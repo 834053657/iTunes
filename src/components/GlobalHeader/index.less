@@ -1,11 +1,29 @@
 @import '~antd/lib/style/themes/default.less';
 
 .header {
-  height: 64px;
-  padding: 0 12px 0 0;
-  background: #fff;
+  height: 65px;
+  padding: 0 12px 0 70px;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   position: relative;
+  background: rgba(9, 33, 54, 1);
+  span {
+    color: #fff;
+    margin-left: 10px;
+  }
+}
+.topMenu {
+  width: 60%;
+  background: rgba(9, 33, 54, 1);
+  float: left;
+  height: 100%;
+  line-height: 64px;
+  font-weight: bolder;
+  color: #fff;
+  padding: 1px 0 0 40px;
+}
+
+.subMenu {
+  margin-left: 25px;
 }
 
 :global {
@@ -23,6 +41,8 @@
   padding: 0 0 0 24px;
   cursor: pointer;
   font-size: 20px;
+  float: left;
+
   img {
     display: inline-block;
     vertical-align: middle;
@@ -82,6 +102,15 @@ i.trigger {
       background: rgba(255, 255, 255, 0.85);
       vertical-align: middle;
     }
+  }
+}
+
+.language,
+.login,
+.register {
+  color: rgba(255, 255, 255, 0.447058823529412);
+  &:hover {
+    cursor: pointer;
   }
 }
 

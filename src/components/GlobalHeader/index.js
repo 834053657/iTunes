@@ -1,20 +1,19 @@
 import React, { PureComponent } from 'react';
-import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
+import { Link } from 'dva/router';
+import { NavLink } from 'react-router-dom';
+import { Menu, Icon, Tag } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import Debounce from 'lodash-decorators/debounce';
-import { Link } from 'dva/router';
-import NoticeIcon from '../NoticeIcon';
-import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
 
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+const { SubMenu } = Menu.SubMenu;
 
 export default class GlobalHeader extends PureComponent {
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
   }
+
   getNoticeData() {
     const { notices = [] } = this.props;
     if (notices.length === 0) {
@@ -46,11 +45,13 @@ export default class GlobalHeader extends PureComponent {
     });
     return groupBy(newNotices, 'type');
   }
+
   toggle = () => {
     const { collapsed, onCollapse } = this.props;
     onCollapse(!collapsed);
     this.triggerResizeEvent();
   };
+
   /* eslint-disable*/
   @Debounce(600)
   triggerResizeEvent() {
@@ -58,6 +59,7 @@ export default class GlobalHeader extends PureComponent {
     event.initEvent('resize', true, false);
     window.dispatchEvent(event);
   }
+
   render() {
     const {
       currentUser = {},
@@ -89,48 +91,45 @@ export default class GlobalHeader extends PureComponent {
     const noticeData = this.getNoticeData();
     return (
       <div className={styles.header}>
-        {/*{isMobile && [
-          <Link to="/" className={styles.logo} key="logo">
-            <img src={logo} alt="logo" width="32" />
-          </Link>,
-          <Divider type="vertical" key="line" />,
-        ]}*/}
         <Link to="/" className={styles.logo} key="logo">
           <img src={logo} alt="logo" width="32" />
+          <span>AntDesign</span>
         </Link>
-      {/*  <Icon
-          className={styles.trigger}
-          type={collapsed ? 'menu-unfold' : 'menu-fold'}
-          onClick={this.toggle}
-        />*/}
-
         <Menu
+          className={styles.topMenu}
           // onClick={this.handleClick}
           // selectedKeys={[this.state.current]}
           mode="horizontal"
         >
-          <Menu.Item key="mail">
-            <Icon type="mail" />Navigation One
+          <Menu.Item className={styles.subMenu} key="mail">
+            <span>主页</span>
           </Menu.Item>
-          <Menu.Item key="app" disabled>
-            <Icon type="appstore" />Navigation Two
-          </Menu.Item>
-          <SubMenu title={<span><Icon type="setting" />Navigation Three - Submenu</span>}>
-            <MenuItemGroup title="Item 1">
-              <Menu.Item key="setting:1">Option 1</Menu.Item>
-              <Menu.Item key="setting:2">Option 2</Menu.Item>
-            </MenuItemGroup>
-            <MenuItemGroup title="Item 2">
-              <Menu.Item key="setting:3">Option 3</Menu.Item>
-              <Menu.Item key="setting:4">Option 4</Menu.Item>
+          <SubMenu className={styles.subMenu} title={<span>Itunes</span>}>
+            <MenuItemGroup>
+              <Menu.Item key="setting:1">
+                <NavLink to={`/itunes/markets`}>交易大厅</NavLink>
+              </Menu.Item>
+              <Menu.Item key="setting:2">
+                <NavLink to={`/itunes/account_manage`}>账号管理</NavLink>
+              </Menu.Item>
             </MenuItemGroup>
           </SubMenu>
-          <Menu.Item key="alipay">
-            <a href="https://ant.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a>
-          </Menu.Item>
+          <SubMenu className={styles.subMenu} title={<NavLink to={`/card`}>礼品卡</NavLink>}>
+            <MenuItemGroup>
+              <Menu.Item key="setting:1">
+                <NavLink to={`/card/markets`}>交易大厅</NavLink>
+              </Menu.Item>
+              <Menu.Item key="setting:2">
+                <NavLink to={`/card/markets`}>发布出售广告</NavLink>
+              </Menu.Item>
+              <Menu.Item key="setting:2">
+                <NavLink to={`/card/markets`}>发布购买广告</NavLink>
+              </Menu.Item>
+            </MenuItemGroup>
+          </SubMenu>
         </Menu>
-        <div className={styles.right}>
-         {/* <HeaderSearch
+        {/* <div className={styles.right}>
+           <HeaderSearch
             className={`${styles.action} ${styles.search}`}
             placeholder="站内搜索"
             dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
@@ -150,7 +149,7 @@ export default class GlobalHeader extends PureComponent {
             >
               <Icon type="question-circle-o" />
             </a>
-          </Tooltip>*/}
+          </Tooltip>
           <NoticeIcon
             className={styles.action}
             count={currentUser.notifyCount}
@@ -160,7 +159,7 @@ export default class GlobalHeader extends PureComponent {
             onClear={onNoticeClear}
             onPopupVisibleChange={onNoticeVisibleChange}
             loading={fetchingNotices}
-            popupAlign={{ offset: [20, -16] }}
+            popupAlign={{offset: [20, -16]}}
           >
             <NoticeIcon.Tab
               list={noticeData['通知']}
@@ -184,13 +183,18 @@ export default class GlobalHeader extends PureComponent {
           {currentUser.name ? (
             <Dropdown overlay={menu}>
               <span className={`${styles.action} ${styles.account}`}>
-                <Avatar size="small" className={styles.avatar} src={currentUser.avatar} />
+                <Avatar size="small" className={styles.avatar} src={currentUser.avatar}/>
                 <span className={styles.name}>{currentUser.name}</span>
               </span>
             </Dropdown>
           ) : (
-            <Spin size="small" style={{ marginLeft: 8 }} />
+            <Spin size="small" style={{marginLeft: 8}}/>
           )}
+        </div>*/}
+        <div className={styles.right}>
+          <span className={styles.language}>EN/CN</span>
+          <span className={styles.login}>登陆</span>
+          <span className={styles.register}>注册</span>
         </div>
       </div>
     );
