@@ -1,4 +1,4 @@
-import { queryNotices } from '../services/api';
+import { queryNotices, queryStatistics } from '../services/api';
 
 export default {
   namespace: 'global',
@@ -6,6 +6,7 @@ export default {
   state: {
     collapsed: false,
     notices: [],
+    statistics: {},
   },
 
   effects: {
@@ -18,6 +19,13 @@ export default {
       yield put({
         type: 'user/changeNotifyCount',
         payload: data.length,
+      });
+    },
+    *fetchStatistics(_, { call, put }) {
+      const res = yield call(queryStatistics);
+      yield put({
+        type: 'saveStatistics',
+        payload: res.data,
       });
     },
     *clearNotices({ payload }, { put, select }) {
@@ -44,6 +52,12 @@ export default {
       return {
         ...state,
         notices: payload,
+      };
+    },
+    saveStatistics(state, { payload }) {
+      return {
+        ...state,
+        statistics: payload,
       };
     },
     saveClearedNotices(state, { payload }) {

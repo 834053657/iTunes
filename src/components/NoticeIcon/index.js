@@ -66,6 +66,7 @@ export default class NoticeIcon extends PureComponent {
       </Spin>
     );
   }
+
   render() {
     const { className, count, popupAlign, onPopupVisibleChange } = this.props;
     const noticeButtonClass = classNames(className, styles.noticeButton);

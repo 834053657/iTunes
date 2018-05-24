@@ -10,6 +10,7 @@ module.exports = {
     jasmine: true,
   },
   rules: {
+    'no-unused-vars': [1],
     'generator-star-spacing': [0],
     'consistent-return': [0],
     'react/forbid-prop-types': [0],
@@ -19,6 +20,7 @@ module.exports = {
     'react/jsx-no-bind': [0],
     'react/prop-types': [0],
     'react/prefer-stateless-function': [0],
+    'spaced-comment': [0],
     'react/jsx-wrap-multilines': [
       'error',
       {

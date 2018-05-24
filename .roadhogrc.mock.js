@@ -135,6 +135,7 @@ const proxy = {
       path: '/base/category/list',
     });
   },
+  '/itunes/*': 'http://47.106.111.213:3000/mock/19/',
 };
 
 export default (noProxy ? {} : delay(proxy, 1000));

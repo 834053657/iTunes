@@ -5,10 +5,11 @@ import groupBy from 'lodash/groupBy';
 import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
 import NoticeIcon from '../NoticeIcon';
-import HeaderSearch from '../HeaderSearch';
+// import HeaderSearch from '../HeaderSearch';
+import TopMenu from '../TopMenu';
 import styles from './index.less';
 
-const SubMenu = Menu.SubMenu;
+const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
 
 export default class GlobalHeader extends PureComponent {
@@ -86,110 +87,81 @@ export default class GlobalHeader extends PureComponent {
         </Menu.Item>
       </Menu>
     );
+    const language = (
+      <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
+        <Menu.Item key="zh">中文</Menu.Item>
+        <Menu.Item key="en">English</Menu.Item>
+      </Menu>
+    );
     const noticeData = this.getNoticeData();
     return (
       <div className={styles.header}>
-        {/*{isMobile && [
-          <Link to="/" className={styles.logo} key="logo">
-            <img src={logo} alt="logo" width="32" />
-          </Link>,
-          <Divider type="vertical" key="line" />,
-        ]}*/}
         <Link to="/" className={styles.logo} key="logo">
           <img src={logo} alt="logo" width="32" />
+          <span> 凯歌交易平台 </span>
         </Link>
-      {/*  <Icon
-          className={styles.trigger}
-          type={collapsed ? 'menu-unfold' : 'menu-fold'}
-          onClick={this.toggle}
-        />*/}
-
-        <Menu
-          // onClick={this.handleClick}
-          // selectedKeys={[this.state.current]}
-          mode="horizontal"
-        >
-          <Menu.Item key="mail">
-            <Icon type="mail" />Navigation One
-          </Menu.Item>
-          <Menu.Item key="app" disabled>
-            <Icon type="appstore" />Navigation Two
-          </Menu.Item>
-          <SubMenu title={<span><Icon type="setting" />Navigation Three - Submenu</span>}>
-            <MenuItemGroup title="Item 1">
-              <Menu.Item key="setting:1">Option 1</Menu.Item>
-              <Menu.Item key="setting:2">Option 2</Menu.Item>
-            </MenuItemGroup>
-            <MenuItemGroup title="Item 2">
-              <Menu.Item key="setting:3">Option 3</Menu.Item>
-              <Menu.Item key="setting:4">Option 4</Menu.Item>
-            </MenuItemGroup>
-          </SubMenu>
-          <Menu.Item key="alipay">
-            <a href="https://ant.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a>
-          </Menu.Item>
-        </Menu>
-        <div className={styles.right}>
-         {/* <HeaderSearch
-            className={`${styles.action} ${styles.search}`}
-            placeholder="站内搜索"
-            dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
-            onSearch={value => {
-              console.log('input', value); // eslint-disable-line
-            }}
-            onPressEnter={value => {
-              console.log('enter', value); // eslint-disable-line
-            }}
+        {isMobile ? (
+          <Icon
+            className={styles.trigger}
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={this.toggle}
           />
-          <Tooltip title="使用文档">
-            <a
-              target="_blank"
-              href="http://pro.ant.design/docs/getting-started"
-              rel="noopener noreferrer"
-              className={styles.action}
-            >
-              <Icon type="question-circle-o" />
-            </a>
-          </Tooltip>*/}
-          <NoticeIcon
-            className={styles.action}
-            count={currentUser.notifyCount}
-            onItemClick={(item, tabProps) => {
-              console.log(item, tabProps); // eslint-disable-line
-            }}
-            onClear={onNoticeClear}
-            onPopupVisibleChange={onNoticeVisibleChange}
-            loading={fetchingNotices}
-            popupAlign={{ offset: [20, -16] }}
-          >
-            <NoticeIcon.Tab
-              list={noticeData['通知']}
-              title="通知"
-              emptyText="你已查看所有通知"
-              emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
-            />
-            <NoticeIcon.Tab
-              list={noticeData['消息']}
-              title="消息"
-              emptyText="您已读完所有消息"
-              emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
-            />
-            <NoticeIcon.Tab
-              list={noticeData['待办']}
-              title="待办"
-              emptyText="你已完成所有待办"
-              emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
-            />
-          </NoticeIcon>
+        ) : (
+          <TopMenu {...this.props} />
+        )}
+
+        <div className={styles.right}>
+          <Dropdown overlay={language}>
+            <span className={`${styles.action}`}>EN/CN</span>
+          </Dropdown>
           {currentUser.name ? (
-            <Dropdown overlay={menu}>
-              <span className={`${styles.action} ${styles.account}`}>
-                <Avatar size="small" className={styles.avatar} src={currentUser.avatar} />
-                <span className={styles.name}>{currentUser.name}</span>
-              </span>
-            </Dropdown>
+            <span>
+              <NoticeIcon
+                className={styles.action}
+                count={currentUser.notifyCount}
+                onItemClick={(item, tabProps) => {
+                  console.log(item, tabProps); // eslint-disable-line
+                }}
+                onClear={onNoticeClear}
+                onPopupVisibleChange={onNoticeVisibleChange}
+                loading={fetchingNotices}
+                popupAlign={{ offset: [20, -16] }}
+              >
+                <NoticeIcon.Tab
+                  list={noticeData['通知']}
+                  title="通知"
+                  emptyText="你已查看所有通知"
+                  emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
+                />
+                <NoticeIcon.Tab
+                  list={noticeData['消息']}
+                  title="消息"
+                  emptyText="您已读完所有消息"
+                  emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
+                />
+                <NoticeIcon.Tab
+                  list={noticeData['待办']}
+                  title="待办"
+                  emptyText="你已完成所有待办"
+                  emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
+                />
+              </NoticeIcon>
+              <Dropdown overlay={menu}>
+                <span className={`${styles.action} ${styles.account}`}>
+                  <Avatar size="small" className={styles.avatar} src={currentUser.avatar} />
+                  <span className={styles.name}>{currentUser.name}</span>
+                </span>
+              </Dropdown>
+            </span>
           ) : (
-            <Spin size="small" style={{ marginLeft: 8 }} />
+            <span>
+              <Link className={styles.action} to="/">
+                登录
+              </Link>
+              <Link className={styles.action} to="/">
+                注册
+              </Link>
+            </span>
           )}
         </div>
       </div>

@@ -192,22 +192,27 @@ class BasicLayout extends React.PureComponent {
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
-        <SiderMenu
-          logo={logo}
-          // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
-          // If you do not have the Authorized parameter
-          // you will be forced to jump to the 403 interface without permission
-          Authorized={Authorized}
-          menuData={getMenuData()}
-          collapsed={collapsed}
-          location={location}
-          isMobile={this.state.isMobile}
-          onCollapse={this.handleMenuCollapse}
-        />
+        {this.state.isMobile && (
+          <SiderMenu
+            logo={logo}
+            // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
+            // If you do not have the Authorized parameter
+            // you will be forced to jump to the 403 interface without permission
+            Authorized={Authorized}
+            menuData={getMenuData()}
+            collapsed={collapsed}
+            location={location}
+            isMobile={this.state.isMobile}
+            onCollapse={this.handleMenuCollapse}
+          />
+        )}
         <Layout>
           <Header style={{ padding: 0 }}>
             <GlobalHeader
               logo={logo}
+              menuData={getMenuData()}
+              Authorized={Authorized}
+              location={location}
               currentUser={currentUser}
               fetchingNotices={fetchingNotices}
               notices={notices}
@@ -242,27 +247,27 @@ class BasicLayout extends React.PureComponent {
             <GlobalFooter
               links={[
                 {
-                  key: 'Pro 首页',
-                  title: 'Pro 首页',
-                  href: 'http://pro.ant.design',
+                  key: '1',
+                  title: '帮助',
+                  href: '#',
                   blankTarget: true,
                 },
                 {
-                  key: 'github',
-                  title: <Icon type="github" />,
-                  href: 'https://github.com/ant-design/ant-design-pro',
+                  key: '2',
+                  title: '隐私',
+                  href: '#',
                   blankTarget: true,
                 },
                 {
-                  key: 'Ant Design',
-                  title: 'Ant Design',
-                  href: 'http://ant.design',
+                  key: '3',
+                  title: '条款',
+                  href: '#',
                   blankTarget: true,
                 },
               ]}
               copyright={
                 <Fragment>
-                  Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+                  Copyright <Icon type="copyright" /> 深圳凯歌科技有限公司
                 </Fragment>
               }
             />
