@@ -1,4 +1,4 @@
-import { queryNotices, queryStatistics } from '../services/api';
+import { queryNotices, queryStatistics, queryConfigs } from '../services/api';
 
 export default {
   namespace: 'global',
@@ -10,6 +10,13 @@ export default {
   },
 
   effects: {
+    *fetchConfigs(_, { call, put }) {
+      // 获取服务器字典
+      const response = yield call(queryConfigs) || {};
+      if (response && response.code === 0) {
+        CONFIG = { ...CONFIG, ...response.data };
+      }
+    },
     *fetchNotices(_, { call, put }) {
       const data = yield call(queryNotices);
       yield put({

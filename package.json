@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "precommit": "npm run lint-staged",
-    "start": "cross-env ESLINT=none roadhog dev",
-    "start:no-proxy": "cross-env NO_PROXY=true ESLINT=none roadhog dev",
+    "start": "cross-env KG_API_ENV=dev ESLINT=none roadhog dev",
+    "start:no-proxy": "cross-env __KG_API_ENV__=dev NO_PROXY=true ESLINT=none roadhog dev",
     "build": "cross-env ESLINT=none roadhog build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true roadhog build",
@@ -18,7 +18,10 @@
     "test": "roadhog test",
     "test:component": "roadhog test ./src/components",
     "test:all": "node ./tests/run-tests.js",
-    "prettier": "prettier --write ./src/**/**/**/*"
+    "prettier": "prettier --write ./src/**/**/**/*",
+    "rsync:dev": "rsync -avz ./dist/  kgdev:/data/itunes-frontend",
+    "build:dev": "cross-env KG_API_ENV=dev ESLINT=none COMPRESS=none roadhog build",
+    "deploy:dev": "npm run build:dev && npm run rsync:dev"
   },
   "dependencies": {
     "@antv/data-set": "^0.8.0",

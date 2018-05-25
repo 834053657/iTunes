@@ -81,3 +81,6 @@ export async function queryNotices() {
 export async function queryStatistics() {
   return request('/itunes/statistics/trade');
 }
+export async function queryConfigs() {
+  return request('/itunes/get_defined');
+}

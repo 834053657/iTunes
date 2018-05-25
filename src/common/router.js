@@ -1,6 +1,7 @@
 import { createElement } from 'react';
 import dynamic from 'dva/dynamic';
 import pathToRegexp from 'path-to-regexp';
+import { getAuthority } from '../utils/authority';
 import { getMenuData } from './menu';
 
 let routerDataCache;
@@ -67,6 +68,11 @@ function getFlatMenuData(menus) {
   return keys;
 }
 
+function checkLogined() {
+  const user = getAuthority();
+  return !!(user && user.token);
+}
+
 export const getRouterData = app => {
   const routerConfig = {
     '/': {
@@ -77,6 +83,8 @@ export const getRouterData = app => {
     },
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/dashboard/monitor': {
       component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
@@ -177,6 +185,7 @@ export const getRouterData = app => {
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
+  // console.log(menuData)
 
   // Route configuration data
   // eg. {name,authority ...routerConfig }

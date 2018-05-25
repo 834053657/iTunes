@@ -28,11 +28,10 @@ import {
 import Trend from 'components/Trend';
 import NumberInfo from 'components/NumberInfo';
 import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import { getTimeDistance } from '../../utils/utils';
 import styles from './Home.less';
-
-require('slick-carousel/slick/slick.css');
-require('slick-carousel/slick/slick-theme.css');
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;

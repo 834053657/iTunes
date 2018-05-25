@@ -6,9 +6,11 @@ import { getProfileBasicData } from './mock/profile';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
+import { getSystemUrl } from './src/utils/utils';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
+const { base_url } = getSystemUrl(process.env.KG_API_ENV);
 
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
@@ -135,7 +137,7 @@ const proxy = {
       path: '/base/category/list',
     });
   },
-  '/itunes/*': 'http://47.106.111.213:3000/mock/19/',
+  '/itunes/*': base_url,
 };
 
 export default (noProxy ? {} : delay(proxy, 1000));

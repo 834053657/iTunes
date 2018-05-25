@@ -108,6 +108,9 @@ class BasicLayout extends React.PureComponent {
     this.props.dispatch({
       type: 'user/fetchCurrent',
     });
+    this.props.dispatch({
+      type: 'global/fetchConfigs',
+    });
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
@@ -128,6 +131,11 @@ class BasicLayout extends React.PureComponent {
     }
     return title;
   }
+
+  /**
+   * 获取重定向地址 否则取路由第一个地址
+   * @returns {string}
+   */
   getBashRedirect = () => {
     // According to the url parameter to redirect
     // 这里是重定向的,重定向到 url 的 redirect 参数所示地址
@@ -236,7 +244,7 @@ class BasicLayout extends React.PureComponent {
                   component={item.component}
                   exact={item.exact}
                   authority={item.authority}
-                  redirectPath="/exception/403"
+                  redirectPath="/user/login"
                 />
               ))}
               <Redirect exact from="/" to={bashRedirect} />

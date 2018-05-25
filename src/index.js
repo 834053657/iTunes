@@ -1,15 +1,23 @@
 import '@babel/polyfill';
 import 'url-polyfill';
 import dva from 'dva';
-
+import { message, notification } from 'antd';
 import createHistory from 'history/createHashHistory';
 // user BrowserHistory
 // import createHistory from 'history/createBrowserHistory';
 import createLoading from 'dva-loading';
 import 'moment/locale/zh-cn';
 import './rollbar';
-
 import './index.less';
+import CONFIG from './utils/config';
+
+notification.config({
+  placement: 'bottomRight',
+  bottom: 50,
+  duration: 3,
+});
+
+global.CONFIG = CONFIG;
 // 1. Initialize
 const app = dva({
   history: createHistory(),

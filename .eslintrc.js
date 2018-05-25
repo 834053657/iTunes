@@ -10,6 +10,7 @@ module.exports = {
     jasmine: true,
   },
   rules: {
+    camelcase: [0],
     'no-unused-vars': [1],
     'generator-star-spacing': [0],
     'consistent-return': [0],
@@ -70,5 +71,10 @@ module.exports = {
   },
   settings: {
     polyfills: ['fetch', 'promises'],
+  },
+  globals: {
+    CONFIG: true,
+    __KG_API_ENV__: true,
+    __KG_DATATIME__: true,
   },
 };

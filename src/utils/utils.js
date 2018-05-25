@@ -159,3 +159,18 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-
 export function isUrl(path) {
   return reg.test(path);
 }
+
+export function getSystemUrl(env) {
+  let base_url = 'http://47.106.111.213:3000/mock/19';
+  let web_name = '凯歌交易平台';
+
+  if (env === 'dev') {
+    base_url = 'http://47.106.111.213:3000/mock/19';
+    web_name += '(DEV)';
+  } else if (env === 'test') {
+    base_url = 'http://47.106.111.213:3000/mock/19';
+    web_name += '(TEST)';
+  }
+
+  return { base_url, web_name };
+}

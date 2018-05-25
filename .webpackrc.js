@@ -2,13 +2,16 @@ const path = require('path');
 
 export default {
   entry: 'src/index.js',
-  extraBabelPlugins: [
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
-  ],
+  extraBabelPlugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
+  define: {
+    __KG_API_ENV__: process.env.KG_API_ENV,
+    __KG_DATATIME__: new Date().toLocaleString(),
+  },
   env: {
     development: {
       extraBabelPlugins: ['dva-hmr'],
     },
+    production: {},
   },
   alias: {
     components: path.resolve(__dirname, 'src/components/'),
@@ -18,7 +21,7 @@ export default {
   html: {
     template: './src/index.ejs',
   },
-  disableDynamicImport: true,
+  disableDynamicImport: false,
   publicPath: '/',
   hash: true,
 };

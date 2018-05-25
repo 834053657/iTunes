@@ -1,6 +1,8 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
+import { getAuthority, getLocale } from './authority';
+import CONFIG from './config';
 import store from '../index';
 
 const codeMessage = {
@@ -42,11 +44,22 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, options) {
+export default function request(postUrl, options, base_url) {
+  // 是否开发环境
+  const isDev = process.env.NODE_ENV === 'development';
+  const { id, token } = getAuthority() || {};
+  const language = getLocale() || 'zh-CN';
   const defaultOptions = {
-    credentials: 'include',
+    // credentials: 'include',
+    headers: {
+      'ITUNES-UID': id,
+      'ITUNES-TOKEN': token,
+      'ITUNES-LANGUAGE': language,
+    },
   };
   const newOptions = { ...defaultOptions, ...options };
+  const url = !isDev ? (base_url || CONFIG.base_url) + postUrl : postUrl;
+  console.log(url);
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
