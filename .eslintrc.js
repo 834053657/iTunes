@@ -47,16 +47,17 @@ module.exports = {
     'no-bitwise': [0],
     'no-cond-assign': [0],
     'import/no-unresolved': [0],
-    'comma-dangle': [
-      'error',
-      {
-        arrays: 'always-multiline',
-        objects: 'always-multiline',
-        imports: 'always-multiline',
-        exports: 'always-multiline',
-        functions: 'ignore',
-      },
-    ],
+    'comma-dangle': [0],
+    // 'comma-dangle': [
+    //   'error',
+    //   {
+    //     arrays: 'always-multiline',
+    //     objects: 'always-multiline',
+    //     imports: 'always-multiline',
+    //     exports: 'always-multiline',
+    //     functions: 'ignore',
+    //   },
+    // ],
     'object-curly-newline': [0],
     'function-paren-newline': [0],
     'no-restricted-globals': [0],

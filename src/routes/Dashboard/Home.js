@@ -27,9 +27,12 @@ import {
 } from 'components/Charts';
 import Trend from 'components/Trend';
 import NumberInfo from 'components/NumberInfo';
+import Slider from 'react-slick';
 import { getTimeDistance } from '../../utils/utils';
+import styles from './Home.less';
 
-import styles from './Analysis.less';
+require('slick-carousel/slick/slick.css');
+require('slick-carousel/slick/slick-theme.css');
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
@@ -58,6 +61,13 @@ export default class Analysis extends Component {
     salesType: 'all',
     currentTabKey: '',
     rangePickerValue: getTimeDistance('year'),
+    settings: {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+    },
   };
 
   componentDidMount() {
@@ -120,7 +130,7 @@ export default class Analysis extends Component {
   }
 
   render() {
-    const { rangePickerValue, salesType, currentTabKey } = this.state;
+    const { rangePickerValue, salesType, currentTabKey, settings } = this.state;
     const { chart, loading, statistics } = this.props;
     // const {
     //   visitData,
@@ -145,6 +155,28 @@ export default class Analysis extends Component {
     console.log(statistics);
     return (
       <Fragment>
+        <div className={styles.banner}>
+          <Slider {...settings}>
+            <div>
+              <div className={styles.banner_items}>
+                <img className={styles.img} src="http://dummyimage.com/400x300" alt="" />
+                <div className={styles.desc}>这里是描述</div>
+              </div>
+            </div>
+            <div>
+              <div className={styles.banner_items}>
+                <img className={styles.img} src="http://dummyimage.com/400x300" alt="" />
+                <div className={styles.desc}>这里是描述</div>
+              </div>
+            </div>
+            <div>
+              <div className={styles.banner_items}>
+                <img className={styles.img} src="http://dummyimage.com/400x300" alt="" />
+                <div className={styles.desc}>这里是描述</div>
+              </div>
+            </div>
+          </Slider>
+        </div>
         <Row gutter={24}>
           <Col {...topColResponsiveProps}>
             <ChartCard
