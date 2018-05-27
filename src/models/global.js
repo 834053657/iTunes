@@ -1,4 +1,4 @@
-import { queryNotices, queryStatistics, queryConfigs } from '../services/api';
+import { queryNotices, queryStatistics, queryConfigs, queryBanners } from '../services/api';
 
 export default {
   namespace: 'global',
@@ -7,9 +7,20 @@ export default {
     collapsed: false,
     notices: [],
     statistics: {},
+    banners: []
   },
 
   effects: {
+    *fetchBanners(_, { call, put }) {
+      const response = yield call(queryBanners);
+
+      if (response && response.code === 0) {
+        yield put({
+          type: 'setBanners',
+          payload: response.data
+        });
+      }
+    },
     *fetchConfigs(_, { call, put }) {
       // 获取服务器字典
       const response = yield call(queryConfigs) || {};
@@ -49,6 +60,12 @@ export default {
   },
 
   reducers: {
+    setBanners(state, { payload }) {
+      return {
+        ...state,
+        banners: payload,
+      };
+    },
     changeLayoutCollapsed(state, { payload }) {
       return {
         ...state,

@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
+import {map} from 'lodash';
+import moment from 'moment';
 import {
   Row,
   Col,
@@ -54,7 +56,9 @@ const Yuan = ({ children }) => (
 @connect(({ global, chart, loading }) => ({
   chart,
   statistics: global.statistics,
-  loading: loading.effects['chart/fetch'],
+  banners: global.banners,
+  //loading: loading.effects['chart/fetch'],
+  loading: loading.models.global,
 }))
 export default class Analysis extends Component {
   state = {
@@ -63,17 +67,22 @@ export default class Analysis extends Component {
     rangePickerValue: getTimeDistance('year'),
     settings: {
       dots: true,
+      //fade: true,
       infinite: true,
-      speed: 1000,
+      speed: 500,
+      //autoplaySpeed: 5000,
       slidesToShow: 1,
       slidesToScroll: 1,
-      autoplay: false,
+      autoplay: true,
     },
   };
 
   componentDidMount() {
     this.props.dispatch({
       type: 'global/fetchStatistics',
+    });
+    this.props.dispatch({
+      type: 'global/fetchBanners',
     });
   }
 
@@ -132,7 +141,31 @@ export default class Analysis extends Component {
 
   render() {
     const { rangePickerValue, salesType, currentTabKey, settings } = this.state;
-    const { chart, loading, statistics } = this.props;
+    const { chart, loading, statistics, banners } = this.props;
+
+    let bannersContent = [];
+    if(banners && banners.length > 0) {
+      map(banners, (item, key) => {
+        bannersContent.push( <div key={key}>
+              <div className={styles.banner_items}>
+                <img className={styles.img} src={item.image_url} alt="" />
+                <Row className={styles.content}>
+                  <Col span={16}>
+                    <div className={styles.content_title}>{item.title}</div>
+                  </Col>
+                  <Col span={8}>
+                    <div className={styles.content_date}>
+                      <Icon type="calendar" className={styles.calendar_icon} /> {item && moment(new Date(parseInt(item.created_at))).format('YYYY-MM-DD')}
+                    </div>
+                  </Col>
+                  <Col span={24}>
+                    <div className={styles.desc}>{item.content}</div>.
+                  </Col>
+                </Row>
+              </div>
+            </div>)
+      });
+    }
 
     // const {
     //   visitData,
@@ -158,47 +191,33 @@ export default class Analysis extends Component {
     return (
       <Fragment>
         <Row gutter={24}>
-          <Col span={12}  className={styles.title}>最新资讯</Col>
+          <Col span={12} className={styles.title}>
+            最新资讯
+          </Col>
           <Col span={12} className={styles.more}>
-            <a className={styles.itunes_btn} href="">更多</a>
+            <a className={styles.itunes_btn} href="">
+              更多
+            </a>
           </Col>
         </Row>
         <div className={styles.banner}>
           <Slider {...settings}>
-            <div>
-              <div className={styles.banner_items}>
-                <img className={styles.img} src="http://dummyimage.com/800x300" alt="" />
-                <div className={styles.desc}>这里是描述1</div>
-              </div>
-            </div>
-            <div>
-              <div className={styles.banner_items}>
-                <img className={styles.img} src="http://dummyimage.com/800x300" alt="" />
-                <div className={styles.desc}>这里是描述2</div>
-              </div>
-            </div>
-            <div>
-              <div className={styles.banner_items}>
-                <img className={styles.img} src="http://dummyimage.com/800x300" alt="" />
-                <div className={styles.desc}>这里是描述3</div>
-              </div>
-            </div>
+            {bannersContent}
           </Slider>
         </div>
         <div className={styles.realtime_header}>
-          <span span={12}  className={styles.title}>实时成交</span>
+          <span span={12} className={styles.title}>
+            实时成交
+          </span>
           <Icon className={styles.realtime_icon} type="bar-chart" />
         </div>
-        <Row gutter={24}>
-        <img scr={HomeIcon} />
+        <Row className={styles.realtime_content} gutter={24}>
+          <img scr={HomeIcon} />
           <Col {...topColResponsiveProps}>
-            
             <ChartCard
               bordered={true}
               title="Itunes"
-              avatar={
-                <img src={HomeIcon} className={styles.home_icon} />
-              }
+              avatar={<img src={HomeIcon} className={styles.home_icon} />}
               action={
                 <Tooltip title="Itunes销售额">
                   <Icon type="info-circle-o" />
@@ -206,16 +225,13 @@ export default class Analysis extends Component {
               }
               total={() => <Yuan>{statistics.itunes}</Yuan>}
               contentHeight={46}
-            >
-            </ChartCard>
+            />
           </Col>
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
               title="礼品卡"
-              avatar={
-                <img src={HomeIcon} className={styles.home_icon} />
-              }
+              avatar={<img src={HomeIcon} className={styles.home_icon} />}
               action={
                 <Tooltip title="礼品卡销售额">
                   <Icon type="info-circle-o" />
@@ -223,8 +239,7 @@ export default class Analysis extends Component {
               }
               total={() => <Yuan>{statistics.gift_card}</Yuan>}
               contentHeight={46}
-            >
-            </ChartCard>
+            />
           </Col>
         </Row>
       </Fragment>

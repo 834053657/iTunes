@@ -1,6 +1,10 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
+export async function queryBanners() {
+  return request('/itunes/info/banners');
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }

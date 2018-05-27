@@ -132,21 +132,35 @@
 }
 
 .banner {
-  height: 300px;
+  height: 400px;
   margin-bottom: 100px;
   background: @menu-dark-bg;
   .banner_items {
-    height: 300px;
+    height: 400px;
     overflow: hidden;
     display: flex;
     flex-direction: row;
     .img {
-      height: 300px;
+      height: 400px;
       width: auto;
     }
-    .desc {
-      padding: 25px;
-      color: #fff;
+    .content{
+      width: 100%;
+
+      .desc {
+        padding: 15px;
+        padding-top: 0px;
+        color: #fff;
+      }
+      .content_title {
+        padding: 15px;
+        color: #fff;
+      }
+      .content_date {
+        padding: 15px;
+        text-align: right;
+        color: #fff;
+      }
     }
   }
 }
@@ -184,7 +198,7 @@
   text-align: right;
 }
 
-.realtime_header {
+.realtime_header, .realtime_content {
   margin-bottom: 35px;
 }
 
@@ -195,6 +209,10 @@
 .home_icon {
   width: 56px;
   height: 56px;
+}
+
+.content_title {
+  font-size: 16px;
 }
 
 @media screen and (max-width: @screen-lg) {
