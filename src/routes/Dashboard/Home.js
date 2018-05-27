@@ -32,6 +32,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { getTimeDistance } from '../../utils/utils';
 import styles from './Home.less';
+import HomeIcon from '../../../public/home_icon.png';
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
@@ -63,9 +64,10 @@ export default class Analysis extends Component {
     settings: {
       dots: true,
       infinite: true,
-      speed: 500,
+      speed: 1000,
       slidesToShow: 1,
       slidesToScroll: 1,
+      autoplay: false,
     },
   };
 
@@ -131,6 +133,7 @@ export default class Analysis extends Component {
   render() {
     const { rangePickerValue, salesType, currentTabKey, settings } = this.state;
     const { chart, loading, statistics } = this.props;
+
     // const {
     //   visitData,
     //   visitData2,
@@ -154,69 +157,73 @@ export default class Analysis extends Component {
     console.log(statistics);
     return (
       <Fragment>
+        <Row gutter={24}>
+          <Col span={12}  className={styles.title}>最新资讯</Col>
+          <Col span={12} className={styles.more}>
+            <a className={styles.itunes_btn} href="">更多</a>
+          </Col>
+        </Row>
         <div className={styles.banner}>
           <Slider {...settings}>
             <div>
               <div className={styles.banner_items}>
-                <img className={styles.img} src="http://dummyimage.com/400x300" alt="" />
-                <div className={styles.desc}>这里是描述</div>
+                <img className={styles.img} src="http://dummyimage.com/800x300" alt="" />
+                <div className={styles.desc}>这里是描述1</div>
               </div>
             </div>
             <div>
               <div className={styles.banner_items}>
-                <img className={styles.img} src="http://dummyimage.com/400x300" alt="" />
-                <div className={styles.desc}>这里是描述</div>
+                <img className={styles.img} src="http://dummyimage.com/800x300" alt="" />
+                <div className={styles.desc}>这里是描述2</div>
               </div>
             </div>
             <div>
               <div className={styles.banner_items}>
-                <img className={styles.img} src="http://dummyimage.com/400x300" alt="" />
-                <div className={styles.desc}>这里是描述</div>
+                <img className={styles.img} src="http://dummyimage.com/800x300" alt="" />
+                <div className={styles.desc}>这里是描述3</div>
               </div>
             </div>
           </Slider>
         </div>
+        <div className={styles.realtime_header}>
+          <span span={12}  className={styles.title}>实时成交</span>
+          <Icon className={styles.realtime_icon} type="bar-chart" />
+        </div>
         <Row gutter={24}>
+        <img scr={HomeIcon} />
           <Col {...topColResponsiveProps}>
+            
             <ChartCard
-              bordered={false}
+              bordered={true}
               title="Itunes"
+              avatar={
+                <img src={HomeIcon} className={styles.home_icon} />
+              }
               action={
                 <Tooltip title="Itunes销售额">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={() => <Yuan>{statistics.itunes}</Yuan>}
-              footer={<Field label="日均销售额" value={`￥${numeral(12423).format('0,0')}`} />}
               contentHeight={46}
             >
-              <Trend flag="up" style={{ marginRight: 16 }}>
-                周同比<span className={styles.trendText}>12%</span>
-              </Trend>
-              <Trend flag="down">
-                日环比<span className={styles.trendText}>11%</span>
-              </Trend>
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
               title="礼品卡"
+              avatar={
+                <img src={HomeIcon} className={styles.home_icon} />
+              }
               action={
                 <Tooltip title="礼品卡销售额">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={() => <Yuan>{statistics.gift_card}</Yuan>}
-              footer={<Field label="日均销售额" value={`￥${numeral(12423).format('0,0')}`} />}
               contentHeight={46}
             >
-              <Trend flag="up" style={{ marginRight: 16 }}>
-                周同比<span className={styles.trendText}>12%</span>
-              </Trend>
-              <Trend flag="down">
-                日环比<span className={styles.trendText}>11%</span>
-              </Trend>
             </ChartCard>
           </Col>
         </Row>
