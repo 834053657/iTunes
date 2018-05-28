@@ -33,6 +33,7 @@ export default class CardMarkets extends Component {
       return <div className={styles.filterDemo}>dasd</div>;
     }
 
+    const cardList = this.props.card.cardList.items;
     const data = [
       {
         key: '1',
@@ -75,7 +76,7 @@ export default class CardMarkets extends Component {
     const columns = [
       {
         title: '用户名',
-        dataIndex: 'name',
+        dataIndex: 'owner_info.nickname',
       },
       {
         title: '类型',
@@ -99,20 +100,27 @@ export default class CardMarkets extends Component {
       {
         title: '面额',
         dataIndex: 'denomination',
-        filterIcon: <FilterDemo />,
+        render: (text, record) => {
+          return (
+            <span>
+              {record.min_denomination}-
+              {record.max_denomination}
+            </span>
+          );
+        },
       },
       {
         title: '总面额',
-        dataIndex: 'allDeno',
+        dataIndex: 'total_denomination',
       },
       {
         title: '单价',
-        dataIndex: 'unitPrice',
+        dataIndex: 'unit_price',
         sorter: (a, b) => a.unitPrice - b.unitPrice,
       },
       {
         title: '保障时间',
-        dataIndex: 'delayTime',
+        dataIndex: 'delay_time',
       },
       {
         title: '操作',
@@ -127,10 +135,10 @@ export default class CardMarkets extends Component {
       <div>
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="我要购买" key="1">
-            <Table dataSource={data} columns={columns} />
+            <Table dataSource={cardList} columns={columns} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="我要出售" key="2">
-            Content of Tab Pane 2
+            <Table dataSource={cardList} columns={columns} />
           </Tabs.TabPane>
         </Tabs>
       </div>
