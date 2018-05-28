@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import {map} from 'lodash';
+import { map } from 'lodash';
 import moment from 'moment';
 import {
   Row,
@@ -143,27 +143,30 @@ export default class Analysis extends Component {
     const { rangePickerValue, salesType, currentTabKey, settings } = this.state;
     const { chart, loading, statistics, banners } = this.props;
 
-    let bannersContent = [];
-    if(banners && banners.length > 0) {
+    const bannersContent = [];
+    if (banners && banners.length > 0) {
       map(banners, (item, key) => {
-        bannersContent.push( <div key={key}>
-              <div className={styles.banner_items}>
-                <img className={styles.img} src={item.image_url} alt="" />
-                <Row className={styles.content}>
-                  <Col span={16}>
-                    <div className={styles.content_title}>{item.title}</div>
-                  </Col>
-                  <Col span={8}>
-                    <div className={styles.content_date}>
-                      <Icon type="calendar" className={styles.calendar_icon} /> {item && moment(new Date(parseInt(item.created_at))).format('YYYY-MM-DD')}
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <div className={styles.desc}>{item.content}</div>.
-                  </Col>
-                </Row>
-              </div>
-            </div>)
+        bannersContent.push(
+          <div key={key}>
+            <div className={styles.banner_items}>
+              <img className={styles.img} src={item.image_url} alt="" />
+              <Row className={styles.content}>
+                <Col span={16}>
+                  <div className={styles.content_title}>{item.title}</div>
+                </Col>
+                <Col span={8}>
+                  <div className={styles.content_date}>
+                    <Icon type="calendar" className={styles.calendar_icon} />{' '}
+                    {item && moment(new Date(Math.parseInt(item.created_at))).format('YYYY-MM-DD')}
+                  </div>
+                </Col>
+                <Col span={24}>
+                  <div className={styles.desc}>{item.content}</div>.
+                </Col>
+              </Row>
+            </div>
+          </div>
+        );
       });
     }
 
@@ -201,9 +204,7 @@ export default class Analysis extends Component {
           </Col>
         </Row>
         <div className={styles.banner}>
-          <Slider {...settings}>
-            {bannersContent}
-          </Slider>
+          <Slider {...settings}>{bannersContent}</Slider>
         </div>
         <div className={styles.realtime_header}>
           <span span={12} className={styles.title}>
@@ -212,12 +213,12 @@ export default class Analysis extends Component {
           <Icon className={styles.realtime_icon} type="bar-chart" />
         </div>
         <Row className={styles.realtime_content} gutter={24}>
-          <img scr={HomeIcon} />
+          <img alt="#" scr={HomeIcon} />
           <Col {...topColResponsiveProps}>
             <ChartCard
-              bordered={true}
+              bordered
               title="Itunes"
-              avatar={<img src={HomeIcon} className={styles.home_icon} />}
+              avatar={<img alt="#" src={HomeIcon} className={styles.home_icon} />}
               action={
                 <Tooltip title="Itunes销售额">
                   <Icon type="info-circle-o" />
@@ -231,7 +232,7 @@ export default class Analysis extends Component {
             <ChartCard
               bordered={false}
               title="礼品卡"
-              avatar={<img src={HomeIcon} className={styles.home_icon} />}
+              avatar={<img alt="#" src={HomeIcon} className={styles.home_icon} />}
               action={
                 <Tooltip title="礼品卡销售额">
                   <Icon type="info-circle-o" />
