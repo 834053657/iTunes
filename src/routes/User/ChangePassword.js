@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
-import styles from './Register.less';
+import styles from './ChangePassword.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -20,18 +20,16 @@ const passwordProgressMap = {
   poor: 'exception',
 };
 
-@connect(({ register, loading }) => ({
-  result: register.result,
+@connect(({ user, loading }) => ({
+  result: user.changePassword,
   submitting: loading.effects['register/submit'],
 }))
 @Form.create()
 export default class Register extends Component {
   state = {
-    count: 0,
     confirmDirty: false,
     visible: false,
     help: '',
-    image: '',
   };
 
   componentWillReceiveProps(nextProps) {
@@ -48,21 +46,7 @@ export default class Register extends Component {
     }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  onGetCaptcha = () => {
-    let count = 59;
-    this.setState({ count });
-    this.interval = setInterval(() => {
-      count -= 1;
-      this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.interval);
-      }
-    }, 1000);
-  };
+  componentWillUnmount() {}
 
   getPasswordStatus = () => {
     const { form } = this.props;
@@ -88,11 +72,6 @@ export default class Register extends Component {
         });
       }
     });
-  };
-
-  handleConfirmBlur = e => {
-    const { value } = e.target;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   };
 
   checkConfirm = (rule, value, callback) => {
@@ -132,13 +111,6 @@ export default class Register extends Component {
     }
   };
 
-  loadCaptcha = () => {
-    const isDev = process.env.NODE_ENV === 'development';
-    this.setState({
-      image: `${!isDev ? CONFIG.base_url : ''}/itunes/user/captcha?r=${Math.random()}`,
-    });
-  };
-
   renderPasswordProgress = () => {
     const { form } = this.props;
     const value = form.getFieldValue('password');
@@ -159,59 +131,10 @@ export default class Register extends Component {
   render() {
     const { form, submitting } = this.props;
     const { getFieldDecorator } = form;
-    const { count, image } = this.state;
     return (
       <div className={styles.main}>
-        <h3>注册</h3>
+        <h3>修改密码</h3>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem>
-            {getFieldDecorator('mail', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入邮箱地址！',
-                },
-                {
-                  type: 'email',
-                  message: '邮箱地址格式错误！',
-                },
-              ],
-            })(<Input size="large" placeholder="邮箱" />)}
-          </FormItem>
-          <FormItem>
-            <Row gutter={8}>
-              <Col span={16}>
-                {getFieldDecorator('captcha', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入验证码！',
-                    },
-                  ],
-                })(<Input size="large" placeholder="验证码" />)}
-              </Col>
-              <Col span={8}>
-                <Button
-                  size="large"
-                  disabled={count}
-                  className={styles.getCaptcha}
-                  onClick={this.onGetCaptcha}
-                >
-                  {count ? `${count} s` : '获取验证码'}
-                </Button>
-              </Col>
-            </Row>
-          </FormItem>
-          <FormItem>
-            {getFieldDecorator('nickname', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入用户名！',
-                },
-              ],
-            })(<Input size="large" placeholder="用户名" />)}
-          </FormItem>
           <FormItem help={this.state.help}>
             <Popover
               content={
@@ -249,19 +172,6 @@ export default class Register extends Component {
               ],
             })(<Input size="large" type="password" placeholder="确认密码" />)}
           </FormItem>
-          <FormItem>
-            {getFieldDecorator('invite_code', {
-              rules: [
-                {
-                  required: true,
-                  message: '请确认邀请码！',
-                },
-                // {
-                //   validator: this.checkConfirm,
-                // },
-              ],
-            })(<Input size="large" type="password" placeholder="邀请码" />)}
-          </FormItem>
 
           <FormItem>
             <Button
@@ -271,7 +181,7 @@ export default class Register extends Component {
               type="primary"
               htmlType="submit"
             >
-              注册
+              完成
             </Button>
             <Link className={styles.login} to="/user/login">
               使用已有账户登录

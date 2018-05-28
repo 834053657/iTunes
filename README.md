@@ -18,6 +18,8 @@ $ npm install
 $ npm start         # visit http://localhost:8000
 ```
 
+## 常见问题
+https://github.com/ant-design/ant-design-pro/issues/1520
 
 ## 兼容性
 

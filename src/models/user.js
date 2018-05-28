@@ -1,4 +1,6 @@
-import { query as queryUsers, queryCurrent } from '../services/user';
+import { query as queryUsers, queryCurrent, forgetPassword } from '../services/user';
+import { setAuthority } from '../utils/authority';
+import { fakeRegister } from '../services/api';
 
 export default {
   namespace: 'user',
@@ -6,6 +8,8 @@ export default {
   state: {
     list: [],
     currentUser: {},
+    forgetPassword: {},
+    changePassword: {},
   },
 
   effects: {
@@ -25,6 +29,15 @@ export default {
         });
       }
     },
+    *submitForgetPassword(_, { call, put }) {
+      const response = yield call(forgetPassword);
+      if (response.code === 0 && response.data) {
+        yield put({
+          type: 'forgetPasswordHandle',
+          payload: response,
+        });
+      }
+    },
   },
 
   reducers: {
@@ -35,6 +48,7 @@ export default {
       };
     },
     saveCurrentUser(state, action) {
+      setAuthority(action.payload);
       return {
         ...state,
         currentUser: action.payload,
@@ -46,6 +60,15 @@ export default {
         currentUser: {
           ...state.currentUser,
           notifyCount: action.payload,
+        },
+      };
+    },
+    forgetPasswordHandle(state, { payload }) {
+      return {
+        ...state,
+        forgetPassword: {
+          ...state.forgetPassword,
+          result: payload.code,
         },
       };
     },

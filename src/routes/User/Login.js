@@ -91,7 +91,7 @@ export default class LoginPage extends Component {
           </div>
           <Submit loading={submitting}>登录</Submit>
           <div className={styles.other}>
-            <a href="">忘记密码</a>
+            <Link to="/user/forget-password">忘记密码</Link>
             {/* 其他登录方式
             <Icon className={styles.icon} type="alipay-circle" />
             <Icon className={styles.icon} type="taobao-circle" />

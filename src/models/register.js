@@ -6,26 +6,28 @@ export default {
   namespace: 'register',
 
   state: {
-    status: undefined,
+    result: undefined,
   },
 
   effects: {
     *submit(_, { call, put }) {
       const response = yield call(fakeRegister);
-      yield put({
-        type: 'registerHandle',
-        payload: response,
-      });
+      if (response.code === 0 && response.data) {
+        yield put({
+          type: 'registerHandle',
+          payload: response,
+        });
+      }
     },
   },
 
   reducers: {
     registerHandle(state, { payload }) {
-      setAuthority('user');
+      setAuthority(payload.data);
       reloadAuthorized();
       return {
         ...state,
-        status: payload.status,
+        result: payload.data,
       };
     },
   },
