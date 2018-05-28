@@ -213,7 +213,7 @@ export default class Analysis extends Component {
           <Icon className={styles.realtime_icon} type="bar-chart" />
         </div>
         <Row className={styles.realtime_content} gutter={24}>
-          <img alt="#" scr={HomeIcon} />
+          {/*<img alt="#" src={HomeIcon} />*/}
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered
