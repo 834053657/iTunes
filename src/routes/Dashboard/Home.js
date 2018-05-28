@@ -157,7 +157,7 @@ export default class Analysis extends Component {
                 <Col span={8}>
                   <div className={styles.content_date}>
                     <Icon type="calendar" className={styles.calendar_icon} />{' '}
-                    {item && moment(new Date(parseInt(item.created_at))).format('YYYY-MM-DD')}
+                    {item && moment(new Date(parseInt(item.created_at) * 1000)).format('YYYY-MM-DD')}
                   </div>
                 </Col>
                 <Col span={24}>
@@ -198,7 +198,7 @@ export default class Analysis extends Component {
             最新资讯
           </Col>
           <Col span={12} className={styles.more}>
-            <a className={styles.itunes_btn} href="">
+            <a className={styles.itunes_btn} href="/#/message/info-list">
               更多
             </a>
           </Col>
@@ -213,7 +213,6 @@ export default class Analysis extends Component {
           <Icon className={styles.realtime_icon} type="bar-chart" />
         </div>
         <Row className={styles.realtime_content} gutter={24}>
-          <img alt="#" scr={HomeIcon} />
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered
