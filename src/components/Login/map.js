@@ -8,12 +8,12 @@ const map = {
     props: {
       size: 'large',
       prefix: <Icon type="user" className={styles.prefixIcon} />,
-      placeholder: 'admin',
+      placeholder: '',
     },
     rules: [
       {
         required: true,
-        message: 'Please enter username!',
+        message: '请输入账户名！',
       },
     ],
   },
@@ -23,12 +23,17 @@ const map = {
       size: 'large',
       prefix: <Icon type="lock" className={styles.prefixIcon} />,
       type: 'password',
-      placeholder: '888888',
+      maxLength: 16,
+      placeholder: '',
     },
     rules: [
       {
         required: true,
-        message: 'Please enter password!',
+        message: '请输入密码！',
+      },
+      {
+        min: 6,
+        message: '密码长度为6到16位',
       },
     ],
   },
@@ -37,16 +42,16 @@ const map = {
     props: {
       size: 'large',
       prefix: <Icon type="mobile" className={styles.prefixIcon} />,
-      placeholder: 'mobile number',
+      placeholder: '手机号',
     },
     rules: [
       {
         required: true,
-        message: 'Please enter mobile number!',
+        message: '请输入手机号！',
       },
       {
         pattern: /^1\d{10}$/,
-        message: 'Wrong mobile number format!',
+        message: '手机号格式错误！',
       },
     ],
   },
@@ -55,12 +60,27 @@ const map = {
     props: {
       size: 'large',
       prefix: <Icon type="mail" className={styles.prefixIcon} />,
-      placeholder: 'captcha',
+      placeholder: '验证码',
     },
     rules: [
       {
         required: true,
-        message: 'Please enter Captcha!',
+        message: '请输入验证码！',
+      },
+    ],
+  },
+  ImgCaptcha: {
+    component: Input,
+    props: {
+      size: 'large',
+      maxLength: 4,
+      prefix: <Icon type="mail" className={styles.prefixIcon} />,
+      placeholder: '图像验证码',
+    },
+    rules: [
+      {
+        required: true,
+        message: '请输入验证码!',
       },
     ],
   },

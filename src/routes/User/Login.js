@@ -5,7 +5,7 @@ import { Checkbox, Alert, Icon } from 'antd';
 import Login from 'components/Login';
 import styles from './Login.less';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
+const { Tab, UserName, Password, Mobile, Captcha, ImgCaptcha, Submit } = Login;
 
 @connect(({ login, loading }) => ({
   login,
@@ -14,8 +14,13 @@ const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 export default class LoginPage extends Component {
   state = {
     type: 'account',
-    autoLogin: true,
+    // autoLogin: true,
+    image: '',
   };
+
+  componentDidMount() {
+    this.loadCaptcha();
+  }
 
   onTabChange = type => {
     this.setState({ type });
@@ -34,11 +39,18 @@ export default class LoginPage extends Component {
     }
   };
 
-  changeAutoLogin = e => {
+  loadCaptcha = () => {
+    const isDev = process.env.NODE_ENV === 'development';
     this.setState({
-      autoLogin: e.target.checked,
+      image: `${!isDev ? CONFIG.base_url : ''}/itunes/user/captcha?r=${Math.random()}`,
     });
   };
+
+  // changeAutoLogin = e => {
+  //   this.setState({
+  //     autoLogin: e.target.checked,
+  //   });
+  // };
 
   renderMessage = content => {
     return <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />;
@@ -46,7 +58,7 @@ export default class LoginPage extends Component {
 
   render() {
     const { login, submitting } = this.props;
-    const { type } = this.state;
+    const { type, image } = this.state;
     return (
       <div className={styles.main}>
         <Login defaultActiveKey={type} onTabChange={this.onTabChange} onSubmit={this.handleSubmit}>
@@ -55,8 +67,14 @@ export default class LoginPage extends Component {
               login.type === 'account' &&
               !login.submitting &&
               this.renderMessage('账户或密码错误（admin/888888）')}
-            <UserName name="userName" placeholder="admin/user" />
-            <Password name="password" placeholder="888888/123456" />
+            <UserName name="account" placeholder="用户名或邮箱" />
+            <Password name="password" placeholder="密码" />
+            <ImgCaptcha
+              name="captcha"
+              placeholder="验证码"
+              image={image}
+              onClick={this.loadCaptcha}
+            />
           </Tab>
           {/* <Tab key="mobile" tab="手机号登录">
             {login.status === 'error' &&
@@ -67,15 +85,13 @@ export default class LoginPage extends Component {
             <Captcha name="captcha" />
           </Tab>*/}
           <div>
-            <Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>
+            {/*<Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>
               自动登录
-            </Checkbox>
-            <a style={{ float: 'right' }} href="">
-              忘记密码
-            </a>
+            </Checkbox>*/}
           </div>
           <Submit loading={submitting}>登录</Submit>
           <div className={styles.other}>
+            <a href="">忘记密码</a>
             {/* 其他登录方式
             <Icon className={styles.icon} type="alipay-circle" />
             <Icon className={styles.icon} type="taobao-circle" />

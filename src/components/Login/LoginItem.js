@@ -18,6 +18,7 @@ function generator({ defaultProps, defaultRules, type }) {
         super(props);
         this.state = {
           count: 0,
+          image: '',
         };
       }
       componentDidMount() {
@@ -42,11 +43,17 @@ function generator({ defaultProps, defaultRules, type }) {
           }
         }, 1000);
       };
+
+      onGetCaptcha = () => {
+        if (this.props.onGetCaptcha) {
+          this.props.onGetCaptcha();
+        }
+      };
       render() {
         const { getFieldDecorator } = this.context.form;
         const options = {};
         let otherProps = {};
-        const { onChange, defaultValue, rules, name, ...restProps } = this.props;
+        const { onChange, defaultValue, rules, name, image, ...restProps } = this.props;
         const { count } = this.state;
         options.rules = rules || defaultRules;
         if (onChange) {
@@ -75,6 +82,27 @@ function generator({ defaultProps, defaultRules, type }) {
                   >
                     {count ? `${count} s` : '获取验证码'}
                   </Button>
+                </Col>
+              </Row>
+            </FormItem>
+          );
+        } else if (type === 'ImgCaptcha') {
+          const inputProps = omit(otherProps, ['onGetCaptcha']);
+          return (
+            <FormItem>
+              <Row gutter={8}>
+                <Col span={16}>
+                  {getFieldDecorator(name, options)(
+                    <WrappedComponent {...defaultProps} {...inputProps} />
+                  )}
+                </Col>
+                <Col span={8}>
+                  <img
+                    alt="captcha"
+                    src={image}
+                    onClick={() => this.props.onClick()}
+                    className={styles.captcha}
+                  />
                 </Col>
               </Row>
             </FormItem>

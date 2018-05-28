@@ -5,6 +5,7 @@ const { base_url, web_name } = getSystemUrl(__KG_API_ENV__);
 export default {
   base_url,
   web_name,
+  web_sub_title: 'Itunes & 礼品卡 在线交易平台',
   language: {
     zh_CN: '简体中文',
     en_GB: 'English',

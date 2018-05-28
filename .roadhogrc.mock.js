@@ -138,6 +138,7 @@ const proxy = {
     });
   },
   '/itunes/*': base_url,
+  'POST /itunes/user/*': base_url,
 };
 
 export default (noProxy ? {} : delay(proxy, 1000));

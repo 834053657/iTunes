@@ -94,11 +94,12 @@ export default class GlobalHeader extends PureComponent {
       </Menu>
     );
     const noticeData = this.getNoticeData();
+    console.log(currentUser);
     return (
       <div className={styles.header}>
         <Link to="/" className={styles.logo} key="logo">
           <img src={logo} alt="logo" width="32" />
-          <span> 凯歌交易平台 </span>
+          <span>{CONFIG.web_name}</span>
         </Link>
         {isMobile ? (
           <Icon
@@ -114,7 +115,7 @@ export default class GlobalHeader extends PureComponent {
           <Dropdown overlay={language}>
             <span className={`${styles.action}`}>EN/CN</span>
           </Dropdown>
-          {currentUser.name ? (
+          {currentUser.token && currentUser.user ? (
             <span>
               <NoticeIcon
                 className={styles.action}
@@ -148,17 +149,17 @@ export default class GlobalHeader extends PureComponent {
               </NoticeIcon>
               <Dropdown overlay={menu}>
                 <span className={`${styles.action} ${styles.account}`}>
-                  <Avatar size="small" className={styles.avatar} src={currentUser.avatar} />
-                  <span className={styles.name}>{currentUser.name}</span>
+                  <Avatar size="small" className={styles.avatar} src={currentUser.user.avatar} />
+                  <span className={styles.name}>{currentUser.user.nickname}</span>
                 </span>
               </Dropdown>
             </span>
           ) : (
             <span>
-              <Link className={styles.action} to="/">
+              <Link className={styles.action} to="/user/login">
                 登录
               </Link>
-              <Link className={styles.action} to="/">
+              <Link className={styles.action} to="/user/register">
                 注册
               </Link>
             </span>
