@@ -11,6 +11,7 @@ module.exports = {
   },
   rules: {
     camelcase: [0],
+    radix: [0],
     'no-unused-vars': [1],
     'generator-star-spacing': [0],
     'consistent-return': [0],
@@ -19,6 +20,7 @@ module.exports = {
     'global-require': [1],
     'import/prefer-default-export': [0],
     'react/jsx-no-bind': [0],
+    'react/sort-comp': [0],
     'react/prop-types': [0],
     'react/prefer-stateless-function': [0],
     'spaced-comment': [0],

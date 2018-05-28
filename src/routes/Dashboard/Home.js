@@ -157,7 +157,7 @@ export default class Analysis extends Component {
                 <Col span={8}>
                   <div className={styles.content_date}>
                     <Icon type="calendar" className={styles.calendar_icon} />{' '}
-                    {item && moment(new Date(Math.parseInt(item.created_at))).format('YYYY-MM-DD')}
+                    {item && moment(new Date(parseInt(item.created_at))).format('YYYY-MM-DD')}
                   </div>
                 </Col>
                 <Col span={24}>
