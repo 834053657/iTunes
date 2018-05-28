@@ -5,6 +5,10 @@ export async function queryBanners() {
   return request('/itunes/info/banners');
 }
 
+export async function queryInfoList(params) {
+  return request(`/itunes/info/all?${stringify(params)}`);
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
