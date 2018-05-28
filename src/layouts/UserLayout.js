@@ -1,35 +1,13 @@
 import React, { Fragment } from 'react';
 import { Link, Redirect, Switch, Route } from 'dva/router';
 import DocumentTitle from 'react-document-title';
-import { Icon } from 'antd';
+import { Icon, Layout } from 'antd';
 import GlobalFooter from '../components/GlobalFooter';
 import styles from './UserLayout.less';
 import logo from '../assets/logo.svg';
 import { getRoutes } from '../utils/utils';
 
-const links = [
-  {
-    key: 'help',
-    title: '帮助',
-    href: '',
-  },
-  {
-    key: 'privacy',
-    title: '隐私',
-    href: '',
-  },
-  {
-    key: 'terms',
-    title: '条款',
-    href: '',
-  },
-];
-
-const copyright = (
-  <Fragment>
-    Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
-  </Fragment>
-);
+const { Footer } = Layout;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
@@ -68,7 +46,35 @@ class UserLayout extends React.PureComponent {
               <Redirect exact from="/user" to="/user/login" />
             </Switch>
           </div>
-          <GlobalFooter links={links} copyright={copyright} />
+          <Footer style={{ padding: 0, backgroundColor: '#092136' }}>
+            <GlobalFooter
+              links={[
+                {
+                  key: '1',
+                  title: '帮助',
+                  href: '#',
+                  blankTarget: true,
+                },
+                {
+                  key: '2',
+                  title: '隐私',
+                  href: '#',
+                  blankTarget: true,
+                },
+                {
+                  key: '3',
+                  title: '条款',
+                  href: '#',
+                  blankTarget: true,
+                },
+              ]}
+              copyright={
+                <Fragment>
+                  Copyright <Icon type="copyright" /> 深圳凯歌科技有限公司
+                </Fragment>
+              }
+            />
+          </Footer>
         </div>
       </DocumentTitle>
     );
