@@ -88,3 +88,11 @@ export async function queryStatistics() {
 export async function queryConfigs() {
   return request('/itunes/get_defined');
 }
+
+//礼品卡列表actions开始
+
+export async function getGiftCard() {
+  return request('/itunes/get_card_list');
+}
+
+//礼品卡列表actions结束

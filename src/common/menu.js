@@ -33,7 +33,7 @@ const menuData = [
       },
       {
         name: '发布出售广告',
-        path: 'sell-card',
+        path: 'sale-card',
       },
     ],
   },

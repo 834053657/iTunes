@@ -100,6 +100,17 @@ export const getRouterData = app => {
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
     },
+    //礼品卡路由控制
+    '/card/card-markets': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/CardMarkets')),
+    },
+    '/card/buy-card': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
+    },
+    '/card/sale-card': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/SaleCard')),
+    },
+
     '/form/step-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm')),
     },
