@@ -5,6 +5,30 @@
   padding: 30px;
 }
 
+.left {
+  .left_wrapper {
+    width: 230px;
+    margin: 0 auto;
+  }
+  .user_info {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 26px;
+    align-items: center;
+
+    .info {
+      padding-left: 16px;
+      .name {
+        font-weight: 800;
+      }
+    }
+    :global(.ant-avatar) {
+      width: 52px;
+      height: 52px;
+    }
+  }
+}
+
 .box {
   font-family: Monospaced Number, Chinese Quote, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;

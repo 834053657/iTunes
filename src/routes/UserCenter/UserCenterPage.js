@@ -45,31 +45,32 @@ export default class Analysis extends Component {
     return (
       <Fragment>
         <Row gutter={24} className={styles.user_center}>
-          <Col span={12}>
+          <Col span={8}>
             <div className={styles.left}>
-              <div className={`${styles.action} ${styles.account}`}>
-                <Avatar size="small" className={styles.avatar} src={user.avatar} />
-                <span>
-                  <span className={styles.name}>{user.nickname}</span>
-                  <span className={styles.name}>UID: {user.uid}</span>
-                </span>
+              <div className={styles.left_wrapper}>
+                <div className={styles.user_info}>
+                  <Avatar size="lager" className={styles.avatar} src={user.avatar} />
+                  <div className={styles.info}>
+                    <div className={styles.name}>{user.nickname}</div>
+                    <div className={styles.uid}>UID: {user.id}</div>
+                  </div>
+                </div>
+                <div>
+                  <Upload {...props}>
+                    <Button>
+                      <Icon type="upload" /> 上传头像
+                    </Button>
+                  </Upload>
+                </div>
+                <Divider />
+                <p>
+                  本帐号于<span> 2017-11-13 15:31:16 </span>注册, <br />
+                  首次交易在<span> 2018-01-19 10:56:39</span>
+                </p>
               </div>
-              <div>
-                <Upload {...props}>
-                  <Button>
-                    <Icon type="upload" /> Click to Upload
-                  </Button>
-                </Upload>
-              </div>
-              <Divider />
-              <p>
-                本帐号于<span>2017-11-13 15:31:16</span>注册, 首次交易在<span>
-                  2018-01-19 10:56:39
-                </span>
-              </p>
             </div>
           </Col>
-          <Col span={12}>
+          <Col span={16}>
             <div className={styles.right}>
               {/* 账号与安全 */}
               <div className={styles.box}>
