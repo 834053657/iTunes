@@ -95,8 +95,11 @@ export async function queryConfigs() {
 
 //礼品卡列表actions开始
 
-export async function getGiftCard() {
-  return request('/itunes/get_card_list');
+export async function getGiftCard(params) {
+  console.log('params');
+  console.log(params);
+  console.log(stringify(params));
+  return request(`/itunes/get_card_list?${stringify(params)}`);
 }
 
 //礼品卡列表actions结束
