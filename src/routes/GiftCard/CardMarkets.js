@@ -87,13 +87,15 @@ export default class CardMarkets extends Component {
       //升序
       if (sorter.order && sorter.order === 'ascend') {
         this.filter = Object.assign(this.filter, { unit_price: 0 });
+        this.reSetPage();
+        this.reloadList();
       }
       //降序
       if (sorter.order && sorter.order === 'descend') {
         this.filter = Object.assign(this.filter, { unit_price: 1 });
+        this.reSetPage();
+        this.reloadList();
       }
-      this.reSetPage();
-      this.reloadList();
     };
 
     this.setMinDeno = e => {
@@ -114,6 +116,7 @@ export default class CardMarkets extends Component {
         maxDeno: null,
       });
     };
+
     this.setRangeFilter = () => {
       const a = parseInt(this.state.minDeno);
       const b = parseInt(this.state.maxDeno);
@@ -153,9 +156,7 @@ export default class CardMarkets extends Component {
     });
   }
 
-  componentDidMount() {
-    console.log(this.props);
-  }
+  componentDidMount() {}
 
   componentWillUnmount() {}
 
