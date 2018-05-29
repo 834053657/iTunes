@@ -75,13 +75,15 @@ export default class InfoDetail extends PureComponent {
             <div className={styles.title}>{data.title}</div>
             <div className={styles.publish}>
               <Icon type="clock-circle-o" />
-              <span>{data.publish_at ? moment(new Date(data.publish_at * 1000)).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>
+              <span>
+                {data.publish_at
+                  ? moment(new Date(data.publish_at * 1000)).format('YYYY-MM-DD HH:mm:ss')
+                  : '-'}
+              </span>
             </div>
           </Card>
           <Card className={styles.content}>
-            <div>
-              {data.content}
-            </div>
+            <div>{data.content}</div>
           </Card>
         </div>
       </PageHeaderLayout>

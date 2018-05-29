@@ -11,11 +11,22 @@ const columns = [
     title: '标题',
     dataIndex: 'title',
     width: '70%',
-    render: (val, row) => <Link to={`/message/info-detail/${row.id}`}>{val}</Link>,
+    render: (val, row) => {
+      let url = '';
+      switch(row.status) {
+        case 1:
+          url = `/message/info-detail/${row.id}`;
+          break;
+        default:
+          url = '';
+          break;
+      }
+      return <Link to={url}>{row.status === 1 ? <Icon type="file-text" /> : <Icon type="bell" />} {val}</Link>
+    },
   },
   {
     title: '发布时间',
-    dataIndex: 'publish_at',
+    dataIndex: 'created_at',
     width: '30%',
     render: val => (
       <span>{val ? moment(new Date(val * 1000)).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>
@@ -24,10 +35,10 @@ const columns = [
 ];
 
 @connect(({ message, loading }) => ({
-  data: message.infoData,
+  data: message.msgData,
   loading: loading.models.message,
 }))
-export default class InfoList extends Component {
+export default class List extends Component {
   constructor(props) {
     super();
 
@@ -41,7 +52,7 @@ export default class InfoList extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'message/fetchInfoList',
+      type: 'message/fetchMessageList',
     });
   }
 
@@ -66,7 +77,7 @@ export default class InfoList extends Component {
     }
 
     dispatch({
-      type: 'message/fetchInfoList',
+      type: 'message/fetchMessageList',
       payload: params,
     });
   };
@@ -75,22 +86,21 @@ export default class InfoList extends Component {
     const { data: { list, pagination }, loading } = this.props;
     const { selectedRows } = this.state;
 
-    const breadcrumbList = [{ title: '首页', href: '/' }, { title: '更多资讯' }];
-
-    console.log(111, this.props);
-
     return (
-      <PageHeaderLayout title="" breadcrumbList={breadcrumbList}>
+      <PageHeaderLayout title="消息中心" >
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Table
               loading={loading}
-              //rowKey={record => record.id}
+              rowKey={record => record.id}
               dataSource={list}
               columns={columns}
               pagination={pagination}
               onChange={this.handleTableChange}
               showHeader={false}
+              rowClassName={(r, index) => {
+                return r.status === 1 ? styles.read : '';
+              }}
             />
           </Card>
         </div>

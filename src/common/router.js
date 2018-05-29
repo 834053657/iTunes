@@ -110,6 +110,9 @@ export const getRouterData = app => {
     '/message/info-detail/:id': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/InfoDetail')),
     },
+    '/message/list': {
+      component: dynamicWrapper(app, ['message'], () => import('../routes/Message/List')),
+    },
     //礼品卡路由控制
     '/card/card-markets': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/CardMarkets')),

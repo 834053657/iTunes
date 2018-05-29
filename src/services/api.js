@@ -13,6 +13,10 @@ export async function queryInfoDtl(params) {
   return request(`/itunes/info/detail?${stringify(params)}`);
 }
 
+export async function queryMessageList(params) {
+  return request(`/itunes/message/all?${stringify(params)}`);
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
