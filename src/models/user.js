@@ -1,10 +1,5 @@
 import { message } from 'antd';
-import {
-  query as queryUsers,
-  queryCurrent,
-  forgetPassword,
-  updatePassword,
-} from '../services/user';
+import { query as queryUsers, queryCurrent, forgetPassword, resetPassword } from '../services/user';
 import { setAuthority } from '../utils/authority';
 import { fakeRegister } from '../services/api';
 
@@ -47,8 +42,7 @@ export default {
       }
     },
     *submitChangePassword({ payload }, { call, put }) {
-      console.log(payload);
-      const response = yield call(updatePassword, payload);
+      const response = yield call(resetPassword, payload);
       if (response.code === 0) {
         yield put({
           type: 'forgetPasswordHandle',

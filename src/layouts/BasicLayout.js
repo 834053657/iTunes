@@ -174,6 +174,12 @@ class BasicLayout extends React.PureComponent {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
       return;
     }
+    console.log(key);
+    if (key === 'userCenter') {
+      this.props.dispatch(routerRedux.push('/user-center'));
+      return;
+    }
+
     if (key === 'logout') {
       this.props.dispatch({
         type: 'login/logout',
