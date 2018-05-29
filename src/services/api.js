@@ -75,12 +75,23 @@ export async function accountLogin(params) {
   });
 }
 
+// -------------- 注册 start --------------
+
 export async function fakeRegister(params) {
   return request('/itunes/user/register', {
     method: 'POST',
     body: params,
   });
 }
+
+export async function postVerify(params) {
+  return request('/itunes/post_verify', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// -------------- 注册 end --------------
 
 export async function queryNotices() {
   return request('/api/notices');

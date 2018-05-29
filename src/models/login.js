@@ -8,6 +8,8 @@ export default {
 
   state: {
     status: undefined,
+    g2Visible: undefined,
+    loginInfo: undefined,
   },
 
   effects: {
@@ -18,10 +20,27 @@ export default {
       if (response.code === 0 && response.data) {
         yield put({
           type: 'changeLoginStatus',
-          payload: response.data,
+          payload: {
+            user: response.data,
+          },
         });
         reloadAuthorized();
         yield put(routerRedux.push('/'));
+      } else if (response.code === 1) {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            g2Visible: true,
+            loginInfo: payload,
+          },
+        });
+      } else {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            status: 'error',
+          },
+        });
       }
     },
     *logout(_, { put, select }) {
@@ -45,11 +64,13 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload);
+      console.log(payload);
+      setAuthority(payload.user);
       return {
         ...state,
+        loginInfo: payload.loginInfo,
+        g2Visible: payload.g2Visible,
         status: payload.status,
-        type: payload.type,
       };
     },
   },

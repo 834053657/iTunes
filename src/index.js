@@ -11,10 +11,15 @@ import './rollbar';
 import './index.less';
 import CONFIG from './utils/config';
 
+message.config({
+  duration: 2,
+  top: '35%',
+});
+
 notification.config({
   placement: 'bottomRight',
   bottom: 50,
-  duration: 3,
+  duration: 2,
 });
 
 global.CONFIG = CONFIG;

@@ -7,7 +7,7 @@ export default {
     collapsed: false,
     notices: [],
     statistics: {},
-    banners: []
+    banners: [],
   },
 
   effects: {
@@ -17,7 +17,7 @@ export default {
       if (response && response.code === 0) {
         yield put({
           type: 'setBanners',
-          payload: response.data
+          payload: response.data,
         });
       }
     },

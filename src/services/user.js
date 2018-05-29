@@ -9,7 +9,14 @@ export async function queryCurrent() {
 }
 
 export async function forgetPassword(params) {
-  return request('/itunes/user_forget_password', {
+  return request('/itunes/user/forget_password', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updatePassword(params) {
+  return request('/itunes/user/update_password', {
     method: 'POST',
     body: params,
   });

@@ -9,7 +9,7 @@ const { Option } = Select;
 const InputGroup = Input.Group;
 
 @connect(({ user, loading }) => ({
-  result: user.forgetPassword,
+  result: user.forgetPassword.result,
   submitting: loading.effects['user/submitForgetPassword'],
 }))
 @Form.create()
@@ -23,14 +23,11 @@ export default class Register extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const account = this.props.form.getFieldValue('mail');
-    if (nextProps.result && nextProps.result.token) {
+    console.log(nextProps);
+    if (nextProps.result === 0) {
       this.props.dispatch(
         routerRedux.push({
-          pathname: '/user/register-result',
-          state: {
-            account,
-          },
+          pathname: '/user/forget-password-result',
         })
       );
     }
