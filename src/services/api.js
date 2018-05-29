@@ -9,6 +9,10 @@ export async function queryInfoList(params) {
   return request(`/itunes/info/all?${stringify(params)}`);
 }
 
+export async function queryInfoDtl(params) {
+  return request(`/itunes/info/detail?${stringify(params)}`);
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }

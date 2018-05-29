@@ -1,4 +1,4 @@
-import { queryInfoList } from '../services/api';
+import { queryInfoList, queryInfoDtl } from '../services/api';
 
 export default {
   namespace: 'message',
@@ -8,6 +8,7 @@ export default {
       list: [],
       pagination: {},
     },
+    infoDetail: {},
   },
 
   effects: {
@@ -15,6 +16,13 @@ export default {
       const res = yield call(queryInfoList, payload);
       yield put({
         type: 'setInfoList',
+        payload: res,
+      });
+    },
+    *fetchInfoDetail({ payload }, { call, put }) {
+      const res = yield call(queryInfoDtl, payload);
+      yield put({
+        type: 'setInfoDetail',
         payload: res,
       });
     },
@@ -29,6 +37,12 @@ export default {
           list: items,
           pagination: { ...paginator, current: paginator.page },
         },
+      };
+    },
+    setInfoDetail(state, { payload }) {
+      return {
+        ...state,
+        infoDetail: payload.data,
       };
     },
   },

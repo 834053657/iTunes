@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import classNames from 'classnames';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
-import { Button, Card, Row, Col, Modal, Form, Input, Table } from 'antd';
+import { Button, Card, Row, Col, Modal, Form, Input, Table, Icon } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Detail.less';
 
@@ -21,7 +21,7 @@ const clsString = classNames(
 );
 
 @connect(({ message, loading }) => ({
-  data: message.infoData,
+  data: message.infoDetail,
   loading: loading.models.message,
 }))
 /* @connect((userDetail, loading) => {
@@ -34,14 +34,14 @@ export default class InfoDetail extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
 
-    /*dispatch({
-      type: 'userDetail/fetch',
+    dispatch({
+      type: 'message/fetchInfoDetail',
       payload: { id: this.props.match.params.id },
-    });*/
+    });
   }
 
   render() {
-    const { loading } = this.props;
+    const { loading, data } = this.props;
 
     const formItemLayout = {
       labelCol: {
@@ -61,15 +61,27 @@ export default class InfoDetail extends PureComponent {
     ];
 
     return (
-      <PageHeaderLayout title="" breadcrumbList={breadcrumbList}>
+      <PageHeaderLayout title="咨询详情" breadcrumbList={breadcrumbList}>
         <div className={clsString}>
           <Card bordered={false}>
-            <a
-              className={styles.itunes_btn}
-              onClick={() => this.props.dispatch(routerRedux.goBack())}
-            >
-              返回
-            </a>
+            <div>
+              <a
+                className={styles.itunes_btn}
+                onClick={() => this.props.dispatch(routerRedux.goBack())}
+              >
+                返回
+              </a>
+            </div>
+            <div className={styles.title}>{data.title}</div>
+            <div className={styles.publish}>
+              <Icon type="clock-circle-o" />
+              <span>{data.publish_at ? moment(new Date(data.publish_at * 1000)).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>
+            </div>
+          </Card>
+          <Card className={styles.content}>
+            <div>
+              {data.content}
+            </div>
           </Card>
         </div>
       </PageHeaderLayout>
