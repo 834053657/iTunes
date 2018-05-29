@@ -1,4 +1,10 @@
-import { query as queryUsers, queryCurrent, forgetPassword } from '../services/user';
+import { message } from 'antd';
+import {
+  query as queryUsers,
+  queryCurrent,
+  forgetPassword,
+  updatePassword,
+} from '../services/user';
 import { setAuthority } from '../utils/authority';
 import { fakeRegister } from '../services/api';
 
@@ -31,11 +37,25 @@ export default {
     },
     *submitForgetPassword(_, { call, put }) {
       const response = yield call(forgetPassword);
-      if (response.code === 0 && response.data) {
+      if (response.code === 0) {
         yield put({
           type: 'forgetPasswordHandle',
           payload: response,
         });
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitChangePassword({ payload }, { call, put }) {
+      console.log(payload);
+      const response = yield call(updatePassword, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'forgetPasswordHandle',
+          payload: response,
+        });
+      } else {
+        message.error(response.errmsg || '操作失败');
       }
     },
   },

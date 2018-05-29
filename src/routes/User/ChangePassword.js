@@ -21,7 +21,7 @@ const passwordProgressMap = {
 };
 
 @connect(({ user, loading }) => ({
-  result: user.changePassword,
+  result: user.changePassword.result,
   submitting: loading.effects['register/submit'],
 }))
 @Form.create()
@@ -33,14 +33,10 @@ export default class Register extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const account = this.props.form.getFieldValue('mail');
-    if (nextProps.result && nextProps.result.token) {
+    if (nextProps.result === 0) {
       this.props.dispatch(
         routerRedux.push({
-          pathname: '/user/register-result',
-          state: {
-            account,
-          },
+          pathname: '/user/change-password-result',
         })
       );
     }
@@ -62,12 +58,15 @@ export default class Register extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    const { params: { code } } = this.props.match || {};
     this.props.form.validateFields({ force: true }, (err, values) => {
+      console.log(values);
       if (!err) {
         this.props.dispatch({
-          type: 'register/submit',
+          type: 'user/submitChangePassword',
           payload: {
             ...values,
+            code,
           },
         });
       }
@@ -181,11 +180,8 @@ export default class Register extends Component {
               type="primary"
               htmlType="submit"
             >
-              完成
+              提交
             </Button>
-            <Link className={styles.login} to="/user/login">
-              使用已有账户登录
-            </Link>
           </FormItem>
         </Form>
       </div>

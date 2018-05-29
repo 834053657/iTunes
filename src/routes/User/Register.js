@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
+import { Form, Input, Button, Select, Row, Col, Popover, Progress, message } from 'antd';
+import ImageValidation from 'components/ImageValidation';
 import styles from './Register.less';
 
 const FormItem = Form.Item;
@@ -30,6 +31,7 @@ export default class Register extends Component {
     count: 0,
     confirmDirty: false,
     visible: false,
+    imageValidationVisible: false,
     help: '',
     image: '',
   };
@@ -52,16 +54,44 @@ export default class Register extends Component {
     clearInterval(this.interval);
   }
 
-  onGetCaptcha = () => {
-    let count = 59;
-    this.setState({ count });
-    this.interval = setInterval(() => {
-      count -= 1;
-      this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.interval);
+  showImageValidationModal = () => {
+    this.props.form.validateFieldsAndScroll(['mail'], {}, (err, values) => {
+      if (!err) {
+        this.setState({
+          imageValidationVisible: true,
+        });
       }
-    }, 1000);
+    });
+  };
+
+  onGetCaptcha = (err, code) => {
+    const { form } = this.props;
+    const mail = form.getFieldValue('mail');
+    if (!err) {
+      this.props.dispatch({
+        type: 'register/sendVerify',
+        payload: {
+          code,
+          data: mail,
+          type: 1,
+        },
+        callback: res => {
+          if (res.code === 0) {
+            let count = 59;
+            this.setState({ count, imageValidationVisible: false });
+            this.interval = setInterval(() => {
+              count -= 1;
+              this.setState({ count });
+              if (count === 0) {
+                clearInterval(this.interval);
+              }
+            }, 1000);
+          } else {
+            message.error(res.errmsg || '发送失败');
+          }
+        },
+      });
+    }
   };
 
   getPasswordStatus = () => {
@@ -159,7 +189,7 @@ export default class Register extends Component {
   render() {
     const { form, submitting } = this.props;
     const { getFieldDecorator } = form;
-    const { count, image } = this.state;
+    const { count, image, imageValidationVisible } = this.state;
     return (
       <div className={styles.main}>
         <h3>注册</h3>
@@ -195,7 +225,7 @@ export default class Register extends Component {
                   size="large"
                   disabled={count}
                   className={styles.getCaptcha}
-                  onClick={this.onGetCaptcha}
+                  onClick={this.showImageValidationModal}
                 >
                   {count ? `${count} s` : '获取验证码'}
                 </Button>
@@ -254,11 +284,8 @@ export default class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请确认邀请码！',
+                  message: '请输入邀请码！',
                 },
-                // {
-                //   validator: this.checkConfirm,
-                // },
               ],
             })(<Input size="large" type="password" placeholder="邀请码" />)}
           </FormItem>
@@ -278,6 +305,14 @@ export default class Register extends Component {
             </Link>
           </FormItem>
         </Form>
+        <ImageValidation
+          title="安全验证"
+          onCancel={() => {
+            this.setState({ imageValidationVisible: false });
+          }}
+          onSubmit={this.onGetCaptcha}
+          visible={imageValidationVisible}
+        />
       </div>
     );
   }
