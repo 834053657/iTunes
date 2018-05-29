@@ -9,6 +9,9 @@
   background: #fff;
   text-align: center;
   line-height: 100%;
+  border-radius: 3px;
+  box-shadow: 0 2px 16px #aaa, 0 0 2px #aaa, 0 0 2px #aaa;
+
   :hover {
     cursor: pointer;
   }
@@ -25,4 +28,41 @@
   width: 100px;
   height: 30px;
   background: red;
+}
+
+.denoRange {
+  width: 200px;
+  height: 120px;
+  background: #fff;
+  border-radius: 3px;
+  position: absolute;
+  top: 10px;
+  left: -50px;
+  box-shadow: 0 2px 16px #aaa, 0 0 2px #aaa, 0 0 2px #aaa;
+
+  .range {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+
+    span {
+      float: left;
+      margin-left: 10px;
+      margin-top: 5px;
+    }
+
+    .min,
+    .max {
+      width: 50px;
+      height: 100%;
+    }
+  }
+
+  .rangeBtns {
+    margin: 15px 0 0 45px;
+
+    button {
+      margin-left: 10px;
+    }
+  }
 }
