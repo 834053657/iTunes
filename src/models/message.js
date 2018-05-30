@@ -1,4 +1,4 @@
-import { queryInfoList, queryInfoDtl, queryMessageList } from '../services/api';
+import { queryInfoList, queryInfoDtl, queryMessageList, readMessage } from '../services/api';
 
 export default {
   namespace: 'message',
@@ -23,12 +23,13 @@ export default {
         payload: res,
       });
     },
-    *fetchInfoDetail({ payload }, { call, put }) {
+    *fetchInfoDetail({ payload, callback }, { call, put }) {
       const res = yield call(queryInfoDtl, payload);
       yield put({
         type: 'setInfoDetail',
         payload: res,
       });
+      if (callback) callback();
     },
     *fetchMessageList({ payload }, { call, put }) {
       const res = yield call(queryMessageList, payload);
@@ -36,6 +37,14 @@ export default {
         type: 'setMessageList',
         payload: res,
       });
+    },
+    *readMessage({ payload, callback }, { call, put }) {
+      const res = yield call(readMessage, payload);
+      yield put({
+        type: 'setReadMessage',
+        payload: res,
+      });
+      if (callback) callback();
     },
   },
 
@@ -64,6 +73,12 @@ export default {
           list: items,
           pagination: { ...paginator, current: paginator.page },
         },
+      };
+    },
+    setReadMessage(state, { payload }) {
+      console.log(payload);
+      return {
+        ...state,
       };
     },
   },

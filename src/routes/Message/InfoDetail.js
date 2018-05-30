@@ -37,6 +37,16 @@ export default class InfoDetail extends PureComponent {
     dispatch({
       type: 'message/fetchInfoDetail',
       payload: { id: this.props.match.params.id },
+      callback: () => this.readMsg(this.props.match.params.id)
+    });
+  }
+
+  readMsg = (id) => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'message/readMessage',
+      payload: { all: false, id },
     });
   }
 

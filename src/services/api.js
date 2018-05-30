@@ -17,6 +17,13 @@ export async function queryMessageList(params) {
   return request(`/itunes/message/all?${stringify(params)}`);
 }
 
+export async function readMessage(params) {
+  return request('/itunes/message/read', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }

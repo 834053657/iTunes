@@ -2,37 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import moment from 'moment';
-import { Table, Tabs, Button, Icon, Card } from 'antd';
+import { Table, Tabs, Button, Icon, Card, Modal } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Message.less';
-
-const columns = [
-  {
-    title: '标题',
-    dataIndex: 'title',
-    width: '70%',
-    render: (val, row) => {
-      let url = '';
-      switch(row.status) {
-        case 1:
-          url = `/message/info-detail/${row.id}`;
-          break;
-        default:
-          url = '';
-          break;
-      }
-      return <Link to={url}>{row.status === 1 ? <Icon type="file-text" /> : <Icon type="bell" />} {val}</Link>
-    },
-  },
-  {
-    title: '发布时间',
-    dataIndex: 'created_at',
-    width: '30%',
-    render: val => (
-      <span>{val ? moment(new Date(val * 1000)).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>
-    ),
-  },
-];
 
 @connect(({ message, loading }) => ({
   data: message.msgData,
@@ -54,6 +26,60 @@ export default class List extends Component {
     dispatch({
       type: 'message/fetchMessageList',
     });
+  }
+
+  columns = [
+    {
+      title: '标题',
+      dataIndex: 'title',
+      width: '70%',
+      render: (val, row) => {
+        if (row.msg_type === 1)
+          return <Link to={`/message/info-detail/${row.id}`}><Icon type="file-text" /> {val}</Link>
+        else 
+          return <a onClick={() => this.readMsg(row)}>{row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />} {val}</a>
+      },
+    },
+    {
+      title: '发布时间',
+      dataIndex: 'created_at',
+      width: '30%',
+      render: val => (
+        <span>{val ? moment(new Date(val * 1000)).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>
+      ),
+    },
+  ];
+
+  readMsg = (row) => {
+    const { dispatch } = this.props;
+
+    if (row.status === 0) {
+      dispatch({
+        type: 'message/readMessage',
+        payload: { all: false, id: row.id },
+        callback: () => {this.showMsg(row)}
+      });
+    }
+    else {
+      this.showMsg(row)
+    }
+  }
+
+  showMsg = (row) => {
+    const { dispatch } = this.props;
+    console.log(111, row)
+    
+    if ([1, 11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
+      Modal.success({
+        title: row.title,
+        content: row.content,
+        onOk: () => {
+          dispatch({
+            type: 'message/fetchMessageList',
+          });
+        }
+      });
+    }
   }
 
   handleTableChange = (pagination, filtersArg, sorter) => {
@@ -94,7 +120,7 @@ export default class List extends Component {
               loading={loading}
               rowKey={record => record.id}
               dataSource={list}
-              columns={columns}
+              columns={this.columns}
               pagination={pagination}
               onChange={this.handleTableChange}
               showHeader={false}
