@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { mapKeys } from 'lodash';
 import {
   queryNotices,
   queryStatistics,
@@ -34,6 +35,7 @@ export default {
       const response = yield call(queryConfigs) || {};
       if (response && response.code === 0) {
         CONFIG = { ...CONFIG, ...response.data };
+        CONFIG.countrysMap = mapKeys(response.data.countrys, 'id');
       }
     },
     *fetchNotices(_, { call, put }) {

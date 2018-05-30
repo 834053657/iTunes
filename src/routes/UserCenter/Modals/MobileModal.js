@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
 import { delay } from 'lodash';
-import CheckEmailForm from '../forms/EmailForm';
+import MobileForm from '../forms/MobileForm';
 import styles from './EmailModal.less';
 
 const { Step } = Steps;
 
-export default class EmailModal extends Component {
+export default class MobileModal extends Component {
   static defaultProps = {
     className: '',
-    title: '邮箱绑定',
+    title: '手机绑定',
     onCancel: () => {},
   };
   static propTypes = {
@@ -70,10 +70,10 @@ export default class EmailModal extends Component {
     const { current } = this.state;
     let steps = [
       {
-        title: '验证旧邮箱',
-        hide: !user.email,
+        title: '验证旧手机',
+        hide: !user.telephone,
         component: (
-          <CheckEmailForm
+          <MobileForm
             key="1"
             onGetCaptcha={this.handleSendCaptcha}
             initialValue={user}
@@ -84,9 +84,9 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title: '绑定新邮箱',
+        title: '绑定新手机',
         component: (
-          <CheckEmailForm
+          <MobileForm
             key="2"
             onGetCaptcha={this.handleSendCaptcha}
             onSubmit={this.handleBindSubmit}

@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import { Row, Col, Avatar, Divider, Upload, message, Button, Icon } from 'antd';
 import EmailModal from './Modals/EmailModal';
+import MobileModal from './Modals/MobileModal';
 import styles from './UserCenterPage.less';
 
 @connect(({ global, user, loading }) => ({
@@ -12,7 +13,7 @@ import styles from './UserCenterPage.less';
 export default class Analysis extends Component {
   state = {
     emailModalVisible: false,
-    emailModalCurrent: 0,
+    mobileModalVisible: false,
   };
 
   componentDidMount() {
@@ -26,14 +27,12 @@ export default class Analysis extends Component {
   hideEmailModal = () => {
     this.setState({
       emailModalVisible: false,
-      emailModalCurrent: 0,
     });
   };
 
   showEmailModal = () => {
     this.setState({
       emailModalVisible: true,
-      emailModalCurrent: 0,
     });
   };
 
@@ -53,11 +52,40 @@ export default class Analysis extends Component {
         });
       }
     }
-    // this.hideEmailModal()
+  };
+
+  hideMobilelModal = () => {
+    this.setState({
+      mobileModalVisible: false,
+    });
+  };
+
+  showMobileModal = () => {
+    this.setState({
+      mobileModalVisible: true,
+    });
+  };
+
+  handleUpdateMobile = (err, values) => {
+    const { currentUser } = this.props;
+    const { user = {} } = currentUser || {};
+    if (!err) {
+      if (!user.email) {
+        this.props.dispatch({
+          type: 'user/submitChangeEmail',
+          callback: this.hideMobilelModal,
+        });
+      } else {
+        this.props.dispatch({
+          type: 'global/sendVerify',
+          callback: this.hideMobilelModal,
+        });
+      }
+    }
   };
 
   render() {
-    const { emailModalVisible, emailModalCurrent } = this.state;
+    const { emailModalVisible, mobileModalVisible } = this.state;
     const { currentUser } = this.props;
     const { user = {} } = currentUser || {};
 
@@ -135,11 +163,7 @@ export default class Analysis extends Component {
                     <div className={styles.box_item_content}>{user.email}</div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        {user.email ? (
-                          <a onClick={() => this.setState({ emailModalVisible: true })}>修改</a>
-                        ) : (
-                          <a onClick={() => this.setState({ emailModalVisible: true })}>绑定</a>
-                        )}
+                        <a onClick={this.showEmailModal}>{user.email ? '修改' : '绑定'}</a>
                       </li>
                     </ul>
                   </div>
@@ -149,13 +173,15 @@ export default class Analysis extends Component {
                       <Icon type="mobile" />
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>手机</h4>
-                        <div className={styles.box_item_descript}>未绑定</div>
+                        <div className={styles.box_item_descript}>
+                          {user.telephone ? '已绑定' : '未绑定'}
+                        </div>
                       </div>
                     </div>
-                    <div className={styles.box_item_content} />
+                    <div className={styles.box_item_content}>{user.telephone}</div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a href="#">编辑</a>
+                        <a onClick={this.showMobileModal}>{user.telephone ? '修改' : '绑定'}</a>
                       </li>
                     </ul>
                   </div>
@@ -296,6 +322,14 @@ export default class Analysis extends Component {
                 email={user.email}
                 visible={emailModalVisible}
                 onCancel={this.hideEmailModal}
+              />
+            )}
+
+            {mobileModalVisible && (
+              <MobileModal
+                {...this.props}
+                visible={mobileModalVisible}
+                onCancel={this.hideMobilelModal}
               />
             )}
           </Col>

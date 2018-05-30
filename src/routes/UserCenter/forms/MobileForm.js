@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, Button, Modal, Row, Col, Steps, Divider } from 'antd';
+import { Form, Input, Button, Modal, Select, Row, Col, Divider } from 'antd';
 import classNames from 'classnames';
-import styles from './EmailForm.less';
+import styles from './MobileForm.less';
 
 const FormItem = Form.Item;
-const { Step } = Steps;
 
-class EmailForm extends Component {
+const InputGroup = Input.Group;
+const { Option } = Select;
+
+class MobileForm extends Component {
   static defaultProps = {
     className: '',
     onGetCaptcha: () => {},
@@ -63,6 +65,7 @@ class EmailForm extends Component {
   render() {
     const { className, form, initialValue = {}, submitting, disabled } = this.props;
     const { count, current } = this.state;
+    const telephone_code = form.getFieldValue('telephone_code');
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -76,22 +79,49 @@ class EmailForm extends Component {
     return (
       <div className={classNames(className, styles.login)}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="邮箱">
+          <FormItem {...formItemLayout} label="国家">
+            {getFieldDecorator('telephone_code', {
+              initialValue: initialValue.telephone_code,
+              rules: [
+                {
+                  required: true,
+                  message: '请选择国家！',
+                },
+              ],
+            })(
+              <Select>
+                {CONFIG.countrys.map(item => (
+                  <Option key={item.code} value={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="手机号码">
             <Row gutter={8}>
               <Col span={16}>
-                {getFieldDecorator('email', {
-                  initialValue: initialValue.email,
+                {getFieldDecorator('telephone', {
+                  initialValue: initialValue.telephone,
                   rules: [
                     {
                       required: true,
-                      message: '请输入邮箱！',
-                    },
-                    {
-                      type: 'email',
-                      message: '邮箱地址格式错误！',
+                      message: '请输入手机号码！',
                     },
                   ],
-                })(<Input size="large" disabled={disabled} placeholder="邮箱" />)}
+                })(
+                  <Input
+                    className={styles.mobile_input}
+                    addonBefore={
+                      telephone_code && CONFIG.countrysMap[telephone_code] ? (
+                        <span>+{CONFIG.countrysMap[telephone_code].code}</span>
+                      ) : (
+                        ''
+                      )
+                    }
+                    style={{ width: '100%' }}
+                  />
+                )}
               </Col>
               <Col span={8}>
                 <Button
@@ -106,7 +136,7 @@ class EmailForm extends Component {
             </Row>
           </FormItem>
           <FormItem {...formItemLayout} label="验证码">
-            {getFieldDecorator('captcha', {
+            {getFieldDecorator('verify_code', {
               rules: [
                 {
                   required: true,
@@ -129,4 +159,4 @@ class EmailForm extends Component {
   }
 }
 
-export default Form.create()(EmailForm);
+export default Form.create()(MobileForm);
