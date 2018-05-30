@@ -101,6 +101,13 @@ export async function postVerify(params) {
 
 // -------------- 注册 end --------------
 
+export async function postVerifyCaptcha(params) {
+  return request('/itunes/verify_captcha', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function queryNotices() {
   return request('/api/notices');
 }

@@ -12,6 +12,7 @@ module.exports = {
   rules: {
     camelcase: [0],
     radix: [0],
+    'no-unused-expressions': [0],
     'react/jsx-closing-tag-location': [0],
     'no-unused-vars': [1],
     'generator-star-spacing': [0],

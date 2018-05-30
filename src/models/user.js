@@ -1,5 +1,11 @@
 import { message } from 'antd';
-import { query as queryUsers, queryCurrent, forgetPassword, resetPassword } from '../services/user';
+import {
+  query as queryUsers,
+  queryCurrent,
+  forgetPassword,
+  resetPassword,
+  updateEmail,
+} from '../services/user';
 import { setAuthority } from '../utils/authority';
 import { fakeRegister } from '../services/api';
 
@@ -48,6 +54,17 @@ export default {
           type: 'forgetPasswordHandle',
           payload: response,
         });
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitChangeEmail({ payload, callback }, { call, put }) {
+      const response = yield call(updateEmail, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'fetchCurrent',
+        });
+        callback && callback();
       } else {
         message.error(response.errmsg || '操作失败');
       }

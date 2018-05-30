@@ -21,3 +21,10 @@ export async function resetPassword(params) {
     body: params,
   });
 }
+
+export async function updateEmail(params) {
+  return request('/itunes/user/update_email', {
+    method: 'POST',
+    body: params,
+  });
+}

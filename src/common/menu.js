@@ -39,7 +39,7 @@ const menuData = [
   },
 ];
 
-if (false) {
+if (true) {
   menuData.push(
     {
       name: 'dashboard',

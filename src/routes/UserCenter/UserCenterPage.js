@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { Row, Col, Avatar, Divider, Upload, message, Button, Icon } from 'antd';
-
+import EmailModal from './Modals/EmailModal';
 import styles from './UserCenterPage.less';
 
 @connect(({ global, user, loading }) => ({
@@ -10,7 +10,10 @@ import styles from './UserCenterPage.less';
   loading: loading.models.global,
 }))
 export default class Analysis extends Component {
-  state = {};
+  state = {
+    emailModalVisible: false,
+    emailModalCurrent: 0,
+  };
 
   componentDidMount() {
     // this.props.dispatch({
@@ -20,7 +23,41 @@ export default class Analysis extends Component {
 
   componentWillUnmount() {}
 
+  hideEmailModal = () => {
+    this.setState({
+      emailModalVisible: false,
+      emailModalCurrent: 0,
+    });
+  };
+
+  showEmailModal = () => {
+    this.setState({
+      emailModalVisible: true,
+      emailModalCurrent: 0,
+    });
+  };
+
+  handleUpdateEmail = (err, values) => {
+    const { currentUser } = this.props;
+    const { user = {} } = currentUser || {};
+    if (!err) {
+      if (!user.email) {
+        this.props.dispatch({
+          type: 'user/submitChangeEmail',
+          callback: this.hideEmailModal,
+        });
+      } else {
+        this.props.dispatch({
+          type: 'global/sendVerify',
+          callback: this.hideEmailModal,
+        });
+      }
+    }
+    // this.hideEmailModal()
+  };
+
   render() {
+    const { emailModalVisible, emailModalCurrent } = this.state;
     const { currentUser } = this.props;
     const { user = {} } = currentUser || {};
 
@@ -90,13 +127,19 @@ export default class Analysis extends Component {
                       <Icon type="mail" />
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>邮箱</h4>
-                        <div className={styles.box_item_descript}>未绑定</div>
+                        <div className={styles.box_item_descript}>
+                          {user.email ? '已绑定' : '未绑定'}
+                        </div>
                       </div>
                     </div>
-                    <div className={styles.box_item_content}>970099734@1qq.com</div>
+                    <div className={styles.box_item_content}>{user.email}</div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a href="#">绑定</a>
+                        {user.email ? (
+                          <a onClick={() => this.setState({ emailModalVisible: true })}>修改</a>
+                        ) : (
+                          <a onClick={() => this.setState({ emailModalVisible: true })}>绑定</a>
+                        )}
                       </li>
                     </ul>
                   </div>
@@ -246,6 +289,15 @@ export default class Analysis extends Component {
                 </div>
               </div>
             </div>
+
+            {emailModalVisible && (
+              <EmailModal
+                {...this.props}
+                email={user.email}
+                visible={emailModalVisible}
+                onCancel={this.hideEmailModal}
+              />
+            )}
           </Col>
         </Row>
       </Fragment>
