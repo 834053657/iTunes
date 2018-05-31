@@ -61,6 +61,13 @@ export async function updateG2Validate(params) {
   });
 }
 
+export async function postAuth(params) {
+  return request('/itunes/user/auth', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function getG2Secret(params) {
   return request(`/itunes/user/2fa_secret?${stringify(params)}`);
 }

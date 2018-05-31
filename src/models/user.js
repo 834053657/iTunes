@@ -9,6 +9,7 @@ import {
   updatePassword,
   updateG2Validate,
   getG2Secret,
+  postAuth,
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 
@@ -112,6 +113,18 @@ export default {
           type: 'saveG2Info',
           payload: response.data,
         });
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitUserAuth({ payload, callback }, { call, put }) {
+      const response = yield call(postAuth, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'fetchCurrent',
+        });
+        message.success('操作成功！');
+        callback && callback();
       } else {
         message.error(response.errmsg || '操作失败');
       }

@@ -4,10 +4,11 @@ import moment from 'moment';
 import { Link } from 'dva/router';
 import { Row, Col, Avatar, Divider, Upload, message, Button, Icon, Modal } from 'antd';
 import G2Validation from 'components/G2Validation';
-import EmailModal from './Modals/EmailModal';
-import MobileModal from './Modals/MobileModal';
+import EmailModal from './modals/EmailModal';
+import MobileModal from './modals/MobileModal';
 import PasswordForm from './forms/PasswordForm';
 import styles from './UserCenterPage.less';
+import RealNameForm from './forms/RealNameForm';
 
 @connect(({ global, user, loading }) => ({
   currentUser: user.currentUser,
@@ -19,6 +20,7 @@ export default class Analysis extends Component {
     mobileModalVisible: false,
     pwdModalVisible: false,
     g2ModalVisible: false,
+    realNameModalVisible: false,
   };
 
   componentDidMount() {
@@ -102,6 +104,31 @@ export default class Analysis extends Component {
     }
   };
 
+  showRealNameModal = () => {
+    this.setState({
+      realNameModalVisible: true,
+    });
+  };
+
+  hideRealNameModal = () => {
+    this.setState({
+      realNameModalVisible: false,
+    });
+  };
+
+  handleSubmitRealName = (err, values) => {
+    if (!err) {
+      this.props.dispatch({
+        type: 'user/submitUserAuth',
+        payload: {
+          enable: false,
+          code: values.code,
+        },
+        callback: this.hideRealNameModal,
+      });
+    }
+  };
+
   renderPwdModal = () => {
     const { pwdModalVisible } = this.state;
     return (
@@ -115,6 +142,24 @@ export default class Analysis extends Component {
       >
         {pwdModalVisible && (
           <PasswordForm onCancel={this.hidePwdlModal} onSubmit={this.handlePwdSubmit} />
+        )}
+      </Modal>
+    );
+  };
+
+  renderRealNameModal = () => {
+    const { realNameModalVisible } = this.state;
+    return (
+      <Modal
+        width={500}
+        title="修改密码"
+        visible={realNameModalVisible}
+        onCancel={this.hideRealNameModal}
+        maskClosable={false}
+        footer={null}
+      >
+        {realNameModalVisible && (
+          <RealNameForm onCancel={this.hideRealNameModal} onSubmit={this.handleSubmitRealName} />
         )}
       </Modal>
     );
@@ -136,9 +181,15 @@ export default class Analysis extends Component {
   };
 
   render() {
-    const { emailModalVisible, mobileModalVisible, g2ModalVisible } = this.state;
+    const {
+      emailModalVisible,
+      mobileModalVisible,
+      g2ModalVisible,
+      realNameModalVisible,
+    } = this.state;
     const { currentUser } = this.props;
-    const { user = {} } = currentUser || {};
+    const { auth, user = {} } = currentUser || {};
+    const { real_name = {} } = auth || {};
 
     const props = {
       name: 'file',
@@ -291,13 +342,17 @@ export default class Analysis extends Component {
                       <Icon type="idcard" />
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>实名认证</h4>
-                        <div className={styles.box_item_descript}>未绑定</div>
+                        <div className={styles.box_item_descript}>
+                          {real_name.status && CONFIG.auth_status[real_name.status]
+                            ? CONFIG.auth_status[real_name.status]
+                            : CONFIG.auth_status[1]}
+                        </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content} />
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a href="#">编辑</a>
+                        <a onClick={this.showRealNameModal}>编辑</a>
                       </li>
                     </ul>
                   </div>
@@ -387,13 +442,17 @@ export default class Analysis extends Component {
                 onCancel={this.hideMobilelModal}
               />
             )}
+
             {this.renderPwdModal()}
+
             <G2Validation
               title="安全验证"
               visible={g2ModalVisible}
               onCancel={this.hideG2Modal}
               onSubmit={this.handleSubmitG2}
             />
+
+            {this.renderRealNameModal()}
           </Col>
         </Row>
       </Fragment>
