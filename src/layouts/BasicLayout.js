@@ -176,7 +176,7 @@ class BasicLayout extends React.PureComponent {
     }
     console.log(key);
     if (key === 'userCenter') {
-      this.props.dispatch(routerRedux.push('/user-center'));
+      this.props.dispatch(routerRedux.push('/user-center/index'));
       return;
     }
 

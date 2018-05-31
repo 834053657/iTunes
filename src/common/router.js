@@ -81,8 +81,11 @@ export const getRouterData = app => {
     '/home': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Home')),
     },
-    '/user-center': {
+    '/user-center/index': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/UserCenterPage')),
+    },
+    '/user-center/g2validate': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/G2ValidatePage')),
     },
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),

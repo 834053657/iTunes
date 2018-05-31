@@ -79,7 +79,7 @@ export default {
     *verifyCaptcha({ payload, callback }, { call }) {
       const res = yield call(postVerifyCaptcha, payload);
       if (res.code === 0) {
-        callback && callback();
+        callback && callback(res.data);
       } else {
         message.error(res.errmsg || '操作失败');
       }

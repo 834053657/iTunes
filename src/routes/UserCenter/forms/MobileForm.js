@@ -33,21 +33,25 @@ class MobileForm extends Component {
   }
 
   handleSendCaptcha = () => {
-    this.props.form.validateFields(['email'], { force: true }, (err, values) => {
-      if (!err) {
-        this.props.onGetCaptcha(values, () => {
-          let count = 59;
-          this.setState({ count });
-          this.interval = setInterval(() => {
-            count -= 1;
+    this.props.form.validateFields(
+      ['telephone_code', 'telephone'],
+      { force: true },
+      (err, values) => {
+        if (!err) {
+          this.props.onGetCaptcha(values, () => {
+            let count = 59;
             this.setState({ count });
-            if (count === 0) {
-              clearInterval(this.interval);
-            }
-          }, 1000);
-        });
+            this.interval = setInterval(() => {
+              count -= 1;
+              this.setState({ count });
+              if (count === 0) {
+                clearInterval(this.interval);
+              }
+            }, 1000);
+          });
+        }
       }
-    });
+    );
   };
 
   handleCancel = () => {
@@ -57,9 +61,7 @@ class MobileForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields({ force: true }, (err, values) => {
-      this.props.onSubmit(err, values.code);
-    });
+    this.props.form.validateFields({ force: true }, this.props.onSubmit);
   };
 
   render() {
@@ -89,7 +91,7 @@ class MobileForm extends Component {
                 },
               ],
             })(
-              <Select>
+              <Select disabled={disabled}>
                 {CONFIG.countrys.map(item => (
                   <Option key={item.code} value={item.id}>
                     {item.name}
@@ -111,6 +113,7 @@ class MobileForm extends Component {
                   ],
                 })(
                   <Input
+                    disabled={disabled}
                     className={styles.mobile_input}
                     addonBefore={
                       telephone_code && CONFIG.countrysMap[telephone_code] ? (

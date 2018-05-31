@@ -1,6 +1,7 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
   "rules": {
+    "no-empty-source": null,
     "selector-pseudo-class-no-unknown": null,
     "shorthand-property-no-redundant-values": null,
     "at-rule-empty-line-before": null,
