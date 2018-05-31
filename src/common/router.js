@@ -120,11 +120,11 @@ export const getRouterData = app => {
     '/card/card-markets': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/CardMarkets')),
     },
+    '/card/sell-card': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/SellCard')),
+    },
     '/card/buy-card': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
-    },
-    '/card/sale-card': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/SaleCard')),
     },
 
     '/form/step-form': {

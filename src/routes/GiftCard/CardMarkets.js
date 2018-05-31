@@ -20,7 +20,7 @@ export default class CardMarkets extends Component {
       denoSaleVisible: false,
       minDeno: null,
       maxDeno: null,
-      type: 0,
+      type_page: 0,
     };
 
     this.filter = {};
@@ -32,7 +32,12 @@ export default class CardMarkets extends Component {
     };
 
     this.changeTab = e => {
+      this.filter = {};
       this.filter = Object.assign(this.filter, { type: e });
+      this.state.type_page = e;
+      this.setState({
+        type_page: e,
+      });
       this.reSetPage();
       this.reloadList();
     };
@@ -50,6 +55,8 @@ export default class CardMarkets extends Component {
 
     //select Card Type
     this.selectType = d => {
+      console.log('card type');
+
       this.filter = Object.assign(this.filter, { card_type: d.type });
       this.reSetPage();
       this.reloadList();
@@ -138,7 +145,7 @@ export default class CardMarkets extends Component {
       } else {
         return message.error('请至少输入一个范围');
       }
-      if (this.state.type === 0) {
+      if (this.state.type_page === 0) {
         this.setState({ denoVisible: false });
       } else {
         this.setState({ denoSaleVisible: false });
@@ -167,7 +174,7 @@ export default class CardMarkets extends Component {
 
     let pagination_prop;
 
-    const cardList = this.props.card.cardList.items;
+    const cardList = this.props.card.cardList ? this.props.card.cardList.items : null;
 
     //购买Table
     const columns = [
@@ -294,7 +301,10 @@ export default class CardMarkets extends Component {
                     <div
                       className={styles.typeName}
                       key={type.id}
-                      onClick={() => this.selectType(type)}
+                      onClick={() => {
+                        console.log('card type IN COLUMNS');
+                        this.selectType(type);
+                      }}
                     >
                       {type.name}
                     </div>
@@ -371,7 +381,7 @@ export default class CardMarkets extends Component {
       {
         title: '单价',
         dataIndex: 'unit_price',
-        sorter: (a, b) => a.unitPrice - b.unitPrice,
+        //sorter: (a, b) => a.unitPrice - b.unitPrice,
       },
       {
         title: '发卡期限',
@@ -388,7 +398,7 @@ export default class CardMarkets extends Component {
         title: '操作',
         dataIndex: 'operation',
         render: () => {
-          return <Button type="primary">购买</Button>;
+          return <Button type="primary">出售</Button>;
         },
       },
     ];
@@ -401,29 +411,18 @@ export default class CardMarkets extends Component {
           }}
           defaultActiveKey="0"
         >
-          <Tabs.TabPane tab="我要购买" key="0">
-            <Table
-              rowKey={row => row.id}
-              dataSource={cardList}
-              columns={columns}
-              pagination={false}
-              loading={this.state.loading}
-              onChange={this.tableChange}
-              filterDropdownVisible={this.state.typeVisible}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="我要出售" key="1">
-            <Table
-              rowKey={row => row.id}
-              dataSource={cardList}
-              columns={columnsSale}
-              pagination={false}
-              loading={this.state.loading}
-              onChange={this.tableChange}
-              filterDropdownVisible={this.state.typeVisible}
-            />
-          </Tabs.TabPane>
+          <Tabs.TabPane tab="我要购买" key="0" />
+          <Tabs.TabPane tab="我要出售" key="1" />
         </Tabs>
+
+        <Table
+          rowKey={row => row.id}
+          dataSource={cardList}
+          columns={this.state.type_page === '0' ? columns : columnsSale}
+          pagination={false}
+          loading={this.state.loading}
+          onChange={this.tableChange}
+        />
         <Pagination
           showQuickJumper
           defaultCurrent={2}

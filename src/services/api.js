@@ -129,10 +129,20 @@ export async function queryConfigs() {
 //礼品卡列表actions开始
 
 export async function getGiftCard(params) {
-  console.log('params');
-  console.log(params);
-  console.log(stringify(params));
   return request(`/itunes/get_card_list?${stringify(params)}`);
 }
 
+//获取交易条款
+export async function getTransTerms() {
+  return request('/itunes/user/trans_term/all');
+}
+
+//创建出售
+export async function postSell(params) {
+  console.log('post postSell in api');
+  return request('/itunes/ad/card/sell', {
+    method: 'POST',
+    body: params,
+  });
+}
 //礼品卡列表actions结束
