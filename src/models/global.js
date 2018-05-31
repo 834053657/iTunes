@@ -1,4 +1,13 @@
-import { queryNotices, queryStatistics, queryConfigs, queryBanners } from '../services/api';
+import { message } from 'antd';
+import { mapKeys } from 'lodash';
+import {
+  queryNotices,
+  queryStatistics,
+  queryConfigs,
+  queryBanners,
+  postVerify,
+  postVerifyCaptcha,
+} from '../services/api';
 
 export default {
   namespace: 'global',
@@ -26,6 +35,7 @@ export default {
       const response = yield call(queryConfigs) || {};
       if (response && response.code === 0) {
         CONFIG = { ...CONFIG, ...response.data };
+        CONFIG.countrysMap = mapKeys(response.data.countrys, 'id');
       }
     },
     *fetchNotices(_, { call, put }) {
@@ -56,6 +66,23 @@ export default {
         type: 'user/changeNotifyCount',
         payload: count,
       });
+    },
+    *sendVerify({ payload, callback }, { call }) {
+      const res = yield call(postVerify, payload);
+      if (res.code === 0) {
+        message.success('发送成功');
+        callback && callback();
+      } else {
+        message.error(res.errmsg || '操作失败');
+      }
+    },
+    *verifyCaptcha({ payload, callback }, { call }) {
+      const res = yield call(postVerifyCaptcha, payload);
+      if (res.code === 0) {
+        callback && callback();
+      } else {
+        message.error(res.errmsg || '操作失败');
+      }
     },
   },
 

@@ -174,6 +174,12 @@ class BasicLayout extends React.PureComponent {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
       return;
     }
+    console.log(key);
+    if (key === 'userCenter') {
+      this.props.dispatch(routerRedux.push('/user-center'));
+      return;
+    }
+
     if (key === 'logout') {
       this.props.dispatch({
         type: 'login/logout',
@@ -232,7 +238,7 @@ class BasicLayout extends React.PureComponent {
               onNoticeVisibleChange={this.handleNoticeVisibleChange}
             />
           </Header>
-          <Content style={{ margin: '24px 24px 0', height: '100%' }}>
+          <Content style={{ height: '100%' }}>
             <Switch>
               {redirectData.map(item => (
                 <Redirect key={item.from} exact from={item.from} to={item.to} />

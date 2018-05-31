@@ -3,7 +3,8 @@ import {
   query as queryUsers,
   queryCurrent,
   forgetPassword,
-  updatePassword,
+  resetPassword,
+  updateEmail,
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 import { fakeRegister } from '../services/api';
@@ -47,13 +48,23 @@ export default {
       }
     },
     *submitChangePassword({ payload }, { call, put }) {
-      console.log(payload);
-      const response = yield call(updatePassword, payload);
+      const response = yield call(resetPassword, payload);
       if (response.code === 0) {
         yield put({
           type: 'forgetPasswordHandle',
           payload: response,
         });
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitChangeEmail({ payload, callback }, { call, put }) {
+      const response = yield call(updateEmail, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'fetchCurrent',
+        });
+        callback && callback();
       } else {
         message.error(response.errmsg || '操作失败');
       }

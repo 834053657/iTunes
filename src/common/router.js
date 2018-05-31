@@ -81,6 +81,9 @@ export const getRouterData = app => {
     '/home': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Home')),
     },
+    '/user-center': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/UserCenterPage')),
+    },
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
       authority: checkLogined,
@@ -106,6 +109,9 @@ export const getRouterData = app => {
     },
     '/message/info-detail/:id': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/InfoDetail')),
+    },
+    '/message/list': {
+      component: dynamicWrapper(app, ['message'], () => import('../routes/Message/List')),
     },
     //礼品卡路由控制
     '/card/card-markets': {

@@ -82,7 +82,7 @@ export default class InfoList extends Component {
     return (
       <PageHeaderLayout title="" breadcrumbList={breadcrumbList}>
         <div>
-          <Card bordered={false}>
+          <Card bordered={false} className={styles.message_list}>
             <Table
               loading={loading}
               //rowKey={record => record.id}

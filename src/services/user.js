@@ -15,8 +15,15 @@ export async function forgetPassword(params) {
   });
 }
 
-export async function updatePassword(params) {
-  return request('/itunes/user/update_password', {
+export async function resetPassword(params) {
+  return request('/itunes/user/reset_password', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updateEmail(params) {
+  return request('/itunes/user/update_email', {
     method: 'POST',
     body: params,
   });
