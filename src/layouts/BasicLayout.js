@@ -111,6 +111,9 @@ class BasicLayout extends React.PureComponent {
     this.props.dispatch({
       type: 'global/fetchConfigs',
     });
+    this.props.dispatch({
+      type: 'global/fetchNotices',
+    });
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
@@ -168,6 +171,9 @@ class BasicLayout extends React.PureComponent {
       type: 'global/clearNotices',
       payload: type,
     });
+  };
+  handleNoticeViewMore = type => {
+    this.props.dispatch(routerRedux.push('/message/list'));
   };
   handleMenuClick = ({ key }) => {
     if (key === 'triggerError') {
@@ -233,6 +239,7 @@ class BasicLayout extends React.PureComponent {
               collapsed={collapsed}
               isMobile={this.state.isMobile}
               onNoticeClear={this.handleNoticeClear}
+              onNoticeView={this.handleNoticeViewMore}
               onCollapse={this.handleMenuCollapse}
               onMenuClick={this.handleMenuClick}
               onNoticeVisibleChange={this.handleNoticeVisibleChange}

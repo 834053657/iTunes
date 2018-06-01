@@ -7,6 +7,7 @@ import {
   queryBanners,
   postVerify,
   postVerifyCaptcha,
+  queryMessageList,
 } from '../services/api';
 
 export default {
@@ -38,7 +39,14 @@ export default {
         CONFIG.countrysMap = mapKeys(response.data.countrys, 'id');
       }
     },
-    *fetchNotices(_, { call, put }) {
+    *fetchNotices({ payload }, { call, put }) {
+      const res = yield call(queryMessageList, payload);
+      yield put({
+        type: 'saveNotices',
+        payload: res,
+      });
+    },
+    *fetchNotices_bak(_, { call, put }) {
       const data = yield call(queryNotices);
       yield put({
         type: 'saveNotices',
@@ -100,9 +108,10 @@ export default {
       };
     },
     saveNotices(state, { payload }) {
+      const { data: { items } } = payload || {};
       return {
         ...state,
-        notices: payload,
+        notices: items || [],
       };
     },
     saveStatistics(state, { payload }) {

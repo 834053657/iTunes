@@ -4,7 +4,7 @@ import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
-import NoticeIcon from '../NoticeIcon';
+import NoticeIcon from '../CustomNoticeIcon';
 // import HeaderSearch from '../HeaderSearch';
 import TopMenu from '../TopMenu';
 import styles from './index.less';
@@ -69,6 +69,8 @@ export default class GlobalHeader extends PureComponent {
       onNoticeVisibleChange,
       onMenuClick,
       onNoticeClear,
+      onNoticeView,
+      notices,
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
@@ -93,8 +95,8 @@ export default class GlobalHeader extends PureComponent {
         <Menu.Item key="en">English</Menu.Item>
       </Menu>
     );
-    const noticeData = this.getNoticeData();
-    console.log(currentUser);
+    // const noticeData = this.getNoticeData();
+
     return (
       <div className={styles.header}>
         <Link to="/" className={styles.logo} key="logo">
@@ -119,33 +121,17 @@ export default class GlobalHeader extends PureComponent {
             <span>
               <NoticeIcon
                 className={styles.action}
-                count={currentUser.notifyCount}
-                onItemClick={(item, tabProps) => {
-                  console.log(item, tabProps); // eslint-disable-line
-                }}
+                count={notices.length}
                 onClear={onNoticeClear}
+                onView={onNoticeView}
                 onPopupVisibleChange={onNoticeVisibleChange}
                 loading={fetchingNotices}
                 popupAlign={{ offset: [20, -16] }}
+                list={notices}
+                title="消息"
+                emptyText="您已读完所有消息"
+                emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
               >
-                <NoticeIcon.Tab
-                  list={noticeData['通知']}
-                  title="通知"
-                  emptyText="你已查看所有通知"
-                  emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
-                />
-                <NoticeIcon.Tab
-                  list={noticeData['消息']}
-                  title="消息"
-                  emptyText="您已读完所有消息"
-                  emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
-                />
-                <NoticeIcon.Tab
-                  list={noticeData['待办']}
-                  title="待办"
-                  emptyText="你已完成所有待办"
-                  emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
-                />
               </NoticeIcon>
               <Dropdown overlay={menu}>
                 <span className={`${styles.action} ${styles.account}`}>
