@@ -11,7 +11,7 @@ import 'moment/locale/zh-cn';
 import './rollbar';
 import './index.less';
 import CONFIG from './utils/config';
-import { dvaSocket } from '../mock/socket';
+import { dvaSocket } from './utils/socket';
 
 message.config({
   duration: 2,

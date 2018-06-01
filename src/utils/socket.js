@@ -1,6 +1,6 @@
 import { Server, SocketIO } from 'mock-socket';
 import createSocket from 'dva-socket.io';
-import { push_system_message } from '../src/services/socket';
+import { push_system_message } from '../services/socket';
 
 export function dvaSocket(url, option) {
   const isDev = process.env.NODE_ENV === 'development';
