@@ -162,15 +162,18 @@ export function isUrl(path) {
 
 export function getSystemUrl(env) {
   let base_url = 'http://47.106.111.213:3000/mock/19';
+  let socket_url = 'http://localhost:3000/socket/push';
   let web_name = '凯歌交易平台';
 
   if (env === 'dev') {
     base_url = 'http://47.106.111.213:3000/mock/19';
     web_name += '(DEV)';
+    socket_url = 'http://localhost:3000/socket/push';
   } else if (env === 'test') {
     base_url = 'http://47.106.111.213:3000/mock/19';
     web_name += '(TEST)';
+    socket_url = 'http://localhost:3000/socket/push';
   }
 
-  return { base_url, web_name };
+  return { base_url, web_name, socket_url };
 }

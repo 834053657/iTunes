@@ -1,8 +1,9 @@
 import { getSystemUrl } from './utils';
 
-const { base_url, web_name } = getSystemUrl(__KG_API_ENV__);
+const { base_url, web_name, socket_url } = getSystemUrl(__KG_API_ENV__);
 
 export default {
+  socket_url,
   base_url,
   web_name,
   web_sub_title: 'Itunes & 礼品卡 在线交易平台',

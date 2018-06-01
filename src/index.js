@@ -6,10 +6,12 @@ import createHistory from 'history/createHashHistory';
 // user BrowserHistory
 // import createHistory from 'history/createBrowserHistory';
 import createLoading from 'dva-loading';
+
 import 'moment/locale/zh-cn';
 import './rollbar';
 import './index.less';
 import CONFIG from './utils/config';
+import { dvaSocket } from '../mock/socket';
 
 message.config({
   duration: 2,
@@ -29,6 +31,7 @@ const app = dva({
 });
 
 // 2. Plugins
+app.use(dvaSocket(CONFIG.socket_url));
 app.use(createLoading());
 
 // 3. Register global model
