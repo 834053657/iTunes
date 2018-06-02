@@ -69,7 +69,7 @@ export default class List extends Component {
     const { dispatch } = this.props;
     console.log(111, row)
     
-    if ([1, 11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
+    if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
       Modal.success({
         title: row.title,
         content: CONFIG.message_type[row.msg_type],

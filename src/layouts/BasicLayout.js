@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon, message } from 'antd';
+import { Layout, Icon, message, Modal } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -187,6 +187,22 @@ class BasicLayout extends React.PureComponent {
       type: 'global/readNotices',
       payload: {all: false, id: item.id},
       callback: () => {
+        if (item.msg_type === 1) {
+          this.props.dispatch(routerRedux.push(`/message/info-detail/${item.id}`));
+        }
+        else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(item.msg_type) >= 0) {
+          Modal.success({
+            title: item.title,
+            content: CONFIG.message_type[item.msg_type],
+            onOk: () => {
+
+            }
+          });
+        }
+        else {
+          //todo
+        }
+
         this.props.dispatch({
           type: 'global/fetchNotices',
           payload: {type: 3}
