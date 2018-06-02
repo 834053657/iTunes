@@ -72,7 +72,7 @@ export default class List extends Component {
     if ([1, 11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
       Modal.success({
         title: row.title,
-        content: row.content,
+        content: CONFIG.message_type[row.msg_type],
         onOk: () => {
           dispatch({
             type: 'message/fetchMessageList',

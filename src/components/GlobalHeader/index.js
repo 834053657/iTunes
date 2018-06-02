@@ -70,6 +70,7 @@ export default class GlobalHeader extends PureComponent {
       onMenuClick,
       onNoticeClear,
       onNoticeView,
+      onNoticeClick,
       notices,
     } = this.props;
     const menu = (
@@ -124,6 +125,7 @@ export default class GlobalHeader extends PureComponent {
                 count={notices.length}
                 onClear={onNoticeClear}
                 onView={onNoticeView}
+                onItemClick={onNoticeClick}
                 onPopupVisibleChange={onNoticeVisibleChange}
                 loading={fetchingNotices}
                 popupAlign={{ offset: [20, -16] }}

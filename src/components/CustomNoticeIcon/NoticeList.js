@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import styles from './NoticeList.less';
 import moment from 'moment';
 
-export default function NoticeList({
+export default function CustomNoticeList({
   data = [],
   onClick,
   onClear,
@@ -39,7 +39,7 @@ export default function NoticeList({
                     <div className={styles.title}>
                       {item.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />} {item.title}
                     </div>
-                    <div>
+                    <div className={styles.datetime}>
                       {item.created_at && moment(new Date(item.created_at * 1000)).format('YYYY-MM-DD HH:mm:ss')}
                     </div>
                   </div>
@@ -51,10 +51,10 @@ export default function NoticeList({
       </List>
       <div className={styles.action}>
         <div className={styles.clear} onClick={onClear}>
-          清除全部
+          <a>清除全部</a>
         </div>
         <div className={styles.view_more} onClick={onView}>
-          查看更多
+          <a>查看更多</a>
         </div>
       </div>
     </div>

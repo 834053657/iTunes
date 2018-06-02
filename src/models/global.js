@@ -8,6 +8,7 @@ import {
   postVerify,
   postVerifyCaptcha,
   queryMessageList,
+  readMessage,
 } from '../services/api';
 
 export default {
@@ -41,6 +42,13 @@ export default {
     },
     *fetchNotices({ payload }, { call, put }) {
       const res = yield call(queryMessageList, payload);
+
+      // only for ui test
+      if (payload && payload.type === 2)
+        res.data.items = []
+      if (payload && payload.type === 3)
+        res.data.items = res.data.items.slice(0, 2);
+
       yield put({
         type: 'saveNotices',
         payload: res,
@@ -64,7 +72,7 @@ export default {
         payload: res.data,
       });
     },
-    *clearNotices({ payload }, { put, select }) {
+    *clearNotices_bak({ payload }, { put, select }) {
       yield put({
         type: 'saveClearedNotices',
         payload,
@@ -74,6 +82,22 @@ export default {
         type: 'user/changeNotifyCount',
         payload: count,
       });
+    },
+    *clearNotices({ payload, callback }, { call, put }) {
+      const res = yield call(readMessage, payload);
+      yield put({
+        type: 'setReadMessage',
+        payload: res,
+      });
+      if (callback) callback();
+    },
+    *readNotices({ payload, callback }, { call, put }) {
+      const res = yield call(readMessage, payload);
+      yield put({
+        type: 'setReadMessage',
+        payload: res,
+      });
+      if (callback) callback();
     },
     *sendVerify({ payload, callback }, { call }) {
       const res = yield call(postVerify, payload);
@@ -124,6 +148,12 @@ export default {
       return {
         ...state,
         notices: state.notices.filter(item => item.type !== payload),
+      };
+    },
+    setReadMessage(state, { payload }) {
+      console.log(payload);
+      return {
+        ...state,
       };
     },
   },

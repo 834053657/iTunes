@@ -8,7 +8,7 @@ const { TabPane } = Tabs;
 
 export default class NoticeIcon extends PureComponent {
   static defaultProps = {
-    onItemClick: () => {},
+    // onItemClick: () => {},
     onPopupVisibleChange: () => {},
     onTabChange: () => {},
     onClear: () => {},
@@ -23,15 +23,15 @@ export default class NoticeIcon extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      popupVisible: true,
+      // visible: true,
     };
     if (props.children && props.children[0]) {
       this.state.tabType = props.children[0].props.title;
     }
   }
-  onItemClick = (item, tabProps) => {
+  onItemClick = (item) => {
     const { onItemClick } = this.props;
-    onItemClick(item, tabProps);
+    onItemClick(item);
   };
   onTabChange = tabType => {
     this.setState({ tabType });
@@ -40,14 +40,15 @@ export default class NoticeIcon extends PureComponent {
 
   onViewMore = () => {
     this.props.onView();
+    this.hidePopup = true;
     this.setState({
-      popupVisible: false,
+      visible: false,
     });
   }
 
-  onPopupVisibleChange = (v) => {
+  onPopupVisibleChange = (visible) => {
     this.setState({
-      popupVisible: v,
+      visible,
     });
     this.props.onPopupVisibleChange();
   }
@@ -58,7 +59,7 @@ export default class NoticeIcon extends PureComponent {
     let contentList = <List
       {...this.props}
       data={list}
-      onClick={item => this.onItemClick(item, this.props)}
+      onClick={item => this.onItemClick(item)}
       onClear={() => this.props.onClear(this.props.title)}
       onView={this.onViewMore}
       title={this.props.title}
@@ -90,9 +91,8 @@ export default class NoticeIcon extends PureComponent {
     if ('popupVisible' in this.props) {
       popoverProps.visible = this.props.popupVisible;
     }
-    /* if(!this.state.popupVisible) {
-      popoverProps.visible = false;
-    } */
+
+    popoverProps.visible = this.state.visible;
 
     return (
       <Popover
