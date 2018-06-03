@@ -67,7 +67,6 @@ export default class List extends Component {
 
   showMsg = (row) => {
     const { dispatch } = this.props;
-    console.log(111, row)
     
     if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
       Modal.success({

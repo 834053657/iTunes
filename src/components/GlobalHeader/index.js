@@ -98,6 +98,8 @@ export default class GlobalHeader extends PureComponent {
     );
     // const noticeData = this.getNoticeData();
 
+    console.log('notices',notices)
+
     return (
       <div className={styles.header}>
         <Link to="/" className={styles.logo} key="logo">

@@ -206,6 +206,15 @@ export default class Analysis extends Component {
             </a>
           </Col>
         </Row>
+        <button onClick={() => {
+          console.log(123, this);
+          this.props.dispatch({
+            type: 'push_system_message',
+            payload: {
+              abc: 123,
+            }
+          });
+        }}>测试推送消息</button>
         <div className={styles.banner}>
           <Slider {...settings}>{bannersContent}</Slider>
         </div>

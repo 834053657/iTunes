@@ -84,7 +84,7 @@ enquireScreen(b => {
   isMobile = b;
 });
 
-class BasicLayout extends React.PureComponent {
+class BasicLayout extends React.Component {
   static childContextTypes = {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
@@ -118,6 +118,9 @@ class BasicLayout extends React.PureComponent {
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
+  }
+  componentWill(nextProp) {
+    console.log('111',nextProp)
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -229,9 +232,9 @@ class BasicLayout extends React.PureComponent {
   };
   handleNoticeVisibleChange = visible => {
     if (visible) {
-      this.props.dispatch({
-        type: 'global/fetchNotices',
-      });
+      // this.props.dispatch({
+      //   type: 'global/fetchNotices',
+      // });
     }
   };
   render() {
@@ -244,6 +247,7 @@ class BasicLayout extends React.PureComponent {
       match,
       location,
     } = this.props;
+    console.log('layout',notices)
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
@@ -262,6 +266,7 @@ class BasicLayout extends React.PureComponent {
           />
         )}
         <Layout>
+
           <Header style={{ padding: 0 }}>
             <GlobalHeader
               logo={logo}
@@ -282,6 +287,7 @@ class BasicLayout extends React.PureComponent {
             />
           </Header>
           <Content style={{ height: '100%' }}>
+          <span>{notices.length}</span>
             <Switch>
               {redirectData.map(item => (
                 <Redirect key={item.from} exact from={item.from} to={item.to} />

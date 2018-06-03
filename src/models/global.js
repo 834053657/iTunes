@@ -133,6 +133,7 @@ export default {
     },
     saveNotices(state, { payload }) {
       const { data: { items } } = payload || {};
+      console.log('savenotices',items)
       return {
         ...state,
         notices: items || [],

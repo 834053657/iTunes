@@ -10,6 +10,16 @@ export function dvaSocket(url, option) {
       const res = await push_system_message();
       mockServer.emit('test', res);
     });
+
+    mockServer.on('pull_system_message', async server => {
+      const res = await push_system_message();
+      mockServer.emit('push_system_message', res);
+    });
+
+     mockServer.on('post_quick_message', async server => {
+      const res = await push_system_message();
+      mockServer.emit('test', res);
+    });
   }
   return createSocket(
     url,
@@ -19,18 +29,37 @@ export function dvaSocket(url, option) {
         test: (data, dispatch, getState) => {
           console.log(data);
         },
-        post_quick_message_rsp: (data, dispatch, getState) => {
+        post_quick_message: (data, dispatch, getState) => {
           console.log(data);
+        },
+        push_system_message: (data, dispatch, getState) => {
+          console.log(11, data);
+          const { notices } = getState().global;
+          notices.unshift({title: 'test11111', "created_at": 1527479877});
+          let rs = {data: {items: notices}}
+          dispatch({
+            type: 'global/saveNotices',
+            payload: rs,
+          })
         },
       },
       emit: {
         post_quick_message: {
           evaluate: (action, dispatch, getState) => action.type === 'post_quick_message',
-          data: action => 'client send a message',
+          data: ({payload}) => {
+            console.log('ppp',payload)
+            return payload
+          },
         },
         hi: {
-          evaluate: (action, dispatch, getState) => action.type === 'send-message',
+          evaluate: (action, dispatch, getState) => action.type === 'send-message2',
           data: action => 'client send a message',
+        },
+        pull_system_message: {
+          evaluate: (action, dispatch, getState) => action.type === 'push_system_message',
+          data: ({ payload }) => {
+            return payload;
+          },
         },
       },
     },
