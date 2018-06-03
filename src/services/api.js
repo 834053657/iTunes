@@ -24,6 +24,10 @@ export async function readMessage(params) {
   });
 }
 
+export async function queryStaticDtl(params) {
+  return request(`/itunes/info/static?${stringify(params)}`);
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }

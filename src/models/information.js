@@ -1,10 +1,11 @@
-import { queryActivities } from '../services/api';
+import { queryActivities, queryStaticDtl } from '../services/api';
 
 export default {
-  namespace: 'infomation',
+  namespace: 'information',
 
   state: {
     list: [],
+    infoDetail: {},
   },
 
   effects: {
@@ -15,6 +16,15 @@ export default {
         payload: Array.isArray(response) ? response : [],
       });
     },
+    *fetchStaticContent({ payload, callback }, { call, put }) {
+      console.log(55, payload);
+      const res = yield call(queryStaticDtl, payload);
+      yield put({
+        type: 'setStaticDetail',
+        payload: res,
+      });
+      if (callback) callback();
+    },
   },
 
   reducers: {
@@ -22,6 +32,12 @@ export default {
       return {
         ...state,
         list: action.payload,
+      };
+    },
+    setStaticDetail(state, { payload }) {
+      return {
+        ...state,
+        infoDetail: payload.data,
       };
     },
   },

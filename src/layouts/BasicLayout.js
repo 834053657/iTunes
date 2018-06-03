@@ -287,7 +287,6 @@ class BasicLayout extends React.Component {
             />
           </Header>
           <Content style={{ height: '100%' }}>
-          <span>{notices.length}</span>
             <Switch>
               {redirectData.map(item => (
                 <Redirect key={item.from} exact from={item.from} to={item.to} />
@@ -312,19 +311,19 @@ class BasicLayout extends React.Component {
                 {
                   key: '1',
                   title: '帮助',
-                  href: '#',
+                  href: '/#/information/help',
                   blankTarget: true,
                 },
                 {
                   key: '2',
                   title: '隐私',
-                  href: '#',
+                  href: '/#/information/privacy',
                   blankTarget: true,
                 },
                 {
                   key: '3',
                   title: '条款',
-                  href: '#',
+                  href: '/#/information/terms',
                   blankTarget: true,
                 },
               ]}
