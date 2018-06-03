@@ -19,8 +19,15 @@ export function dvaSocket(url, option) {
         test: (data, dispatch, getState) => {
           console.log(data);
         },
+        post_quick_message_rsp: (data, dispatch, getState) => {
+          console.log(data);
+        },
       },
       emit: {
+        post_quick_message: {
+          evaluate: (action, dispatch, getState) => action.type === 'post_quick_message',
+          data: action => 'client send a message',
+        },
         hi: {
           evaluate: (action, dispatch, getState) => action.type === 'send-message',
           data: action => 'client send a message',

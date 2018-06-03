@@ -30,8 +30,16 @@ const app = dva({
   history: createHistory(),
 });
 
+const options = {
+  extraHeaders: {
+    UID: '1xxx',
+    TOKEN: 'xxx',
+    language: 'CN-zh',
+  },
+};
+
 // 2. Plugins
-app.use(dvaSocket(CONFIG.socket_url));
+app.use(dvaSocket(CONFIG.socket_url, options));
 app.use(createLoading());
 
 // 3. Register global model
