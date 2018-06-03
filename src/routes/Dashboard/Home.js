@@ -149,7 +149,9 @@ export default class Analysis extends Component {
         bannersContent.push(
           <div key={key}>
             <div className={styles.banner_items}>
-              <img className={styles.img} src={item.image_url} alt="" />
+              <a href={item.link} target="_blank">
+                <img className={styles.img} src={item.image_url} alt=""/>
+              </a>
               <Row className={styles.content}>
                 <Col span={16}>
                   <div className={styles.content_title}>{item.title}</div>

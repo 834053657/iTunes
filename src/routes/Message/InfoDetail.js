@@ -93,7 +93,9 @@ export default class InfoDetail extends PureComponent {
             </div>
           </Card>
           <Card className={styles.content}>
-            <div>{data.content}</div>
+            <div dangerouslySetInnerHTML={{
+              __html: data.content
+            }}/>
           </Card>
         </div>
       </PageHeaderLayout>
