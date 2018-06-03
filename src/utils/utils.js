@@ -170,7 +170,7 @@ export function getSystemUrl(env) {
     web_name += '(DEV)';
     socket_url = 'http://localhost:3000/socket/push';
   } else if (env === 'test') {
-    base_url = 'http://47.106.111.213:3000/mock/19';
+    base_url = 'http://47.106.111.213:9001';
     web_name += '(TEST)';
     socket_url = 'http://localhost:3000/socket/push';
   }
