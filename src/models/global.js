@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { mapKeys } from 'lodash';
+import { mapKeys, groupBy, orderBy, map } from 'lodash';
 import {
   queryNotices,
   queryStatistics,
@@ -16,7 +16,9 @@ export default {
 
   state: {
     collapsed: false,
+    oldNotices: [],
     notices: [],
+    noticesCount: null,
     statistics: {},
     banners: [],
   },
@@ -132,11 +134,30 @@ export default {
       };
     },
     saveNotices(state, { payload }) {
-      const { data: { items } } = payload || {};
-      console.log('savenotices',items)
+      let { data: { items } } = payload || {};
+      let newItems = [], tmp1 = [], tmp2 = [];
+
+      console.log('notices', items)
+      map(items, (v) => {
+        if (v.ref_id)
+          tmp1.push(v);
+        else
+          newItems.push(v);
+      });
+      let orderMessages = groupBy(tmp1, 'ref_id') || [];
+      map(orderMessages, v => {
+        tmp2 = orderBy(v, ['created_at'], ['desc']);
+        if (tmp2.length > 0) {
+          newItems.push({...tmp2[0], count: tmp2.length});
+        }
+      })
+
+      newItems = orderBy(newItems, ['created_at'], ['desc']);
       return {
         ...state,
-        notices: items || [],
+        notices: newItems || [],
+        oldNotices: items,
+        noticesCount: items.length,
       };
     },
     saveStatistics(state, { payload }) {

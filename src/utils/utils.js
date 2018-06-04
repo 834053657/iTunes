@@ -1,4 +1,5 @@
 import moment from 'moment';
+import audioMsg from '../../public/audio/msg.mp3'
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -176,4 +177,16 @@ export function getSystemUrl(env) {
   }
 
   return { base_url, web_name, socket_url };
+}
+
+export function getMessageContent(msgObj) {
+  //get language
+  let lang = 'zh_CN';
+  return CONFIG[`message_type_${lang}`][msgObj.msg_type];
+}
+
+export function playAudio() {
+  var audio = document.createElement("audio");
+  audio.src = audioMsg;
+  audio.play();
 }

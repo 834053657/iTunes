@@ -33,7 +33,6 @@ export default class Content extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    console.log(66, this.props)
 
     dispatch({
       type: 'information/fetchStaticContent',

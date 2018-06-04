@@ -15,6 +15,7 @@ import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
+import { getMessageContent } from '../utils/utils';
 import logo from '../assets/logo.svg';
 
 const { Content, Header, Footer } = Layout;
@@ -113,7 +114,7 @@ class BasicLayout extends React.Component {
     });
     this.props.dispatch({
       type: 'global/fetchNotices',
-      payload: {type: 1}
+      payload: {status: 0, type: 1}
     });
   }
   componentWillUnmount() {
@@ -177,7 +178,7 @@ class BasicLayout extends React.Component {
       callback: () => {
         this.props.dispatch({
           type: 'global/fetchNotices',
-          payload: {type: 2}
+          payload: {status: 0, type: 2}
         });
       }
     });
@@ -196,7 +197,7 @@ class BasicLayout extends React.Component {
         else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(item.msg_type) >= 0) {
           Modal.success({
             title: item.title,
-            content: CONFIG.message_type[item.msg_type],
+            content: getMessageContent(item),
             onOk: () => {
 
             }
@@ -204,6 +205,15 @@ class BasicLayout extends React.Component {
         }
         else {
           //todo
+          //todo redirect to order detail
+          if (item.order_type === 'card')
+            this.props.dispatch(routerRedux.push(`/card/order/${item.ref_id}`));
+          else if (item.order_type === 'itunes') {
+            this.props.dispatch(routerRedux.push(`/itunes/order/${item.ref_id}`));
+          }
+          else {
+            
+          }
         }
 
         this.props.dispatch({
@@ -243,11 +253,12 @@ class BasicLayout extends React.Component {
       collapsed,
       fetchingNotices,
       notices,
+      noticesCount,
       routerData,
       match,
       location,
     } = this.props;
-    console.log('layout',notices)
+    console.log('layout', noticesCount)
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
@@ -276,6 +287,7 @@ class BasicLayout extends React.Component {
               currentUser={currentUser}
               fetchingNotices={fetchingNotices}
               notices={notices}
+              noticesCount={noticesCount}
               collapsed={collapsed}
               isMobile={this.state.isMobile}
               onNoticeClear={this.handleNoticeClear}
@@ -353,4 +365,5 @@ export default connect(({ user, global, loading }) => ({
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
   notices: global.notices,
+  noticesCount: global.noticesCount,
 }))(BasicLayout);

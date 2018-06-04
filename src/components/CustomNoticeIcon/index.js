@@ -30,9 +30,6 @@ export default class NoticeIcon extends PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProp) {
-    console.log('noticceicon',nextProp)
-  }
   onItemClick = (item) => {
     const { onItemClick } = this.props;
     onItemClick(item);
@@ -88,7 +85,7 @@ export default class NoticeIcon extends PureComponent {
     const notificationBox = this.getNotificationBox();
     const trigger = (
       <span className={noticeButtonClass}>
-        <Badge count={list.length} className={styles.badge}>
+        <Badge count={count} className={styles.badge}>
           <Icon type="bell" className={styles.icon} />
         </Badge>
       </span>
@@ -102,8 +99,6 @@ export default class NoticeIcon extends PureComponent {
     }
 
     popoverProps.visible = this.state.visible;
-
-    console.log('xxx',list)
 
     return (
       <Popover

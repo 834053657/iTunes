@@ -1,7 +1,8 @@
 import React from 'react';
-import { Avatar, List, Icon } from 'antd';
+import { Avatar, List, Icon, Badge } from 'antd';
 import classNames from 'classnames';
 import styles from './NoticeList.less';
+import { getMessageContent } from '../../utils/utils';
 import moment from 'moment';
 
 export default function CustomNoticeList({
@@ -37,7 +38,20 @@ export default function CustomNoticeList({
                 title={
                   <div>
                     <div className={styles.title}>
-                      {item.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />} {item.title}
+                      {
+                        item.ref_id && item.count > 1 ? 
+                        (
+                          <span>
+                            <Badge count={item.count} offset={[5, 25]}>
+                              <Icon type="file-text" /> {getMessageContent(item)} 
+                            </Badge>
+                          </span>
+                        )
+                        :
+                        (
+                          <span>{item.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />} {getMessageContent(item)}</span>
+                        )
+                      }
                     </div>
                     <div className={styles.datetime}>
                       {item.created_at && moment(new Date(item.created_at * 1000)).format('YYYY-MM-DD HH:mm:ss')}

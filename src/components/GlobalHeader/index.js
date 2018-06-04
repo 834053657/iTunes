@@ -72,6 +72,7 @@ export default class GlobalHeader extends PureComponent {
       onNoticeView,
       onNoticeClick,
       notices,
+      noticesCount,
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
@@ -98,8 +99,6 @@ export default class GlobalHeader extends PureComponent {
     );
     // const noticeData = this.getNoticeData();
 
-    console.log('notices',notices)
-
     return (
       <div className={styles.header}>
         <Link to="/" className={styles.logo} key="logo">
@@ -124,7 +123,7 @@ export default class GlobalHeader extends PureComponent {
             <span>
               <NoticeIcon
                 className={styles.action}
-                count={notices.length}
+                count={noticesCount}
                 onClear={onNoticeClear}
                 onView={onNoticeView}
                 onItemClick={onNoticeClick}

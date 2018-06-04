@@ -1,6 +1,7 @@
 import { Server, SocketIO } from 'mock-socket';
 import createSocket from 'dva-socket.io';
 import { push_system_message } from '../services/socket';
+import { playAudio } from './utils';
 
 export function dvaSocket(url, option) {
   const isDev = process.env.NODE_ENV === 'development';
@@ -33,14 +34,16 @@ export function dvaSocket(url, option) {
           console.log(data);
         },
         push_system_message: (data, dispatch, getState) => {
-          console.log(11, data);
-          const { notices } = getState().global;
-          notices.unshift({title: 'test11111', "created_at": 1527479877});
-          let rs = {data: {items: notices}}
+          const { data: msg } = data;
+          const { oldNotices } = getState().global;
+
+          oldNotices.unshift(msg);
+          let rs = {data: {items: oldNotices}};
           dispatch({
             type: 'global/saveNotices',
             payload: rs,
-          })
+          });
+          playAudio();
         },
       },
       emit: {

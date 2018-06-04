@@ -17,7 +17,6 @@ export default {
       });
     },
     *fetchStaticContent({ payload, callback }, { call, put }) {
-      console.log(55, payload);
       const res = yield call(queryStaticDtl, payload);
       yield put({
         type: 'setStaticDetail',

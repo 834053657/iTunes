@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
+import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import { getMessageContent } from '../../utils/utils';
 import styles from './Message.less';
 
 @connect(({ message, loading }) => ({
@@ -71,13 +72,24 @@ export default class List extends Component {
     if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
       Modal.success({
         title: row.title,
-        content: CONFIG.message_type[row.msg_type],
+        content: getMessageContent(row),
         onOk: () => {
           dispatch({
             type: 'message/fetchMessageList',
           });
         }
       });
+    }
+    else {
+      //todo redict to order detail
+      if (row.order_type === 'card')
+        this.props.dispatch(routerRedux.push(`/card/order/${row.ref_id}`));
+      else if (row.order_type === 'itunes') {
+        this.props.dispatch(routerRedux.push(`/itunes/order/${row.ref_id}`));
+      }
+      else {
+        
+      }
     }
   }
 
