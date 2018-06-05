@@ -12,10 +12,9 @@ import GlobalHeader from '../components/GlobalHeader';
 import GlobalFooter from '../components/GlobalFooter';
 import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
-import { getRoutes } from '../utils/utils';
+import { getRoutes, getMessageContent } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
-import { getMessageContent } from '../utils/utils';
 import logo from '../assets/logo.svg';
 
 const { Content, Header, Footer } = Layout;
@@ -114,14 +113,11 @@ class BasicLayout extends React.Component {
     });
     this.props.dispatch({
       type: 'global/fetchNotices',
-      payload: {status: 0, type: 1}
+      payload: { status: 0, type: 1 },
     });
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
-  }
-  componentWill(nextProp) {
-    console.log('111',nextProp)
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -174,13 +170,13 @@ class BasicLayout extends React.Component {
     message.success(`清空了${type}`);
     this.props.dispatch({
       type: 'global/readNotices',
-      payload: {all: true},
+      payload: { all: true },
       callback: () => {
         this.props.dispatch({
           type: 'global/fetchNotices',
-          payload: {status: 0, type: 2}
+          payload: { status: 0, type: 2 },
         });
-      }
+      },
     });
   };
   handleNoticeViewMore = type => {
@@ -189,21 +185,17 @@ class BasicLayout extends React.Component {
   handleNoticeRead = item => {
     this.props.dispatch({
       type: 'global/readNotices',
-      payload: {all: false, id: item.id},
+      payload: { all: false, id: item.id },
       callback: () => {
         if (item.msg_type === 1) {
           this.props.dispatch(routerRedux.push(`/message/info-detail/${item.id}`));
-        }
-        else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(item.msg_type) >= 0) {
+        } else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(item.msg_type) >= 0) {
           Modal.success({
             title: item.title,
             content: getMessageContent(item),
-            onOk: () => {
-
-            }
+            onOk: () => {},
           });
-        }
-        else {
+        } else {
           //todo
           //todo redirect to order detail
           if (item.order_type === 'card')
@@ -211,16 +203,15 @@ class BasicLayout extends React.Component {
           else if (item.order_type === 'itunes') {
             this.props.dispatch(routerRedux.push(`/itunes/order/${item.ref_id}`));
           }
-          else {
-            
-          }
-        }
+          // else {
 
+          // }
+        }
         this.props.dispatch({
           type: 'global/fetchNotices',
-          payload: {type: 3}
+          payload: { type: 3 },
         });
-      }
+      },
     });
   };
   handleMenuClick = ({ key }) => {
@@ -258,7 +249,7 @@ class BasicLayout extends React.Component {
       match,
       location,
     } = this.props;
-    console.log('layout', noticesCount)
+    console.log('layout', noticesCount);
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
@@ -277,7 +268,6 @@ class BasicLayout extends React.Component {
           />
         )}
         <Layout>
-
           <Header style={{ padding: 0 }}>
             <GlobalHeader
               logo={logo}

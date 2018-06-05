@@ -12,6 +12,8 @@ module.exports = {
   rules: {
     camelcase: [0],
     radix: [0],
+    'prefer-const': [1],
+    'no-lonely-if': [1],
     'prefer-destructuring': [0],
     'react/no-array-index-key': [0],
     'prefer-template': [0],

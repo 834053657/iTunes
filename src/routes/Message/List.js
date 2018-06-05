@@ -36,9 +36,17 @@ export default class List extends Component {
       width: '70%',
       render: (val, row) => {
         if (row.msg_type === 1)
-          return <Link to={`/message/info-detail/${row.id}`}><Icon type="file-text" /> {val}</Link>
-        else 
-          return <a onClick={() => this.readMsg(row)}>{row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />} {val}</a>
+          return (
+            <Link to={`/message/info-detail/${row.id}`}>
+              <Icon type="file-text" /> {val}
+            </Link>
+          );
+        else
+          return (
+            <a onClick={() => this.readMsg(row)}>
+              {row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />} {val}
+            </a>
+          );
       },
     },
     {
@@ -51,24 +59,25 @@ export default class List extends Component {
     },
   ];
 
-  readMsg = (row) => {
+  readMsg = row => {
     const { dispatch } = this.props;
 
     if (row.status === 0) {
       dispatch({
         type: 'message/readMessage',
         payload: { all: false, id: row.id },
-        callback: () => {this.showMsg(row)}
+        callback: () => {
+          this.showMsg(row);
+        },
       });
+    } else {
+      this.showMsg(row);
     }
-    else {
-      this.showMsg(row)
-    }
-  }
+  };
 
-  showMsg = (row) => {
+  showMsg = row => {
     const { dispatch } = this.props;
-    
+
     if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
       Modal.success({
         title: row.title,
@@ -77,21 +86,17 @@ export default class List extends Component {
           dispatch({
             type: 'message/fetchMessageList',
           });
-        }
+        },
       });
-    }
-    else {
+    } else {
       //todo redict to order detail
       if (row.order_type === 'card')
         this.props.dispatch(routerRedux.push(`/card/order/${row.ref_id}`));
       else if (row.order_type === 'itunes') {
         this.props.dispatch(routerRedux.push(`/itunes/order/${row.ref_id}`));
       }
-      else {
-        
-      }
     }
-  }
+  };
 
   handleTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch, getValue } = this.props;
@@ -124,7 +129,7 @@ export default class List extends Component {
     const { selectedRows } = this.state;
 
     return (
-      <PageHeaderLayout title="消息中心" >
+      <PageHeaderLayout title="消息中心">
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Table

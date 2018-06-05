@@ -46,10 +46,8 @@ export default {
       const res = yield call(queryMessageList, payload);
 
       // only for ui test
-      if (payload && payload.type === 2)
-        res.data.items = []
-      if (payload && payload.type === 3)
-        res.data.items = res.data.items.slice(0, 2);
+      if (payload && payload.type === 2) res.data.items = [];
+      if (payload && payload.type === 3) res.data.items = res.data.items.slice(0, 2);
 
       yield put({
         type: 'saveNotices',
@@ -134,23 +132,23 @@ export default {
       };
     },
     saveNotices(state, { payload }) {
-      let { data: { items } } = payload || {};
-      let newItems = [], tmp1 = [], tmp2 = [];
+      const { data: { items } } = payload || {};
+      let newItems = [];
+      const tmp1 = [];
+      let tmp2 = [];
 
-      console.log('notices', items)
-      map(items, (v) => {
-        if (v.ref_id)
-          tmp1.push(v);
-        else
-          newItems.push(v);
+      console.log('notices', items);
+      map(items, v => {
+        if (v.ref_id) tmp1.push(v);
+        else newItems.push(v);
       });
-      let orderMessages = groupBy(tmp1, 'ref_id') || [];
+      const orderMessages = groupBy(tmp1, 'ref_id') || [];
       map(orderMessages, v => {
         tmp2 = orderBy(v, ['created_at'], ['desc']);
         if (tmp2.length > 0) {
-          newItems.push({...tmp2[0], count: tmp2.length});
+          newItems.push({ ...tmp2[0], count: tmp2.length });
         }
-      })
+      });
 
       newItems = orderBy(newItems, ['created_at'], ['desc']);
       return {
