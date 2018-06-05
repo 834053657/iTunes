@@ -24,6 +24,10 @@ export async function readMessage(params) {
   });
 }
 
+export async function queryStaticDtl(params) {
+  return request(`/itunes/info/static?${stringify(params)}`);
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
@@ -100,7 +104,7 @@ export async function fakeRegister(params) {
 }
 
 export async function postVerify(params) {
-  return request('/itunes/post_verify', {
+  return request('/itunes/user/send_code', {
     method: 'POST',
     body: params,
   });
@@ -109,7 +113,7 @@ export async function postVerify(params) {
 // -------------- 注册 end --------------
 
 export async function postVerifyCaptcha(params) {
-  return request('/itunes/verify_captcha', {
+  return request('/itunes/user/verify_code', {
     method: 'POST',
     body: params,
   });

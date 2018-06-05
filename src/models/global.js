@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { mapKeys } from 'lodash';
+import { mapKeys, groupBy, orderBy, map } from 'lodash';
 import {
   queryNotices,
   queryStatistics,
@@ -7,6 +7,8 @@ import {
   queryBanners,
   postVerify,
   postVerifyCaptcha,
+  queryMessageList,
+  readMessage,
 } from '../services/api';
 
 export default {
@@ -14,7 +16,9 @@ export default {
 
   state: {
     collapsed: false,
+    oldNotices: [],
     notices: [],
+    noticesCount: null,
     statistics: {},
     banners: [],
   },
@@ -38,7 +42,21 @@ export default {
         CONFIG.countrysMap = mapKeys(response.data.countrys, 'id');
       }
     },
-    *fetchNotices(_, { call, put }) {
+    *fetchNotices({ payload }, { call, put }) {
+      const res = yield call(queryMessageList, payload);
+
+      // only for ui test
+      if (payload && payload.type === 2)
+        res.data.items = []
+      if (payload && payload.type === 3)
+        res.data.items = res.data.items.slice(0, 2);
+
+      yield put({
+        type: 'saveNotices',
+        payload: res,
+      });
+    },
+    *fetchNotices_bak(_, { call, put }) {
       const data = yield call(queryNotices);
       yield put({
         type: 'saveNotices',
@@ -56,7 +74,7 @@ export default {
         payload: res.data,
       });
     },
-    *clearNotices({ payload }, { put, select }) {
+    *clearNotices_bak({ payload }, { put, select }) {
       yield put({
         type: 'saveClearedNotices',
         payload,
@@ -66,6 +84,22 @@ export default {
         type: 'user/changeNotifyCount',
         payload: count,
       });
+    },
+    *clearNotices({ payload, callback }, { call, put }) {
+      const res = yield call(readMessage, payload);
+      yield put({
+        type: 'setReadMessage',
+        payload: res,
+      });
+      if (callback) callback();
+    },
+    *readNotices({ payload, callback }, { call, put }) {
+      const res = yield call(readMessage, payload);
+      yield put({
+        type: 'setReadMessage',
+        payload: res,
+      });
+      if (callback) callback();
     },
     *sendVerify({ payload, callback }, { call }) {
       const res = yield call(postVerify, payload);
@@ -79,7 +113,7 @@ export default {
     *verifyCaptcha({ payload, callback }, { call }) {
       const res = yield call(postVerifyCaptcha, payload);
       if (res.code === 0) {
-        callback && callback();
+        callback && callback(res.data);
       } else {
         message.error(res.errmsg || '操作失败');
       }
@@ -100,9 +134,30 @@ export default {
       };
     },
     saveNotices(state, { payload }) {
+      let { data: { items } } = payload || {};
+      let newItems = [], tmp1 = [], tmp2 = [];
+
+      console.log('notices', items)
+      map(items, (v) => {
+        if (v.ref_id)
+          tmp1.push(v);
+        else
+          newItems.push(v);
+      });
+      let orderMessages = groupBy(tmp1, 'ref_id') || [];
+      map(orderMessages, v => {
+        tmp2 = orderBy(v, ['created_at'], ['desc']);
+        if (tmp2.length > 0) {
+          newItems.push({...tmp2[0], count: tmp2.length});
+        }
+      })
+
+      newItems = orderBy(newItems, ['created_at'], ['desc']);
       return {
         ...state,
-        notices: payload,
+        notices: newItems || [],
+        oldNotices: items,
+        noticesCount: items.length,
       };
     },
     saveStatistics(state, { payload }) {
@@ -115,6 +170,12 @@ export default {
       return {
         ...state,
         notices: state.notices.filter(item => item.type !== payload),
+      };
+    },
+    setReadMessage(state, { payload }) {
+      console.log(payload);
+      return {
+        ...state,
       };
     },
   },

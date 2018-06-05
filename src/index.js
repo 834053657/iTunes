@@ -6,10 +6,12 @@ import createHistory from 'history/createHashHistory';
 // user BrowserHistory
 // import createHistory from 'history/createBrowserHistory';
 import createLoading from 'dva-loading';
+
 import 'moment/locale/zh-cn';
 import './rollbar';
 import './index.less';
 import CONFIG from './utils/config';
+import { dvaSocket } from './utils/socket';
 
 message.config({
   duration: 2,
@@ -28,7 +30,16 @@ const app = dva({
   history: createHistory(),
 });
 
+const options = {
+  extraHeaders: {
+    UID: '1xxx',
+    TOKEN: 'xxx',
+    language: 'CN-zh',
+  },
+};
+
 // 2. Plugins
+app.use(dvaSocket(CONFIG.socket_url, options));
 app.use(createLoading());
 
 // 3. Register global model

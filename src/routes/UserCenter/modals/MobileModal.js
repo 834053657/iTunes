@@ -42,7 +42,7 @@ export default class MobileModal extends Component {
   handleBindSubmit = (err, values) => {
     if (!err) {
       this.props.dispatch({
-        type: 'user/submitChangeEmail',
+        type: 'user/submitChangeMobile',
         payload: {
           ...values,
         },

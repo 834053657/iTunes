@@ -40,6 +40,7 @@ class G2Validation extends Component {
         width={360}
         title={title}
         visible={visible}
+        maskClosable={false}
         onCancel={this.handleCancel}
         footer={[
           <Button key="back" onClick={this.handleCancel}>

@@ -1,10 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Row, Col, Avatar, Divider, Upload, message, Button, Icon } from 'antd';
-import EmailModal from './Modals/EmailModal';
-import MobileModal from './Modals/MobileModal';
+import { Link } from 'dva/router';
+import { Row, Col, Avatar, Divider, Upload, message, Button, Icon, Modal } from 'antd';
+import G2Validation from 'components/G2Validation';
+import EmailModal from './modals/EmailModal';
+import MobileModal from './modals/MobileModal';
+import PasswordForm from './forms/PasswordForm';
 import styles from './UserCenterPage.less';
+import RealNameForm from './forms/RealNameForm';
 
 @connect(({ global, user, loading }) => ({
   currentUser: user.currentUser,
@@ -14,6 +18,9 @@ export default class Analysis extends Component {
   state = {
     emailModalVisible: false,
     mobileModalVisible: false,
+    pwdModalVisible: false,
+    g2ModalVisible: false,
+    realNameModalVisible: false,
   };
 
   componentDidMount() {
@@ -36,24 +43,6 @@ export default class Analysis extends Component {
     });
   };
 
-  handleUpdateEmail = (err, values) => {
-    const { currentUser } = this.props;
-    const { user = {} } = currentUser || {};
-    if (!err) {
-      if (!user.email) {
-        this.props.dispatch({
-          type: 'user/submitChangeEmail',
-          callback: this.hideEmailModal,
-        });
-      } else {
-        this.props.dispatch({
-          type: 'global/sendVerify',
-          callback: this.hideEmailModal,
-        });
-      }
-    }
-  };
-
   hideMobilelModal = () => {
     this.setState({
       mobileModalVisible: false,
@@ -66,28 +55,141 @@ export default class Analysis extends Component {
     });
   };
 
-  handleUpdateMobile = (err, values) => {
-    const { currentUser } = this.props;
-    const { user = {} } = currentUser || {};
+  hidePwdlModal = () => {
+    this.setState({
+      pwdModalVisible: false,
+    });
+  };
+
+  showPwdeModal = () => {
+    this.setState({
+      pwdModalVisible: true,
+    });
+  };
+
+  handlePwdSubmit = (err, values) => {
     if (!err) {
-      if (!user.email) {
-        this.props.dispatch({
-          type: 'user/submitChangeEmail',
-          callback: this.hideMobilelModal,
-        });
-      } else {
-        this.props.dispatch({
-          type: 'global/sendVerify',
-          callback: this.hideMobilelModal,
-        });
-      }
+      this.props.dispatch({
+        type: 'user/submitChangePassword',
+        payload: {
+          ...values,
+        },
+        callback: this.hidePwdlModal,
+      });
     }
   };
 
+  showG2Modal = () => {
+    this.setState({
+      g2ModalVisible: true,
+    });
+  };
+
+  hideG2Modal = () => {
+    this.setState({
+      g2ModalVisible: false,
+    });
+  };
+
+  handleSubmitG2 = (err, values) => {
+    if (!err) {
+      this.props.dispatch({
+        type: 'user/submitChangeG2Validate',
+        payload: {
+          enable: false,
+          code: values.code,
+        },
+        callback: this.hideG2Modal,
+      });
+    }
+  };
+
+  showRealNameModal = () => {
+    this.setState({
+      realNameModalVisible: true,
+    });
+  };
+
+  hideRealNameModal = () => {
+    this.setState({
+      realNameModalVisible: false,
+    });
+  };
+
+  handleSubmitRealName = (err, values) => {
+    if (!err) {
+      this.props.dispatch({
+        type: 'user/submitUserAuth',
+        payload: {
+          enable: false,
+          code: values.code,
+        },
+        callback: this.hideRealNameModal,
+      });
+    }
+  };
+
+  renderPwdModal = () => {
+    const { pwdModalVisible } = this.state;
+    return (
+      <Modal
+        width={500}
+        title="修改密码"
+        visible={pwdModalVisible}
+        onCancel={this.hidePwdlModal}
+        maskClosable={false}
+        footer={null}
+      >
+        {pwdModalVisible && (
+          <PasswordForm onCancel={this.hidePwdlModal} onSubmit={this.handlePwdSubmit} />
+        )}
+      </Modal>
+    );
+  };
+
+  renderRealNameModal = () => {
+    const { realNameModalVisible } = this.state;
+    return (
+      <Modal
+        width={500}
+        title="修改密码"
+        visible={realNameModalVisible}
+        onCancel={this.hideRealNameModal}
+        maskClosable={false}
+        footer={null}
+      >
+        {realNameModalVisible && (
+          <RealNameForm onCancel={this.hideRealNameModal} onSubmit={this.handleSubmitRealName} />
+        )}
+      </Modal>
+    );
+  };
+
+  handleGetLevel = user => {
+    let level = <span className={styles.low}>低</span>;
+    if (user.email) {
+      level = <span className={styles.low}>低</span>;
+    }
+    if (user.email && user.telephone) {
+      level = <span className={styles.middle}>中</span>;
+    }
+    if (user.email && user.telephone && user.g2fa_on) {
+      level = <span className={styles.hight}>高</span>;
+    }
+
+    return level;
+  };
+
   render() {
-    const { emailModalVisible, mobileModalVisible } = this.state;
+    const {
+      emailModalVisible,
+      mobileModalVisible,
+      g2ModalVisible,
+      realNameModalVisible,
+    } = this.state;
     const { currentUser } = this.props;
-    const { user = {} } = currentUser || {};
+    const { auth, user = {} } = currentUser || {};
+    const { real_name = {} } = auth || {};
 
     const props = {
       name: 'file',
@@ -143,9 +245,7 @@ export default class Analysis extends Component {
                   <div className={styles.box_head_wrapper}>
                     <div className={styles.box_head_title}>账号与安全</div>
                     <div className={styles.box_head_extra}>
-                      <span>
-                        安全等级: <span>低</span>
-                      </span>
+                      <span>安全等级: {this.handleGetLevel(user)}</span>
                     </div>
                   </div>
                 </div>
@@ -191,13 +291,19 @@ export default class Analysis extends Component {
                       <Icon type="chrome" />
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>谷歌验证码</h4>
-                        <div className={styles.box_item_descript}>未绑定</div>
+                        <div className={styles.box_item_descript}>
+                          {user.g2fa_on ? '已绑定' : '未绑定'}
+                        </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content} />
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a href="#">编辑</a>
+                        {user.g2fa_on ? (
+                          <a onClick={this.showG2Modal}>停用</a>
+                        ) : (
+                          <Link to="/user-center/g2validate">设置</Link>
+                        )}
                       </li>
                     </ul>
                   </div>
@@ -207,13 +313,13 @@ export default class Analysis extends Component {
                       <Icon type="unlock" />
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>登录密码</h4>
-                        <div className={styles.box_item_descript}>未绑定</div>
+                        <div className={styles.box_item_descript}>已绑定</div>
                       </div>
                     </div>
                     <div className={styles.box_item_content} />
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a href="#">编辑</a>
+                        <a onClick={this.showPwdeModal}>修改</a>
                       </li>
                     </ul>
                   </div>
@@ -236,13 +342,17 @@ export default class Analysis extends Component {
                       <Icon type="idcard" />
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>实名认证</h4>
-                        <div className={styles.box_item_descript}>未绑定</div>
+                        <div className={styles.box_item_descript}>
+                          {real_name.status && CONFIG.auth_status[real_name.status]
+                            ? CONFIG.auth_status[real_name.status]
+                            : CONFIG.auth_status[1]}
+                        </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content} />
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a href="#">编辑</a>
+                        <a onClick={this.showRealNameModal}>编辑</a>
                       </li>
                     </ul>
                   </div>
@@ -332,6 +442,17 @@ export default class Analysis extends Component {
                 onCancel={this.hideMobilelModal}
               />
             )}
+
+            {this.renderPwdModal()}
+
+            <G2Validation
+              title="安全验证"
+              visible={g2ModalVisible}
+              onCancel={this.hideG2Modal}
+              onSubmit={this.handleSubmitG2}
+            />
+
+            {this.renderRealNameModal()}
           </Col>
         </Row>
       </Fragment>

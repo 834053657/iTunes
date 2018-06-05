@@ -21,6 +21,7 @@ export default class EmailModal extends Component {
 
   state = {
     current: 0,
+    updateKey: null,
   };
 
   handleCheckSubmit = (err, values) => {
@@ -29,10 +30,12 @@ export default class EmailModal extends Component {
         type: 'global/verifyCaptcha',
         payload: {
           ...values,
+          type: 1, // 验证码类型 1：邮箱
         },
-        callback: () => {
+        callback: (data = {}) => {
           this.setState({
             current: this.state.current + 1,
+            updateKey: data.key,
           });
         },
       });
@@ -40,11 +43,13 @@ export default class EmailModal extends Component {
   };
 
   handleBindSubmit = (err, values) => {
+    console.log(values);
     if (!err) {
       this.props.dispatch({
         type: 'user/submitChangeEmail',
         payload: {
           ...values,
+          key: this.state.updateKey,
         },
         callback: () => {
           this.setState({
@@ -59,7 +64,11 @@ export default class EmailModal extends Component {
   handleSendCaptcha = (values, callback) => {
     return this.props.dispatch({
       type: 'global/sendVerify',
-      payload: { ...values },
+      payload: {
+        ...values,
+        type: 1,
+        usage: 2,
+      },
       callback,
     });
   };

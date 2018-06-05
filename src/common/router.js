@@ -81,8 +81,11 @@ export const getRouterData = app => {
     '/home': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Home')),
     },
-    '/user-center': {
+    '/user-center/index': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/UserCenterPage')),
+    },
+    '/user-center/g2validate': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/G2ValidatePage')),
     },
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
@@ -102,6 +105,16 @@ export const getRouterData = app => {
     },
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
+    },
+    //帮助，隐私，条款路由控制
+    '/information/help': {
+      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Help')),
+    },
+    '/information/privacy': {
+      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Privacy')),
+    },
+    '/information/terms': {
+      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Terms')),
     },
     //资讯消息路由控制
     '/message/info-list': {

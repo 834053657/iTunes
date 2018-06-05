@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon, message } from 'antd';
+import { Layout, Icon, message, Modal } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -15,6 +15,7 @@ import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
+import { getMessageContent } from '../utils/utils';
 import logo from '../assets/logo.svg';
 
 const { Content, Header, Footer } = Layout;
@@ -84,7 +85,7 @@ enquireScreen(b => {
   isMobile = b;
 });
 
-class BasicLayout extends React.PureComponent {
+class BasicLayout extends React.Component {
   static childContextTypes = {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
@@ -111,9 +112,16 @@ class BasicLayout extends React.PureComponent {
     this.props.dispatch({
       type: 'global/fetchConfigs',
     });
+    this.props.dispatch({
+      type: 'global/fetchNotices',
+      payload: {status: 0, type: 1}
+    });
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
+  }
+  componentWill(nextProp) {
+    console.log('111',nextProp)
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -165,8 +173,54 @@ class BasicLayout extends React.PureComponent {
   handleNoticeClear = type => {
     message.success(`清空了${type}`);
     this.props.dispatch({
-      type: 'global/clearNotices',
-      payload: type,
+      type: 'global/readNotices',
+      payload: {all: true},
+      callback: () => {
+        this.props.dispatch({
+          type: 'global/fetchNotices',
+          payload: {status: 0, type: 2}
+        });
+      }
+    });
+  };
+  handleNoticeViewMore = type => {
+    this.props.dispatch(routerRedux.push('/message/list'));
+  };
+  handleNoticeRead = item => {
+    this.props.dispatch({
+      type: 'global/readNotices',
+      payload: {all: false, id: item.id},
+      callback: () => {
+        if (item.msg_type === 1) {
+          this.props.dispatch(routerRedux.push(`/message/info-detail/${item.id}`));
+        }
+        else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(item.msg_type) >= 0) {
+          Modal.success({
+            title: item.title,
+            content: getMessageContent(item),
+            onOk: () => {
+
+            }
+          });
+        }
+        else {
+          //todo
+          //todo redirect to order detail
+          if (item.order_type === 'card')
+            this.props.dispatch(routerRedux.push(`/card/order/${item.ref_id}`));
+          else if (item.order_type === 'itunes') {
+            this.props.dispatch(routerRedux.push(`/itunes/order/${item.ref_id}`));
+          }
+          else {
+            
+          }
+        }
+
+        this.props.dispatch({
+          type: 'global/fetchNotices',
+          payload: {type: 3}
+        });
+      }
     });
   };
   handleMenuClick = ({ key }) => {
@@ -176,7 +230,7 @@ class BasicLayout extends React.PureComponent {
     }
     console.log(key);
     if (key === 'userCenter') {
-      this.props.dispatch(routerRedux.push('/user-center'));
+      this.props.dispatch(routerRedux.push('/user-center/index'));
       return;
     }
 
@@ -188,9 +242,9 @@ class BasicLayout extends React.PureComponent {
   };
   handleNoticeVisibleChange = visible => {
     if (visible) {
-      this.props.dispatch({
-        type: 'global/fetchNotices',
-      });
+      // this.props.dispatch({
+      //   type: 'global/fetchNotices',
+      // });
     }
   };
   render() {
@@ -199,10 +253,12 @@ class BasicLayout extends React.PureComponent {
       collapsed,
       fetchingNotices,
       notices,
+      noticesCount,
       routerData,
       match,
       location,
     } = this.props;
+    console.log('layout', noticesCount)
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
@@ -221,6 +277,7 @@ class BasicLayout extends React.PureComponent {
           />
         )}
         <Layout>
+
           <Header style={{ padding: 0 }}>
             <GlobalHeader
               logo={logo}
@@ -230,9 +287,12 @@ class BasicLayout extends React.PureComponent {
               currentUser={currentUser}
               fetchingNotices={fetchingNotices}
               notices={notices}
+              noticesCount={noticesCount}
               collapsed={collapsed}
               isMobile={this.state.isMobile}
               onNoticeClear={this.handleNoticeClear}
+              onNoticeView={this.handleNoticeViewMore}
+              onNoticeClick={this.handleNoticeRead}
               onCollapse={this.handleMenuCollapse}
               onMenuClick={this.handleMenuClick}
               onNoticeVisibleChange={this.handleNoticeVisibleChange}
@@ -263,19 +323,19 @@ class BasicLayout extends React.PureComponent {
                 {
                   key: '1',
                   title: '帮助',
-                  href: '#',
+                  href: '/#/information/help',
                   blankTarget: true,
                 },
                 {
                   key: '2',
                   title: '隐私',
-                  href: '#',
+                  href: '/#/information/privacy',
                   blankTarget: true,
                 },
                 {
                   key: '3',
                   title: '条款',
-                  href: '#',
+                  href: '/#/information/terms',
                   blankTarget: true,
                 },
               ]}
@@ -305,4 +365,5 @@ export default connect(({ user, global, loading }) => ({
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
   notices: global.notices,
+  noticesCount: global.noticesCount,
 }))(BasicLayout);

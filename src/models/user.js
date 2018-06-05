@@ -5,9 +5,13 @@ import {
   forgetPassword,
   resetPassword,
   updateEmail,
+  updateMobile,
+  updatePassword,
+  updateG2Validate,
+  getG2Secret,
+  postAuth,
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
-import { fakeRegister } from '../services/api';
 
 export default {
   namespace: 'user',
@@ -17,6 +21,7 @@ export default {
     currentUser: {},
     forgetPassword: {},
     changePassword: {},
+    g2Info: {},
   },
 
   effects: {
@@ -47,8 +52,17 @@ export default {
         message.error(response.errmsg || '操作失败');
       }
     },
-    *submitChangePassword({ payload }, { call, put }) {
+    *submitChangePassword({ payload, callback }, { call, put }) {
       const response = yield call(resetPassword, payload);
+      if (response.code === 0) {
+        message.success('操作成功!');
+        callback && callback(response);
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitUpdatePassword({ payload }, { call, put }) {
+      const response = yield call(updatePassword, payload);
       if (response.code === 0) {
         yield put({
           type: 'forgetPasswordHandle',
@@ -69,6 +83,52 @@ export default {
         message.error(response.errmsg || '操作失败');
       }
     },
+    *submitChangeMobile({ payload, callback }, { call, put }) {
+      const response = yield call(updateMobile, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'fetchCurrent',
+        });
+        callback && callback();
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitChangeG2Validate({ payload, callback }, { call, put }) {
+      const response = yield call(updateG2Validate, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'fetchCurrent',
+        });
+        message.success('操作成功！');
+        callback && callback();
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *fetchG2Info(_, { call, put }) {
+      const response = yield call(getG2Secret);
+      if (response.code === 0) {
+        yield put({
+          type: 'saveG2Info',
+          payload: response.data,
+        });
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitUserAuth({ payload, callback }, { call, put }) {
+      const response = yield call(postAuth, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'fetchCurrent',
+        });
+        message.success('操作成功！');
+        callback && callback();
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
   },
 
   reducers: {
@@ -76,6 +136,12 @@ export default {
       return {
         ...state,
         list: action.payload,
+      };
+    },
+    saveG2Info(state, { payload }) {
+      return {
+        ...state,
+        g2Info: payload,
       };
     },
     saveCurrentUser(state, action) {

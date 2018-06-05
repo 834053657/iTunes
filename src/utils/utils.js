@@ -1,4 +1,5 @@
 import moment from 'moment';
+import audioMsg from '../../public/audio/msg.mp3'
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -162,15 +163,30 @@ export function isUrl(path) {
 
 export function getSystemUrl(env) {
   let base_url = 'http://47.106.111.213:3000/mock/19';
+  let socket_url = 'http://localhost:3000/socket/push';
   let web_name = '凯歌交易平台';
 
   if (env === 'dev') {
     base_url = 'http://47.106.111.213:3000/mock/19';
     web_name += '(DEV)';
+    socket_url = 'http://localhost:3000/socket/push';
   } else if (env === 'test') {
-    base_url = 'http://47.106.111.213:3000/mock/19';
+    base_url = 'http://47.106.111.213:9001';
     web_name += '(TEST)';
+    socket_url = 'http://localhost:3000/socket/push';
   }
 
-  return { base_url, web_name };
+  return { base_url, web_name, socket_url };
+}
+
+export function getMessageContent(msgObj) {
+  //get language
+  let lang = 'zh_CN';
+  return CONFIG[`message_type_${lang}`][msgObj.msg_type];
+}
+
+export function playAudio() {
+  var audio = document.createElement("audio");
+  audio.src = audioMsg;
+  audio.play();
 }
