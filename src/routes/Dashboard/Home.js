@@ -208,7 +208,6 @@ export default class Analysis extends Component {
         </Row>
         <button
           onClick={() => {
-            console.log(123, this);
             this.props.dispatch({
               type: 'push_system_message',
               payload: {
