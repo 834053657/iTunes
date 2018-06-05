@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import moment from 'moment';
-import Content from './Content';
 import { routerRedux } from 'dva/router';
 import { Button, Card, Row, Col, Modal, Form, Input, Table, Icon } from 'antd';
+import Content from './Content';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Detail.less';
 
@@ -28,16 +28,14 @@ const clsString = classNames(
 export default class Terms extends PureComponent {
   state = {};
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   render() {
     const { loading, data } = this.props;
 
     return (
       <PageHeaderLayout className={styles.title} title="条款">
-        <Content type='terms' />
+        <Content type="terms" />
       </PageHeaderLayout>
     );
   }

@@ -150,7 +150,7 @@ export default class Analysis extends Component {
           <div key={key}>
             <div className={styles.banner_items}>
               <a href={item.link} target="_blank">
-                <img className={styles.img} src={item.image_url} alt=""/>
+                <img className={styles.img} src={item.image_url} alt="" />
               </a>
               <Row className={styles.content}>
                 <Col span={16}>
@@ -206,15 +206,19 @@ export default class Analysis extends Component {
             </a>
           </Col>
         </Row>
-        <button onClick={() => {
-          console.log(123, this);
-          this.props.dispatch({
-            type: 'push_system_message',
-            payload: {
-              abc: 123,
-            }
-          });
-        }}>测试推送消息</button>
+        <button
+          onClick={() => {
+            console.log(123, this);
+            this.props.dispatch({
+              type: 'push_system_message',
+              payload: {
+                abc: 123,
+              },
+            });
+          }}
+        >
+          测试推送消息
+        </button>
         <div className={styles.banner}>
           <Slider {...settings}>{bannersContent}</Slider>
         </div>

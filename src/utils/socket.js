@@ -17,7 +17,7 @@ export function dvaSocket(url, option) {
       mockServer.emit('push_system_message', res);
     });
 
-     mockServer.on('post_quick_message', async server => {
+    mockServer.on('post_quick_message', async server => {
       const res = await push_system_message();
       mockServer.emit('test', res);
     });
@@ -38,7 +38,7 @@ export function dvaSocket(url, option) {
           const { oldNotices } = getState().global;
 
           oldNotices.unshift(msg);
-          let rs = {data: {items: oldNotices}};
+          const rs = { data: { items: oldNotices } };
           dispatch({
             type: 'global/saveNotices',
             payload: rs,
@@ -49,9 +49,9 @@ export function dvaSocket(url, option) {
       emit: {
         post_quick_message: {
           evaluate: (action, dispatch, getState) => action.type === 'post_quick_message',
-          data: ({payload}) => {
-            console.log('ppp',payload)
-            return payload
+          data: ({ payload }) => {
+            console.log('ppp', payload);
+            return payload;
           },
         },
         hi: {

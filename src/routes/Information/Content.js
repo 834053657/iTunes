@@ -27,7 +27,6 @@ const clsString = classNames(
 /* @connect((userDetail, loading) => {
   return {data: userDetail, loading: loading}
 }) */
-
 export default class Content extends PureComponent {
   state = {};
 
@@ -55,13 +54,15 @@ export default class Content extends PureComponent {
     };
 
     return (
-        <div className={clsString}>
-          <Card className={styles.content}>
-            <div dangerouslySetInnerHTML={{
-              __html: data.content
-            }}/>
-          </Card>
-        </div>
+      <div className={clsString}>
+        <Card className={styles.content}>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: data.content,
+            }}
+          />
+        </Card>
+      </div>
     );
   }
 }

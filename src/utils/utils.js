@@ -1,5 +1,6 @@
+// 请勿在此引用静态文件 因为会影响到mock 执行
 import moment from 'moment';
-import audioMsg from '../../public/audio/msg.mp3'
+// import audioMsg from '../../public/audio/msg.mp3'
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -181,12 +182,12 @@ export function getSystemUrl(env) {
 
 export function getMessageContent(msgObj) {
   //get language
-  let lang = 'zh_CN';
+  const lang = 'zh_CN';
   return CONFIG[`message_type_${lang}`][msgObj.msg_type];
 }
 
 export function playAudio() {
-  var audio = document.createElement("audio");
-  audio.src = audioMsg;
+  const audio = document.createElement('audio');
+  audio.src = require('../../public/audio/msg.mp3');
   audio.play();
 }

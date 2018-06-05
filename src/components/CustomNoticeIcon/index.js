@@ -30,7 +30,7 @@ export default class NoticeIcon extends PureComponent {
     }
   }
 
-  onItemClick = (item) => {
+  onItemClick = item => {
     const { onItemClick } = this.props;
     onItemClick(item);
     if (item.msg_type === 1) {
@@ -50,27 +50,29 @@ export default class NoticeIcon extends PureComponent {
     this.setState({
       visible: false,
     });
-  }
+  };
 
-  onPopupVisibleChange = (visible) => {
+  onPopupVisibleChange = visible => {
     this.setState({
       visible,
     });
     this.props.onPopupVisibleChange();
-  }
+  };
 
   getNotificationBox() {
     const { list, loading, locale } = this.props;
-    
-    let contentList = <List
-      {...this.props}
-      data={list}
-      onClick={item => this.onItemClick(item)}
-      onClear={() => this.props.onClear(this.props.title)}
-      onView={this.onViewMore}
-      title={this.props.title}
-      locale={locale}
-    />
+
+    const contentList = (
+      <List
+        {...this.props}
+        data={list}
+        onClick={item => this.onItemClick(item)}
+        onClear={() => this.props.onClear(this.props.title)}
+        onView={this.onViewMore}
+        title={this.props.title}
+        locale={locale}
+      />
+    );
 
     return (
       <Spin spinning={loading} delay={0}>
