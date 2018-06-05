@@ -123,6 +123,23 @@ export const getRouterData = app => {
     '/card/buy-card': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
     },
+    '/card/deal-detail': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealDetail')),
+    },
+    '/card/deal-steps': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/Process/Steps')),
+    },
+    '/card/buy-stepTwo': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard/StepTwo')),
+    },
+    '/card/buy-appeal': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard/Appeal')),
+    },
+    '/card/buy-finish': {
+      component: dynamicWrapper(app, ['card'], () =>
+        import('../routes/GiftCard/BuyCard/StepThree')
+      ),
+    },
 
     '/form/step-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm')),

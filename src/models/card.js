@@ -1,4 +1,12 @@
-import { getGiftCard, getTransTerms, postSell } from '../services/api';
+import {
+  getBuyCardlist,
+  getSellCardlist,
+  getTransTerms,
+  postSell,
+  getToken,
+  getBuyDetail,
+  ensure,
+} from '../services/api';
 
 export default {
   namespace: 'card',
@@ -6,11 +14,19 @@ export default {
   state: {
     cardList: [],
     terms: [],
+    buyDetail: null,
   },
 
   effects: {
-    *fetchCardList(payload, { put, call }) {
-      const res = yield call(getGiftCard, payload);
+    *fetchBuyCardList(payload, { put, call }) {
+      const res = yield call(getBuyCardlist, payload);
+      yield put({
+        type: 'GET_CARD_LIST',
+        payload: res,
+      });
+    },
+    *fetchSellCardList(payload, { put, call }) {
+      const res = yield call(getSellCardlist, payload);
       yield put({
         type: 'GET_CARD_LIST',
         payload: res,
@@ -29,6 +45,27 @@ export default {
         type: 'ADD_SELL',
         payload: res,
       });
+    },
+    *getToken({ payload }, { call, put }) {
+      const res = yield call(getToken, payload);
+      return res;
+      // yield put({
+      //   type: 'GET_TOKEN',
+      //   payload: res
+      // })
+    },
+    //获取购买交易详情
+    *getBuyDetail({ payload }, { call, put }) {
+      const res = yield call(getBuyDetail, payload);
+      yield put({
+        type: 'GET_BUY_DETAIL',
+        payload: res,
+      });
+    },
+    //发送确认订单请求
+    *ensureOrder({ payload }, { call, put }) {
+      const res = yield call(ensure, payload);
+      return res;
     },
   },
 
@@ -49,6 +86,21 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    GET_TOKEN(state, action) {
+      return {
+        ...state,
+        token: action.payload,
+      };
+    },
+    GET_BUY_DETAIL(state, action) {
+      console.log(state);
+      console.log(action);
+      console.log('reducer');
+      return {
+        ...state,
+        buyDetail: action.payload,
       };
     },
   },

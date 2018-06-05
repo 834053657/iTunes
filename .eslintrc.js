@@ -12,6 +12,11 @@ module.exports = {
   rules: {
     camelcase: [0],
     radix: [0],
+    'prefer-destructuring': [0],
+    'react/no-array-index-key': [0],
+    'prefer-template': [0],
+    'no-return-assign': [0],
+    'react/jsx-boolean-value': [1],
     'no-unused-expressions': [0],
     'react/jsx-closing-tag-location': [0],
     'no-unused-vars': [1],

@@ -17,7 +17,6 @@ export default class CardMarkets extends Component {
       loading: false,
       typeVisible: false,
       denoVisible: false,
-      denoSaleVisible: false,
       minDeno: null,
       maxDeno: null,
       type_page: 0,
@@ -38,6 +37,7 @@ export default class CardMarkets extends Component {
       this.setState({
         type_page: e,
       });
+      console.log(e);
       this.reSetPage();
       this.reloadList();
     };
@@ -79,14 +79,26 @@ export default class CardMarkets extends Component {
 
     //after set filter，reload data
     this.reloadList = () => {
+      const { type_page } = this.state;
       this.setState({ loading: true });
       const { dispatch } = this.props;
-      dispatch({
-        type: 'card/fetchCardList',
-        payload: this.filter,
-      }).then(() => {
-        this.setState({ loading: false });
-      });
+      if (+type_page === 0) {
+        //购买
+        dispatch({
+          type: 'card/fetchSellCardList',
+          payload: this.filter,
+        }).then(() => {
+          this.setState({ loading: false });
+        });
+      } else if (+type_page === 1) {
+        //出售
+        dispatch({
+          type: 'card/fetchBuyCardList',
+          payload: this.filter,
+        }).then(() => {
+          this.setState({ loading: false });
+        });
+      }
     };
 
     //单价排序
@@ -147,8 +159,6 @@ export default class CardMarkets extends Component {
       }
       if (this.state.type_page === 0) {
         this.setState({ denoVisible: false });
-      } else {
-        this.setState({ denoSaleVisible: false });
       }
       this.reSetPage();
       this.reloadList();
@@ -158,8 +168,10 @@ export default class CardMarkets extends Component {
   componentWillMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'card/fetchCardList',
-      payload: this.state.pagination,
+      type: 'card/fetchSellCardList',
+      payload: this.filter,
+    }).then(() => {
+      this.setState({ loading: false });
     });
   }
 
@@ -168,240 +180,358 @@ export default class CardMarkets extends Component {
   componentWillUnmount() {}
 
   render() {
+    const { card } = this.props;
+
     function FilterDemo() {
       return <div className={styles.filterDemo}>dasd</div>;
     }
 
+    function findDeno(m, r) {
+      const money = [];
+      const a = r.condition instanceof Array;
+      if (!a && r.condition) {
+        if (m === 'min') {
+          return r.condition.min_money;
+        }
+        if (m === 'max') {
+          return r.condition.max_money;
+        }
+      }
+    }
+
+    function denoType(r) {
+      return r.condition instanceof Array;
+    }
+
+    function denoList(r) {
+      const a = [];
+      if (denoType(r)) {
+        r.condition.map(i => {
+          return a.push(i.money);
+        });
+        return a;
+      }
+    }
+
+    function denoBuyList(r) {
+      const a = [];
+      if (r.cards instanceof Array) {
+        r.cards.map(i => {
+          return a.push(i.money);
+        });
+        return a;
+      } else {
+        return false;
+      }
+    }
+
+    function amountMoney(r) {
+      let a = 0;
+      if (r.cards instanceof Array) {
+        r.cards.map(i => {
+          return (a += i.money * i.count);
+        });
+        return a;
+      } else {
+        return false;
+      }
+    }
+
     let pagination_prop;
+    let cardList;
 
-    const cardList = this.props.card.cardList ? this.props.card.cardList.items : null;
+    if (card.cardList) {
+      cardList = card.cardList.items;
+    }
 
+    let columns;
+    let columnsSale;
+    if (cardList) {
+      columns = [
+        {
+          title: '用户名',
+          dataIndex: 'owner.nickname',
+        },
+        {
+          title: '类型',
+          dataIndex: 'type',
+          filterDropdown: (
+            <div style={{ padding: '0 10px 0 10px' }} className={styles.filterDropdownCard}>
+              {CONFIG.card_type
+                ? CONFIG.card_type.map(type => {
+                    return (
+                      <div
+                        className={styles.typeName}
+                        key={type.id}
+                        onClick={() => this.selectType(type)}
+                      >
+                        {type.name}
+                      </div>
+                    );
+                  })
+                : null}
+            </div>
+          ),
+          filterDropdownVisible: this.state.typeVisible,
+          onFilterDropdownVisibleChange: e => {
+            this.setVisible('typeVisible', e);
+          },
+          filterIcon: (
+            <Icon
+              type="down"
+              onClick={() => this.setState({ typeVisible: !this.state.typeVisible })}
+            />
+          ),
+          render: (text, record) => {
+            return (
+              <span>
+                {record.card_type && CONFIG.card_type[record.card_type]
+                  ? CONFIG.card_type[record.card_type].name
+                  : '-'}
+              </span>
+            );
+          },
+        },
+        {
+          title: '面额',
+          dataIndex: 'denomination',
+          onFilterDropdownVisibleChange: e => {
+            this.setVisible('denoVisible', e);
+          },
+          filterDropdownVisible: this.state.denoVisible,
+          filterDropdown: (
+            <div className={styles.denoRange}>
+              <div className={styles.range}>
+                <span>区间:</span>
+                <span className={styles.min}>
+                  <Input value={this.state.minDeno} onChange={e => this.setMinDeno(e)} />
+                </span>
+                <span>---</span>
+                <span className={styles.max}>
+                  <Input value={this.state.maxDeno} onChange={e => this.setMaxDeno(e)} />
+                </span>
+              </div>
+              <div className={styles.rangeBtns}>
+                <Button
+                  onClick={() => {
+                    this.resetRangeFilter();
+                  }}
+                >
+                  重置
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.setRangeFilter();
+                  }}
+                >
+                  确定
+                </Button>
+              </div>
+            </div>
+          ),
+          render: (text, record) => {
+            return (
+              <span>
+                {console.log(record, 'recorddddddd')}
+                {denoBuyList(record)
+                  ? denoBuyList(record).map((m, index) => {
+                      return (
+                        <span key={index}>
+                          {m}
+                          {index < denoBuyList(record).length - 1 ? '/' : null}
+                        </span>
+                      );
+                    })
+                  : null}
+              </span>
+            );
+          },
+        },
+        {
+          title: '总面额',
+          dataIndex: 'total_denomination',
+          render: (text, record) => {
+            return <span>{amountMoney(record)}</span>;
+          },
+        },
+        {
+          title: '单价',
+          dataIndex: 'unit_price',
+          sorter: (a, b) => a.unitPrice - b.unitPrice,
+        },
+        {
+          title: '保障时间',
+          dataIndex: 'guarantee_time',
+        },
+        {
+          title: '操作',
+          dataIndex: 'operation',
+          render: (text, record) => {
+            return (
+              <Button
+                type="primary"
+                onClick={() => {
+                  console.log('this.props');
+                  console.log(this.props);
+                  this.props.history.push({
+                    pathname: `/card/deal-detail`,
+                    query: { ad_info: record },
+                  });
+                }}
+              >
+                购买
+              </Button>
+            );
+          },
+        },
+      ];
+    }
     //购买Table
-    const columns = [
-      {
-        title: '用户名',
-        dataIndex: 'owner_info.nickname',
-      },
-      {
-        title: '类型',
-        dataIndex: 'type',
-        filterDropdown: (
-          <div style={{ padding: '0 10px 0 10px' }} className={styles.filterDropdownCard}>
-            {CONFIG.card_type
-              ? CONFIG.card_type.map(type => {
-                  return (
-                    <div
-                      className={styles.typeName}
-                      key={type.id}
-                      onClick={() => this.selectType(type)}
-                    >
-                      {type.name}
-                    </div>
-                  );
-                })
-              : null}
-          </div>
-        ),
-        filterDropdownVisible: this.state.typeVisible,
-        onFilterDropdownVisibleChange: e => {
-          this.setVisible('typeVisible', e);
-        },
-        filterIcon: (
-          <Icon
-            type="down"
-            onClick={() => this.setState({ typeVisible: !this.state.typeVisible })}
-          />
-        ),
-        render: (text, record) => {
-          return <span>{text && CONFIG.card_type[text] ? CONFIG.card_type[text].name : '-'}</span>;
-        },
-      },
-      {
-        title: '面额',
-        dataIndex: 'denomination',
-        onFilterDropdownVisibleChange: e => {
-          this.setVisible('denoVisible', e);
-        },
-        filterDropdownVisible: this.state.denoVisible,
-        filterDropdown: (
-          <div className={styles.denoRange}>
-            <div className={styles.range}>
-              <span>区间:</span>
-              <span className={styles.min}>
-                <Input value={this.state.minDeno} onChange={e => this.setMinDeno(e)} />
-              </span>
-              <span>---</span>
-              <span className={styles.max}>
-                <Input value={this.state.maxDeno} onChange={e => this.setMaxDeno(e)} />
-              </span>
-            </div>
-            <div className={styles.rangeBtns}>
-              <Button
-                onClick={() => {
-                  this.resetRangeFilter();
-                }}
-              >
-                重置
-              </Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  this.setRangeFilter();
-                }}
-              >
-                确定
-              </Button>
-            </div>
-          </div>
-        ),
-        render: (text, record) => {
-          return (
-            <span>
-              {record.min_denomination}-
-              {record.max_denomination}
-            </span>
-          );
-        },
-      },
-      {
-        title: '总面额',
-        dataIndex: 'total_denomination',
-      },
-      {
-        title: '单价',
-        dataIndex: 'unit_price',
-        sorter: (a, b) => a.unitPrice - b.unitPrice,
-      },
-      {
-        title: '保障时间',
-        dataIndex: 'guarantee_time',
-      },
-      {
-        title: '操作',
-        dataIndex: 'operation',
-        render: () => {
-          return <Button type="primary">购买</Button>;
-        },
-      },
-    ];
 
-    const columnsSale = [
-      {
-        title: '用户名',
-        dataIndex: 'owner_info.nickname',
-      },
-      {
-        title: '类型',
-        dataIndex: 'type',
-        filterDropdown: (
-          <div style={{ padding: '0 10px 0 10px' }} className={styles.filterDropdownCard}>
-            {CONFIG.card_type
-              ? CONFIG.card_type.map(type => {
-                  return (
-                    <div
-                      className={styles.typeName}
-                      key={type.id}
-                      onClick={() => {
-                        console.log('card type IN COLUMNS');
-                        this.selectType(type);
-                      }}
-                    >
-                      {type.name}
-                    </div>
-                  );
-                })
-              : null}
-          </div>
-        ),
-        filterDropdownVisible: this.state.typeVisible,
-        onFilterDropdownVisibleChange: e => {
-          this.setVisible('typeVisible', e);
+    if (cardList) {
+      columnsSale = [
+        {
+          title: '用户名',
+          dataIndex: 'owner.nickname',
         },
-        filterIcon: (
-          <Icon
-            type="down"
-            onClick={() => this.setState({ typeVisible: !this.state.typeVisible })}
-          />
-        ),
-        render: (text, record) => {
-          return <span>{text && CONFIG.card_type[text] ? CONFIG.card_type[text].name : '-'}</span>;
-        },
-      },
-      {
-        title: '面额',
-        dataIndex: 'denomination',
-        onFilterDropdownVisibleChange: e => {
-          this.setVisible('denoSaleVisible', e);
-        },
-        filterDropdownVisible: this.state.denoSaleVisible,
-        filterDropdown: (
-          <div className={styles.denoRange}>
-            <div className={styles.range}>
-              <span>区间:</span>
-              <span className={styles.min}>
-                <Input value={this.state.minDeno} onChange={e => this.setMinDeno(e)} />
-              </span>
-              <span>---</span>
-              <span className={styles.max}>
-                <Input value={this.state.maxDeno} onChange={e => this.setMaxDeno(e)} />
-              </span>
+        {
+          title: '类型',
+          dataIndex: 'type',
+          filterDropdown: (
+            <div style={{ padding: '0 10px 0 10px' }} className={styles.filterDropdownCard}>
+              {CONFIG.card_type
+                ? CONFIG.card_type.map(type => {
+                    return (
+                      <div
+                        className={styles.typeName}
+                        key={type.id}
+                        onClick={() => this.selectType(type)}
+                      >
+                        {type.name}
+                      </div>
+                    );
+                  })
+                : null}
             </div>
-            <div className={styles.rangeBtns}>
-              <Button
-                onClick={() => {
-                  this.resetRangeFilter();
-                }}
-              >
-                重置
-              </Button>
+          ),
+          filterDropdownVisible: this.state.typeVisible,
+          onFilterDropdownVisibleChange: e => {
+            this.setVisible('typeVisible', e);
+          },
+          filterIcon: (
+            <Icon
+              type="down"
+              onClick={() => this.setState({ typeVisible: !this.state.typeVisible })}
+            />
+          ),
+          render: (text, record) => {
+            return (
+              <span>
+                {record.card_type && CONFIG.card_type[record.card_type]
+                  ? CONFIG.card_type[record.card_type].name
+                  : '-'}
+              </span>
+            );
+          },
+        },
+        {
+          title: '面额',
+          dataIndex: 'denomination',
+          onFilterDropdownVisibleChange: e => {
+            this.setVisible('denoVisible', e);
+          },
+          filterDropdownVisible: this.state.denoVisible,
+          filterDropdown: (
+            <div className={styles.denoRange}>
+              <div className={styles.range}>
+                <span>区间:</span>
+                <span className={styles.min}>
+                  <Input value={this.state.minDeno} onChange={e => this.setMinDeno(e)} />
+                </span>
+                <span>---</span>
+                <span className={styles.max}>
+                  <Input value={this.state.maxDeno} onChange={e => this.setMaxDeno(e)} />
+                </span>
+              </div>
+              <div className={styles.rangeBtns}>
+                <Button
+                  onClick={() => {
+                    this.resetRangeFilter();
+                  }}
+                >
+                  重置
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.setRangeFilter();
+                  }}
+                >
+                  确定
+                </Button>
+              </div>
+            </div>
+          ),
+          render: (text, record) => {
+            return (
+              <span>
+                {denoType(record) ? (
+                  denoList(record) ? (
+                    denoList(record).map((i, index) => {
+                      return (
+                        <span key={index}>
+                          {i}
+                          {index < denoList(record).length - 1 ? '/' : null}
+                        </span>
+                      );
+                    })
+                  ) : null
+                ) : (
+                  <span>
+                    {findDeno('min', record) + ' - '}
+                    {findDeno('max', record)}
+                  </span>
+                )}
+              </span>
+            );
+          },
+        },
+        {
+          title: '单价',
+          dataIndex: 'unit_price',
+          sorter: (a, b) => a.unitPrice - b.unitPrice,
+        },
+        {
+          title: '发卡期限',
+          dataIndex: 'deadline',
+        },
+        {
+          title: '保障时间',
+          dataIndex: 'guarantee_time',
+        },
+        {
+          title: '操作',
+          dataIndex: 'operation',
+          render: (text, record) => {
+            return (
               <Button
                 type="primary"
                 onClick={() => {
-                  this.setRangeFilter();
+                  console.log(this.props);
+                  this.props.history.push({
+                    pathname: `/card/deal-detail`,
+                    query: { ad_info: record },
+                  });
                 }}
               >
-                确定
+                出售
               </Button>
-            </div>
-          </div>
-        ),
-        render: (text, record) => {
-          return (
-            <span>
-              {record.min_denomination}-
-              {record.max_denomination}
-            </span>
-          );
+            );
+          },
         },
-      },
-      {
-        title: '总面额',
-        dataIndex: 'total_denomination',
-      },
-      {
-        title: '单价',
-        dataIndex: 'unit_price',
-        //sorter: (a, b) => a.unitPrice - b.unitPrice,
-      },
-      {
-        title: '发卡期限',
-        dataIndex: 'deadline',
-        render: text => {
-          return <span>{new Date(text).toLocaleDateString()}</span>;
-        },
-      },
-      {
-        title: '保障时间',
-        dataIndex: 'guarantee_time',
-      },
-      {
-        title: '操作',
-        dataIndex: 'operation',
-        render: () => {
-          return <Button type="primary">出售</Button>;
-        },
-      },
-    ];
+      ];
+    }
 
     return (
       <div>
@@ -418,7 +548,7 @@ export default class CardMarkets extends Component {
         <Table
           rowKey={row => row.id}
           dataSource={cardList}
-          columns={this.state.type_page === '0' ? columns : columnsSale}
+          columns={+this.state.type_page === 0 ? columns : columnsSale}
           pagination={false}
           loading={this.state.loading}
           onChange={this.tableChange}

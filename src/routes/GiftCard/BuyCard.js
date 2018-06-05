@@ -28,7 +28,7 @@ export default class SaleCard extends Component {
       condition: [],
       deadline: '',
       defaultCardTypeName: '',
-      condition_type: '',
+      condition_type: 1,
     };
     this.items = [];
     this.data = {
@@ -84,18 +84,36 @@ export default class SaleCard extends Component {
       this.data.unit_price = e;
     };
 
-    //添加面额种类
-    this.addDeno = () => {
-      // if (isNaN(this.state.denoVaule)) {
-      //   return message.warning('请输入正确格式')
-      // }
+    //删除面额种类
+    this.delDeno = (t, i) => {
       const a = this.state.condition;
-      const con = {
-        money: '',
-        min_count: '',
-        max_count: '',
-      };
-      a.push(con);
+      a.splice(i, 1);
+      this.setState({
+        condition: a,
+      });
+    };
+
+    this.changeMoney = (e, index) => {
+      const a = this.state.condition;
+      a[index].money = e;
+      this.setState({
+        condition: a,
+      });
+      this.data.condition = a;
+    };
+
+    this.changeMinCount = (e, index) => {
+      const a = this.state.condition;
+      a[index].min_count = e;
+      this.setState({
+        condition: a,
+      });
+      this.data.condition = a;
+    };
+
+    this.changeMaxCount = (e, index) => {
+      const a = this.state.condition;
+      a[index].max_count = e;
       this.setState({
         condition: a,
       });
@@ -114,21 +132,46 @@ export default class SaleCard extends Component {
     };
 
     this.selCondition = e => {
-      this.data.condition = {};
       this.setState({
         condition_type: e,
+        condition: +e === 1 ? [] : {},
       });
-      this.data.condition_type = e;
-      this.state.condition_type = e;
+      this.data.condition = +e === 1 ? [] : {};
     };
 
     this.changeMinMoney = e => {
+      console.log(this.data);
       this.data.condition.min_money = e.target.value;
     };
     this.changeMaxMoney = e => {
       this.data.condition.max_money = e.target.value;
     };
+
+    this.addBuyAd = () => {
+      console.log(this.data);
+    };
   }
+
+  //添加面额种类
+  addDeno = () => {
+    // if (isNaN(this.state.denoVaule)) {
+    //   return message.warning('请输入正确格式')
+    // }
+    const { condition } = this.state;
+    const con = {
+      money: '',
+      min_count: '',
+      max_count: '',
+    };
+    condition.push({
+      money: '',
+      min_count: '',
+      max_count: '',
+    });
+    this.setState({
+      condition,
+    });
+  };
 
   componentWillMount() {
     const { dispatch } = this.props;
@@ -142,6 +185,8 @@ export default class SaleCard extends Component {
   componentWillUnmount() {}
 
   render() {
+    const { condition_type, condition } = this.state;
+
     const cardTypeMenu = CONFIG.card_type ? (
       <Menu>
         {CONFIG.card_type.map(t => {
@@ -229,56 +274,78 @@ export default class SaleCard extends Component {
               <Radio.Button value="2">交易限额</Radio.Button>
             </Radio.Group>
           </li>
-          {this.state.condition_type ? (
+          {condition_type && condition.length && +condition_type === 1 ? (
             <li>
               <span className={styles.tableLeft}>&nbsp;</span>
-              {parseInt(this.state.condition_type) === 1 ? (
+              {
                 <ul className={styles.conditionFixed}>
-                  {console.log(this.data.condition)}
-                  {console.log(this.data)}
-                  {this.state.condition && this.state.condition.length
-                    ? this.state.condition.map(condition => {
+                  {condition && condition.length
+                    ? condition.map((c, index) => {
                         return (
-                          <li>
-                            <Input className={styles.contIpt} placeholder="面额" />
+                          <li key={`condition_1_${index}`}>
+                            <Input
+                              className={styles.contIpt}
+                              placeholder="面额"
+                              value={c.money}
+                              onChange={e => {
+                                this.changeMoney(e.target.value, index);
+                              }}
+                            />
                             &nbsp;--&nbsp;
-                            <Input className={styles.contIpt} placeholder="最小数量" />
+                            <Input
+                              className={styles.contIpt}
+                              placeholder="最小数量"
+                              value={c.min_count}
+                              onChange={e => {
+                                this.changeMinCount(e.target.value, index);
+                              }}
+                            />
                             &nbsp;--&nbsp;
-                            <Input className={styles.contIpt} placeholder="最大数量" />
-                            <Icon className={styles.delIcon} type="minus-circle-o" />
+                            <Input
+                              className={styles.contIpt}
+                              placeholder="最大数量"
+                              value={c.max_count}
+                              onChange={e => {
+                                this.changeMaxCount(e.target.value, index);
+                              }}
+                            />
+                            <Icon
+                              className={styles.delIcon}
+                              type="minus-circle-o"
+                              onClick={() => {
+                                this.delDeno(c, index);
+                              }}
+                            />
                           </li>
                         );
                       })
                     : null}
                 </ul>
-              ) : null}
-              {parseInt(this.state.condition_type) === 2 ? (
-                <div>
-                  <Input
-                    className={styles.conIpt}
-                    type="text"
-                    onChange={e => this.changeMinMoney(e)}
-                  />
-                  &nbsp;&nbsp;---&nbsp;&nbsp;
-                  <Input
-                    className={styles.conIpt}
-                    type="text"
-                    onChange={e => this.changeMaxMoney(e)}
-                  />
-                </div>
-              ) : null}
+              }
             </li>
           ) : null}
-
-          {this.state.condition_type && parseInt(this.state.condition_type) === 1 ? (
+          {+condition_type === 2 ? (
             <li>
               <span className={styles.tableLeft}>&nbsp;</span>
-              <Button
-                style={{ width: '260px', borderStyle: 'dashed' }}
-                onClick={() => {
-                  this.addDeno();
-                }}
-              >
+              <div>
+                <Input
+                  className={styles.conIpt}
+                  type="text"
+                  onChange={e => this.changeMinMoney(e)}
+                />
+                &nbsp;&nbsp;---&nbsp;&nbsp;
+                <Input
+                  className={styles.conIpt}
+                  type="text"
+                  onChange={e => this.changeMaxMoney(e)}
+                />
+              </div>
+            </li>
+          ) : null}
+          {+condition_type === 1 ? (
+            <li>
+              <span className={styles.tableLeft}>&nbsp;</span>
+              <Button style={{ width: '260px', borderStyle: 'dashed' }} onClick={this.addDeno}>
                 + 添加面额
               </Button>
             </li>
@@ -327,6 +394,17 @@ export default class SaleCard extends Component {
             </Dropdown>
           </li>
         </ul>
+        <div className={styles.footerBox}>
+          <Button>取消</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              this.addBuyAd();
+            }}
+          >
+            发布
+          </Button>
+        </div>
       </div>
     );
   }

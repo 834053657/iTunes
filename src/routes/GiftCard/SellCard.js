@@ -35,6 +35,14 @@ export default class BuyCard extends Component {
     this.items = [];
     this.data = {};
 
+    //upload
+    this.getToken = () => {
+      return this.props.dispatch({
+        type: 'card/getToken',
+        payload: { bucket: 'image' },
+      });
+    };
+
     this.setVisible = (type, visible) => {
       this.setState({
         [type]: visible,
@@ -344,7 +352,14 @@ export default class BuyCard extends Component {
 
         {this.state.passwordType === 2
           ? this.state.cards.map((item, index) => {
-              return <OnlyPicture item={item} styles={styles} index={index} />;
+              return (
+                <OnlyPicture
+                  item={item}
+                  styles={styles}
+                  index={index}
+                  getToken={() => this.getToken()}
+                />
+              );
             })
           : null}
 

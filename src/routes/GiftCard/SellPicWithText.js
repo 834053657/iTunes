@@ -60,7 +60,6 @@ function PicWithText(props) {
             </Upload>
           </div>
         </div>
-
         <div className={styles.receipt}>
           <div className={styles.left}>
             <span>收据:</span>
@@ -74,7 +73,6 @@ function PicWithText(props) {
               />
               <Icon className={styles.iconDel} type="minus-circle-o" />
             </div>
-
             <div className={styles.addBtn}>
               <Upload {...uploadProp}>
                 <Button className={styles.uploadButton}>

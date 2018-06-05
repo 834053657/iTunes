@@ -128,13 +128,25 @@ export async function queryConfigs() {
 
 //礼品卡列表actions开始
 
-export async function getGiftCard(params) {
-  return request(`/itunes/get_card_list?${stringify(params)}`);
+export async function getBuyCardlist(params) {
+  return request(`/itunes/ad/card/buy?${stringify(params)}`);
+}
+
+export async function getSellCardlist(params) {
+  return request(`/itunes/ad/card/sell?${stringify(params)}`);
 }
 
 //获取交易条款
 export async function getTransTerms() {
   return request('/itunes/user/trans_term/all');
+}
+
+//getToken
+export async function getToken(params) {
+  return request('/itunes/user/upload_token', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 //创建出售
@@ -145,4 +157,17 @@ export async function postSell(params) {
     body: params,
   });
 }
+
+export async function ensure(params) {
+  return request('/itunes/order/create', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//创建出售
+export async function getBuyDetail(params) {
+  return request(`/itunes/card/buy/get_order_info?${stringify(params)}`);
+}
+
 //礼品卡列表actions结束
