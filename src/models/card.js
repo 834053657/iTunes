@@ -18,14 +18,15 @@ export default {
   },
 
   effects: {
-    *fetchBuyCardList(payload, { put, call }) {
+    *fetchBuyCardList({ payload }, { put, call }) {
+      console.log(payload);
       const res = yield call(getBuyCardlist, payload);
       yield put({
         type: 'GET_CARD_LIST',
         payload: res,
       });
     },
-    *fetchSellCardList(payload, { put, call }) {
+    *fetchSellCardList({ payload }, { put, call }) {
       const res = yield call(getSellCardlist, payload);
       yield put({
         type: 'GET_CARD_LIST',
@@ -95,9 +96,6 @@ export default {
       };
     },
     GET_BUY_DETAIL(state, action) {
-      console.log(state);
-      console.log(action);
-      console.log('reducer');
       return {
         ...state,
         buyDetail: action.payload,

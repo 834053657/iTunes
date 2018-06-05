@@ -137,6 +137,8 @@ export async function getBuyCardlist(params) {
 }
 
 export async function getSellCardlist(params) {
+  console.log('params');
+  console.log(params);
   return request(`/itunes/ad/card/sell?${stringify(params)}`);
 }
 

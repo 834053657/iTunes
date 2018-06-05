@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Table, Tabs, Button, Icon, Pagination, Input, message } from 'antd';
-import styles from './CardMarket.less';
+import styles from './CardMarkets.less';
 
 @connect(({ card }) => ({
   card,
@@ -372,8 +372,6 @@ export default class CardMarkets extends Component {
               <Button
                 type="primary"
                 onClick={() => {
-                  console.log('this.props');
-                  console.log(this.props);
                   this.props.history.push({
                     pathname: `/card/deal-detail`,
                     query: { ad_info: record },
@@ -520,7 +518,7 @@ export default class CardMarkets extends Component {
                 onClick={() => {
                   console.log(this.props);
                   this.props.history.push({
-                    pathname: `/card/deal-detail`,
+                    pathname: `/card/sell-sendCard`,
                     query: { ad_info: record },
                   });
                 }}

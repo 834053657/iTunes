@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
+import { connect } from 'dva/index';
 import {
   Table,
   Tabs,
@@ -12,8 +12,10 @@ import {
   Steps,
   Avatar,
   Select,
+  Upload,
+  Modal,
 } from 'antd';
-import styles from './StepTwo.less';
+import styles from '../../BuyCard/StepTwo.less';
 
 const Step = Steps.Step;
 const Option = Select.Option;
@@ -21,10 +23,9 @@ const Option = Select.Option;
 @connect(({ card }) => ({
   card,
 }))
-export default class Process extends Component {
+export default class BuyCard extends Component {
   constructor(props) {
     super();
-    this.state = {};
   }
 
   componentWillMount() {}
@@ -37,9 +38,14 @@ export default class Process extends Component {
     return (
       <div className={styles.stepTwoBox}>
         <Steps current={1}>
-          <Step title="打开交易" />
+          <Step title="发送礼品卡" />
           <Step title="确认信息" />
-          <Step title="完成" />
+          <Step
+            onClick={() => {
+              this.props.history.push({ pathname: `/card/sell-dealFinish` });
+            }}
+            title="完成"
+          />
         </Steps>
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
@@ -68,16 +74,6 @@ export default class Process extends Component {
                 &nbsp;
                 {'30'}分钟
               </h5>
-
-              <Button
-                type="danger"
-                onClick={() => {
-                  this.props.history.push({ pathname: `/card/buy-appeal` });
-                }}
-              >
-                申诉
-              </Button>
-              <Button type="primary">确认释放</Button>
             </div>
 
             <div className={styles.chatInfo}>
