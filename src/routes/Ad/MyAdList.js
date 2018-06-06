@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
-import { Table, Tabs, Button, Icon, Card, Modal, Row, Col, Divider, Badge } from 'antd';
+import { Table, Tabs, Button, Icon, Card, Modal, Row, Col, Divider, Badge, Tooltip } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getMessageContent } from '../../utils/utils';
 import styles from './List.less';
@@ -65,8 +65,25 @@ export default class List extends Component {
       title: '状态',
       dataIndex: 'status',
       width: '15%',
-      render(val) {
-        return <Badge status={statusMap[val - 1]} text={val ? CONFIG.ad_status[val] : '-'} />;
+      render(val, row) {
+        if (val === 4) {
+          const reason = (
+            <Tooltip title={row.cancel_reason}>
+              <span>原因</span>
+            </Tooltip>
+          );
+          return (
+            <span>
+              <Badge status={statusMap[3]} text={val ? `${CONFIG.ad_status[4]}` : '-'} />
+              <Tooltip title={row.cancel_reason}>
+                <span className={styles.reason}>原因</span>
+              </Tooltip>
+            </span>
+          );
+        }
+        else {
+          return <Badge status={statusMap[val - 1]} text={val ? CONFIG.ad_status[val] : '-'} />;
+        }
       },
     },
     {
@@ -133,20 +150,22 @@ export default class List extends Component {
   render() {
     const { data: { list, pagination }, loading } = this.props;
     const { selectedRows } = this.state;
-    console.log(111, this.props);
+    
+    const content = (
+      <Row gutter={24}>
+        <Col span={12} className={styles.title}>
+          我的广告
+        </Col>
+        <Col span={12} className={styles.more}>
+          <a className={styles.itunes_btn} href="/#/ad/terms">
+            交易条款管理
+          </a>
+        </Col>
+      </Row>
+    );
 
     return (
-      <Fragment>
-        <Row gutter={24}>
-          <Col span={12} className={styles.title}>
-            我的广告
-          </Col>
-          <Col span={12} className={styles.more}>
-            <a className={styles.itunes_btn} href="/#/ad/terms">
-              交易条款管理
-            </a>
-          </Col>
-        </Row>
+      <PageHeaderLayout content={content} >
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Table
@@ -159,7 +178,7 @@ export default class List extends Component {
             />
           </Card>
         </div>
-      </Fragment>
+      </PageHeaderLayout>
     );
   }
 }

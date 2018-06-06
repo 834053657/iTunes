@@ -203,12 +203,10 @@ class BasicLayout extends React.Component {
           else if (item.content && item.content.order_type === 'itunes') {
             this.props.dispatch(routerRedux.push(`/itunes/order/${item.content.order_id}`));
           }
-        }
-        else {
+        } else {
           // todo
           console.log(item.msg_type);
         }
-
 
         this.props.dispatch({
           type: 'global/fetchNotices',

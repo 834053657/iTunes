@@ -139,12 +139,14 @@ export default {
 
       console.log('notices', items);
       map(items, v => {
-        if (v.msg_type === 104 && v.content && v.content.order_type && v.content.order_id) tmp1.push(v);
+        if (v.msg_type === 104 && v.content && v.content.order_type && v.content.order_id)
+          tmp1.push(v);
         else newItems.push(v);
       });
-      const orderMessages = groupBy(tmp1, d => {
-        return `${d.content.order_type}_${d.content.order_id}`; 
-      }) || [];
+      const orderMessages =
+        groupBy(tmp1, d => {
+          return `${d.content.order_type}_${d.content.order_id}`;
+        }) || [];
       // console.log(111, orderMessages);
       map(orderMessages, v => {
         tmp2 = orderBy(v, ['created_at'], ['desc']);

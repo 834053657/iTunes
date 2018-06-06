@@ -25,7 +25,11 @@ export async function readMessage(params) {
 }
 
 export async function queryMyAdList(params) {
-  return request(`/itunes/ad/get_my_ad_list?${stringify(params)}`);
+  return request(`/itunes/user/my_ad_list/all?${stringify(params)}`);
+}
+
+export async function queryTermsList(params) {
+  return request(`/itunes/user/trans_term/all?${stringify(params)}`);
 }
 
 export async function queryStaticDtl(params) {

@@ -97,8 +97,7 @@ export default class List extends Component {
       else if (row.content && row.content.order_type === 'itunes') {
         this.props.dispatch(routerRedux.push(`/itunes/order/${row.content.order_id}`));
       }
-    }
-    else {
+    } else {
       // todo
       console.log(row.msg_type);
     }
