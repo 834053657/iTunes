@@ -90,13 +90,17 @@ export default class List extends Component {
           });
         },
       });
-    } else {
+    } else if ([101, 102, 103, 104, 105, 106, 107].indexOf(row.msg_type) >= 0) {
       //todo redict to order detail
-      if (row.order_type === 'card')
-        this.props.dispatch(routerRedux.push(`/card/order/${row.ref_id}`));
-      else if (row.order_type === 'itunes') {
-        this.props.dispatch(routerRedux.push(`/itunes/order/${row.ref_id}`));
+      if (row.content && row.content.order_type === 'card')
+        this.props.dispatch(routerRedux.push(`/card/order/${row.content.order_id}`));
+      else if (row.content && row.content.order_type === 'itunes') {
+        this.props.dispatch(routerRedux.push(`/itunes/order/${row.content.order_id}`));
       }
+    }
+    else {
+      // todo
+      console.log(row.msg_type);
     }
   };
 

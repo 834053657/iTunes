@@ -139,10 +139,13 @@ export default {
 
       console.log('notices', items);
       map(items, v => {
-        if (v.ref_id) tmp1.push(v);
+        if (v.msg_type === 104 && v.content && v.content.order_type && v.content.order_id) tmp1.push(v);
         else newItems.push(v);
       });
-      const orderMessages = groupBy(tmp1, 'ref_id') || [];
+      const orderMessages = groupBy(tmp1, d => {
+        return `${d.content.order_type}_${d.content.order_id}`; 
+      }) || [];
+      // console.log(111, orderMessages);
       map(orderMessages, v => {
         tmp2 = orderBy(v, ['created_at'], ['desc']);
         if (tmp2.length > 0) {
@@ -151,6 +154,7 @@ export default {
       });
 
       newItems = orderBy(newItems, ['created_at'], ['desc']);
+      // console.log(222, newItems);
       return {
         ...state,
         notices: newItems || [],

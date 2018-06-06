@@ -31,9 +31,9 @@ export default class List extends Component {
     });
   }
 
-  processAd = (r) => {
+  processAd = r => {
     // todo
-  }
+  };
 
   columns = [
     {
