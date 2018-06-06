@@ -148,9 +148,6 @@ export const getRouterData = app => {
     '/card/deal-detail': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealDetail')),
     },
-    '/card/deal-steps': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/Process/Steps')),
-    },
     '/card/buy-stepTwo': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard/StepTwo')),
     },
@@ -175,6 +172,21 @@ export const getRouterData = app => {
     '/card/sell-dealFinish': {
       component: dynamicWrapper(app, ['card'], () =>
         import('../routes/GiftCard/SellCard/Seller/DealFinish')
+      ),
+    },
+    '/card/card-preview': {
+      component: dynamicWrapper(app, ['card'], () =>
+        import('../routes/GiftCard/PreviewCard/PreviewCard')
+      ),
+    },
+    '/card/ad-receiveCard': {
+      component: dynamicWrapper(app, ['card'], () =>
+        import('../routes/GiftCard/SellCard/Buyer/ReceiveCard')
+      ),
+    },
+    '/card/ad-ensureInfo': {
+      component: dynamicWrapper(app, ['card'], () =>
+        import('../routes/GiftCard/SellCard/Buyer/EnsureBuyInfo')
       ),
     },
 

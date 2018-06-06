@@ -215,11 +215,8 @@ export default class CardMarkets extends Component {
 
     function denoBuyList(r) {
       const a = [];
-      if (r.cards instanceof Array) {
-        r.cards.map(i => {
-          return a.push(i.money);
-        });
-        return a;
+      if (r.money instanceof Array) {
+        return r.money;
       } else {
         return false;
       }
@@ -513,18 +510,31 @@ export default class CardMarkets extends Component {
           dataIndex: 'operation',
           render: (text, record) => {
             return (
-              <Button
-                type="primary"
-                onClick={() => {
-                  console.log(this.props);
-                  this.props.history.push({
-                    pathname: `/card/sell-sendCard`,
-                    query: { ad_info: record },
-                  });
-                }}
-              >
-                出售
-              </Button>
+              <div>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.props.history.push({
+                      pathname: `/card/sell-sendCard`,
+                      query: { ad_info: record },
+                    });
+                  }}
+                >
+                  出售
+                </Button>
+
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.props.history.push({
+                      pathname: `/card/ad-receiveCard`,
+                      query: { ad_info: record },
+                    });
+                  }}
+                >
+                  查收
+                </Button>
+              </div>
             );
           },
         },

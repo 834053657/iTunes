@@ -74,8 +74,16 @@ export default class BuyCard extends Component {
                 &nbsp;
                 {'30'}分钟
               </h5>
+              <Button
+                type="danger"
+                onClick={() => {
+                  this.props.history.push({ pathname: `/card/buy-appeal` });
+                }}
+              >
+                申诉
+              </Button>
+              <Button type="primary">确认释放</Button>
             </div>
-
             <div className={styles.chatInfo}>
               <Select defaultValue="lucy" style={{ width: 120 }}>
                 <Option value="jack">Jack</Option>

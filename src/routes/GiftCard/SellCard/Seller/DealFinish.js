@@ -43,7 +43,12 @@ export default class Process extends Component {
       <div className={styles.buyFinish}>
         <Steps current={2}>
           <Step title="打开交易" />
-          <Step title="确认信息" />
+          <Step
+            title="确认信息"
+            onClick={() => {
+              this.props.history.push({ pathname: `/card/sell-ensureInfo` });
+            }}
+          />
           <Step title="完成" />
         </Steps>
 
