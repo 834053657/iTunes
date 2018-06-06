@@ -106,7 +106,14 @@ export const getRouterData = app => {
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
     },
-    //帮助，隐私，条款路由控制
+    // 我的广告
+    '/ad/my': {
+      component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/MyAdList')),
+    },
+    '/ad/terms': {
+      component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/MyTermsList')),
+    },
+    // 帮助，隐私，条款路由控制
     '/information/help': {
       component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Help')),
     },
@@ -118,7 +125,7 @@ export const getRouterData = app => {
     '/information/terms': {
       component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Terms')),
     },
-    //资讯消息路由控制
+    // 资讯消息路由控制
     '/message/info-list': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/InfoList')),
     },

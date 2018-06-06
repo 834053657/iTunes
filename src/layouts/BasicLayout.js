@@ -191,7 +191,8 @@ class BasicLayout extends React.Component {
           this.props.dispatch(routerRedux.push(`/message/info-detail/${item.id}`));
         } else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(item.msg_type) >= 0) {
           Modal.success({
-            title: item.title,
+            // title: item.title,
+            title: '提示',
             content: getMessageContent(item),
             onOk: () => {},
           });
@@ -222,6 +223,11 @@ class BasicLayout extends React.Component {
     console.log(key);
     if (key === 'userCenter') {
       this.props.dispatch(routerRedux.push('/user-center/index'));
+      return;
+    }
+
+    if (key === 'ad') {
+      this.props.dispatch(routerRedux.push('/ad/my'));
       return;
     }
 

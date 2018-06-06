@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getMessageContent } from '../../utils/utils';
-import styles from './Message.less';
+import styles from './List.less';
 
 @connect(({ message, loading }) => ({
   data: message.msgData,
@@ -43,7 +43,7 @@ export default class List extends Component {
           );
         else
           return (
-            <a onClick={() => this.readMsg(row)}>
+            <a>
               {row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />}{' '}
               {getMessageContent(row)}
             </a>
@@ -59,46 +59,6 @@ export default class List extends Component {
       ),
     },
   ];
-
-  readMsg = row => {
-    const { dispatch } = this.props;
-
-    if (row.status === 0) {
-      dispatch({
-        type: 'message/readMessage',
-        payload: { all: false, id: row.id },
-        callback: () => {
-          this.showMsg(row);
-        },
-      });
-    } else {
-      this.showMsg(row);
-    }
-  };
-
-  showMsg = row => {
-    const { dispatch } = this.props;
-
-    if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
-      Modal.success({
-        // title: row.title,
-        title: '提示',
-        content: getMessageContent(row),
-        onOk: () => {
-          dispatch({
-            type: 'message/fetchMessageList',
-          });
-        },
-      });
-    } else {
-      //todo redict to order detail
-      if (row.order_type === 'card')
-        this.props.dispatch(routerRedux.push(`/card/order/${row.ref_id}`));
-      else if (row.order_type === 'itunes') {
-        this.props.dispatch(routerRedux.push(`/itunes/order/${row.ref_id}`));
-      }
-    }
-  };
 
   handleTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch, getValue } = this.props;
@@ -131,7 +91,8 @@ export default class List extends Component {
     const { selectedRows } = this.state;
 
     return (
-      <PageHeaderLayout title="消息中心">
+      <PageHeaderLayout title="我的广告">
+        <button>交易条款管理</button>
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Table

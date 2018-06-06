@@ -79,11 +79,11 @@ export default class GlobalHeader extends PureComponent {
         <Menu.Item key="userCenter">
           <Icon type="user" />个人中心
         </Menu.Item>
-        <Menu.Item disabled>
-          <Icon type="setting" />设置
+        <Menu.Item key="ad">
+          <Icon type="code-o" />我的广告
         </Menu.Item>
-        <Menu.Item key="triggerError">
-          <Icon type="close-circle" />触发报错
+        <Menu.Item key="order">
+          <Icon type="file-text" />我的订单
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">
@@ -134,8 +134,7 @@ export default class GlobalHeader extends PureComponent {
                 title="消息"
                 emptyText="您已读完所有消息"
                 emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
-              >
-              </NoticeIcon>
+              />
               <Dropdown overlay={menu}>
                 <span className={`${styles.action} ${styles.account}`}>
                   <Avatar size="small" className={styles.avatar} src={currentUser.user.avatar} />

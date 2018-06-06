@@ -1,14 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
-import moment from 'moment';
 import { routerRedux } from 'dva/router';
-import { Button, Card, Row, Col, Modal, Form, Input, Table, Icon } from 'antd';
 import Content from './Content';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Detail.less';
-
-const FormItem = Form.Item;
 
 const size = 'large';
 const clsString = classNames(
@@ -24,7 +20,6 @@ const clsString = classNames(
 /* @connect((userDetail, loading) => {
   return {data: userDetail, loading: loading}
 }) */
-@Form.create()
 export default class Terms extends PureComponent {
   state = {};
 
