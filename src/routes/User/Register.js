@@ -4,6 +4,7 @@ import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress, message } from 'antd';
 import ImageValidation from 'components/ImageValidation';
 import styles from './Register.less';
+import { getCaptcha } from '../../services/api';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -37,7 +38,7 @@ export default class Register extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const account = this.props.form.getFieldValue('mail');
+    const account = this.props.form.getFieldValue('email');
     if (nextProps.result && nextProps.result.token) {
       this.props.dispatch(
         routerRedux.push({
@@ -55,7 +56,7 @@ export default class Register extends Component {
   }
 
   showImageValidationModal = () => {
-    this.props.form.validateFieldsAndScroll(['mail'], {}, (err, values) => {
+    this.props.form.validateFieldsAndScroll(['email'], {}, (err, values) => {
       if (!err) {
         this.setState({
           imageValidationVisible: true,
@@ -66,14 +67,15 @@ export default class Register extends Component {
 
   onGetCaptcha = (err, code) => {
     const { form } = this.props;
-    const mail = form.getFieldValue('mail');
+    const email = form.getFieldValue('email');
     if (!err) {
       this.props.dispatch({
         type: 'register/sendVerify',
         payload: {
           code,
-          data: mail,
-          type: 1,
+          data: email,
+          type: 'email',
+          usage: 1,
         },
         callback: res => {
           if (res.code === 0) {
@@ -162,11 +164,17 @@ export default class Register extends Component {
     }
   };
 
-  loadCaptcha = () => {
-    const isDev = process.env.NODE_ENV === 'development';
-    this.setState({
-      image: `${!isDev ? CONFIG.base_url : ''}/itunes/user/captcha?r=${Math.random()}`,
-    });
+  loadCaptcha = async () => {
+    const params = {
+      r: Math.random(),
+      usage: 'login',
+    };
+    const res = await getCaptcha(params);
+    if (res.data) {
+      this.setState({
+        image: res.data.img,
+      });
+    }
   };
 
   renderPasswordProgress = () => {
@@ -195,7 +203,7 @@ export default class Register extends Component {
         <h3>注册</h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
@@ -211,7 +219,7 @@ export default class Register extends Component {
           <FormItem>
             <Row gutter={8}>
               <Col span={16}>
-                {getFieldDecorator('captcha', {
+                {getFieldDecorator('verify_code', {
                   rules: [
                     {
                       required: true,

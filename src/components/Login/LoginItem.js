@@ -44,11 +44,6 @@ function generator({ defaultProps, defaultRules, type }) {
         }, 1000);
       };
 
-      onGetCaptcha = () => {
-        if (this.props.onGetCaptcha) {
-          this.props.onGetCaptcha();
-        }
-      };
       render() {
         const { getFieldDecorator } = this.context.form;
         const options = {};

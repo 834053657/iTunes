@@ -16,6 +16,7 @@ import { getRoutes, getMessageContent } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.svg';
+import { getAuthority } from '../utils/authority';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
@@ -100,21 +101,25 @@ class BasicLayout extends React.Component {
     };
   }
   componentDidMount() {
+    const { token, user } = getAuthority() || {};
     this.enquireHandler = enquireScreen(mobile => {
       this.setState({
         isMobile: mobile,
       });
     });
-    this.props.dispatch({
-      type: 'user/fetchCurrent',
-    });
+
     this.props.dispatch({
       type: 'global/fetchConfigs',
     });
-    this.props.dispatch({
-      type: 'global/fetchNotices',
-      payload: { status: 0, type: 1 },
-    });
+    if (token && user.id) {
+      this.props.dispatch({
+        type: 'user/fetchCurrent',
+      });
+      this.props.dispatch({
+        type: 'global/fetchNotices',
+        payload: { status: 0, type: 1 },
+      });
+    }
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);

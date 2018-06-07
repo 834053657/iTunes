@@ -185,3 +185,7 @@ export async function getBuyDetail(params) {
 }
 
 //礼品卡列表actions结束
+
+export async function getCaptcha(params) {
+  return request(`/itunes/user/captcha?${stringify(params)}`);
+}

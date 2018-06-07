@@ -31,10 +31,10 @@ const map = {
         required: true,
         message: '请输入密码！',
       },
-      {
-        min: 6,
-        message: '密码长度为6到16位',
-      },
+      // {
+      //   min: 6,
+      //   message: '密码长度为6到16位',
+      // },
     ],
   },
   Mobile: {

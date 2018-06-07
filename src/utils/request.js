@@ -47,7 +47,8 @@ function checkStatus(response) {
 export default function request(postUrl, options, base_url) {
   // 是否开发环境
   const isDev = process.env.NODE_ENV === 'development';
-  const { id, token } = getAuthority() || {};
+  const { token, user } = getAuthority() || {};
+  const { id } = user || {};
   const language = getLocale() || 'zh-CN';
   const defaultOptions = {
     // credentials: 'include',
@@ -59,7 +60,7 @@ export default function request(postUrl, options, base_url) {
   };
   const newOptions = { ...defaultOptions, ...options };
   const url = !isDev ? (base_url || CONFIG.base_url) + postUrl : postUrl;
-  console.log(url);
+  // console.log(url);
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {

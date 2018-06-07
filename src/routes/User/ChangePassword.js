@@ -46,7 +46,7 @@ export default class Register extends Component {
 
   getPasswordStatus = () => {
     const { form } = this.props;
-    const value = form.getFieldValue('password');
+    const value = form.getFieldValue('new_password');
     if (value && value.length > 9) {
       return 'ok';
     }
@@ -75,7 +75,7 @@ export default class Register extends Component {
 
   checkConfirm = (rule, value, callback) => {
     const { form } = this.props;
-    if (value && value !== form.getFieldValue('password')) {
+    if (value && value !== form.getFieldValue('new_password')) {
       callback('两次输入的密码不匹配!');
     } else {
       callback();
@@ -112,7 +112,7 @@ export default class Register extends Component {
 
   renderPasswordProgress = () => {
     const { form } = this.props;
-    const value = form.getFieldValue('password');
+    const value = form.getFieldValue('new_password');
     const passwordStatus = this.getPasswordStatus();
     return value && value.length ? (
       <div className={styles[`progress-${passwordStatus}`]}>
@@ -149,7 +149,7 @@ export default class Register extends Component {
               placement="right"
               visible={this.state.visible}
             >
-              {getFieldDecorator('password', {
+              {getFieldDecorator('new_password', {
                 rules: [
                   {
                     validator: this.checkPassword,
