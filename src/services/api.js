@@ -25,11 +25,39 @@ export async function readMessage(params) {
 }
 
 export async function queryMyAdList(params) {
-  return request(`/itunes/user/my_ad_list/all?${stringify(params)}`);
+  return request(`/itunes/user/my_ad/all?${stringify(params)}`);
 }
 
 export async function queryTermsList(params) {
   return request(`/itunes/user/trans_term/all?${stringify(params)}`);
+}
+
+export async function fakeAd(params) {
+  return request('/itunes/user/my_ad/update', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function removeAd(params) {
+  return request('/itunes/user/my_ad/delete', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function fakeTerms(params) {
+  return request('/itunes/user/trans_term/update', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function removeTerms(params) {
+  return request('/itunes/user/trans_term/delete', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 export async function queryStaticDtl(params) {

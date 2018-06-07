@@ -2,17 +2,18 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
-import { Table, Tabs, Button, Icon, Card, Modal, Row, Col, Divider, Badge } from 'antd';
+import { Table, Tabs, Button, Icon, Card, Modal, Row, Col, Divider, Badge, Popconfirm, Tooltip } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getMessageContent } from '../../utils/utils';
 import TermsModal from './TermsModal';
 import styles from './List.less';
 
-const statusMap = ['default', 'warning', 'success', 'error'];
+const statusMap = ['default', 'warning', 'success'];
 
 @connect(({ ad, loading }) => ({
   data: ad.termsData,
   loading: loading.models.ad,
+  submitting: loading.effects['ad/saveTerms'],
 }))
 export default class TermsList extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ export default class TermsList extends Component {
     this.state = {
       termsModalVisible: false,
       action: null,
+      selectedTerms: null,
       selectedRows: [],
     };
   }
@@ -37,31 +39,53 @@ export default class TermsList extends Component {
   addTerm = () => {
     this.setState({
       termsModalVisible: true,
-      action: "_NEW",
+      action: '_NEW',
     });
   };
 
   viewTerm = r => {
     this.setState({
       termsModalVisible: true,
-      action: "_OPEN",
+      action: '_OPEN',
+      selectedTerms: r,
     });
   };
 
   editTerm = r => {
     this.setState({
       termsModalVisible: true,
-      action: "_EDIT",
+      action: '_EDIT',
+      selectedTerms: r,
     });
   };
 
   deleteTerm = r => {
-    // todo
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'ad/deleteTerms',
+      payload: {id: r.id},
+      callback: this.refreshGrid(),
+    });
   };
 
   hideTermsModal = () => {
     this.setState({
       termsModalVisible: false,
+    });
+  };
+
+  handleSubmitTerms = (v) => {
+    this.setState({
+      termsModalVisible: false,
+    });
+
+    this.refreshGrid();
+  };
+
+  refreshGrid = (v) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'ad/fetchTermsList',
     });
   };
 
@@ -80,8 +104,19 @@ export default class TermsList extends Component {
       title: '审核状态',
       dataIndex: 'status',
       width: '15%',
-      render(val) {
-        return <Badge status={statusMap[val - 1]} text={val ? CONFIG.trans_term_status[val] : '-'} />;
+      render(val, row) {
+        if (val === 1) {
+          return (
+            <span>
+              <Badge status={statusMap[0]} text={val ? `${CONFIG.trans_term_status[1]}` : '-'} />
+              <Tooltip title={row.reason}>
+                <span className={styles.reason}>原因</span>
+              </Tooltip>
+            </span>
+          );
+        } else {
+          return <Badge status={statusMap[val - 1]} text={val ? CONFIG.trans_term_status[val] : '-'} />;
+        }
       },
     },
     {
@@ -93,7 +128,9 @@ export default class TermsList extends Component {
           <Divider type="vertical" />
           <a onClick={() => this.editTerm(r)}>编辑</a>
           <Divider type="vertical" />
-          <a onClick={() => this.deleteTerm(r)}>删除</a>
+          <Popconfirm title="您确认要删除此交易条款?" onConfirm={() => this.deleteTerm(r)} okText="确认" cancelText="取消">
+            <a>删除</a>
+          </Popconfirm>
         </Fragment>
       ),
     },
@@ -126,13 +163,10 @@ export default class TermsList extends Component {
   };
 
   render() {
-    const { data: { list, pagination }, loading } = this.props;
-    const { selectedRows, termsModalVisible, action } = this.state;
-    
-    const breadcrumbList = [
-      { title: '我的广告', href: '/ad/my' },
-      { title: '交易条款管理' },
-    ];
+    const { data: { list, pagination }, loading, submitting } = this.props;
+    const { selectedRows, termsModalVisible, action, selectedTerms } = this.state;
+
+    const breadcrumbList = [{ title: '我的广告', href: '/ad/my' }, { title: '交易条款管理' }];
 
     const content = (
       <Row gutter={24}>
@@ -165,7 +199,9 @@ export default class TermsList extends Component {
           <TermsModal
             {...this.props}
             action={action}
+            terms={selectedTerms}
             visible={termsModalVisible}
+            onOK={this.handleSubmitTerms}
             onCancel={this.hideTermsModal}
           />
         )}

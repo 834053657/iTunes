@@ -35,7 +35,7 @@ export default class List extends Component {
       dataIndex: 'title',
       width: '70%',
       render: (val, row) => {
-        if (row.msg_type === 1)
+        if (row.msg_type === -1)
           return (
             <Link to={`/message/info-detail/${row.id}`}>
               <Icon type="file-text" /> {val}
@@ -45,7 +45,7 @@ export default class List extends Component {
           return (
             <a onClick={() => this.readMsg(row)}>
               {row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />}{' '}
-              {getMessageContent(row)}
+              {row.msg_type === 1 ? val : getMessageContent(row)}
             </a>
           );
       },
@@ -79,7 +79,11 @@ export default class List extends Component {
   showMsg = row => {
     const { dispatch } = this.props;
 
-    if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
+    if (row.msg_type === 1) {
+      // this.props.dispatch(routerRedux.push(`/message/info-detail/${row.id}`));
+      window.location.href = `/#/message/info-detail/${row.id}`
+    }
+    else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
       Modal.success({
         // title: row.title,
         title: '提示',
