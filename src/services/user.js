@@ -68,6 +68,20 @@ export async function postAuth(params) {
   });
 }
 
+export async function postPayMethod(params) {
+  return request('/itunes/user/payment/update', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function deletePayMethod(params) {
+  return request('/itunes/user/payment/delete', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function getG2Secret(params) {
   return request(`/itunes/user/2fa_secret?${stringify(params)}`);
 }

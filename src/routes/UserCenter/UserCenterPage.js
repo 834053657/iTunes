@@ -2,13 +2,16 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { Link } from 'dva/router';
-import { Row, Col, Avatar, Divider, Upload, message, Button, Icon, Modal } from 'antd';
+import { Row, Col, Avatar, Divider, Upload, message, Button, Icon, Modal, Popconfirm } from 'antd';
+import { map } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import EmailModal from './modals/EmailModal';
 import MobileModal from './modals/MobileModal';
+import PayMethodModal from './modals/PayMethodModal';
 import PasswordForm from './forms/PasswordForm';
-import styles from './UserCenterPage.less';
 import RealNameForm from './forms/RealNameForm';
+import VideoAuthForm from './forms/VideoAuthForm';
+import styles from './UserCenterPage.less';
 
 @connect(({ global, user, loading }) => ({
   currentUser: user.currentUser,
@@ -21,6 +24,8 @@ export default class Analysis extends Component {
     pwdModalVisible: false,
     g2ModalVisible: false,
     realNameModalVisible: false,
+    videoAuthModalVisible: false,
+    payMethodModalVisible: false,
   };
 
   componentDidMount() {
@@ -116,6 +121,18 @@ export default class Analysis extends Component {
     });
   };
 
+  hideVideoAuthModal = () => {
+    this.setState({
+      videoAuthModalVisible: false,
+    });
+  };
+
+  showVideoAuthModal = () => {
+    this.setState({
+      videoAuthModalVisible: true,
+    });
+  };
+
   handleSubmitRealName = (err, values) => {
     if (!err) {
       this.props.dispatch({
@@ -127,6 +144,18 @@ export default class Analysis extends Component {
         callback: this.hideRealNameModal,
       });
     }
+  };
+
+  hidePayMethodModal = () => {
+    this.setState({
+      payMethodModalVisible: false,
+    });
+  };
+
+  showPayMethodModal = (data = true) => {
+    this.setState({
+      payMethodModalVisible: data,
+    });
   };
 
   renderPwdModal = () => {
@@ -152,7 +181,7 @@ export default class Analysis extends Component {
     return (
       <Modal
         width={500}
-        title="修改密码"
+        title="实名认证"
         visible={realNameModalVisible}
         onCancel={this.hideRealNameModal}
         maskClosable={false}
@@ -161,6 +190,22 @@ export default class Analysis extends Component {
         {realNameModalVisible && (
           <RealNameForm onCancel={this.hideRealNameModal} onSubmit={this.handleSubmitRealName} />
         )}
+      </Modal>
+    );
+  };
+
+  renderVideoAuthModal = () => {
+    const { videoAuthModalVisible } = this.state;
+    return (
+      <Modal
+        width={500}
+        title="视频认证"
+        visible={videoAuthModalVisible}
+        onCancel={this.hideVideoAuthModal}
+        maskClosable={false}
+        footer={null}
+      >
+        {videoAuthModalVisible && <VideoAuthForm />}
       </Modal>
     );
   };
@@ -180,16 +225,53 @@ export default class Analysis extends Component {
     return level;
   };
 
+  getMethodContent = item => {
+    const { payment_method, payment_detail = {} } = item || {};
+    let content = '';
+
+    switch (payment_method) {
+      case 'wechat':
+      case 'alipay':
+        content = (
+          <div className={styles.box_item_content}>
+            <div className={styles.mb4}>{payment_detail.name}</div>
+            <div>{payment_detail.account}</div>
+          </div>
+        );
+        break;
+      case 'bank':
+        content = (
+          <div className={styles.box_item_content}>
+            <div className={styles.mb4}>{payment_detail.name}</div>
+            <div>{payment_detail.bank_name}</div>
+            <div>{payment_detail.bank_account}</div>
+          </div>
+        );
+        break;
+    }
+    return content;
+  };
+
+  handleDeletePayMethod = async id => {
+    this.props.dispatch({
+      type: 'user/submitDeleteUserPayMethod',
+      payload: {
+        id,
+      },
+    });
+  };
+
   render() {
     const {
       emailModalVisible,
       mobileModalVisible,
       g2ModalVisible,
       realNameModalVisible,
+      payMethodModalVisible,
     } = this.state;
     const { currentUser } = this.props;
-    const { auth, user = {} } = currentUser || {};
-    const { real_name = {} } = auth || {};
+    const { auth, user = {}, payments = [] } = currentUser || {};
+    const { real_name = {}, video = {} } = auth || {};
 
     const props = {
       name: 'file',
@@ -361,13 +443,17 @@ export default class Analysis extends Component {
                       <Icon type="video-camera" />
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>视频认证</h4>
-                        <div className={styles.box_item_descript}>未绑定</div>
+                        <div className={styles.box_item_descript}>
+                          {video.status && CONFIG.auth_status[video.status]
+                            ? CONFIG.auth_status[video.status]
+                            : CONFIG.auth_status[1]}
+                        </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content} />
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a href="#">编辑</a>
+                        <a onClick={this.showVideoAuthModal}>编辑</a>
                       </li>
                     </ul>
                   </div>
@@ -382,46 +468,58 @@ export default class Analysis extends Component {
                   </div>
                 </div>
                 <div className={styles.box_content}>
-                  <div className={styles.box_item}>
-                    <div className={styles.box_item_meta}>
-                      <Icon type="credit-card" />
-                      <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>银行卡</h4>
-                        <div className={styles.box_item_descript}>未认证</div>
+                  {map(payments, item => {
+                    let iconType = '';
+                    switch (item.payment_method) {
+                      case 'wechat':
+                        iconType = 'wechat';
+                        break;
+                      case 'alipay':
+                        iconType = 'alipay-circle';
+                        break;
+                      case 'bank':
+                        iconType = 'credit-card';
+                        break;
+                    }
+                    return (
+                      <div key={item.id} className={styles.box_item}>
+                        <div className={styles.box_item_meta}>
+                          <Icon type={iconType} />
+                          <div className={styles.box_item_meta_head}>
+                            <h4 className={styles.box_item_title}>
+                              {item.payment_method && CONFIG.payments[item.payment_method]
+                                ? CONFIG.payments[item.payment_method]
+                                : '-'}
+                            </h4>
+                            <div className={styles.box_item_descript}>
+                              {item.status && CONFIG.auth_status[item.status]
+                                ? CONFIG.auth_status[item.status]
+                                : '-'}
+                            </div>
+                          </div>
+                        </div>
+                        {this.getMethodContent(item)}
+                        <ul className={styles.box_item_action}>
+                          <li>
+                            <a onClick={this.showPayMethodModal.bind(this, item)}>设置</a>
+                          </li>
+                          <li>
+                            <Popconfirm
+                              title="确定要删除吗?"
+                              onConfirm={this.handleDeletePayMethod.bind(this, item.id)}
+                            >
+                              <a className="text-red">删除</a>
+                            </Popconfirm>
+                          </li>
+                        </ul>
                       </div>
-                    </div>
-                    <div className={styles.box_item_content}>
-                      <div className={styles.mb4}>json</div>
-                      <div>430511199321</div>
-                    </div>
-                    <ul className={styles.box_item_action}>
-                      <li>
-                        <a href="#">设置</a>
-                      </li>
-                      <li>
-                        <a href="#">删除</a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className={styles.box_item}>
-                    <div className={styles.box_item_meta}>
-                      <Icon type="red-envelope" />
-                      <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>支付宝</h4>
-                        <div className={styles.box_item_descript}>未认证</div>
-                      </div>
-                    </div>
-                    <div className={styles.box_item_content} />
-                    <ul className={styles.box_item_action}>
-                      <li>
-                        <a href="#">设置</a>
-                      </li>
-                      <li>
-                        <a href="#">删除</a>
-                      </li>
-                    </ul>
-                  </div>
+                    );
+                  })}
+                </div>
+                <div className={styles.box_footer}>
+                  <a onClick={this.showPayMethodModal}>
+                    <Icon type="plus" /> 添加新的支付方式
+                  </a>
                 </div>
               </div>
             </div>
@@ -453,6 +551,17 @@ export default class Analysis extends Component {
             />
 
             {this.renderRealNameModal()}
+
+            {this.renderVideoAuthModal()}
+
+            <PayMethodModal
+              {...this.props}
+              title={
+                payMethodModalVisible && payMethodModalVisible.id ? '修改支付方式' : '添加支付方式'
+              }
+              data={payMethodModalVisible}
+              onCancel={this.hidePayMethodModal}
+            />
           </Col>
         </Row>
       </Fragment>

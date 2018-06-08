@@ -163,7 +163,7 @@ export async function queryStatistics() {
   return request('/itunes/statistics/trade');
 }
 export async function queryConfigs() {
-  return request('/itunes/get_defined');
+  return request('/itunes/defines');
 }
 
 //礼品卡列表actions开始

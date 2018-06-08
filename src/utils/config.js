@@ -21,6 +21,7 @@ export default {
     1: '买入',
     2: '出售',
   },
+  auth_status: {},
   ad_status: {
     1: '已暂停',
     2: '已发布',

@@ -10,6 +10,8 @@ import {
   updateG2Validate,
   getG2Secret,
   postAuth,
+  postPayMethod,
+  deletePayMethod,
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 
@@ -119,6 +121,31 @@ export default {
     },
     *submitUserAuth({ payload, callback }, { call, put }) {
       const response = yield call(postAuth, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'fetchCurrent',
+        });
+        message.success('操作成功！');
+        callback && callback();
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitUserPayMethod({ payload, callback }, { call, put }) {
+      const response = yield call(postPayMethod, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'fetchCurrent',
+        });
+        message.success('操作成功！');
+        callback && callback();
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitDeleteUserPayMethod({ payload, callback }, { call, put }) {
+      console.log('submitDeleteUserPayMethod', payload);
+      const response = yield call(deletePayMethod, payload);
       if (response.code === 0) {
         yield put({
           type: 'fetchCurrent',

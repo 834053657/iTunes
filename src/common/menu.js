@@ -131,7 +131,7 @@ if (true) {
         {
           name: '高级详情页',
           path: 'advanced',
-          authority: 'admin',
+          // authority: 'admin',
         },
       ],
     },
@@ -178,7 +178,7 @@ if (true) {
       name: '账户',
       icon: 'user',
       path: 'user',
-      authority: 'guest',
+      // authority: 'guest',
       children: [
         {
           name: '登录',
