@@ -91,12 +91,7 @@ export default class TermsModal extends Component {
             {getFieldDecorator('title', {
               initialValue: action === '_NEW' ? null : terms && terms.title,
               rules: [{ required: true, message: '请输入标题' }],
-            })(<Input
-              placeholder="标题"
-              maxLength={100}
-              disabled={action === '_OPEN'}
-            />
-            )}
+            })(<Input placeholder="标题" maxLength={100} disabled={action === '_OPEN'} />)}
           </Form.Item>
           <FormItem label="交易条款" {...formItemLayout}>
             {getFieldDecorator('content', {
@@ -107,19 +102,29 @@ export default class TermsModal extends Component {
                   message: '请输入交易条款',
                 },
               ],
-            })(<TextArea style={{ minHeight: 32 }} placeholder="交易条款" disabled={action === '_OPEN'} rows={4} />)}
+            })(
+              <TextArea
+                style={{ minHeight: 32 }}
+                placeholder="交易条款"
+                disabled={action === '_OPEN'}
+                rows={4}
+              />
+            )}
           </FormItem>
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.props.onCancel}>
               {action !== '_OPEN' ? '取消' : '确定'}
             </Button>
-            {
-              action !== '_OPEN' && (
-                <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
-                  提交
-                </Button>
-              )
-            }
+            {action !== '_OPEN' && (
+              <Button
+                loading={submitting}
+                className={styles.submit}
+                type="primary"
+                htmlType="submit"
+              >
+                提交
+              </Button>
+            )}
           </FormItem>
         </Form>
       </Modal>

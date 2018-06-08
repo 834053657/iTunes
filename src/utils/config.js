@@ -23,10 +23,11 @@ export default {
   },
   auth_status: {},
   ad_status: {
-    1: '已暂停',
-    2: '已发布',
-    3: '冻结',
+    1: '已发布',
+    2: '已暂停',
+    3: '已冻结',
     4: '已取消',
+    5: '已删除',
   },
   order_status: {
     1: '打开中',
@@ -36,7 +37,7 @@ export default {
     5: '已完成',
     6: '已取消',
   },
-  googs_type: {
+  goods_type: {
     1: 'itunes',
     2: '礼品卡',
   },

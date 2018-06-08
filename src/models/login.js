@@ -2,6 +2,7 @@ import { routerRedux } from 'dva/router';
 import { accountLogin } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
+import { dvaSocket } from '../utils/socket';
 
 export default {
   namespace: 'login',
@@ -25,6 +26,10 @@ export default {
           },
         });
         reloadAuthorized();
+        /* if (process.env.KG_API_ENV === 'dev' || !process.env.KG_API_ENV) {
+          // 暂时写法 只在开发环境打开socket
+          dvaSocket(CONFIG.socket_url, {uid: 'abcxx'});
+        } */
         yield put(routerRedux.push('/'));
       } else if (response.code === 10) {
         yield put({

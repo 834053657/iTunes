@@ -2,7 +2,20 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
-import { Table, Tabs, Button, Icon, Card, Modal, Row, Col, Divider, Badge, Tooltip, Popconfirm } from 'antd';
+import {
+  Table,
+  Tabs,
+  Button,
+  Icon,
+  Card,
+  Modal,
+  Row,
+  Col,
+  Divider,
+  Badge,
+  Tooltip,
+  Popconfirm,
+} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getMessageContent } from '../../utils/utils';
 import styles from './List.less';
@@ -35,31 +48,34 @@ export default class List extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'ad/updateAd',
-      payload: {ad_id: r.ad_id, status},
+      payload: { id: r.id, status },
       callback: this.refreshGrid(),
     });
   };
 
   viewAd = (r, action) => {
     // todo
-    if (r.order_type === 'card') {
-      this.props.dispatch(routerRedux.push(`/ad/card/detail?ad_id=${r.ad_id}&type=${r.trade_type}&action=${action}`));
+    if (r.goods_type === 1) {
+      this.props.dispatch(
+        routerRedux.push(`/ad/card/detail?id=${r.id}&ad_type=${r.ad_type}&action=${action}`)
+      );
+    } else {
+      this.props.dispatch(
+        routerRedux.push(`/ad/itunes/detail?id=${r.id}&ad_type=${r.ad_type}&action=${action}`)
+      );
     }
-    else {
-      this.props.dispatch(routerRedux.push(`/ad/itunes/detail?ad_id=${r.ad_id}&type=${r.trade_type}&action=${action}`));
-    }
-  }
+  };
 
   deleteAd = r => {
     const { dispatch } = this.props;
     dispatch({
       type: 'ad/deleteAd',
-      payload: {ad_id: r.ad_id},
+      payload: { id: r.id },
       callback: this.refreshGrid(),
     });
   };
 
-  refreshGrid = (v) => {
+  refreshGrid = v => {
     const { dispatch } = this.props;
     dispatch({
       type: 'ad/fetchMyAdList',
@@ -69,24 +85,24 @@ export default class List extends Component {
   columns = [
     {
       title: '广告标号',
-      dataIndex: 'ad_id',
+      dataIndex: 'ad_no',
       width: '15%',
     },
     {
       title: '产品类型',
-      dataIndex: 'order_type',
+      dataIndex: 'goods_type',
       width: '15%',
-      render: (val, row) => CONFIG.googs_type[val],
+      render: (val, row) => CONFIG.goods_type[val],
     },
     {
       title: '交易类型',
-      dataIndex: 'trade_type',
+      dataIndex: 'ad_type',
       width: '15%',
       render: (val, row) => CONFIG.ad_type[val],
     },
     {
       title: '单价',
-      dataIndex: 'price',
+      dataIndex: 'unit_price',
       width: '15%',
     },
     {
@@ -113,29 +129,34 @@ export default class List extends Component {
       width: '25%',
       render: r => (
         <Fragment>
-          <a onClick={() => this.viewAd(r, '_OPEN')} >查看</a>
+          <a onClick={() => this.viewAd(r, '_OPEN')}>查看</a>
           {r.status === 1 && (
             <span>
               <Divider type="vertical" />
-              <a onClick={() => this.updateAd(r, 2)} >恢复</a>
+              <a onClick={() => this.updateAd(r, 2)}>暂停</a>
             </span>
           )}
           {r.status === 2 && (
             <span>
               <Divider type="vertical" />
-              <a onClick={() => this.updateAd(r, 1)} >暂停</a>
+              <a onClick={() => this.updateAd(r, 1)}>恢复</a>
             </span>
           )}
-          {r.status === 1 && (
+          {r.status === 2 && (
             <span>
               <Divider type="vertical" />
-              <a onClick={() => this.viewAd(r, '_EDIT')} >编辑</a>
+              <a onClick={() => this.viewAd(r, '_EDIT')}>编辑</a>
             </span>
           )}
           {r.status === 4 && (
             <span>
               <Divider type="vertical" />
-              <Popconfirm title="您确认要删除此广告?" onConfirm={() => this.deleteAd(r)} okText="确认" cancelText="取消">
+              <Popconfirm
+                title="您确认要删除此广告?"
+                onConfirm={() => this.updateAd(r, 5)}
+                okText="确认"
+                cancelText="取消"
+              >
                 <a>删除</a>
               </Popconfirm>
             </span>

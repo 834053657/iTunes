@@ -1,5 +1,12 @@
 import { message } from 'antd';
-import { queryMyAdList, queryTermsList, fakeTerms, removeTerms, fakeAd, removeAd } from '../services/api';
+import {
+  queryMyAdList,
+  queryTermsList,
+  fakeTerms,
+  removeTerms,
+  fakeAd,
+  removeAd,
+} from '../services/api';
 
 export default {
   namespace: 'ad',
@@ -36,7 +43,10 @@ export default {
       const response = yield call(fakeAd, payload);
       if (response.code === 0) {
         message.success('操作成功');
+      } else {
+        message.error(response.errmsg || '操作失败');
       }
+
       yield put({
         type: 'fakeAd',
         payload: response,
@@ -47,6 +57,8 @@ export default {
       const response = yield call(removeAd, payload);
       if (response.code === 0) {
         message.success('操作成功');
+      } else {
+        message.error(response.errmsg || '操作失败');
       }
       yield put({
         type: 'removeAd',
@@ -58,6 +70,8 @@ export default {
       const response = yield call(fakeTerms, payload);
       if (response.code === 0) {
         message.success('操作成功');
+      } else {
+        message.error(response.errmsg || '操作失败');
       }
       yield put({
         type: 'fakeTerms',
@@ -69,6 +83,8 @@ export default {
       const response = yield call(removeTerms, payload);
       if (response.code === 0) {
         message.success('操作成功');
+      } else {
+        message.error(response.errmsg || '操作失败');
       }
       yield put({
         type: 'removeTerms',

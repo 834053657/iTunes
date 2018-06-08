@@ -39,10 +39,10 @@ const options = {
 };
 
 // 2. Plugins
-if (process.env.KG_API_ENV === 'dev') {
+/*if (process.env.KG_API_ENV === 'dev' || !process.env.KG_API_ENV) {
   // 暂时写法 只在开发环境打开socket
   app.use(dvaSocket(CONFIG.socket_url, options));
-}
+} */
 app.use(createLoading());
 
 // 3. Register global model
