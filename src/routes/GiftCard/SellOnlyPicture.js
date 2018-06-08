@@ -66,22 +66,6 @@ export default class OnlyPicture extends PureComponent {
                 },
                 1
               )}
-              <div className={styles.imgBox}>
-                <img
-                  width="85%"
-                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                  alt=""
-                />
-                <Icon className={styles.iconDel} type="minus-circle-o" />
-              </div>
-              <div className={styles.imgBox}>
-                <img
-                  width="85%"
-                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                  alt=""
-                />
-                <Icon className={styles.iconDel} type="minus-circle-o" />
-              </div>
             </div>
             <div className={styles.addBtn}>
               <Upload className={styles.uploadBtn} {...uploadProp}>

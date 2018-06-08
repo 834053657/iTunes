@@ -59,16 +59,16 @@ export default class SaleCard extends Component {
 
     this.selectGuaTime = e => {
       this.setState({
-        defaultGuaTime: e.time,
+        defaultGuaTime: e,
       });
-      this.data.guarantee_time = e.time;
+      this.data.guarantee_time = e;
     };
 
     this.selectDeadline = e => {
       this.setState({
-        deadline: e.time,
+        deadline: e,
       });
-      this.data.deadline = e.time;
+      this.data.deadline = e;
     };
 
     this.selectTermTitle = e => {
@@ -137,6 +137,7 @@ export default class SaleCard extends Component {
         condition: +e === 1 ? [] : {},
       });
       this.data.condition = +e === 1 ? [] : {};
+      this.data.condition_type = e;
     };
 
     this.changeMinMoney = e => {
@@ -149,6 +150,19 @@ export default class SaleCard extends Component {
 
     this.addBuyAd = () => {
       console.log(this.data);
+      this.props
+        .dispatch({
+          type: 'card/addBuyAd',
+          payload: this.data,
+        })
+        .then(r => {
+          console.log(r);
+          this.data = {};
+          this.props.history.push({ pathname: '/ad/my' });
+        })
+        .catch(err => {
+          console.log('发送失败，错误原因' + err);
+        });
     };
   }
 
@@ -191,7 +205,7 @@ export default class SaleCard extends Component {
       <Menu>
         {CONFIG.card_type.map(t => {
           return (
-            <Menu.Item key={t.id} onClick={() => this.selectCardType(t)}>
+            <Menu.Item key={t.type} onClick={() => this.selectCardType(t)}>
               {t.name}
             </Menu.Item>
           );
@@ -203,8 +217,8 @@ export default class SaleCard extends Component {
       <Menu>
         {CONFIG.deadline.map(t => {
           return (
-            <Menu.Item key={t.time} onClick={() => this.selectDeadline(t)}>
-              {t.time}
+            <Menu.Item key={t} onClick={() => this.selectDeadline(t)}>
+              {t}
             </Menu.Item>
           );
         })}
@@ -215,8 +229,8 @@ export default class SaleCard extends Component {
       <Menu>
         {CONFIG.guarantee_time.map(t => {
           return (
-            <Menu.Item key={t.time} onClick={() => this.selectGuaTime(t)}>
-              {t.time}
+            <Menu.Item key={t} onClick={() => this.selectGuaTime(t)}>
+              {t}
             </Menu.Item>
           );
         })}
@@ -282,7 +296,7 @@ export default class SaleCard extends Component {
                   {condition && condition.length
                     ? condition.map((c, index) => {
                         return (
-                          <li key={`condition_1_${index}`}>
+                          <li key={index}>
                             <Input
                               className={styles.contIpt}
                               placeholder="面额"

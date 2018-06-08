@@ -32,7 +32,7 @@ export default class CardMarkets extends Component {
 
     this.changeTab = e => {
       this.filter = {};
-      this.filter = Object.assign(this.filter, { type: e });
+      this.filter = Object.assign(this.filter, { ad_type: e });
       this.state.type_page = e;
       this.setState({
         type_page: e,
@@ -56,7 +56,6 @@ export default class CardMarkets extends Component {
     //select Card Type
     this.selectType = d => {
       console.log('card type');
-
       this.filter = Object.assign(this.filter, { card_type: d.type });
       this.reSetPage();
       this.reloadList();
@@ -82,10 +81,20 @@ export default class CardMarkets extends Component {
       const { type_page } = this.state;
       this.setState({ loading: true });
       const { dispatch } = this.props;
-      if (+type_page === 0) {
+
+      // dispatch({
+      //   type: 'card/fetchCardList',
+      //   payload: this.filter,
+      // }).then(() => {
+      //   this.setState({ loading: false });
+      // });
+
+      console.log('this.filter');
+      console.log(this.filter);
+      if (+type_page === 2) {
         //购买
         dispatch({
-          type: 'card/fetchSellCardList',
+          type: 'card/fetchCardList',
           payload: this.filter,
         }).then(() => {
           this.setState({ loading: false });
@@ -93,7 +102,7 @@ export default class CardMarkets extends Component {
       } else if (+type_page === 1) {
         //出售
         dispatch({
-          type: 'card/fetchBuyCardList',
+          type: 'card/fetchCardList',
           payload: this.filter,
         }).then(() => {
           this.setState({ loading: false });
@@ -167,8 +176,10 @@ export default class CardMarkets extends Component {
 
   componentWillMount() {
     const { dispatch } = this.props;
+    this.filter = Object.assign(this.filter, { ad_type: 1 });
+
     dispatch({
-      type: 'card/fetchSellCardList',
+      type: 'card/fetchCardList',
       payload: this.filter,
     }).then(() => {
       this.setState({ loading: false });
@@ -243,6 +254,8 @@ export default class CardMarkets extends Component {
 
     let columns;
     let columnsSale;
+
+    //我要购买页  出售广告
     if (cardList) {
       columns = [
         {
@@ -259,7 +272,7 @@ export default class CardMarkets extends Component {
                     return (
                       <div
                         className={styles.typeName}
-                        key={type.id}
+                        key={type.type}
                         onClick={() => this.selectType(type)}
                       >
                         {type.name}
@@ -280,6 +293,8 @@ export default class CardMarkets extends Component {
             />
           ),
           render: (text, record) => {
+            console.log(record);
+            console.log('record');
             return (
               <span>
                 {record.card_type && CONFIG.card_type[record.card_type]
@@ -400,7 +415,7 @@ export default class CardMarkets extends Component {
                     return (
                       <div
                         className={styles.typeName}
-                        key={type.id}
+                        key={type.type}
                         onClick={() => this.selectType(type)}
                       >
                         {type.name}
@@ -515,7 +530,7 @@ export default class CardMarkets extends Component {
                   type="primary"
                   onClick={() => {
                     this.props.history.push({
-                      pathname: `/card/sell-sendCard`,
+                      pathname: `/card/sell-detail`,
                       query: { ad_info: record },
                     });
                   }}
@@ -547,16 +562,18 @@ export default class CardMarkets extends Component {
           onChange={e => {
             this.changeTab(e);
           }}
-          defaultActiveKey="0"
+          defaultActiveKey="2"
         >
-          <Tabs.TabPane tab="我要购买" key="0" />
+          {/*出售广告*/}
+          <Tabs.TabPane tab="我要购买" key="2" />
+          {/*购买广告*/}
           <Tabs.TabPane tab="我要出售" key="1" />
         </Tabs>
 
         <Table
           rowKey={row => row.id}
           dataSource={cardList}
-          columns={+this.state.type_page === 0 ? columns : columnsSale}
+          columns={+this.state.type_page === 2 ? columns : columnsSale}
           pagination={false}
           loading={this.state.loading}
           onChange={this.tableChange}

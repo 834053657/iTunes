@@ -148,6 +148,11 @@ export const getRouterData = app => {
     '/card/deal-detail': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealDetail')),
     },
+    '/card/sell-detail': {
+      component: dynamicWrapper(app, ['card'], () =>
+        import('../routes/GiftCard/SellCard/Seller/SellDetail')
+      ),
+    },
     '/card/buy-stepTwo': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard/StepTwo')),
     },

@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Tabs, Button, Icon, Pagination, Input, message, InputNumber, Avatar } from 'antd';
+import _ from 'lodash';
+import {
+  Table,
+  Tabs,
+  Button,
+  Icon,
+  Pagination,
+  Input,
+  message,
+  InputNumber,
+  Avatar,
+  Popover,
+} from 'antd';
 import styles from './DealDetail.less';
 
 @connect(({ card }) => ({
@@ -9,38 +21,49 @@ import styles from './DealDetail.less';
 export default class DealDeatil extends Component {
   constructor(props) {
     super();
-    this.state = {
-      data: null,
-    };
+    this.state = {};
 
+    this.postData = {
+      order_type: 1, //1代表购买  2代表出售
+      ad_id: 20, //广告ID
+      order_detail: [], // 订单详情
+    };
     this.ensureOrder = () => {
-      this.props.dispatch({
-        type: 'card/ensureOrder',
-        payload: this.state.data.id,
-      });
+      this.props
+        .dispatch({
+          type: 'card/ensureBuyOrder',
+          payload: this.postData,
+        })
+        .then(() => {
+          this.postData.order_detail = [];
+        });
       this.props.history.push({ pathname: `/card/buy-stepTwo` });
     };
   }
 
-  changeNum = e => {
-    console.log(e);
+  changeNum = (e, d) => {
+    let index = this.postData.order_detail.findIndex(t => {
+      return t.money === d;
+    });
+
+    if (index >= 0) {
+      this.postData.order_detail[index].count = e;
+    } else {
+      this.postData.order_detail.push({
+        money: d,
+        count: e,
+      });
+    }
+    console.log(this.postData);
   };
 
   componentWillMount() {
     const adInfo = this.props.location.query;
     console.log(this.props);
-    this.props
-      .dispatch({
-        type: 'card/getBuyDetail',
-        //payload: this.order_id,
-      })
-      .then(res => {
-        console.log('this.props.card');
-        console.log(this.props.card.buyDetail);
-        this.setState({
-          data: this.props.card.buyDetail,
-        });
-      });
+    this.props.dispatch({
+      type: 'card/getSellDetail',
+      //payload: this.order_id,
+    });
   }
 
   componentDidMount() {}
@@ -57,20 +80,21 @@ export default class DealDeatil extends Component {
       if (n === 3) return '密码和图片';
     }
 
+    function getStock(d) {}
+
     function amountMoney() {
       let a = 0;
-      if (card.buyDetail) {
-        card.buyDetail.ad_info.cards.map(i => {
-          return (a += i.count * i.money);
-        });
-      }
+      // if (card.buyDetail) {
+      //   card.buyDetail.ad_info.cards.map(i => {
+      //     return (a += i.count * i.money);
+      //   });
+      // }
       return a;
     }
 
-    if (card.buyDetail) {
-      data = card.buyDetail;
-      const info = data.ad_info;
-      const ownerInfo = info.owner;
+    if (card.sellDetail) {
+      data = card.sellDetail.data;
+      const ownerInfo = data.owner;
       const type = CONFIG.card_type;
 
       return (
@@ -79,31 +103,31 @@ export default class DealDeatil extends Component {
             <ul>
               <li className={styles.item}>
                 <span className={styles.title}>类型：</span>
-                <div className={styles.content}>{type[info.card_type].name}</div>
+                <div className={styles.content}>{type[data.card_type].name}</div>
               </li>
               <li className={styles.item}>
                 <span className={styles.title}>包含：</span>
-                <div className={styles.content}>{passwordType(info.password_type)}</div>
+                <div className={styles.content}>{passwordType(data.password_type)}</div>
               </li>
               <li className={styles.item}>
                 <span className={styles.title}>单价：</span>
-                <div className={styles.content}>{info.unit_price}RMB</div>
+                <div className={styles.content}>{data.unit_price}RMB</div>
               </li>
               <li className={styles.denoList}>
                 <ul>
-                  {info.cards.map((d, index) => {
+                  {data.money.map((d, index) => {
                     return (
-                      <li key={d.money}>
-                        <span className={styles.denoTitle}>{d.money}面额：</span>
+                      <li key={d}>
+                        <span className={styles.denoTitle}>{d}面额：</span>
                         <div className={styles.denoIpt}>
                           <InputNumber
                             min={0}
-                            max={d.count}
-                            defaultValue={1}
-                            onChange={e => this.changeNum(e)}
+                            max={18}
+                            defaultValue={0}
+                            onChange={e => this.changeNum(e, d)}
                           />
                         </div>
-                        <span className={styles.last}>库存({d.count})</span>
+                        <span className={styles.last}>库存({getStock(d)})</span>
                       </li>
                     );
                   })}
@@ -115,7 +139,7 @@ export default class DealDeatil extends Component {
               </li>
               <li className={styles.item}>
                 <span className={styles.title}>保障时间：</span>
-                <div className={styles.content}>{info.guarantee_time}分钟</div>
+                <div className={styles.content}>{data.guarantee_time}分钟</div>
               </li>
             </ul>
             <div className={styles.bottom}>
@@ -149,7 +173,7 @@ export default class DealDeatil extends Component {
             </div>
             <div className={styles.term}>
               <h3>交易条款：</h3>
-              <p>{info.term}</p>
+              <p>{data.term}</p>
             </div>
           </div>
         </div>
