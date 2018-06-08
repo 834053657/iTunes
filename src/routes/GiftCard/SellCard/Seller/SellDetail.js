@@ -99,7 +99,7 @@ export default class DealDeatil extends Component {
     }
 
     function amountMoney() {
-      let a = 0;
+      const a = 0;
       // if (card.buyDetail) {
       //   card.buyDetail.ad_info.cards.map(i => {
       //     return (a += i.count * i.money);

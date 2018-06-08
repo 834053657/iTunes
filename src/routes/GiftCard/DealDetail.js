@@ -42,7 +42,7 @@ export default class DealDeatil extends Component {
   }
 
   changeNum = (e, d) => {
-    let index = this.postData.order_detail.findIndex(t => {
+    const index = this.postData.order_detail.findIndex(t => {
       return t.money === d;
     });
 
@@ -83,7 +83,7 @@ export default class DealDeatil extends Component {
     function getStock(d) {}
 
     function amountMoney() {
-      let a = 0;
+      const a = 0;
       // if (card.buyDetail) {
       //   card.buyDetail.ad_info.cards.map(i => {
       //     return (a += i.count * i.money);
