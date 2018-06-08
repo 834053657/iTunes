@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Checkbox, Alert, Icon } from 'antd';
+import { stringify } from 'qs';
 import Login from 'components/Login';
 import G2Validation from 'components/G2Validation';
+import { getCaptcha } from '../../services/api';
 import styles from './Login.less';
 
 const { Tab, UserName, Password, Mobile, Captcha, ImgCaptcha, Submit } = Login;
@@ -37,11 +39,17 @@ export default class LoginPage extends Component {
     }
   };
 
-  loadCaptcha = () => {
-    const isDev = process.env.NODE_ENV === 'development';
-    this.setState({
-      image: `${!isDev ? CONFIG.base_url : ''}/itunes/user/captcha?r=${Math.random()}`,
-    });
+  loadCaptcha = async () => {
+    const params = {
+      r: Math.random(),
+      usage: 'login',
+    };
+    const res = await getCaptcha(params);
+    if (res.data) {
+      this.setState({
+        image: res.data.img,
+      });
+    }
   };
 
   // changeAutoLogin = e => {
@@ -82,9 +90,7 @@ export default class LoginPage extends Component {
       <div className={styles.main}>
         <h3>登录</h3>
         <Login defaultActiveKey={type} onTabChange={this.onTabChange} onSubmit={this.handleSubmit}>
-          {login.status === 'error' &&
-            !login.submitting &&
-            this.renderMessage('账户或密码错误（admin/888888）')}
+          {login.status === 'error' && !login.submitting && this.renderMessage('账户或密码错误')}
           <UserName name="account" placeholder="用户名或邮箱" />
           <Password name="password" placeholder="密码" />
           <ImgCaptcha

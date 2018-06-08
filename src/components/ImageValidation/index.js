@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Input, Button, Modal, Row, Col } from 'antd';
 import classNames from 'classnames';
 import styles from './index.less';
+import { getCaptcha } from '../../services/api';
 
 const FormItem = Form.Item;
 
@@ -38,11 +39,17 @@ class ImageValidation extends Component {
     });
   };
 
-  loadCaptcha = () => {
-    const isDev = process.env.NODE_ENV === 'development';
-    this.setState({
-      image: `${!isDev ? CONFIG.base_url : ''}/itunes/user/captcha?r=${Math.random()}`,
-    });
+  loadCaptcha = async () => {
+    const params = {
+      r: Math.random(),
+      usage: 'login',
+    };
+    const res = await getCaptcha(params);
+    if (res.data) {
+      this.setState({
+        image: res.data.img,
+      });
+    }
   };
 
   render() {

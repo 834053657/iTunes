@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
 import styles from './ForgetPassword.less';
+import { getCaptcha } from '../../services/api';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -49,11 +50,17 @@ export default class Register extends Component {
     });
   };
 
-  loadCaptcha = () => {
-    const isDev = process.env.NODE_ENV === 'development';
-    this.setState({
-      image: `${!isDev ? CONFIG.base_url : ''}/itunes/user/captcha?r=${Math.random()}`,
-    });
+  loadCaptcha = async () => {
+    const params = {
+      r: Math.random(),
+      usage: 'login',
+    };
+    const res = await getCaptcha(params);
+    if (res.data) {
+      this.setState({
+        image: res.data.img,
+      });
+    }
   };
 
   render() {
@@ -65,7 +72,7 @@ export default class Register extends Component {
         <h3>忘记密码</h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
@@ -81,7 +88,7 @@ export default class Register extends Component {
           <FormItem>
             <Row gutter={8}>
               <Col span={16}>
-                {getFieldDecorator('code', {
+                {getFieldDecorator('captcha', {
                   rules: [
                     {
                       required: true,

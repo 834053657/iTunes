@@ -1,4 +1,5 @@
-import { queryMyAdList } from '../services/api';
+import { message } from 'antd';
+import { queryMyAdList, queryTermsList, fakeTerms, removeTerms, fakeAd, removeAd } from '../services/api';
 
 export default {
   namespace: 'ad',
@@ -8,6 +9,12 @@ export default {
       list: [],
       pagination: {},
     },
+    termsData: {
+      list: [],
+      pagination: {},
+    },
+    termsDetail: {},
+    adDetail: {},
   },
 
   effects: {
@@ -17,6 +24,57 @@ export default {
         type: 'setMyAdList',
         payload: res,
       });
+    },
+    *fetchTermsList({ payload }, { call, put }) {
+      const res = yield call(queryTermsList, payload);
+      yield put({
+        type: 'setTermsList',
+        payload: res,
+      });
+    },
+    *updateAd({ payload, callback }, { call, put }) {
+      const response = yield call(fakeAd, payload);
+      if (response.code === 0) {
+        message.success('操作成功');
+      }
+      yield put({
+        type: 'fakeAd',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+    *deleteAd({ payload, callback }, { call, put }) {
+      const response = yield call(removeAd, payload);
+      if (response.code === 0) {
+        message.success('操作成功');
+      }
+      yield put({
+        type: 'removeAd',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+    *saveTerms({ payload, callback }, { call, put }) {
+      const response = yield call(fakeTerms, payload);
+      if (response.code === 0) {
+        message.success('操作成功');
+      }
+      yield put({
+        type: 'fakeTerms',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+    *deleteTerms({ payload, callback }, { call, put }) {
+      const response = yield call(removeTerms, payload);
+      if (response.code === 0) {
+        message.success('操作成功');
+      }
+      yield put({
+        type: 'removeTerms',
+        payload: response,
+      });
+      if (callback) callback();
     },
   },
 
@@ -29,6 +87,38 @@ export default {
           list: items,
           pagination: { ...paginator, current: paginator.page },
         },
+      };
+    },
+    setTermsList(state, { payload }) {
+      const { data: { items = [], paginator } } = payload || {};
+      return {
+        ...state,
+        termsData: {
+          list: items,
+          pagination: { ...paginator, current: paginator.page },
+        },
+      };
+    },
+    fakeTerms(state, action) {
+      return {
+        ...state,
+        termsDetail: action.payload,
+      };
+    },
+    removeTerms(state, action) {
+      return {
+        ...state,
+      };
+    },
+    fakeAd(state, action) {
+      return {
+        ...state,
+        adDetail: action.payload,
+      };
+    },
+    removeAd(state, action) {
+      return {
+        ...state,
       };
     },
   },

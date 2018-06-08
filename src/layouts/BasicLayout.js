@@ -16,6 +16,7 @@ import { getRoutes, getMessageContent } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.svg';
+import { getAuthority } from '../utils/authority';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
@@ -100,21 +101,25 @@ class BasicLayout extends React.Component {
     };
   }
   componentDidMount() {
+    const { token, user } = getAuthority() || {};
     this.enquireHandler = enquireScreen(mobile => {
       this.setState({
         isMobile: mobile,
       });
     });
-    this.props.dispatch({
-      type: 'user/fetchCurrent',
-    });
+
     this.props.dispatch({
       type: 'global/fetchConfigs',
     });
-    this.props.dispatch({
-      type: 'global/fetchNotices',
-      payload: { status: 0, type: 1 },
-    });
+    if (token && user.id) {
+      this.props.dispatch({
+        type: 'user/fetchCurrent',
+      });
+      this.props.dispatch({
+        type: 'global/fetchNotices',
+        payload: { status: 0, type: 1 },
+      });
+    }
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
@@ -196,18 +201,18 @@ class BasicLayout extends React.Component {
             content: getMessageContent(item),
             onOk: () => {},
           });
-        } else {
-          //todo
-          //todo redirect to order detail
-          if (item.order_type === 'card')
-            this.props.dispatch(routerRedux.push(`/card/order/${item.ref_id}`));
-          else if (item.order_type === 'itunes') {
-            this.props.dispatch(routerRedux.push(`/itunes/order/${item.ref_id}`));
+        } else if ([101, 102, 103, 104, 105, 106, 107].indexOf(item.msg_type) >= 0) {
+          //todo redict to order detail
+          if (item.content && item.content.order_type === 'card')
+            this.props.dispatch(routerRedux.push(`/card/order/${item.content.order_id}`));
+          else if (item.content && item.content.order_type === 'itunes') {
+            this.props.dispatch(routerRedux.push(`/itunes/order/${item.content.order_id}`));
           }
-          // else {
-
-          // }
+        } else {
+          // todo
+          console.log(item.msg_type);
         }
+
         this.props.dispatch({
           type: 'global/fetchNotices',
           payload: { type: 3 },

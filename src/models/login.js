@@ -15,7 +15,7 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(accountLogin, payload);
-
+      console.log(response);
       // Login successfully
       if (response.code === 0 && response.data) {
         yield put({
@@ -26,7 +26,7 @@ export default {
         });
         reloadAuthorized();
         yield put(routerRedux.push('/'));
-      } else if (response.code === 1) {
+      } else if (response.code === 10) {
         yield put({
           type: 'changeLoginStatus',
           payload: {

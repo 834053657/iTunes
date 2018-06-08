@@ -41,8 +41,8 @@ export default {
         });
       }
     },
-    *submitForgetPassword(_, { call, put }) {
-      const response = yield call(forgetPassword);
+    *submitForgetPassword({ payload }, { call, put }) {
+      const response = yield call(forgetPassword, payload);
       if (response.code === 0) {
         yield put({
           type: 'forgetPasswordHandle',

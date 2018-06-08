@@ -39,6 +39,11 @@ export default {
     1: 'itunes',
     2: '礼品卡',
   },
+  trans_term_status: {
+    1: '未通过',
+    2: '审核中',
+    3: '已通过',
+  },
   message_type_zh_CN: {
     1: '系统资讯',
     11: '您的身份认证，后台已审核通过',
