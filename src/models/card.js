@@ -1,11 +1,12 @@
 import {
-  getBuyCardlist,
-  getSellCardlist,
+  getCardlist,
   getTransTerms,
   postSell,
   getToken,
   getBuyDetail,
-  ensure,
+  getSellDetail,
+  ensureBuyOrder,
+  addBuyAd,
 } from '../services/api';
 
 export default {
@@ -18,16 +19,9 @@ export default {
   },
 
   effects: {
-    *fetchBuyCardList({ payload }, { put, call }) {
+    *fetchCardList({ payload }, { put, call }) {
       console.log(payload);
-      const res = yield call(getBuyCardlist, payload);
-      yield put({
-        type: 'GET_CARD_LIST',
-        payload: res,
-      });
-    },
-    *fetchSellCardList({ payload }, { put, call }) {
-      const res = yield call(getSellCardlist, payload);
+      const res = yield call(getCardlist, payload);
       yield put({
         type: 'GET_CARD_LIST',
         payload: res,
@@ -42,10 +36,7 @@ export default {
     },
     *addCardSell({ payload }, { call, put }) {
       const res = yield call(postSell, payload);
-      yield put({
-        type: 'ADD_SELL',
-        payload: res,
-      });
+      return res;
     },
     *getToken({ payload }, { call, put }) {
       const res = yield call(getToken, payload);
@@ -63,9 +54,22 @@ export default {
         payload: res,
       });
     },
+    //获取出售交易详情
+    *getSellDetail({ payload }, { call, put }) {
+      const res = yield call(getSellDetail, payload);
+      yield put({
+        type: 'GET_SELL_DETAIL',
+        payload: res,
+      });
+    },
     //发送确认订单请求
-    *ensureOrder({ payload }, { call, put }) {
-      const res = yield call(ensure, payload);
+    *ensureBuyOrder({ payload }, { call, put }) {
+      const res = yield call(ensureBuyOrder, payload);
+      return res;
+    },
+    //添加购买广告
+    *addBuyAd({ payload }, { call, put }) {
+      const res = yield call(addBuyAd, payload);
       return res;
     },
   },
@@ -99,6 +103,12 @@ export default {
       return {
         ...state,
         buyDetail: action.payload,
+      };
+    },
+    GET_SELL_DETAIL(state, action) {
+      return {
+        ...state,
+        sellDetail: action.payload,
       };
     },
   },

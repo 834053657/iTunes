@@ -51,9 +51,9 @@ export default class BuyCard extends Component {
 
     this.changePasswordType = e => {
       this.data.password_type = e.target.value;
-      console.log(e.target.value);
       this.setState({
         passwordType: e.target.value,
+        cards: [],
       });
     };
 
@@ -68,9 +68,9 @@ export default class BuyCard extends Component {
     this.selectGuaTime = e => {
       console.log(e);
       this.setState({
-        defaultGuaTime: e.time,
+        defaultGuaTime: e,
       });
-      this.data.guarantee_time = e.time;
+      this.data.guarantee_time = e;
     };
 
     this.selectTermTitle = e => {
@@ -100,6 +100,7 @@ export default class BuyCard extends Component {
       this.setState({
         cards: a,
       });
+      console.log(this.state.cards);
       this.setVisible('addDenoVisible', false);
     };
 
@@ -107,7 +108,7 @@ export default class BuyCard extends Component {
     this.addCDKBox = m => {
       const b = {
         password: '',
-        img: '',
+        picture: '',
       };
       const index = this.state.cards.findIndex(item => {
         return item.money === m;
@@ -115,6 +116,19 @@ export default class BuyCard extends Component {
       if (index >= 0) {
         const c = this.state.cards;
         c[index].items.push(b);
+        this.setState({
+          cards: c,
+        });
+      }
+    };
+    //删除密码框
+    this.delCDKBox = (m, i) => {
+      const index = this.state.cards.findIndex(item => {
+        return item.money === m;
+      });
+      if (index >= 0) {
+        const c = this.state.cards;
+        c[index].items.splice(i, 1);
         this.setState({
           cards: c,
         });
@@ -132,11 +146,34 @@ export default class BuyCard extends Component {
 
     this.addAdvertising = () => {
       this.data.cards = this.state.cards;
-      this.props.dispatch({
-        type: 'card/addCardSell',
-        payload: this.data,
-      });
+      this.props
+        .dispatch({
+          type: 'card/addCardSell',
+          payload: this.data,
+        })
+        .then(res => {
+          console.log('res');
+          console.log(res);
+          this.data = {};
+          this.props.history.push({ pathname: '/ad/my' });
+        })
+        .catch(err => {
+          console.log('发送失败，失败原因：' + err);
+        });
     };
+
+    //SellPicWithText Component Function
+    this.handlePreview = file => {
+      console.log('file');
+      console.log(file);
+    };
+    this.changeFileData = ({ fileList }, index) => {
+      console.log('fileList');
+      console.log({ fileList });
+      console.log(index);
+      console.log(this.state.cards);
+    };
+    this.handleCancel = () => {};
   }
 
   componentWillMount() {
@@ -155,7 +192,7 @@ export default class BuyCard extends Component {
       <Menu>
         {CONFIG.card_type.map(t => {
           return (
-            <Menu.Item key={t.id} onClick={() => this.selectCardType(t)}>
+            <Menu.Item key={t.type} onClick={() => this.selectCardType(t)}>
               {t.name}
             </Menu.Item>
           );
@@ -167,8 +204,8 @@ export default class BuyCard extends Component {
       <Menu>
         {CONFIG.guarantee_time.map(t => {
           return (
-            <Menu.Item key={t.time} onClick={() => this.selectGuaTime(t)}>
-              {t.time}
+            <Menu.Item key={t} onClick={() => this.selectGuaTime(t)}>
+              {t}
             </Menu.Item>
           );
         })}
@@ -277,6 +314,7 @@ export default class BuyCard extends Component {
             <span className={styles.tableLeft}>&nbsp;</span>
             <Popover
               key={this.state.date}
+              placement="topRight"
               content={addDenoBox}
               title="添加面额"
               trigger="click"
@@ -301,7 +339,7 @@ export default class BuyCard extends Component {
         {this.state.passwordType === 1
           ? this.state.cards.map((item, index) => {
               return (
-                <div className={styles.denomination}>
+                <div key={index + 'cards'} className={styles.denomination}>
                   <header>
                     <span>{item.money}</span>
                     面额 （{item.items.length}）
@@ -317,17 +355,23 @@ export default class BuyCard extends Component {
                     <div className={styles.right}>
                       {item.items.map((card, i) => {
                         return (
-                          <div className={styles.iptBox}>
+                          <div key={index + 'item'} className={styles.iptBox}>
                             <div className={styles.input}>
                               <Input
                                 type="text"
+                                value={this.state.cards[index].items[i].password}
                                 onChange={e => {
                                   this.denoIptValueChange(e, i, index);
                                 }}
                               />
                             </div>
                             <div className={styles.icon}>
-                              <Icon type="delete" />
+                              <Icon
+                                onClick={() => {
+                                  this.delCDKBox(item.money, i);
+                                }}
+                                type="delete"
+                              />
                             </div>
                           </div>
                         );
@@ -354,6 +398,7 @@ export default class BuyCard extends Component {
           ? this.state.cards.map((item, index) => {
               return (
                 <OnlyPicture
+                  key={index}
                   item={item}
                   styles={styles}
                   index={index}
@@ -365,7 +410,19 @@ export default class BuyCard extends Component {
 
         {this.state.passwordType === 3
           ? this.state.cards.map((item, index) => {
-              return <PicWithText item={item} styles={styles} index={index} />;
+              return (
+                <PicWithText
+                  key={index}
+                  item={item}
+                  styles={styles}
+                  index={index}
+                  handlePreview={this.handlePreview}
+                  changeFileData={({ fileList }) => this.changeFileData({ fileList }, index)}
+                  addCDKBox={this.addCDKBox}
+                  delCDKBox={this.delCDKBox}
+                  changePTPass={this.denoIptValueChange}
+                />
+              );
             })
           : null}
 
@@ -381,19 +438,19 @@ export default class BuyCard extends Component {
                 <span>120RMB</span>
               </h5>
             </div>
-            <div className={styles.footer}>
-              <Button>取消</Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  this.addAdvertising();
-                }}
-              >
-                发布
-              </Button>
-            </div>
           </div>
         ) : null}
+        <div className={styles.footer}>
+          <Button>取消</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              this.addAdvertising();
+            }}
+          >
+            发布
+          </Button>
+        </div>
       </div>
     );
   }
