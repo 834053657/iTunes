@@ -176,7 +176,7 @@ export default class CardMarkets extends Component {
 
   componentWillMount() {
     const { dispatch } = this.props;
-    this.filter = Object.assign(this.filter, { ad_type: 1 });
+    this.filter = Object.assign(this.filter, { ad_type: 2 });
 
     dispatch({
       type: 'card/fetchCardList',
@@ -573,7 +573,7 @@ export default class CardMarkets extends Component {
         <Table
           rowKey={row => row.id}
           dataSource={cardList}
-          columns={+this.state.type_page === 2 ? columns : columnsSale}
+          columns={+this.state.type_page === 1 ? columnsSale : columns}
           pagination={false}
           loading={this.state.loading}
           onChange={this.tableChange}
