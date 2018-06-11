@@ -23,9 +23,24 @@ export default class BuyCard extends Component {
 
   componentWillMount() {}
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.dispatch({
+      type: 'enter_chat_room',
+      payload: {
+        order_id: 123,
+      },
+    });
+  }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'leave_chat_room',
+      payload: {
+        order_id: 123,
+        room_id: 'xxx'
+      },
+    });
+  }
 
   render() {
     const steps = [
