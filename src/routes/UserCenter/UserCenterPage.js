@@ -26,6 +26,7 @@ export default class Analysis extends Component {
     realNameModalVisible: false,
     videoAuthModalVisible: false,
     payMethodModalVisible: false,
+    uploadLoading: false,
   };
 
   componentDidMount() {
@@ -133,17 +134,15 @@ export default class Analysis extends Component {
     });
   };
 
-  handleSubmitRealName = (err, values) => {
-    if (!err) {
-      this.props.dispatch({
-        type: 'user/submitUserAuth',
-        payload: {
-          enable: false,
-          code: values.code,
-        },
-        callback: this.hideRealNameModal,
-      });
-    }
+  handleSubmitRealName = auth_detail => {
+    this.props.dispatch({
+      type: 'user/submitUserAuth',
+      payload: {
+        auth_type: '1',
+        auth_detail,
+      },
+      callback: this.hideRealNameModal,
+    });
   };
 
   hidePayMethodModal = () => {
@@ -260,6 +259,38 @@ export default class Analysis extends Component {
       },
     });
   };
+  uploadHandler = info => {
+    const { upload } = this.props.currentUser || {};
+
+    if (info.file.status === 'uploading') {
+      this.setState({
+        uploadLoading: true,
+      });
+    } else if (info.file.status === 'done') {
+      const avatar = upload.prefix + info.file.response.hash;
+      this.props.dispatch({
+        type: 'user/submitChangeAvatar',
+        payload: {
+          avatar,
+        },
+        callback: () => {
+          message.success('修改头像成功');
+          this.setState({ uploadLoading: false });
+        },
+      });
+    } else if (info.file.status === 'error') {
+      this.setState({ uploadLoading: false });
+      message.error('上传错误，可能请求已过期，请刷新页面重试');
+    }
+  };
+
+  beforeUpload = file => {
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('头像必须小于2!');
+    }
+    return isLt2M;
+  };
 
   render() {
     const {
@@ -268,28 +299,11 @@ export default class Analysis extends Component {
       g2ModalVisible,
       realNameModalVisible,
       payMethodModalVisible,
+      uploadLoading,
     } = this.state;
     const { currentUser } = this.props;
-    const { auth, user = {}, payments = [] } = currentUser || {};
+    const { auth, user = {}, payments = [], upload = {} } = currentUser || {};
     const { real_name = {}, video = {} } = auth || {};
-
-    const props = {
-      name: 'file',
-      action: '//jsonplaceholder.typicode.com/posts/',
-      headers: {
-        authorization: 'authorization-text',
-      },
-      onChange(info) {
-        if (info.file.status !== 'uploading') {
-          console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-          message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      },
-    };
 
     return (
       <Fragment>
@@ -305,9 +319,18 @@ export default class Analysis extends Component {
                   </div>
                 </div>
                 <div>
-                  <Upload {...props}>
-                    <Button>
-                      <Icon type="upload" /> 上传头像
+                  <Upload
+                    name="file"
+                    accept="image/*"
+                    beforeUpload={this.beforeUpload}
+                    // fileList={false} // 请勿添加此属性 否则 onchange status 不改变
+                    showUploadList={false}
+                    action={upload.domain}
+                    onChange={this.uploadHandler}
+                    data={{ token: upload.token }}
+                  >
+                    <Button disabled={uploadLoading}>
+                      <Icon type={uploadLoading ? 'loading' : 'upload'} /> 上传头像
                     </Button>
                   </Upload>
                 </div>

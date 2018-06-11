@@ -12,6 +12,7 @@ import {
   postAuth,
   postPayMethod,
   deletePayMethod,
+  updateAvatar,
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 
@@ -92,6 +93,18 @@ export default {
           type: 'fetchCurrent',
         });
         callback && callback();
+      } else {
+        message.error(response.errmsg || '操作失败');
+      }
+    },
+    *submitChangeAvatar({ payload, callback }, { call, put }) {
+      const response = yield call(updateAvatar, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'fetchCurrent',
+        });
+        // callback && callback();
+        yield setTimeout(callback && callback(), 1000);
       } else {
         message.error(response.errmsg || '操作失败');
       }

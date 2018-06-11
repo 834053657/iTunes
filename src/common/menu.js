@@ -77,7 +77,7 @@ if (true) {
         },
         {
           name: '高级表单',
-          authority: 'admin',
+          // authority: 'admin',
           path: 'advanced-form',
         },
       ],

@@ -82,6 +82,13 @@ export async function deletePayMethod(params) {
   });
 }
 
+export async function updateAvatar(params) {
+  return request('/itunes/user/avatar', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function getG2Secret(params) {
   return request(`/itunes/user/2fa_secret?${stringify(params)}`);
 }
