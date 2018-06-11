@@ -1,15 +1,10 @@
-import React, {Component} from 'react';
-import {connect} from 'dva';
-import {
-  Button,
-  Icon,
-  Input,
-  Avatar,
-} from 'antd';
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { Button, Icon, Input, Avatar } from 'antd';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
 
-@connect(({card}) => ({
+@connect(({ card }) => ({
   card,
 }))
 export default class Process extends Component {
@@ -19,17 +14,10 @@ export default class Process extends Component {
   }
 
   render() {
-    const steps = [
-      {title: "发送礼品卡"},
-      {title: "确认信息"},
-      {title: "完成"}
-    ]
+    const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.sendBox}>
-        <StepModel
-          steps={steps}
-          current={0}
-        />
+        <StepModel steps={steps} current={0} />
         <div className={styles.top}>
           <div className={styles.orderInfo}>
             <div className={styles.price}>
@@ -50,7 +38,7 @@ export default class Process extends Component {
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
-                  <Avatar size="large" icon="user"/>
+                  <Avatar size="large" icon="user" />
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
@@ -86,9 +74,9 @@ export default class Process extends Component {
               <div className={styles.right}>
                 <div className={styles.iptBox}>
                   <div className={styles.input}>
-                    <Input type="text"/>
-                    <Input type="text"/>
-                    <Input type="text"/>
+                    <Input type="text" />
+                    <Input type="text" />
+                    <Input type="text" />
                   </div>
                 </div>
               </div>
@@ -109,9 +97,9 @@ export default class Process extends Component {
               <div className={styles.right}>
                 <div className={styles.iptBox}>
                   <div className={styles.input}>
-                    <Input type="text"/>
-                    <Input type="text"/>
-                    <Input type="text"/>
+                    <Input type="text" />
+                    <Input type="text" />
+                    <Input type="text" />
                   </div>
                 </div>
               </div>
@@ -132,9 +120,9 @@ export default class Process extends Component {
               <div className={styles.right}>
                 <div className={styles.iptBox}>
                   <div className={styles.input}>
-                    <Input type="text"/>
-                    <Input type="text"/>
-                    <Input type="text"/>
+                    <Input type="text" />
+                    <Input type="text" />
+                    <Input type="text" />
                   </div>
                 </div>
               </div>
@@ -158,14 +146,14 @@ export default class Process extends Component {
             <div className={styles.footer}>
               <div>
                 请在&nbsp;
-                <Icon type="delete"/>
+                <Icon type="delete" />
                 &nbsp;30分钟内发卡
               </div>
               <Button>取消</Button>
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push({pathname: `/card/sell-ensureInfo`});
+                  this.props.history.push({ pathname: `/card/sell-ensureInfo` });
                 }}
               >
                 发布

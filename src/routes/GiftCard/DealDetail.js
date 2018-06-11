@@ -42,7 +42,7 @@ export default class DealDeatil extends Component {
   }
 
   changeNum = (e, d) => {
-    let index = this.postData.order_detail.findIndex(t => {
+    const index = this.postData.order_detail.findIndex(t => {
       return t.money === d;
     });
 
