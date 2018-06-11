@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import {
-  Button,
-  Icon,
-  Avatar,
-  Select,
-} from 'antd';
+import { Button, Icon, Avatar, Select } from 'antd';
 import styles from './StepTwo.less';
 import StepModel from '../Step';
 
@@ -27,17 +22,10 @@ export default class Process extends Component {
   componentWillUnmount() {}
 
   render() {
-    const steps = [
-      {title: "打开交易"},
-      {title: "确认信息"},
-      {title: "完成"}
-    ]
+    const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.stepTwoBox}>
-        <StepModel
-          steps={steps}
-          current={1}
-        />
+        <StepModel steps={steps} current={1} />
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
             <div className={styles.orderInfo}>

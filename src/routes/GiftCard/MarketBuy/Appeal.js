@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import {
-  Tabs,
-  Button,
-  Icon,
-  Input,
-  Steps,
-  Avatar,
-  Upload,
-  Modal,
-} from 'antd';
+import { Tabs, Button, Icon, Input, Steps, Avatar, Upload, Modal } from 'antd';
 import styles from './appeal.less';
 import StepModel from '../Step';
 
@@ -47,7 +38,11 @@ export default class Process extends Component {
 
   handleChange = ({ fileList }) => this.setState({ fileList });
 
-  componentWillMount() {}
+  componentWillMount() {
+    this.props.dispatch({
+      type: 'card/getAppealInfo',
+    });
+  }
 
   componentDidMount() {}
 
@@ -61,23 +56,16 @@ export default class Process extends Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-    const steps = [
-      {title: "打开交易"},
-      {title: "确认信息"},
-      {title: "完成"}
-    ]
+    const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.appeal}>
         <h3>申诉啊申诉啊申诉啊</h3>
-        <StepModel
-          steps={steps}
-          current={1}
-        />
+        <StepModel steps={steps} current={1} />
         <div className={styles.top}>
           <div className={styles.orderInfo}>
             <h5>
               <span>订单：</span>
-              <h6>15216524713875</h6>
+              <span>15216524713875</span>
             </h5>
             <div className={styles.orderDescribe}>您向Jason购买总面额300的亚马逊美卡亚马逊美卡</div>
           </div>

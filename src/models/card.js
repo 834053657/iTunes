@@ -7,6 +7,7 @@ import {
   getSellDetail,
   ensureBuyOrder,
   addBuyAd,
+  getAppealInfo,
 } from '../services/api';
 
 export default {
@@ -16,6 +17,7 @@ export default {
     cardList: [],
     terms: [],
     buyDetail: null,
+    appeal: null,
   },
 
   effects: {
@@ -72,6 +74,14 @@ export default {
       const res = yield call(addBuyAd, payload);
       return res;
     },
+    //添加购买广告
+    *getAppealInfo({ payload }, { call, put }) {
+      const res = yield call(getAppealInfo, payload);
+      yield put({
+        type: 'GET_APPEAL_INFO',
+        payload: res,
+      });
+    },
   },
 
   reducers: {
@@ -109,6 +119,12 @@ export default {
       return {
         ...state,
         sellDetail: action.payload,
+      };
+    },
+    GET_APPEAL_INFO(state, action) {
+      return {
+        ...state,
+        appeal: action.payload,
       };
     },
   },

@@ -217,6 +217,11 @@ export async function getSellDetail(params) {
   return request(`/itunes/ad/card/sell/detail?${stringify(params)}`);
 }
 
+//获取申诉详情
+export async function getAppealInfo(params) {
+  return request(`/itunes/card/order/get_appeal_info`);
+}
+
 //礼品卡列表actions结束
 
 export async function getCaptcha(params) {
