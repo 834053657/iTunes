@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import {
   Table,
-  Tabs,
   Button,
   Icon,
   Pagination,
@@ -16,11 +15,11 @@ import {
   Modal,
   Rate,
 } from 'antd';
-import styles from './StepThree.less';
+import styles from './DealFinish.less';
+import StepModel from '../../Step';
 
 const Step = Steps.Step;
 const Option = Select.Option;
-const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
 
 @connect(({ card }) => ({
@@ -41,13 +40,17 @@ export default class Process extends Component {
   componentWillUnmount() {}
 
   render() {
+    const steps = [
+      {title: "发送礼品卡"},
+      {title: "确认信息"},
+      {title: "完成"}
+    ]
     return (
       <div className={styles.buyFinish}>
-        <Steps current={2}>
-          <Step title="发送礼品卡" />
-          <Step title="确认信息" />
-          <Step title="完成" />
-        </Steps>
+        <StepModel
+          steps={steps}
+          current={2}
+        />
 
         <div className={styles.finishBox}>
           <div className={styles.left}>

@@ -52,12 +52,15 @@ export default class SellUpload extends Component {
     return (
       <div className={styles.imgBox}>
         <Upload
-          action="http://up-z2.qiniup.com"
+          action="http://up-z2.qiniu.com"
           listType="picture-card"
           fileList={ptFileList}
           data={() => {
             console.log(this.token);
-            return { token: this.token };
+            return {
+              token:
+                'onb47_1uVKhYASIOfAaGwTGYIfjkL8K3TiDxwk_g:B8tGsCE_jo9BGZaW3VgO0tbrU5U=:eyJkZWFkbGluZSI6MTUyODY4ODQwNSwic2NvcGUiOiJpbWFnZXM6NTI3NTZlOGEzODUzNDU2ZjlmMDczZjkwZTA1YjAyNDIifQ==',
+            };
           }}
           onPreview={this.handlePreview}
           beforeUpload={async () => {

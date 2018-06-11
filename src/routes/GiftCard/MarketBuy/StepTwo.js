@@ -1,31 +1,23 @@
 import React, { Component } from 'react';
-import { connect } from 'dva/index';
+import { connect } from 'dva';
 import {
-  Table,
-  Tabs,
   Button,
   Icon,
-  Pagination,
-  Input,
-  message,
-  InputNumber,
-  Steps,
   Avatar,
   Select,
-  Upload,
-  Modal,
 } from 'antd';
-import styles from '../../BuyCard/StepTwo.less';
+import styles from './StepTwo.less';
+import StepModel from '../Step';
 
-const Step = Steps.Step;
 const Option = Select.Option;
 
 @connect(({ card }) => ({
   card,
 }))
-export default class BuyCard extends Component {
+export default class Process extends Component {
   constructor(props) {
     super();
+    this.state = {};
   }
 
   componentWillMount() {}
@@ -35,18 +27,17 @@ export default class BuyCard extends Component {
   componentWillUnmount() {}
 
   render() {
+    const steps = [
+      {title: "打开交易"},
+      {title: "确认信息"},
+      {title: "完成"}
+    ]
     return (
       <div className={styles.stepTwoBox}>
-        <Steps current={1}>
-          <Step title="发送礼品卡" />
-          <Step title="确认信息" />
-          <Step
-            onClick={() => {
-              this.props.history.push({ pathname: `/card/sell-dealFinish` });
-            }}
-            title="完成"
-          />
-        </Steps>
+        <StepModel
+          steps={steps}
+          current={1}
+        />
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
             <div className={styles.orderInfo}>
@@ -74,6 +65,16 @@ export default class BuyCard extends Component {
                 &nbsp;
                 {'30'}分钟
               </h5>
+
+              <Button
+                type="danger"
+                onClick={() => {
+                  this.props.history.push({ pathname: `/card/buy-appeal` });
+                }}
+              >
+                申诉
+              </Button>
+              <Button type="primary">确认释放</Button>
             </div>
 
             <div className={styles.chatInfo}>
@@ -130,13 +131,7 @@ export default class BuyCard extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button
-                onClick={() => {
-                  this.props.history.push({ pathname: `/card/card-preview` });
-                }}
-              >
-                查看礼品卡清单
-              </Button>
+              <Button>查看礼品卡清单</Button>
             </div>
 
             <div className={styles.ownerInfo}>

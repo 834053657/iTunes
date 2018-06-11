@@ -25,7 +25,7 @@ const menuData = [
     children: [
       {
         name: '交易大厅',
-        path: 'card-markets',
+        path: 'market-buy',
       },
       {
         name: '发布购买广告',

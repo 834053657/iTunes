@@ -76,6 +76,8 @@ export default class SaleCard extends Component {
         defaultTermTitle: e.title,
       });
       this.data.term_id = e.id;
+      console.log('term id');
+      console.log(e);
     };
 
     //单价修改

@@ -209,8 +209,8 @@ export async function ensureBuyOrder(params) {
 }
 
 //创建购买
-export async function getBuyDetail(params) {
-  return request(`/itunes/ad/card/buy/detail?${stringify(params)}`);
+export async function getAdDetail(params) {
+  return request(`/itunes/ad/card/detail?${stringify(params)}`);
 }
 //创建出售
 export async function getSellDetail(params) {

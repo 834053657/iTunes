@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import {
-  Table,
-  Tabs,
-  Button,
-  Icon,
-  Pagination,
-  Input,
-  message,
-  InputNumber,
-  Steps,
-  Avatar,
-} from 'antd';
+import { Tabs, Icon } from 'antd';
 import styles from './PreviewCard.less';
+import StepModel from '../Step';
 
 const TabPane = Tabs.TabPane;
-const Step = Steps.Step;
 
 @connect(({ card }) => ({
   card,
@@ -32,25 +21,11 @@ export default class Process extends Component {
     }
   };
 
-  componentWillMount() {}
-
-  componentDidMount() {}
-
-  componentWillUnmount() {}
-
   render() {
+    const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.stepBox}>
-        <Steps current={1}>
-          <Step title="打开交易" />
-          <Step title="确认信息" />
-          <Step
-            onClick={() => {
-              this.props.history.push({ pathname: `/card/sell-dealFinish` });
-            }}
-            title="完成"
-          />
-        </Steps>
+        <StepModel steps={steps} current={1} />
         <div className={styles.orderInfo}>
           <h5>
             <span>订单：</span>

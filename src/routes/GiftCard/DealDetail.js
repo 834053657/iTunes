@@ -54,15 +54,12 @@ export default class DealDeatil extends Component {
         count: e,
       });
     }
-    console.log(this.postData);
   };
 
-  componentWillMount() {
-    const adInfo = this.props.location.query;
-    console.log(this.props);
-    this.props.dispatch({
-      type: 'card/getSellDetail',
-      //payload: this.order_id,
+  async componentWillMount() {
+    await this.props.dispatch({
+      type: 'card/getAdDetail',
+      payload: { id: this.props.match.params.id },
     });
   }
 
@@ -80,30 +77,23 @@ export default class DealDeatil extends Component {
       if (n === 3) return '密码和图片';
     }
 
-    function getStock(d) {}
-
-    function amountMoney() {
-      let a = 0;
-      // if (card.buyDetail) {
-      //   card.buyDetail.ad_info.cards.map(i => {
-      //     return (a += i.count * i.money);
-      //   });
-      // }
-      return a;
-    }
-
-    if (card.sellDetail) {
-      data = card.sellDetail.data;
+    console.log('CONFIG WAI');
+    console.log(CONFIG);
+    if (card.adDetail && CONFIG.card_type) {
+      data = card.adDetail.data;
       const ownerInfo = data.owner;
       const type = CONFIG.card_type;
-
+      console.log('CONFIG');
+      console.log(CONFIG);
+      console.log('data');
+      console.log(data);
       return (
         <div className={styles.detailBox}>
           <div className={styles.left}>
             <ul>
               <li className={styles.item}>
                 <span className={styles.title}>类型：</span>
-                <div className={styles.content}>{type[data.card_type].name}</div>
+                <div className={styles.content}>{type[data.card_type - 1].name}</div>
               </li>
               <li className={styles.item}>
                 <span className={styles.title}>包含：</span>
@@ -115,27 +105,47 @@ export default class DealDeatil extends Component {
               </li>
               <li className={styles.denoList}>
                 <ul>
-                  {data.money.map((d, index) => {
-                    return (
-                      <li key={d}>
-                        <span className={styles.denoTitle}>{d}面额：</span>
-                        <div className={styles.denoIpt}>
-                          <InputNumber
-                            min={0}
-                            max={18}
-                            defaultValue={0}
-                            onChange={e => this.changeNum(e, d)}
-                          />
-                        </div>
-                        <span className={styles.last}>库存({getStock(d)})</span>
-                      </li>
-                    );
-                  })}
+                  {data.condition && !data.money
+                    ? data.condition.map(c => {
+                        return (
+                          <li key={c}>
+                            <span className={styles.denoTitle}>{c}面额：</span>
+                            <div className={styles.denoIpt}>
+                              <InputNumber
+                                min={0}
+                                max={18}
+                                defaultValue={0}
+                                onChange={e => this.changeNum(e, c)}
+                              />
+                            </div>
+                            <span className={styles.last}>数量限额</span>
+                          </li>
+                        );
+                      })
+                    : null}
+                  {data.money && !data.condition
+                    ? data.money.map((d, index) => {
+                        return (
+                          <li key={d}>
+                            <span className={styles.denoTitle}>{d}面额：</span>
+                            <div className={styles.denoIpt}>
+                              <InputNumber
+                                min={0}
+                                max={18}
+                                defaultValue={0}
+                                onChange={e => this.changeNum(e, d)}
+                              />
+                            </div>
+                            <span className={styles.last}>库存</span>
+                          </li>
+                        );
+                      })
+                    : null}
                 </ul>
               </li>
               <li className={styles.item}>
                 <span className={styles.title}>总价：</span>
-                <div className={styles.content}>{amountMoney()}RMB</div>
+                <div className={styles.content}>{33}RMB</div>
               </li>
               <li className={styles.item}>
                 <span className={styles.title}>保障时间：</span>

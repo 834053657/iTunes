@@ -1,27 +1,22 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
+import React, {Component} from 'react';
+import {connect} from 'dva';
 import {
-  Table,
-  Tabs,
   Button,
   Icon,
-  Pagination,
   Input,
-  message,
   InputNumber,
   Avatar,
   Popover,
 } from 'antd';
 import styles from './SellDetail.less';
 
-@connect(({ card }) => ({
+@connect(({card}) => ({
   card,
 }))
 export default class DealDeatil extends Component {
   constructor(props) {
     super();
     this.state = {
-      data: null,
       addDenoVisible: false,
       denoValue: '',
     };
@@ -33,7 +28,7 @@ export default class DealDeatil extends Component {
       });
       this.props.dispatch({
         type: 'card/ensureOrder',
-        payload: this.state.data.id,
+        // payload: this.props.data.id,
       });
       //this.props.history.push({pathname: `/card/buy-stepTwo`});
     };
@@ -43,46 +38,38 @@ export default class DealDeatil extends Component {
     console.log(e);
   };
 
-  componentWillMount() {
-    const adInfo = this.props.location.query;
-    console.log(this.props);
-    this.props
-      .dispatch({
-        type: 'card/getBuyDetail',
-        //payload: this.order_id,
-      })
-      .then(res => {
-        console.log('this.props.card');
-        console.log(this.props.card.buyDetail);
-        this.setState({
-          data: this.props.card.buyDetail,
-        });
-      });
+  async componentWillMount() {
+    await this.props.dispatch({
+      type: 'card/getAdDetail',
+      payload: {id: this.props.match.params.id},
+    });
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+  }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+  }
 
   render() {
-    const { card } = this.props;
+    const {card} = this.props;
     let data;
 
     const addDenoNode = (
       <div className={styles.addDenoNode}>
         <Input
           onChange={e => {
-            this.setState({ denoValue: e.target.value });
+            this.setState({denoValue: e.target.value});
           }}
           value={this.state.denoValue}
         />
 
         <h5>可添加面额：1-1000</h5>
         <div>
-          <Button onClick={() => this.setState({ addDenoVisible: false })}>取消</Button>
+          <Button onClick={() => this.setState({addDenoVisible: false})}>取消</Button>
           <Button
             onClick={() => {
-              this.setState({ addDenoVisible: false });
+              this.setState({addDenoVisible: false});
             }}
             type="primary"
           >
@@ -108,21 +95,20 @@ export default class DealDeatil extends Component {
       return a;
     }
 
-    if (card.buyDetail) {
-      data = card.buyDetail.data;
+    if (card.adDetail && CONFIG.card_type) {
+      data = card.adDetail.data;
       console.log('data');
       console.log(data);
       const info = data;
       const ownerInfo = info.owner;
       const type = CONFIG.card_type;
-
       return (
         <div className={styles.detailBox}>
           <div className={styles.left}>
             <ul>
               <li className={styles.item}>
                 <span className={styles.title}>类型：</span>
-                <div className={styles.content}>{type[info.card_type].name}</div>
+                <div className={styles.content}>{type[+data.card_type-1].name}</div>
               </li>
               <li className={styles.item}>
                 <span className={styles.title}>包含：</span>
@@ -135,19 +121,19 @@ export default class DealDeatil extends Component {
               <li className={styles.denoList}>
                 {data.condition_type === 1 ? (
                   <ul>
-                    {info.cards.map((d, index) => {
+                    {info.condition.map((d, index) => {
                       return (
                         <li key={d.money}>
                           <span className={styles.denoTitle}>{d.money}面额：</span>
                           <div className={styles.denoIpt}>
                             <InputNumber
-                              min={0}
-                              max={d.count}
-                              defaultValue={1}
+                              min={d.min_count}
+                              max={d.max_count}
+                              defaultValue={0}
                               onChange={e => this.changeNum(e)}
                             />
                           </div>
-                          <span className={styles.last}>库存({d.count})</span>
+                          <span className={styles.last}>数量限额 {d.min_count} - {d.max_count} </span>
                         </li>
                       );
                     })}
@@ -161,11 +147,11 @@ export default class DealDeatil extends Component {
                         trigger="click"
                         visible={this.state.addDenoVisible}
                         onVisibleChange={() =>
-                          this.setState({ addDenoVisible: !this.state.addDenoVisible })
+                          this.setState({addDenoVisible: !this.state.addDenoVisible})
                         }
                       >
                         <Button>
-                          <Icon type="plus" />
+                          <Icon type="plus"/>
                           添加面额
                         </Button>
                       </Popover>
@@ -198,7 +184,7 @@ export default class DealDeatil extends Component {
           <div className={styles.right}>
             <div className={styles.userInfo}>
               <div className={styles.avatar}>
-                <Avatar size="large" src={ownerInfo.avatar} />
+                <Avatar size="large" src={ownerInfo.avatar}/>
               </div>
               <div className={styles.avatarRight}>
                 <div className={styles.top}>

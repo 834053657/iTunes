@@ -145,38 +145,46 @@ export const getRouterData = app => {
     '/card/buy-card': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
     },
-    '/card/deal-detail': {
+    '/card/deal-detail/:id': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealDetail')),
     },
-    '/card/sell-detail': {
+    '/card/sell-detail/:id': {
       component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/SellCard/Seller/SellDetail')
+        import('../routes/GiftCard/MarketSell/Seller/SellDetail')
       ),
     },
+    '/card/market-buy': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketOne')),
+    },
+    '/card/market-sell': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketTwo')),
+    },
     '/card/buy-stepTwo': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard/StepTwo')),
+      component: dynamicWrapper(app, ['card'], () =>
+        import('../routes/GiftCard/MarketBuy/StepTwo')
+      ),
     },
     '/card/buy-appeal': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard/Appeal')),
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketBuy/Appeal')),
     },
     '/card/buy-finish': {
       component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/BuyCard/StepThree')
+        import('../routes/GiftCard/MarketBuy/StepThree')
       ),
     },
     '/card/sell-sendCard': {
       component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/SellCard/Seller/SendCard')
+        import('../routes/GiftCard/MarketSell/Seller/SendCard')
       ),
     },
     '/card/sell-ensureInfo': {
       component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/SellCard/Seller/EnsureInfo')
+        import('../routes/GiftCard/MarketSell/Seller/EnsureInfo')
       ),
     },
     '/card/sell-dealFinish': {
       component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/SellCard/Seller/DealFinish')
+        import('../routes/GiftCard/MarketSell/Seller/DealFinish')
       ),
     },
     '/card/card-preview': {
@@ -186,12 +194,12 @@ export const getRouterData = app => {
     },
     '/card/ad-receiveCard': {
       component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/SellCard/Buyer/ReceiveCard')
+        import('../routes/GiftCard/MarketSell/Buyer/ReceiveCard')
       ),
     },
     '/card/ad-ensureInfo': {
       component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/SellCard/Buyer/EnsureBuyInfo')
+        import('../routes/GiftCard/MarketSell/Buyer/EnsureBuyInfo')
       ),
     },
 
