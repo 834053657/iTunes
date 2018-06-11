@@ -50,63 +50,79 @@ export default class Process extends Component {
 
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
-    const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
-    return (
-      <div className={styles.appeal}>
-        <h3>申诉啊申诉啊申诉啊</h3>
-        <StepModel steps={steps} current={1} />
-        <div className={styles.top}>
-          <div className={styles.orderInfo}>
-            <h5>
-              <span>订单：</span>
-              <span>15216524713875</span>
-            </h5>
-            <div className={styles.orderDescribe}>您向Jason购买总面额300的亚马逊美卡亚马逊美卡</div>
-          </div>
-          <div className={styles.tabs}>
-            <Tabs animated={false} defaultActiveKey="1">
-              <TabPane tab="订单详情" key="1">
-                <Detail />
-              </TabPane>
-              <TabPane tab="申诉中" key="2">
-                <AppealInfoAppealInfo />
-                <div className={styles.submitAppeal}>
-                  <div>
-                    <div className={styles.addPic}>
-                      <span className={styles.addTitle}>上传图片:</span>
-                      <div className={styles.addBox}>
-                        <Upload
-                          action="//jsonplaceholder.typicode.com/posts/"
-                          listType="picture-card"
-                          fileList={fileList}
-                          onPreview={this.handlePreview}
-                          onChange={this.handleChange}
-                        >
-                          {fileList.length >= 3 ? null : uploadButton}
-                        </Upload>
-                        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                          <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                        </Modal>
+    const { card } = this.props;
+    console.log('appeal');
+
+    let appeal;
+    if (card.appeal) {
+      appeal = card.appeal.data;
+      const info = appeal.appeal_info;
+
+      const uploadButton = (
+        <div>
+          <Icon type="plus" />
+          <div className="ant-upload-text">Upload</div>
+        </div>
+      );
+      const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
+      return (
+        <div className={styles.appeal}>
+          <StepModel steps={steps} current={1} />
+          <div className={styles.top}>
+            <div className={styles.orderInfo}>
+              <h5>
+                <span>订单：</span>
+                <span>15216524713875</span>
+              </h5>
+              <div className={styles.orderDescribe}>
+                您向Jason购买总面额300的亚马逊美卡亚马逊美卡
+              </div>
+            </div>
+            <div className={styles.tabs}>
+              <Tabs animated={false} defaultActiveKey="1">
+                <TabPane tab="订单详情" key="1">
+                  <Detail />
+                </TabPane>
+                <TabPane tab="申诉中" key="2">
+                  <AppealInfoAppealInfo info={info} />
+                  <div className={styles.submitAppeal}>
+                    <div>
+                      <div className={styles.addPic}>
+                        <span className={styles.addTitle}>上传图片:</span>
+                        <div className={styles.addBox}>
+                          <Upload
+                            action="//jsonplaceholder.typicode.com/posts/"
+                            listType="picture-card"
+                            fileList={fileList}
+                            onPreview={this.handlePreview}
+                            onChange={this.handleChange}
+                          >
+                            {fileList.length >= 3 ? null : uploadButton}
+                          </Upload>
+                          <Modal
+                            visible={previewVisible}
+                            footer={null}
+                            onCancel={this.handleCancel}
+                          >
+                            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                          </Modal>
+                        </div>
                       </div>
                     </div>
+                    <div className={styles.editor}>
+                      <TextArea rows={4} />
+                    </div>
+                    <Button type="primary">提交</Button>
                   </div>
-                  <div className={styles.editor}>
-                    <TextArea rows={4} />
-                  </div>
-                  <Button type="primary">提交</Button>
-                </div>
-              </TabPane>
-            </Tabs>
+                </TabPane>
+              </Tabs>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -168,38 +184,27 @@ function Detail() {
   );
 }
 
-function AppealInfoAppealInfo() {
+function AppealInfoAppealInfo(props) {
+  const { info } = props;
   return (
     <div>
       <ul className={styles.tabTwoTab}>
-        <li>
-          <div className={styles.leftAvatar}>
-            <span className={styles.avaTop}>
-              <Avatar className={styles.avatar} size="large" icon="user" />
-            </span>
-            <span className={styles.avaName}>Jason</span>
-          </div>
-          <div className={styles.chatItem}>
-            <p className={styles.chatText}>
-              您好，请稍等片刻待我确认请稍等片刻待我确认请稍等片刻待我确认
-            </p>
-            <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-          </div>
-        </li>
-        <li>
-          <div className={styles.leftAvatar}>
-            <span className={styles.avaTop}>
-              <Avatar className={styles.avatar} size="large" icon="user" />
-            </span>
-            <span className={styles.avaName}>Jason</span>
-          </div>
-          <div className={styles.chatItem}>
-            <p className={styles.chatText}>
-              您好，请稍等片刻待我确认请稍等片刻待我确认请稍等片刻待我确认
-            </p>
-            <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-          </div>
-        </li>
+        {info.map(i => {
+          return (
+            <li>
+              <div className={styles.leftAvatar}>
+                <span className={styles.avaTop}>
+                  <Avatar className={styles.avatar} size="large" src={i.avatar} />
+                </span>
+                <span className={styles.avaName}>{i.user_name}</span>
+              </div>
+              <div className={styles.chatItem}>
+                <p className={styles.chatText}>{i.content.cont}</p>
+                <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

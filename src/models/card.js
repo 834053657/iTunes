@@ -122,6 +122,8 @@ export default {
       };
     },
     GET_APPEAL_INFO(state, action) {
+      console.log('action');
+      console.log(action);
       return {
         ...state,
         appeal: action.payload,
