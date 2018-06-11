@@ -2,7 +2,20 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
-import { Table, Tabs, Button, Icon, Card, Modal, Row, Col, Divider, Badge, Popconfirm, Tooltip } from 'antd';
+import {
+  Table,
+  Tabs,
+  Button,
+  Icon,
+  Card,
+  Modal,
+  Row,
+  Col,
+  Divider,
+  Badge,
+  Popconfirm,
+  Tooltip,
+} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getMessageContent } from '../../utils/utils';
 import TermsModal from './TermsModal';
@@ -63,7 +76,7 @@ export default class TermsList extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'ad/deleteTerms',
-      payload: {id: r.id},
+      payload: { id: r.id },
       callback: this.refreshGrid(),
     });
   };
@@ -74,7 +87,7 @@ export default class TermsList extends Component {
     });
   };
 
-  handleSubmitTerms = (v) => {
+  handleSubmitTerms = v => {
     this.setState({
       termsModalVisible: false,
     });
@@ -82,7 +95,7 @@ export default class TermsList extends Component {
     this.refreshGrid();
   };
 
-  refreshGrid = (v) => {
+  refreshGrid = v => {
     const { dispatch } = this.props;
     dispatch({
       type: 'ad/fetchTermsList',
@@ -115,7 +128,9 @@ export default class TermsList extends Component {
             </span>
           );
         } else {
-          return <Badge status={statusMap[val - 1]} text={val ? CONFIG.trans_term_status[val] : '-'} />;
+          return (
+            <Badge status={statusMap[val - 1]} text={val ? CONFIG.trans_term_status[val] : '-'} />
+          );
         }
       },
     },
@@ -128,7 +143,12 @@ export default class TermsList extends Component {
           <Divider type="vertical" />
           <a onClick={() => this.editTerm(r)}>编辑</a>
           <Divider type="vertical" />
-          <Popconfirm title="您确认要删除此交易条款?" onConfirm={() => this.deleteTerm(r)} okText="确认" cancelText="取消">
+          <Popconfirm
+            title="您确认要删除此交易条款?"
+            onConfirm={() => this.deleteTerm(r)}
+            okText="确认"
+            cancelText="取消"
+          >
             <a>删除</a>
           </Popconfirm>
         </Fragment>

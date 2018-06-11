@@ -81,9 +81,8 @@ export default class List extends Component {
 
     if (row.msg_type === 1) {
       // this.props.dispatch(routerRedux.push(`/message/info-detail/${row.id}`));
-      window.location.href = `/#/message/info-detail/${row.id}`
-    }
-    else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
+      window.location.href = `/#/message/info-detail/${row.id}`;
+    } else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(row.msg_type) >= 0) {
       Modal.success({
         // title: row.title,
         title: '提示',
@@ -95,11 +94,11 @@ export default class List extends Component {
         },
       });
     } else if ([101, 102, 103, 104, 105, 106, 107].indexOf(row.msg_type) >= 0) {
-      //todo redict to order detail
-      if (row.content && row.content.order_type === 'card')
-        this.props.dispatch(routerRedux.push(`/card/order/${row.content.order_id}`));
-      else if (row.content && row.content.order_type === 'itunes') {
+      //todo redirect to order detail
+      if (row.content && row.content.goods_type === 1)
         this.props.dispatch(routerRedux.push(`/itunes/order/${row.content.order_id}`));
+      else if (row.content && row.content.goods_type === 2) {
+        this.props.dispatch(routerRedux.push(`/card/order/${row.content.order_id}`));
       }
     } else {
       // todo

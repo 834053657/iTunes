@@ -1,3 +1,5 @@
+@import '~antd/lib/style/color/colors.less';
+
 html,
 body,
 :global(#root) {
@@ -31,6 +33,29 @@ body {
 
 // temp fix for https://github.com/ant-design/ant-design/commit/a1fafb5b727b62cb0be29ce6e9eca8f579d4f8b7
 :global {
+  .text-red {
+    color: @red-5;
+
+    &:hover {
+      color: @red-6;
+    }
+
+    &:active {
+      color: @red-7;
+    }
+  }
+
+  .text-green {
+    color: @cyan-5;
+
+    &:hover {
+      color: @cyan-6;
+    }
+
+    &:active {
+      color: @cyan-7;
+    }
+  }
   .ant-spin-container {
     overflow: visible !important;
   }

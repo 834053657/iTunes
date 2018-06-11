@@ -25,7 +25,7 @@ export async function readMessage(params) {
 }
 
 export async function queryMyAdList(params) {
-  return request(`/itunes/user/my_ad/all?${stringify(params)}`);
+  return request(`/itunes/user/ad/all?${stringify(params)}`);
 }
 
 export async function queryTermsList(params) {
@@ -33,7 +33,7 @@ export async function queryTermsList(params) {
 }
 
 export async function fakeAd(params) {
-  return request('/itunes/user/my_ad/update', {
+  return request('/itunes/user/ad/status', {
     method: 'POST',
     body: params,
   });

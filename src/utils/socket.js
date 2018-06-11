@@ -8,13 +8,14 @@ export function dvaSocket(url, option) {
   if (isDev) {
     const mockServer = new Server(url);
     mockServer.on('connection', async server => {
+      console.log('mock-socket connected......');
       // const res = await push_system_message();
       // mockServer.emit('test', res);
     });
 
     mockServer.on('pull_system_message', async server => {
-      // const res = await push_system_message();
-      // mockServer.emit('push_system_message', res);
+      const res = await push_system_message();
+      mockServer.emit('push_system_message', res);
     });
 
     mockServer.on('post_quick_message', async server => {

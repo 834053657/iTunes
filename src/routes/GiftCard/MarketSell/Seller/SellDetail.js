@@ -1,16 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'dva';
-import {
-  Button,
-  Icon,
-  Input,
-  InputNumber,
-  Avatar,
-  Popover,
-} from 'antd';
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { Button, Icon, Input, InputNumber, Avatar, Popover } from 'antd';
 import styles from './SellDetail.less';
 
-@connect(({card}) => ({
+@connect(({ card }) => ({
   card,
 }))
 export default class DealDeatil extends Component {
@@ -41,35 +34,33 @@ export default class DealDeatil extends Component {
   async componentWillMount() {
     await this.props.dispatch({
       type: 'card/getAdDetail',
-      payload: {id: this.props.match.params.id},
+      payload: { id: this.props.match.params.id },
     });
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
   render() {
-    const {card} = this.props;
+    const { card } = this.props;
     let data;
 
     const addDenoNode = (
       <div className={styles.addDenoNode}>
         <Input
           onChange={e => {
-            this.setState({denoValue: e.target.value});
+            this.setState({ denoValue: e.target.value });
           }}
           value={this.state.denoValue}
         />
 
         <h5>可添加面额：1-1000</h5>
         <div>
-          <Button onClick={() => this.setState({addDenoVisible: false})}>取消</Button>
+          <Button onClick={() => this.setState({ addDenoVisible: false })}>取消</Button>
           <Button
             onClick={() => {
-              this.setState({addDenoVisible: false});
+              this.setState({ addDenoVisible: false });
             }}
             type="primary"
           >
@@ -86,7 +77,7 @@ export default class DealDeatil extends Component {
     }
 
     function amountMoney() {
-      let a = 0;
+      const a = 0;
       // if (card.buyDetail) {
       //   card.buyDetail.ad_info.cards.map(i => {
       //     return (a += i.count * i.money);
@@ -108,7 +99,7 @@ export default class DealDeatil extends Component {
             <ul>
               <li className={styles.item}>
                 <span className={styles.title}>类型：</span>
-                <div className={styles.content}>{type[+data.card_type-1].name}</div>
+                <div className={styles.content}>{type[+data.card_type - 1].name}</div>
               </li>
               <li className={styles.item}>
                 <span className={styles.title}>包含：</span>
@@ -133,7 +124,9 @@ export default class DealDeatil extends Component {
                               onChange={e => this.changeNum(e)}
                             />
                           </div>
-                          <span className={styles.last}>数量限额 {d.min_count} - {d.max_count} </span>
+                          <span className={styles.last}>
+                            数量限额 {d.min_count} - {d.max_count}{' '}
+                          </span>
                         </li>
                       );
                     })}
@@ -147,11 +140,11 @@ export default class DealDeatil extends Component {
                         trigger="click"
                         visible={this.state.addDenoVisible}
                         onVisibleChange={() =>
-                          this.setState({addDenoVisible: !this.state.addDenoVisible})
+                          this.setState({ addDenoVisible: !this.state.addDenoVisible })
                         }
                       >
                         <Button>
-                          <Icon type="plus"/>
+                          <Icon type="plus" />
                           添加面额
                         </Button>
                       </Popover>
@@ -184,7 +177,7 @@ export default class DealDeatil extends Component {
           <div className={styles.right}>
             <div className={styles.userInfo}>
               <div className={styles.avatar}>
-                <Avatar size="large" src={ownerInfo.avatar}/>
+                <Avatar size="large" src={ownerInfo.avatar} />
               </div>
               <div className={styles.avatarRight}>
                 <div className={styles.top}>
