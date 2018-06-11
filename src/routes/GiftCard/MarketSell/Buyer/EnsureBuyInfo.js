@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import {
-  Table,
-  Tabs,
   Button,
   Icon,
-  Pagination,
-  Input,
-  message,
-  InputNumber,
   Steps,
   Avatar,
   Select,
-  Upload,
-  Modal,
 } from 'antd';
-import styles from '../../BuyCard/StepTwo.less';
+import styles from '../../MarketBuy/StepTwo.less';
+import StepModel from '../../Step';
 
 const Step = Steps.Step;
 const Option = Select.Option;
@@ -35,18 +28,18 @@ export default class BuyCard extends Component {
   componentWillUnmount() {}
 
   render() {
+    const steps = [
+      {title: "查收礼品卡"},
+      {title: "确认信息3"},
+      {title: "完成"}
+    ]
     return (
       <div className={styles.stepTwoBox}>
-        <Steps current={1}>
-          <Step title="发送礼品卡" />
-          <Step title="确认信息" />
-          <Step
-            onClick={() => {
-              this.props.history.push({ pathname: `/card/sell-dealFinish` });
-            }}
-            title="完成"
-          />
-        </Steps>
+        <StepModel
+          steps={steps}
+          current={1}
+        />
+
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
             <div className={styles.orderInfo}>

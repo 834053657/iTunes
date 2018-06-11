@@ -14,12 +14,12 @@ export default class CardMarkets extends Component {
         page: 1,
         page_size: 10,
       },
-      loading: false,
+      loading: true,
       typeVisible: false,
       denoVisible: false,
       minDeno: null,
       maxDeno: null,
-      type_page: 0,
+      type_page: 1,
     };
 
     this.filter = {};
@@ -37,10 +37,11 @@ export default class CardMarkets extends Component {
       this.setState({
         type_page: e,
       });
-      this.props.history.push({
-        pathname: `/card/card-markets`,
-        //query: { ad_info: record },
-      });
+      if (+e === 2) {
+        this.props.history.push({
+          pathname: `/card/market-buy`,
+        });
+      }
       this.reSetPage();
       this.reloadList();
     };
@@ -84,33 +85,12 @@ export default class CardMarkets extends Component {
       const { type_page } = this.state;
       this.setState({ loading: true });
       const { dispatch } = this.props;
-
-      // dispatch({
-      //   type: 'card/fetchCardList',
-      //   payload: this.filter,
-      // }).then(() => {
-      //   this.setState({ loading: false });
-      // });
-
-      console.log('this.filter');
-      console.log(this.filter);
-      if (+type_page === 2) {
-        //购买
-        dispatch({
-          type: 'card/fetchCardList',
-          payload: this.filter,
-        }).then(() => {
-          this.setState({ loading: false });
-        });
-      } else if (+type_page === 1) {
-        //出售
-        dispatch({
-          type: 'card/fetchCardList',
-          payload: this.filter,
-        }).then(() => {
-          this.setState({ loading: false });
-        });
-      }
+      dispatch({
+        type: 'card/fetchCardList',
+        payload: this.filter,
+      }).then(() => {
+        this.setState({ loading: false });
+      });
     };
 
     //单价排序
@@ -179,7 +159,7 @@ export default class CardMarkets extends Component {
 
   componentWillMount() {
     const { dispatch } = this.props;
-    this.filter = Object.assign(this.filter, { ad_type: 2 });
+    this.filter = Object.assign(this.filter, { ad_type: 1 });
 
     dispatch({
       type: 'card/fetchCardList',
@@ -248,158 +228,14 @@ export default class CardMarkets extends Component {
       }
     }
 
-    let pagination_prop;
     let cardList;
 
     if (card.cardList) {
       cardList = card.cardList.items;
     }
 
-    let columns;
     let columnsSale;
 
-    //我要购买页  出售广告
-    if (cardList) {
-      columns = [
-        {
-          title: '用户名',
-          dataIndex: 'owner.nickname',
-        },
-        {
-          title: '类型',
-          dataIndex: 'type',
-          filterDropdown: (
-            <div style={{ padding: '0 10px 0 10px' }} className={styles.filterDropdownCard}>
-              {CONFIG.card_type
-                ? CONFIG.card_type.map(type => {
-                    return (
-                      <div
-                        className={styles.typeName}
-                        key={type.type}
-                        onClick={() => this.selectType(type)}
-                      >
-                        {type.name}
-                      </div>
-                    );
-                  })
-                : null}
-            </div>
-          ),
-          filterDropdownVisible: this.state.typeVisible,
-          onFilterDropdownVisibleChange: e => {
-            this.setVisible('typeVisible', e);
-          },
-          filterIcon: (
-            <Icon
-              type="down"
-              onClick={() => this.setState({ typeVisible: !this.state.typeVisible })}
-            />
-          ),
-          render: (text, record) => {
-            console.log(record);
-            console.log('record');
-            return (
-              <span>
-                {record.card_type && CONFIG.card_type[record.card_type]
-                  ? CONFIG.card_type[record.card_type].name
-                  : '-'}
-              </span>
-            );
-          },
-        },
-        {
-          title: '面额',
-          dataIndex: 'denomination',
-          onFilterDropdownVisibleChange: e => {
-            this.setVisible('denoVisible', e);
-          },
-          filterDropdownVisible: this.state.denoVisible,
-          filterDropdown: (
-            <div className={styles.denoRange}>
-              <div className={styles.range}>
-                <span>区间:</span>
-                <span className={styles.min}>
-                  <Input value={this.state.minDeno} onChange={e => this.setMinDeno(e)} />
-                </span>
-                <span>---</span>
-                <span className={styles.max}>
-                  <Input value={this.state.maxDeno} onChange={e => this.setMaxDeno(e)} />
-                </span>
-              </div>
-              <div className={styles.rangeBtns}>
-                <Button
-                  onClick={() => {
-                    this.resetRangeFilter();
-                  }}
-                >
-                  重置
-                </Button>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    this.setRangeFilter();
-                  }}
-                >
-                  确定
-                </Button>
-              </div>
-            </div>
-          ),
-          render: (text, record) => {
-            return (
-              <span>
-                {console.log(record, 'recorddddddd')}
-                {denoBuyList(record)
-                  ? denoBuyList(record).map((m, index) => {
-                      return (
-                        <span key={index}>
-                          {m}
-                          {index < denoBuyList(record).length - 1 ? '/' : null}
-                        </span>
-                      );
-                    })
-                  : null}
-              </span>
-            );
-          },
-        },
-        {
-          title: '总面额',
-          dataIndex: 'total_denomination',
-          render: (text, record) => {
-            return <span>{amountMoney(record)}</span>;
-          },
-        },
-        {
-          title: '单价',
-          dataIndex: 'unit_price',
-          sorter: (a, b) => a.unitPrice - b.unitPrice,
-        },
-        {
-          title: '保障时间',
-          dataIndex: 'guarantee_time',
-        },
-        {
-          title: '操作',
-          dataIndex: 'operation',
-          render: (text, record) => {
-            return (
-              <Button
-                type="primary"
-                onClick={() => {
-                  this.props.history.push({
-                    pathname: `/card/deal-detail`,
-                    query: { ad_info: record },
-                  });
-                }}
-              >
-                购买
-              </Button>
-            );
-          },
-        },
-      ];
-    }
     //购买Table
 
     if (cardList) {
@@ -441,8 +277,8 @@ export default class CardMarkets extends Component {
           render: (text, record) => {
             return (
               <span>
-                {record.card_type && CONFIG.card_type[record.card_type]
-                  ? CONFIG.card_type[record.card_type].name
+                {CONFIG.card_type[record.card_type - 1]
+                  ? CONFIG.card_type[record.card_type - 1].name
                   : '-'}
               </span>
             );
@@ -533,8 +369,7 @@ export default class CardMarkets extends Component {
                   type="primary"
                   onClick={() => {
                     this.props.history.push({
-                      pathname: `/card/sell-detail`,
-                      query: { ad_info: record },
+                      pathname: `/card/sell-detail/${record.id}`,
                     });
                   }}
                 >
@@ -565,7 +400,7 @@ export default class CardMarkets extends Component {
           onChange={e => {
             this.changeTab(e);
           }}
-          defaultActiveKey="2"
+          defaultActiveKey="1"
         >
           {/*出售广告*/}
           <Tabs.TabPane tab="我要购买" key="2" />
@@ -576,7 +411,7 @@ export default class CardMarkets extends Component {
         <Table
           rowKey={row => row.id}
           dataSource={cardList}
-          columns={+this.state.type_page === 1 ? columnsSale : columns}
+          columns={columnsSale}
           pagination={false}
           loading={this.state.loading}
           onChange={this.tableChange}

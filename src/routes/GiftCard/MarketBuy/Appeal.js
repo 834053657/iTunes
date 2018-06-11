@@ -1,24 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import {
-  Table,
   Tabs,
   Button,
   Icon,
-  Pagination,
   Input,
-  message,
-  InputNumber,
   Steps,
   Avatar,
-  Select,
   Upload,
   Modal,
 } from 'antd';
 import styles from './appeal.less';
+import StepModel from '../Step';
 
-const Step = Steps.Step;
-const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
 
@@ -67,18 +61,18 @@ export default class Process extends Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
+    const steps = [
+      {title: "打开交易"},
+      {title: "确认信息"},
+      {title: "完成"}
+    ]
     return (
       <div className={styles.appeal}>
-        <Steps current={1}>
-          <Step title="打开交易" />
-          <Step title="确认信息" />
-          <Step
-            title="完成"
-            onClick={() => {
-              this.props.history.push({ pathname: `/card/buy-finish` });
-            }}
-          />
-        </Steps>
+        <h3>申诉啊申诉啊申诉啊</h3>
+        <StepModel
+          steps={steps}
+          current={1}
+        />
         <div className={styles.top}>
           <div className={styles.orderInfo}>
             <h5>

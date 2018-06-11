@@ -1,17 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import {
-  Table,
-  Tabs,
-  Button,
-  Icon,
-  Pagination,
-  Input,
-  message,
-  InputNumber,
-  Avatar,
-  Popover,
-} from 'antd';
+import { Button, Icon, Input, InputNumber, Avatar, Popover } from 'antd';
 import styles from './SellDetail.less';
 
 @connect(({ card }) => ({
@@ -21,7 +10,6 @@ export default class DealDeatil extends Component {
   constructor(props) {
     super();
     this.state = {
-      data: null,
       addDenoVisible: false,
       denoValue: '',
     };
@@ -33,7 +21,7 @@ export default class DealDeatil extends Component {
       });
       this.props.dispatch({
         type: 'card/ensureOrder',
-        payload: this.state.data.id,
+        // payload: this.props.data.id,
       });
       //this.props.history.push({pathname: `/card/buy-stepTwo`});
     };
@@ -43,21 +31,11 @@ export default class DealDeatil extends Component {
     console.log(e);
   };
 
-  componentWillMount() {
-    const adInfo = this.props.location.query;
-    console.log(this.props);
-    this.props
-      .dispatch({
-        type: 'card/getBuyDetail',
-        //payload: this.order_id,
-      })
-      .then(res => {
-        console.log('this.props.card');
-        console.log(this.props.card.buyDetail);
-        this.setState({
-          data: this.props.card.buyDetail,
-        });
-      });
+  async componentWillMount() {
+    await this.props.dispatch({
+      type: 'card/getAdDetail',
+      payload: { id: this.props.match.params.id },
+    });
   }
 
   componentDidMount() {}
@@ -108,21 +86,20 @@ export default class DealDeatil extends Component {
       return a;
     }
 
-    if (card.buyDetail) {
-      data = card.buyDetail.data;
+    if (card.adDetail && CONFIG.card_type) {
+      data = card.adDetail.data;
       console.log('data');
       console.log(data);
       const info = data;
       const ownerInfo = info.owner;
       const type = CONFIG.card_type;
-
       return (
         <div className={styles.detailBox}>
           <div className={styles.left}>
             <ul>
               <li className={styles.item}>
                 <span className={styles.title}>类型：</span>
-                <div className={styles.content}>{type[info.card_type].name}</div>
+                <div className={styles.content}>{type[+data.card_type - 1].name}</div>
               </li>
               <li className={styles.item}>
                 <span className={styles.title}>包含：</span>
@@ -135,19 +112,21 @@ export default class DealDeatil extends Component {
               <li className={styles.denoList}>
                 {data.condition_type === 1 ? (
                   <ul>
-                    {info.cards.map((d, index) => {
+                    {info.condition.map((d, index) => {
                       return (
                         <li key={d.money}>
                           <span className={styles.denoTitle}>{d.money}面额：</span>
                           <div className={styles.denoIpt}>
                             <InputNumber
-                              min={0}
-                              max={d.count}
-                              defaultValue={1}
+                              min={d.min_count}
+                              max={d.max_count}
+                              defaultValue={0}
                               onChange={e => this.changeNum(e)}
                             />
                           </div>
-                          <span className={styles.last}>库存({d.count})</span>
+                          <span className={styles.last}>
+                            数量限额 {d.min_count} - {d.max_count}{' '}
+                          </span>
                         </li>
                       );
                     })}

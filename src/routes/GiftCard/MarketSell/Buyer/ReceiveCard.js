@@ -13,6 +13,7 @@ import {
   Avatar,
 } from 'antd';
 import styles from './ReceiveCard.less';
+import StepModel from '../../Step';
 
 const Step = Steps.Step;
 
@@ -32,13 +33,17 @@ export default class Process extends Component {
   componentWillUnmount() {}
 
   render() {
+    const steps = [
+      {title: "查收礼品卡"},
+      {title: "确认信息"},
+      {title: "完成"}
+    ]
     return (
       <div className={styles.receiveCard}>
-        <Steps current={0}>
-          <Step title="查收礼品卡" />
-          <Step title="确认信息" />
-          <Step title="完成" />
-        </Steps>
+        <StepModel
+          steps={steps}
+          current={0}
+        />
         <div className={styles.left}>
           <div className={styles.orderInfo}>
             <h5>
@@ -71,6 +76,11 @@ export default class Process extends Component {
           </ul>
           <div className={styles.bottom}>
             <h4>
+              对方剩余&nbsp;
+              <Icon type="clock-circle-o" />
+              &nbsp;10分钟确认
+            </h4>
+            <h4>
               请在&nbsp;
               <Icon type="clock-circle-o" />
               &nbsp;10分钟内确认
@@ -94,8 +104,8 @@ export default class Process extends Component {
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>
-                <span className={styles.name}>ownerInfo.nickname</span>
                 <span className={styles.online}>&nbsp;</span>
+                <span className={styles.name}>ownerInfo.nickname</span>
               </div>
               <div className={styles.infoBottom}>
                 <span className={styles.dealTit}>30日成单：</span>

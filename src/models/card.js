@@ -3,7 +3,7 @@ import {
   getTransTerms,
   postSell,
   getToken,
-  getBuyDetail,
+  getAdDetail,
   getSellDetail,
   ensureBuyOrder,
   addBuyAd,
@@ -47,10 +47,10 @@ export default {
       // })
     },
     //获取购买交易详情
-    *getBuyDetail({ payload }, { call, put }) {
-      const res = yield call(getBuyDetail, payload);
+    *getAdDetail({ payload }, { call, put }) {
+      const res = yield call(getAdDetail, payload);
       yield put({
-        type: 'GET_BUY_DETAIL',
+        type: 'GET_AD_DETAIL',
         payload: res,
       });
     },
@@ -99,10 +99,10 @@ export default {
         token: action.payload,
       };
     },
-    GET_BUY_DETAIL(state, action) {
+    GET_AD_DETAIL(state, action) {
       return {
         ...state,
-        buyDetail: action.payload,
+        adDetail: action.payload,
       };
     },
     GET_SELL_DETAIL(state, action) {
