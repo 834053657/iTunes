@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import {
   getCardlist,
   getTransTerms,
@@ -14,13 +15,31 @@ export default {
   namespace: 'card',
 
   state: {
+    list: {
+      items: [],
+      pagination: {
+        pageSize: 10,
+      },
+    },
     cardList: [],
     terms: [],
     buyDetail: null,
     appeal: null,
+    adDetail: {},
   },
 
   effects: {
+    *fetchCardList_({ payload }, { put, call }) {
+      const res = yield call(getCardlist, payload);
+      if (res.code === 0 && res.data) {
+        yield put({
+          type: 'GET_CARD_LIST_',
+          payload: res.data,
+        });
+      } else {
+        message.error(res.msg);
+      }
+    },
     *fetchCardList({ payload }, { put, call }) {
       console.log(payload);
       const res = yield call(getCardlist, payload);
@@ -49,12 +68,16 @@ export default {
       // })
     },
     //获取购买交易详情
-    *getAdDetail({ payload }, { call, put }) {
+    *fetchAdDetail({ payload }, { call, put }) {
       const res = yield call(getAdDetail, payload);
-      yield put({
-        type: 'GET_AD_DETAIL',
-        payload: res,
-      });
+      if (res.code === 0) {
+        yield put({
+          type: 'GET_AD_DETAIL',
+          payload: res.data,
+        });
+      } else {
+        message.error(res.msg);
+      }
     },
     //获取出售交易详情
     *getSellDetail({ payload }, { call, put }) {
@@ -85,6 +108,23 @@ export default {
   },
 
   reducers: {
+    GET_CARD_LIST_(state, { payload }) {
+      const { pagination: oldPagination } = state.list;
+      const { items, paginator: { page, total } } = payload;
+      const pagination = {
+        ...oldPagination,
+        current: page,
+        total,
+      };
+
+      return {
+        ...state,
+        list: {
+          items,
+          pagination,
+        },
+      };
+    },
     GET_CARD_LIST(state, action) {
       return {
         ...state,

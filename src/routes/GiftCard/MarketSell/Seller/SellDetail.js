@@ -31,10 +31,11 @@ export default class DealDeatil extends Component {
     console.log(e);
   };
 
-  async componentWillMount() {
-    await this.props.dispatch({
-      type: 'card/getAdDetail',
-      payload: { id: this.props.match.params.id },
+  componentWillMount() {
+    const { params: { id } } = this.props.match || {};
+    this.props.dispatch({
+      type: 'card/fetchAdDetail',
+      payload: { id },
     });
   }
 

@@ -24,6 +24,10 @@ const menuData = [
     path: 'card',
     children: [
       {
+        name: '交易大厅by_elvin',
+        path: 'market',
+      },
+      {
         name: '交易大厅',
         path: 'market-buy',
       },
@@ -39,7 +43,7 @@ const menuData = [
   },
 ];
 
-if (true) {
+if (__KG_API_ENV__ === 'dev') {
   menuData.push(
     {
       name: 'dashboard',

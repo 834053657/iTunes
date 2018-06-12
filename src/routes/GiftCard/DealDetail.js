@@ -16,7 +16,7 @@ import {
 import styles from './DealDetail.less';
 
 @connect(({ card }) => ({
-  card,
+  detail: card.adDetail,
 }))
 export default class DealDeatil extends Component {
   constructor(props) {
@@ -56,140 +56,153 @@ export default class DealDeatil extends Component {
     }
   };
 
-  async componentWillMount() {
-    await this.props.dispatch({
-      type: 'card/getAdDetail',
-      payload: { id: this.props.match.params.id },
+  componentWillMount() {
+    const { params: { id } } = this.props.match || {};
+    this.props.dispatch({
+      type: 'card/fetchAdDetail',
+      payload: { id },
     });
   }
 
-  componentDidMount() {}
+  renderCondition = detail => {
+    const { condition_type, ad_type, money = [], stock = {} } = detail || {};
+    let { condition } = detail || {};
+    let content = null;
 
-  componentWillUnmount() {}
-
-  render() {
-    const { card } = this.props;
-    let data;
-
-    function passwordType(n) {
-      if (n === 1) return '密码';
-      if (n === 2) return '图片';
-      if (n === 3) return '密码和图片';
-    }
-
-    console.log('CONFIG WAI');
-    console.log(CONFIG);
-    if (card.adDetail && CONFIG.card_type) {
-      data = card.adDetail.data;
-      const ownerInfo = data.owner;
-      const type = CONFIG.card_type;
-      console.log('CONFIG');
-      console.log(CONFIG);
-      console.log('data');
-      console.log(data);
-      return (
-        <div className={styles.detailBox}>
-          <div className={styles.left}>
-            <ul>
-              <li className={styles.item}>
-                <span className={styles.title}>类型：</span>
-                <div className={styles.content}>{type[data.card_type - 1].name}</div>
-              </li>
-              <li className={styles.item}>
-                <span className={styles.title}>包含：</span>
-                <div className={styles.content}>{passwordType(data.password_type)}</div>
-              </li>
-              <li className={styles.item}>
-                <span className={styles.title}>单价：</span>
-                <div className={styles.content}>{data.unit_price}RMB</div>
-              </li>
-              <li className={styles.denoList}>
-                <ul>
-                  {data.condition && !data.money
-                    ? data.condition.map(c => {
-                        return (
-                          <li key={c}>
-                            <span className={styles.denoTitle}>{c}面额：</span>
-                            <div className={styles.denoIpt}>
-                              <InputNumber
-                                min={0}
-                                max={18}
-                                defaultValue={0}
-                                onChange={e => this.changeNum(e, c)}
-                              />
-                            </div>
-                            <span className={styles.last}>数量限额</span>
-                          </li>
-                        );
-                      })
-                    : null}
-                  {data.money && !data.condition
-                    ? data.money.map((d, index) => {
-                        return (
-                          <li key={d}>
-                            <span className={styles.denoTitle}>{d}面额：</span>
-                            <div className={styles.denoIpt}>
-                              <InputNumber
-                                min={0}
-                                max={18}
-                                defaultValue={0}
-                                onChange={e => this.changeNum(e, d)}
-                              />
-                            </div>
-                            <span className={styles.last}>库存</span>
-                          </li>
-                        );
-                      })
-                    : null}
-                </ul>
-              </li>
-              <li className={styles.item}>
-                <span className={styles.title}>总价：</span>
-                <div className={styles.content}>{33}RMB</div>
-              </li>
-              <li className={styles.item}>
-                <span className={styles.title}>保障时间：</span>
-                <div className={styles.content}>{data.guarantee_time}分钟</div>
-              </li>
-            </ul>
-            <div className={styles.bottom}>
-              <Button>取消</Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  this.ensureOrder();
-                }}
-              >
-                确认购买
-              </Button>
-            </div>
-          </div>
-
-          <div className={styles.right}>
-            <div className={styles.userInfo}>
-              <div className={styles.avatar}>
-                <Avatar size="large" src={ownerInfo.avatar} />
-              </div>
-              <div className={styles.avatarRight}>
-                <div className={styles.top}>
-                  <span className={styles.name}>{ownerInfo.nickname}</span>
-                  <span className={styles.online}>&nbsp;</span>
+    if (ad_type === 1) {
+      // 主动购买
+      if (condition_type === 1) {
+        // 指定面额
+        condition = condition || [];
+        content = (
+          <ul>
+            {condition.map((c, index) => {
+              return (
+                <li key={`${index}${c.money}`}>
+                  <span className={styles.denoTitle}>{c.money}面额：</span>
+                  <div className={styles.denoIpt}>
+                    <InputNumber
+                      min={c.min_count}
+                      max={c.max_count}
+                      defaultValue={0}
+                      onChange={e => this.changeNum(e, c)}
+                    />
+                    <span className={styles.last}>
+                      数量限额<span>{c.min_count}</span>-<span>{c.max_count}</span>
+                    </span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        );
+      } else {
+        // 面额区间
+        // condition = condition || {}
+        content = (
+          <ul>
+            <li>面额区间</li>
+          </ul>
+        );
+      }
+    } else {
+      // 主动出售
+      content = (
+        <ul>
+          {money.map(d => {
+            return (
+              <li key={d}>
+                <span className={styles.denoTitle}>{d}面额：</span>
+                <div className={styles.denoIpt}>
+                  <InputNumber
+                    min={0}
+                    max={18}
+                    defaultValue={0}
+                    onChange={e => this.changeNum(e, d)}
+                  />
                 </div>
-                <div className={styles.infoBottom}>
-                  <span className={styles.dealTit}>30日成单：</span>
-                  <span className={styles.dealNum}>{ownerInfo.month_volume}</span>
-                </div>
-              </div>
-            </div>
-            <div className={styles.term}>
-              <h3>交易条款：</h3>
-              <p>{data.term}</p>
-            </div>
-          </div>
-        </div>
+                <span className={styles.last}>库存({stock[d] || 0})</span>
+              </li>
+            );
+          })}
+        </ul>
       );
     }
 
-    return null;
+    return content;
+  };
+
+  render() {
+    const { detail } = this.props;
+    const { owner = {}, card_type, password_type, unit_price, guarantee_time, term } = detail || {};
+
+    return (
+      <div className={styles.detailBox}>
+        <div className={styles.left}>
+          <ul>
+            <li className={styles.item}>
+              <span className={styles.title}>类型：</span>
+              <div className={styles.content}>
+                {card_type && CONFIG.cardTypeMap[card_type]
+                  ? CONFIG.cardTypeMap[card_type].name
+                  : '-'}
+              </div>
+            </li>
+            <li className={styles.item}>
+              <span className={styles.title}>包含：</span>
+              <div className={styles.content}>
+                {password_type ? CONFIG.cardPwdType[password_type] : '-'}
+              </div>
+            </li>
+            <li className={styles.item}>
+              <span className={styles.title}>单价：</span>
+              <div className={styles.content}>{unit_price}RMB</div>
+            </li>
+            <li className={styles.denoList}>{this.renderCondition(detail)}</li>
+            <li className={styles.item}>
+              <span className={styles.title}>总价：</span>
+              <div className={styles.content}>{33}RMB</div>
+            </li>
+            <li className={styles.item}>
+              <span className={styles.title}>保障时间：</span>
+              <div className={styles.content}>{guarantee_time}分钟</div>
+            </li>
+          </ul>
+          <div className={styles.bottom}>
+            <Button>取消</Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                this.ensureOrder();
+              }}
+            >
+              确认购买
+            </Button>
+          </div>
+        </div>
+
+        <div className={styles.right}>
+          <div className={styles.userInfo}>
+            <div className={styles.avatar}>
+              <Avatar size="large" src={owner.avatar} />
+            </div>
+            <div className={styles.avatarRight}>
+              <div className={styles.top}>
+                <span className={styles.name}>{owner.nickname}</span>
+                <span className={styles.online}>&nbsp;</span>
+              </div>
+              <div className={styles.infoBottom}>
+                <span className={styles.dealTit}>30日成单：</span>
+                <span className={styles.dealNum}>{owner.month_volume}</span>
+              </div>
+            </div>
+          </div>
+          <div className={styles.term}>
+            <h3>交易条款：</h3>
+            <p>{term}</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
