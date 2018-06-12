@@ -44,7 +44,7 @@ export default {
       if (response.code === 0) {
         message.success('操作成功');
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
 
       yield put({
@@ -58,7 +58,7 @@ export default {
       if (response.code === 0) {
         message.success('操作成功');
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
       yield put({
         type: 'removeAd',
@@ -71,7 +71,7 @@ export default {
       if (response.code === 0) {
         message.success('操作成功');
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
       yield put({
         type: 'fakeTerms',
@@ -84,7 +84,7 @@ export default {
       if (response.code === 0) {
         message.success('操作成功');
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
       yield put({
         type: 'removeTerms',

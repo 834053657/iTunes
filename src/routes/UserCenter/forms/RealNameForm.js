@@ -93,7 +93,11 @@ export default class RealNameForm extends Component {
         onChange={this.uploadHandler.bind(this, type)}
         data={{ token: upload.token }}
       >
-        {imageUrl ? <img style={{ maxWidth: '100%' }} src={imageUrl} alt={type} /> : uploadButton}
+        {imageUrl ? (
+          <img style={{ maxWidth: '100%', maxHeight: '150px' }} src={imageUrl} alt={type} />
+        ) : (
+          uploadButton
+        )}
       </Dragger>
     );
 

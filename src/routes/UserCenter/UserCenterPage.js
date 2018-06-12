@@ -76,7 +76,7 @@ export default class Analysis extends Component {
   handlePwdSubmit = (err, values) => {
     if (!err) {
       this.props.dispatch({
-        type: 'user/submitChangePassword',
+        type: 'user/submitUpdatePassword',
         payload: {
           ...values,
         },
@@ -138,7 +138,7 @@ export default class Analysis extends Component {
     this.props.dispatch({
       type: 'user/submitUserAuth',
       payload: {
-        auth_type: '1',
+        auth_type: 1,
         auth_detail,
       },
       callback: this.hideRealNameModal,
@@ -457,6 +457,9 @@ export default class Analysis extends Component {
                     <div className={styles.box_item_content} />
                     <ul className={styles.box_item_action}>
                       <li>
+                        {/*{
+                          real_name.status === 3 && <a onClick={this.showRealNameModal}>编辑</a>
+                        }*/}
                         <a onClick={this.showRealNameModal}>编辑</a>
                       </li>
                     </ul>
@@ -522,19 +525,23 @@ export default class Analysis extends Component {
                           </div>
                         </div>
                         {this.getMethodContent(item)}
-                        <ul className={styles.box_item_action}>
-                          <li>
-                            <a onClick={this.showPayMethodModal.bind(this, item)}>设置</a>
-                          </li>
-                          <li>
-                            <Popconfirm
-                              title="确定要删除吗?"
-                              onConfirm={this.handleDeletePayMethod.bind(this, item.id)}
-                            >
-                              <a className="text-red">删除</a>
-                            </Popconfirm>
-                          </li>
-                        </ul>
+                        {
+                          // item.status === 4 ? (
+                          <ul className={styles.box_item_action}>
+                            <li>
+                              <a onClick={this.showPayMethodModal.bind(this, item)}>设置</a>
+                            </li>
+                            <li>
+                              <Popconfirm
+                                title="确定要删除吗?"
+                                onConfirm={this.handleDeletePayMethod.bind(this, item.id)}
+                              >
+                                <a className="text-red">删除</a>
+                              </Popconfirm>
+                            </li>
+                          </ul>
+                          // ) : null
+                        }
                       </div>
                     );
                   })}

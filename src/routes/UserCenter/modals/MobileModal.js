@@ -21,45 +21,57 @@ export default class MobileModal extends Component {
 
   state = {
     current: 0,
+    verify_token: null,
   };
 
-  handleCheckSubmit = (err, values) => {
-    if (!err) {
-      this.props.dispatch({
-        type: 'global/verifyCaptcha',
-        payload: {
-          ...values,
+  handleCheckSubmit = ({ code, nation_code, phone }) => {
+    this.props.dispatch({
+      type: 'global/verifyCaptcha',
+      payload: {
+        data: {
+          nation_code,
+          phone,
         },
-        callback: () => {
-          this.setState({
-            current: this.state.current + 1,
-          });
-        },
-      });
-    }
+        type: 'sms',
+        code,
+        usage: 4,
+      },
+      callback: data => {
+        this.setState({
+          current: this.state.current + 1,
+          verify_token: data.verify_token,
+        });
+      },
+    });
   };
 
-  handleBindSubmit = (err, values) => {
-    if (!err) {
-      this.props.dispatch({
-        type: 'user/submitChangeMobile',
-        payload: {
-          ...values,
-        },
-        callback: () => {
-          this.setState({
-            current: this.state.current + 1,
-          });
-          delay(this.props.onCancel, 1000);
-        },
-      });
-    }
+  handleBindSubmit = values => {
+    this.props.dispatch({
+      type: 'user/submitChangeMobile',
+      payload: {
+        ...values,
+        verify_token: this.state.verify_token,
+      },
+      callback: () => {
+        this.setState({
+          current: this.state.current + 1,
+        });
+        delay(this.props.onCancel, 1000);
+      },
+    });
   };
 
-  handleSendCaptcha = (values, callback) => {
+  handleSendCaptcha = (usage, { nation_code, telephone: phone }, callback) => {
     return this.props.dispatch({
       type: 'global/sendVerify',
-      payload: { ...values },
+      payload: {
+        type: 'sms',
+        usage,
+        data: {
+          nation_code,
+          phone,
+        },
+      },
       callback,
     });
   };
@@ -75,7 +87,7 @@ export default class MobileModal extends Component {
         component: (
           <MobileForm
             key="1"
-            onGetCaptcha={this.handleSendCaptcha}
+            onGetCaptcha={this.handleSendCaptcha.bind(this, 4)}
             initialValue={user}
             disabled
             onSubmit={this.handleCheckSubmit}
@@ -88,7 +100,7 @@ export default class MobileModal extends Component {
         component: (
           <MobileForm
             key="2"
-            onGetCaptcha={this.handleSendCaptcha}
+            onGetCaptcha={this.handleSendCaptcha.bind(this, 5)}
             onSubmit={this.handleBindSubmit}
             onCancel={onCancel}
           />

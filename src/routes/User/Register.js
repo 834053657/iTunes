@@ -67,14 +67,16 @@ export default class Register extends Component {
 
   onGetCaptcha = (err, code) => {
     const { form } = this.props;
-    const email = form.getFieldValue('email');
+    const mail = form.getFieldValue('email');
     if (!err) {
       this.props.dispatch({
         type: 'register/sendVerify',
         payload: {
           code,
-          data: email,
-          type: 'email',
+          data: {
+            mail,
+          },
+          type: 'mail',
           usage: 1,
         },
         callback: res => {
@@ -89,7 +91,7 @@ export default class Register extends Component {
               }
             }, 1000);
           } else {
-            message.error(res.errmsg || '发送失败');
+            message.error(res.msg);
           }
         },
       });

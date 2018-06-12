@@ -24,32 +24,36 @@ export default class EmailModal extends Component {
     updateKey: null,
   };
 
-  handleCheckSubmit = (err, values) => {
+  handleCheckSubmit = (err, { email, captcha }) => {
     if (!err) {
       this.props.dispatch({
         type: 'global/verifyCaptcha',
         payload: {
-          ...values,
-          type: 1, // 验证码类型 1：邮箱
+          data: {
+            mail: email,
+          },
+          type: 'mail',
+          code: captcha,
+          usage: 2,
         },
         callback: (data = {}) => {
           this.setState({
             current: this.state.current + 1,
-            updateKey: data.key,
+            updateKey: data.verify_token,
           });
         },
       });
     }
   };
 
-  handleBindSubmit = (err, values) => {
-    console.log(values);
+  handleBindSubmit = (err, { captcha: code, email }) => {
     if (!err) {
       this.props.dispatch({
         type: 'user/submitChangeEmail',
         payload: {
-          ...values,
-          key: this.state.updateKey,
+          email,
+          code,
+          verify_token: this.state.updateKey,
         },
         callback: () => {
           this.setState({
@@ -61,12 +65,14 @@ export default class EmailModal extends Component {
     }
   };
 
-  handleSendCaptcha = (values, callback) => {
+  handleSendCaptcha = ({ email }, callback) => {
     return this.props.dispatch({
       type: 'global/sendVerify',
       payload: {
-        ...values,
-        type: 1,
+        data: {
+          mail: email,
+        },
+        type: 'mail',
         usage: 2,
       },
       callback,

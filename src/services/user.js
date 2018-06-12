@@ -22,9 +22,13 @@ export async function forgetPassword(params) {
  * @returns {Promise<Object>}
  */
 export async function resetPassword(params) {
+  const { code, new_password } = params || {};
   return request('/itunes/user/reset_password', {
     method: 'POST',
-    body: params,
+    body: {
+      code,
+      new_password,
+    },
   });
 }
 
@@ -34,9 +38,13 @@ export async function resetPassword(params) {
  * @returns {Promise<Object>}
  */
 export async function updatePassword(params) {
+  const { old_password, password: new_password } = params || {};
   return request('/itunes/user/update_password', {
     method: 'POST',
-    body: params,
+    body: {
+      old_password,
+      new_password,
+    },
   });
 }
 

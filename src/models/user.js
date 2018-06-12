@@ -52,27 +52,27 @@ export default {
           payload: response,
         });
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
-    *submitChangePassword({ payload, callback }, { call, put }) {
+    *submitChangePassword({ payload }, { call, put }) {
       const response = yield call(resetPassword, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'changePasswordHandle',
+          payload: response,
+        });
+      } else {
+        message.error(response.msg);
+      }
+    },
+    *submitUpdatePassword({ payload, callback }, { call }) {
+      const response = yield call(updatePassword, payload);
       if (response.code === 0) {
         message.success('操作成功!');
         callback && callback(response);
       } else {
-        message.error(response.errmsg || '操作失败');
-      }
-    },
-    *submitUpdatePassword({ payload }, { call, put }) {
-      const response = yield call(updatePassword, payload);
-      if (response.code === 0) {
-        yield put({
-          type: 'forgetPasswordHandle',
-          payload: response,
-        });
-      } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
     *submitChangeEmail({ payload, callback }, { call, put }) {
@@ -83,7 +83,7 @@ export default {
         });
         callback && callback();
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
     *submitChangeMobile({ payload, callback }, { call, put }) {
@@ -94,7 +94,7 @@ export default {
         });
         callback && callback();
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
     *submitChangeAvatar({ payload, callback }, { call, put }) {
@@ -106,7 +106,7 @@ export default {
         // callback && callback();
         yield setTimeout(callback && callback(), 1000);
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
     *submitChangeG2Validate({ payload, callback }, { call, put }) {
@@ -118,7 +118,7 @@ export default {
         message.success('操作成功！');
         callback && callback();
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
     *fetchG2Info(_, { call, put }) {
@@ -129,7 +129,7 @@ export default {
           payload: response.data,
         });
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
     *submitUserAuth({ payload, callback }, { call, put }) {
@@ -141,7 +141,7 @@ export default {
         message.success('操作成功！');
         callback && callback();
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
     *submitUserPayMethod({ payload, callback }, { call, put }) {
@@ -153,7 +153,7 @@ export default {
         message.success('操作成功！');
         callback && callback();
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
     *submitDeleteUserPayMethod({ payload, callback }, { call, put }) {
@@ -166,7 +166,7 @@ export default {
         message.success('操作成功！');
         callback && callback();
       } else {
-        message.error(response.errmsg || '操作失败');
+        message.error(response.msg);
       }
     },
   },
@@ -200,11 +200,11 @@ export default {
         },
       };
     },
-    forgetPasswordHandle(state, { payload }) {
+    changePasswordHandle(state, { payload }) {
       return {
         ...state,
-        forgetPassword: {
-          ...state.forgetPassword,
+        changePassword: {
+          ...state.changePassword,
           result: payload.code,
         },
       };

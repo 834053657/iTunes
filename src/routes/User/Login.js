@@ -97,7 +97,7 @@ export default class LoginPage extends Component {
             name="captcha"
             placeholder="验证码"
             image={image}
-            onClick={this.loadCaptcha}
+            loadCaptcha={this.loadCaptcha}
           />
           <Submit loading={submitting}>登录</Submit>
           <div className={styles.other}>

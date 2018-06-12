@@ -39,7 +39,7 @@ export default {
       const response = yield call(queryConfigs) || {};
       if (response && response.code === 0) {
         CONFIG = { ...CONFIG, ...response.data };
-        CONFIG.countrysMap = mapKeys(response.data.countrys, 'id');
+        CONFIG.countrysMap = mapKeys(response.data.country, 'code');
       }
     },
     *fetchNotices({ payload }, { call, put }) {
@@ -105,7 +105,7 @@ export default {
         message.success('发送成功');
         callback && callback();
       } else {
-        message.error(res.errmsg || '操作失败');
+        message.error(res.msg || '操作失败');
       }
     },
     *verifyCaptcha({ payload, callback }, { call }) {
@@ -113,7 +113,7 @@ export default {
       if (res.code === 0) {
         callback && callback(res.data);
       } else {
-        message.error(res.errmsg || '操作失败');
+        message.error(res.msg);
       }
     },
   },

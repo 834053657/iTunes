@@ -95,7 +95,7 @@ function generator({ defaultProps, defaultRules, type }) {
                   <img
                     alt="captcha"
                     src={image}
-                    onClick={() => this.props.onClick()}
+                    onClick={() => this.props.loadCaptcha()}
                     className={styles.captcha}
                   />
                 </Col>

@@ -1,4 +1,5 @@
 import { routerRedux } from 'dva/router';
+import { message } from 'antd';
 import { accountLogin } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
@@ -16,7 +17,7 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(accountLogin, payload);
-      console.log(response);
+      // console.log(response);
       // Login successfully
       if (response.code === 0 && response.data) {
         yield put({
@@ -31,7 +32,8 @@ export default {
           dvaSocket(CONFIG.socket_url, {uid: 'abcxx'});
         } */
         yield put(routerRedux.push('/'));
-      } else if (response.code === 10) {
+      } else if (response.code === 1000) {
+        //  需谷歌验证
         yield put({
           type: 'changeLoginStatus',
           payload: {
@@ -39,6 +41,9 @@ export default {
             loginInfo: payload,
           },
         });
+      } else if (response.code === 1001) {
+        //  谷歌验证失败
+        message.error(response.msg);
       } else {
         yield put({
           type: 'changeLoginStatus',

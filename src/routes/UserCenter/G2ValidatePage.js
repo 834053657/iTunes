@@ -29,12 +29,12 @@ export default class G2ValidatePage extends Component {
     this.props.dispatch(routerRedux.push('/user-center/index'));
   };
 
-  handleSubmit = (err, values) => {
+  handleSubmit = (err, { captcha }) => {
     if (!err) {
       this.props.dispatch({
         type: 'user/submitChangeG2Validate',
         payload: {
-          ...values,
+          code: captcha,
           enable: true,
         },
         callback: this.handleBack,

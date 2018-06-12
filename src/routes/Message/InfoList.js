@@ -85,7 +85,7 @@ export default class InfoList extends Component {
           <Card bordered={false} className={styles.message_list}>
             <Table
               loading={loading}
-              //rowKey={record => record.id}
+              rowKey={record => record.id}
               dataSource={list}
               columns={columns}
               pagination={pagination}

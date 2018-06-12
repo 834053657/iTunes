@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, Button, Modal, Select, Row, Col, Divider } from 'antd';
+import { Form, Input, Button, Select, Row, Col } from 'antd';
 import classNames from 'classnames';
 import styles from './MobileForm.less';
 
 const FormItem = Form.Item;
-
-const InputGroup = Input.Group;
 const { Option } = Select;
 
 class MobileForm extends Component {
@@ -25,7 +23,6 @@ class MobileForm extends Component {
 
   state = {
     count: 0,
-    current: 0,
   };
 
   componentDidMount() {
@@ -36,9 +33,10 @@ class MobileForm extends Component {
     this.props.form.validateFields(
       ['telephone_code', 'telephone'],
       { force: true },
-      (err, values) => {
+      (err, { telephone, telephone_code }) => {
         if (!err) {
-          this.props.onGetCaptcha(values, () => {
+          const nation_code = CONFIG.countrysMap[telephone_code].nation_code;
+          this.props.onGetCaptcha({ nation_code, telephone }, () => {
             let count = 59;
             this.setState({ count });
             this.interval = setInterval(() => {
@@ -61,12 +59,19 @@ class MobileForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields({ force: true }, this.props.onSubmit);
+    this.props.form.validateFields({ force: true }, (err, values) => {
+      if (!err) {
+        const { telephone_code, verify_code: code, telephone: phone } = values;
+        const nation_code = CONFIG.countrysMap[telephone_code].nation_code;
+
+        this.props.onSubmit({ nation_code, code, phone });
+      }
+    });
   };
 
   render() {
     const { className, form, initialValue = {}, submitting, disabled } = this.props;
-    const { count, current } = this.state;
+    const { count } = this.state;
     const telephone_code = form.getFieldValue('telephone_code');
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -77,6 +82,7 @@ class MobileForm extends Component {
         sm: { span: 20 },
       },
     };
+    console.log(telephone_code);
 
     return (
       <div className={classNames(className, styles.login)}>
@@ -92,9 +98,9 @@ class MobileForm extends Component {
               ],
             })(
               <Select disabled={disabled}>
-                {CONFIG.countrys.map(item => (
-                  <Option key={item.code} value={item.id}>
-                    {item.name}
+                {CONFIG.country.map(item => (
+                  <Option key={item.code} value={item.code}>
+                    {item.name_cn}
                   </Option>
                 ))}
               </Select>
@@ -117,10 +123,8 @@ class MobileForm extends Component {
                     className={styles.mobile_input}
                     addonBefore={
                       telephone_code && CONFIG.countrysMap[telephone_code] ? (
-                        <span>+{CONFIG.countrysMap[telephone_code].code}</span>
-                      ) : (
-                        ''
-                      )
+                        <span>+{CONFIG.countrysMap[telephone_code].nation_code}</span>
+                      ) : null
                     }
                     style={{ width: '100%' }}
                   />

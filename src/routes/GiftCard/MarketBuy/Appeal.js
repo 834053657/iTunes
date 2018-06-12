@@ -80,7 +80,7 @@ export default class Process extends Component {
       type: 'leave_chat_room',
       payload: {
         order_id: 123,
-        room_id: 'xxx'
+        room_id: 'xxx',
       },
     });
   }
