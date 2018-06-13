@@ -282,7 +282,7 @@ export default class Register extends Component {
                   message: '请输入邀请码！',
                 },
               ],
-            })(<Input size="large" type="password" placeholder="邀请码" />)}
+            })(<Input size="large" placeholder="邀请码" />)}
           </FormItem>
 
           <FormItem>

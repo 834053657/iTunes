@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { stringify } from 'qs';
 import { routerRedux } from 'dva/router';
 import { fakeRegister, postVerify } from '../services/api';
 import { setAuthority } from '../utils/authority';
@@ -18,9 +19,7 @@ export default {
         yield put(
           routerRedux.push({
             pathname: '/user/register-result',
-            state: {
-              account: payload.email,
-            },
+            search: stringify({ account: payload.email }),
           })
         );
       } else {

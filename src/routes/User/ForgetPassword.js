@@ -22,8 +22,6 @@ export default class Register extends Component {
     this.loadCaptcha();
   }
 
-  componentWillUnmount() {}
-
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
