@@ -1,23 +1,37 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
-import { Badge, Button, message, InputNumber, Avatar } from 'antd';
-import { postSellOrder } from '../../services/api';
+import React, {Component} from 'react';
+import {connect} from 'dva';
+import {routerRedux} from 'dva/router';
+import {Badge, Button, message, InputNumber, Avatar} from 'antd';
+import {postSellOrder} from '../../services/api';
 import styles from './DealDetail.less';
 
-@connect(({ card }) => ({
+@connect(({card}) => ({
   detail: card.adDetail,
 }))
 export default class DealDeatil extends Component {
   constructor(props) {
     super();
-    this.state = {};
-
+    this.state = {
+      order_type: null
+    };
     this.postData = {
-      order_type: 1, //1代表购买  2代表出售
-      ad_id: 20, //广告ID
+      // order_type: props.card.adDetail.ad_type, //1代表购买  2代表出售
+      ad_id: props.match.params, //广告ID
       order_detail: [], // 订单详情
     };
+  }
+
+  ensureOrder = () => {
+    const {params: {id}} = this.props.match || {};
+    this.props.dispatch({
+      type: "card/createBuyOrder",
+      //payload:this.data
+    })
+    console.log(this.postData);
+    this.props.history.push({
+      pathname: `/card/deal-line/${id}`,
+      //query: { order_id: record },
+    });
   }
 
   handlerBuy = () => {
@@ -29,14 +43,14 @@ export default class DealDeatil extends Component {
       .then(() => {
         this.postData.order_detail = [];
       });
-    this.props.history.push({ pathname: `/card/buy-stepTwo` });
+    this.props.history.push({pathname: `/card/buy-stepTwo`});
   };
 
   handlerSell = async () => {
     const res = await postSellOrder(this.postData);
     console.log(res);
     if (res.code === 0 && res.data) {
-      const { order_id } = res.data || {};
+      const {order_id} = res.data || {};
       this.props.dispatch(routerRedux.push(`/card/order/${order_id}`));
     } else {
       message.error(res.msg);
@@ -58,12 +72,18 @@ export default class DealDeatil extends Component {
     }
   };
 
-  componentWillMount() {
-    const { params: { id } } = this.props.match || {};
+  componentDidMount() {
+    console.log('componentDidMount');
+    const {params: {id}} = this.props.match || {};
     this.props.dispatch({
       type: 'card/fetchAdDetail',
-      payload: { id },
-    });
+      payload: {id},
+      callback: (res) => {
+        this.setState({
+          order_type: res.ad_type
+        })
+      }
+    })
   }
 
   /**
@@ -72,8 +92,8 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   renderCondition = detail => {
-    const { condition_type, ad_type, money = [], stock = {} } = detail || {};
-    let { condition } = detail || {};
+    const {condition_type, ad_type, money = [], stock = {}} = detail || {};
+    let {condition} = detail || {};
     let content = null;
     // 主动出售
     if (condition_type === 1) {
@@ -120,8 +140,8 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   renderSellContent = detail => {
-    const { card_type, password_type, unit_price, deadline = 0, multiple = 0, guarantee_time } =
-      detail || {};
+    const {card_type, password_type, unit_price, deadline = 0, multiple = 0, guarantee_time} =
+    detail || {};
 
     return (
       <div className={styles.left}>
@@ -181,8 +201,8 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   renderBuyerContent = detail => {
-    const { card_type, password_type, unit_price, guarantee_time = 0, money = [], stock = {} } =
-      detail || {};
+    const {card_type, password_type, unit_price, guarantee_time = 0, money = [], stock = {}} =
+    detail || {};
 
     return (
       <div className={styles.left}>
@@ -239,7 +259,7 @@ export default class DealDeatil extends Component {
         <div className={styles.bottom}>
           <Button>取消</Button>
           <Button type="primary" onClick={this.ensureOrder}>
-            确认购买
+            确认购买2
           </Button>
         </div>
       </div>
@@ -252,8 +272,9 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   render() {
-    const { detail } = this.props;
-    const { owner = {}, ad_type, term } = detail || {};
+    const {detail} = this.props;
+    console.log(detail)
+    const {owner = {}, ad_type, term} = detail || {};
 
     return (
       <div className={styles.detailBox}>
@@ -262,7 +283,7 @@ export default class DealDeatil extends Component {
         <div className={styles.right}>
           <div className={styles.userInfo}>
             <div className={styles.avatar}>
-              <Avatar size="large" src={owner.avatar} />
+              <Avatar size="large" src={owner.avatar}/>
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>
