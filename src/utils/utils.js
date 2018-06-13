@@ -1,5 +1,6 @@
 // 请勿在此引用静态文件 因为会影响到mock 执行
 import moment from 'moment';
+import { parse } from 'qs';
 // import audioMsg from '../../public/audio/msg.mp3'
 
 export function fixedZero(val) {
@@ -190,4 +191,14 @@ export function playAudio() {
   const audio = document.createElement('audio');
   audio.src = require('../../public/audio/msg.mp3');
   audio.play();
+}
+
+/**
+ * 获取queryString
+ * @param queryString字符串
+ * @returns {*|{}}
+ */
+export function getQueryString(str_) {
+  const str = str_.replace('?', '');
+  return parse(str) || {};
 }

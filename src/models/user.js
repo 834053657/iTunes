@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
+import { stringify } from 'qs';
 import {
   query as queryUsers,
   queryCurrent,
@@ -43,19 +44,14 @@ export default {
           type: 'saveCurrentUser',
           payload: response.data,
         });
+      } else {
+        message.error(response.msg);
       }
     },
     *submitForgetPassword({ payload }, { call, put }) {
       const response = yield call(forgetPassword, payload);
       if (response.code === 0) {
-        console.log('xxx');
-        yield call(routerRedux.push, {
-          pathname: '/user/register-result',
-          query: {
-            account: payload.email,
-          },
-        });
-        // yield put(routerRedux.push(`/user/register-result?account=${payload.email}`));
+        yield put(routerRedux.push('/user/forget-password-result'));
       } else {
         message.error(response.msg);
       }
@@ -63,10 +59,7 @@ export default {
     *submitChangePassword({ payload }, { call, put }) {
       const response = yield call(resetPassword, payload);
       if (response.code === 0) {
-        yield put({
-          type: 'changePasswordHandle',
-          payload: response,
-        });
+        yield put(routerRedux.push('/user/change-password-result'));
       } else {
         message.error(response.msg);
       }
@@ -202,15 +195,6 @@ export default {
         currentUser: {
           ...state.currentUser,
           notifyCount: action.payload,
-        },
-      };
-    },
-    changePasswordHandle(state, { payload }) {
-      return {
-        ...state,
-        changePassword: {
-          ...state.changePassword,
-          result: payload.code,
         },
       };
     },

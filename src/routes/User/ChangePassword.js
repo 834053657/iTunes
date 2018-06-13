@@ -32,18 +32,6 @@ export default class Register extends Component {
     help: '',
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.result === 0) {
-      this.props.dispatch(
-        routerRedux.push({
-          pathname: '/user/change-password-result',
-        })
-      );
-    }
-  }
-
-  componentWillUnmount() {}
-
   getPasswordStatus = () => {
     const { form } = this.props;
     const value = form.getFieldValue('new_password');

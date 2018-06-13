@@ -65,7 +65,7 @@ export default class EmailModal extends Component {
     }
   };
 
-  handleSendCaptcha = ({ email }, callback) => {
+  handleSendCaptcha = (usage = 2, { email }, callback) => {
     return this.props.dispatch({
       type: 'global/sendVerify',
       payload: {
@@ -73,7 +73,7 @@ export default class EmailModal extends Component {
           mail: email,
         },
         type: 'mail',
-        usage: 2,
+        usage,
       },
       callback,
     });
@@ -90,7 +90,7 @@ export default class EmailModal extends Component {
         component: (
           <CheckEmailForm
             key="1"
-            onGetCaptcha={this.handleSendCaptcha}
+            onGetCaptcha={this.handleSendCaptcha.bind(this, 2)}
             initialValue={user}
             disabled
             onSubmit={this.handleCheckSubmit}
@@ -103,7 +103,7 @@ export default class EmailModal extends Component {
         component: (
           <CheckEmailForm
             key="2"
-            onGetCaptcha={this.handleSendCaptcha}
+            onGetCaptcha={this.handleSendCaptcha.bind(this, 3)}
             onSubmit={this.handleBindSubmit}
             onCancel={onCancel}
           />
