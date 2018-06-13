@@ -160,6 +160,12 @@ export const getRouterData = app => {
     '/card/market': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/List')),
     },
+    '/card/detail/:id': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealDetail')),
+    },
+    '/card/order/:id': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/OrderDetail')),
+    },
     '/card/market-buy': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketOne')),
     },

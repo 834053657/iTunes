@@ -23,7 +23,7 @@ module.exports = {
     'react/jsx-boolean-value': [1],
     'no-unused-expressions': [0],
     'react/jsx-closing-tag-location': [0],
-    'no-unused-vars': [1],
+    'no-unused-vars': [0],
     'generator-star-spacing': [0],
     'consistent-return': [0],
     'react/forbid-prop-types': [0],

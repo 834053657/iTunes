@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Table, Tabs, Button, Icon, Pagination, Input, message } from 'antd';
+import { filter } from 'lodash';
 import styles from './CardMarkets.less';
 
-@connect(({ card }) => ({
+@connect(({ card, loading }) => ({
   list: card.list,
+  loading: loading.effects['card/fetchCardList_'],
 }))
 export default class CardMarkets extends Component {
   constructor(props) {
@@ -17,8 +19,6 @@ export default class CardMarkets extends Component {
       maxDeno: null,
       type_page: 2,
     };
-
-    this.filter = {};
 
     this.setVisible = (type, visible) => {
       this.setState({
@@ -84,21 +84,21 @@ export default class CardMarkets extends Component {
       }
     };
 
-    //单价排序
-    this.tableChange = (pagination, filter, sorter) => {
-      //升序
-      if (sorter.order && sorter.order === 'ascend') {
-        this.filter = Object.assign(this.filter, { unit_price: 0 });
-        this.reSetPage();
-        this.reloadList();
-      }
-      //降序
-      if (sorter.order && sorter.order === 'descend') {
-        this.filter = Object.assign(this.filter, { unit_price: 1 });
-        this.reSetPage();
-        this.reloadList();
-      }
-    };
+    // //单价排序
+    // this.tableChange = (pagination, filter, sorter) => {
+    //   //升序
+    //   if (sorter.order && sorter.order === 'ascend') {
+    //     this.filter = Object.assign(this.filter, { unit_price: 0 });
+    //     this.reSetPage();
+    //     this.reloadList();
+    //   }
+    //   //降序
+    //   if (sorter.order && sorter.order === 'descend') {
+    //     this.filter = Object.assign(this.filter, { unit_price: 1 });
+    //     this.reSetPage();
+    //     this.reloadList();
+    //   }
+    // };
 
     this.setMinDeno = e => {
       this.setState({
@@ -176,30 +176,32 @@ export default class CardMarkets extends Component {
   };
 
   handleTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch, getValue } = this.props;
-    const { formValues } = this.state;
+    // const { dispatch, getValue } = this.props;
+    // const { formValues } = this.state;
+    //
+    // const filters = Object.keys(filtersArg).reduce((obj, key) => {
+    //   const newObj = { ...obj };
+    //   newObj[key] = getValue(filtersArg[key]);
+    //   return newObj;
+    // }, {});
 
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
+    // const params = {
+    //   page: pagination.current,
+    //   page_size: pagination.pageSize,
+    //   ...formValues,
+    //   // ...filters,
+    // };
+    // if (sorter.field) {
+    //   params.sorter = `${sorter.field}_${sorter.order}`;
+    // }
+    console.log(this.filter);
 
-    const params = {
-      page: pagination.current,
-      page_size: pagination.pageSize,
-      ...formValues,
-      // ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    this.fetchData(params);
+    this.fetchData();
   };
 
   initColumns = () => {
-    const columns = [
+    const { type } = this.state;
+    let columns = [
       {
         title: '用户名',
         dataIndex: 'owner.nickname',
@@ -210,14 +212,14 @@ export default class CardMarkets extends Component {
         filterDropdown: (
           <div style={{ padding: '0 10px 0 10px' }} className={styles.filterDropdownCard}>
             {CONFIG.card_type
-              ? CONFIG.card_type.map(type => {
+              ? CONFIG.card_type.map(item => {
                   return (
                     <div
                       className={styles.typeName}
-                      key={type.type}
-                      onClick={() => this.selectType(type)}
+                      key={item.type}
+                      onClick={() => this.selectType(item)}
                     >
-                      {type.name}
+                      {item.name}
                     </div>
                   );
                 })
@@ -244,6 +246,13 @@ export default class CardMarkets extends Component {
                 : '-'}
             </span>
           );
+        },
+      },
+      {
+        title: type === '2' ? '包含' : '要求',
+        dataIndex: 'password_type',
+        render: (v, row) => {
+          return <span>{v ? CONFIG.cardPwdType[v] : '-'}</span>;
         },
       },
       {
@@ -309,6 +318,10 @@ export default class CardMarkets extends Component {
         },
       },
       {
+        title: '发卡期限',
+        dataIndex: 'deadline',
+      },
+      {
         title: '单价',
         dataIndex: 'unit_price',
         sorter: (a, b) => a.unitPrice - b.unitPrice,
@@ -319,7 +332,7 @@ export default class CardMarkets extends Component {
       },
       {
         title: '操作',
-        dataIndex: 'operation',
+        dataIndex: 'operation_',
         render: (text, record) => {
           return (
             <Button
@@ -339,6 +352,11 @@ export default class CardMarkets extends Component {
       },
     ];
 
+    if (type === '2') {
+      columns = filter(columns, item => item.dataIndex !== 'deadline');
+    } else {
+      columns = filter(columns, item => item.dataIndex !== 'total_denomination');
+    }
     return columns;
   };
 
@@ -382,7 +400,10 @@ export default class CardMarkets extends Component {
           dataSource={items}
           columns={this.initColumns()}
           onChange={this.handleTableChange}
-          pagination={pagination}
+          pagination={{
+            ...pagination,
+            showQuickJumper: true,
+          }}
           loading={loading}
         />
       </div>

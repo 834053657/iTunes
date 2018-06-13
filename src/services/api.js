@@ -177,6 +177,14 @@ export async function getTransTerms() {
   return request('/itunes/user/trans_term/all');
 }
 
+// 出售／创建订单
+export async function postSellOrder(params) {
+  return request('/itunes/order/sell/create', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 //getToken
 export async function getToken(params) {
   return request('/itunes/user/upload_token', {
