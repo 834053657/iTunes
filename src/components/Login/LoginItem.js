@@ -82,7 +82,7 @@ function generator({ defaultProps, defaultRules, type }) {
             </FormItem>
           );
         } else if (type === 'ImgCaptcha') {
-          const inputProps = omit(otherProps, ['onGetCaptcha']);
+          const inputProps = omit(otherProps, ['loadCaptcha']);
           return (
             <FormItem>
               <Row gutter={8}>

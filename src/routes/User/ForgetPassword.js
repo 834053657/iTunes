@@ -10,7 +10,6 @@ const { Option } = Select;
 const InputGroup = Input.Group;
 
 @connect(({ user, loading }) => ({
-  result: user.forgetPassword.result,
   submitting: loading.effects['user/submitForgetPassword'],
 }))
 @Form.create()
@@ -21,17 +20,6 @@ export default class Register extends Component {
 
   componentDidMount() {
     this.loadCaptcha();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-    if (nextProps.result === 0) {
-      this.props.dispatch(
-        routerRedux.push({
-          pathname: '/user/forget-password-result',
-        })
-      );
-    }
   }
 
   componentWillUnmount() {}

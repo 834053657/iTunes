@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { routerRedux } from 'dva/router';
 import {
   query as queryUsers,
   queryCurrent,
@@ -47,10 +48,14 @@ export default {
     *submitForgetPassword({ payload }, { call, put }) {
       const response = yield call(forgetPassword, payload);
       if (response.code === 0) {
-        yield put({
-          type: 'forgetPasswordHandle',
-          payload: response,
+        console.log('xxx');
+        yield call(routerRedux.push, {
+          pathname: '/user/register-result',
+          query: {
+            account: payload.email,
+          },
         });
+        // yield put(routerRedux.push(`/user/register-result?account=${payload.email}`));
       } else {
         message.error(response.msg);
       }

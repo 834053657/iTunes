@@ -23,7 +23,6 @@ const passwordProgressMap = {
 };
 
 @connect(({ register, loading }) => ({
-  result: register.result,
   submitting: loading.effects['register/submit'],
 }))
 @Form.create()
@@ -36,20 +35,6 @@ export default class Register extends Component {
     help: '',
     image: '',
   };
-
-  componentWillReceiveProps(nextProps) {
-    const account = this.props.form.getFieldValue('email');
-    if (nextProps.result && nextProps.result.token) {
-      this.props.dispatch(
-        routerRedux.push({
-          pathname: '/user/register-result',
-          state: {
-            account,
-          },
-        })
-      );
-    }
-  }
 
   componentWillUnmount() {
     clearInterval(this.interval);
