@@ -157,6 +157,9 @@ export const getRouterData = app => {
         import('../routes/GiftCard/MarketSell/Seller/SellDetail')
       ),
     },
+    '/card/deal-line/:id': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealLine')),
+    },
     '/card/market': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/List')),
     },

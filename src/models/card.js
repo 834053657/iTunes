@@ -2,13 +2,14 @@ import { message } from 'antd';
 import {
   getCardlist,
   getTransTerms,
-  postSell,
   getToken,
   getAdDetail,
   getSellDetail,
-  ensureBuyOrder,
+  createSellOrder,
+  createBuyOrder,
   addBuyAd,
   getAppealInfo,
+  getOrderDetail,
 } from '../services/api';
 
 export default {
@@ -26,6 +27,11 @@ export default {
     buyDetail: null,
     appeal: null,
     adDetail: {},
+    odDetail: {
+      ad:{},
+      cards:{},
+      order:{},
+    },
   },
 
   effects: {
@@ -55,8 +61,13 @@ export default {
         payload: res,
       });
     },
-    *addCardSell({ payload }, { call, put }) {
-      const res = yield call(postSell, payload);
+    //发送确认订单请求
+    *createBuyOrder({ payload }, { call, put }) {
+      const res = yield call(createBuyOrder, payload);
+      return res;
+    },
+    *createSellOrder({ payload }, { call, put }) {
+      const res = yield call(createSellOrder, payload);
       return res;
     },
     *getToken({ payload }, { call, put }) {
@@ -67,14 +78,27 @@ export default {
       //   payload: res
       // })
     },
+    //获取订单详情
+    *getOrderDetail({ payload }, { call, put }) {
+      const res = yield call(getOrderDetail, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'GET_OD_DETAIL',
+          payload: res.data,
+        });
+      } else {
+        message.error(res.msg);
+      }
+    },
     //获取购买交易详情
-    *fetchAdDetail({ payload }, { call, put }) {
+    *fetchAdDetail({ payload, callback }, { call, put }) {
       const res = yield call(getAdDetail, payload);
       if (res.code === 0) {
         yield put({
           type: 'GET_AD_DETAIL',
           payload: res.data,
         });
+        yield callback && callback(res.data);
       } else {
         message.error(res.msg);
       }
@@ -86,11 +110,6 @@ export default {
         type: 'GET_SELL_DETAIL',
         payload: res,
       });
-    },
-    //发送确认订单请求
-    *ensureBuyOrder({ payload }, { call, put }) {
-      const res = yield call(ensureBuyOrder, payload);
-      return res;
     },
     //添加购买广告
     *addBuyAd({ payload }, { call, put }) {
@@ -149,11 +168,19 @@ export default {
         token: action.payload,
       };
     },
-    GET_AD_DETAIL(state, action) {
+    GET_OD_DETAIL(state, action) {
       return {
         ...state,
-        adDetail: action.payload,
+        odDetail: action.payload,
       };
+    },
+    GET_AD_DETAIL(state, action) {
+      const newState =  {
+        ...state,
+        adDetail: action.payload,
+      }
+      console.log('GET_AD_DETAIL', newState, action.payload);
+      return newState;
     },
     GET_SELL_DETAIL(state, action) {
       return {

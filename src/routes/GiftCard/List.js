@@ -1,30 +1,33 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import { Table, Tabs, Button, Icon, Pagination, Input, message } from 'antd';
-import { filter } from 'lodash';
+import React, {Component} from 'react';
+import { parse } from 'url';
+import {connect} from 'dva';
+import {Table, Tabs, Button, Icon, Pagination, Input, message} from 'antd';
+import {filter} from 'lodash';
+import {routerRedux} from 'dva/router';
 import styles from './CardMarkets.less';
 
-@connect(({ card, loading }) => ({
+@connect(({card, loading}) => ({
   list: card.list,
   loading: loading.effects['card/fetchCardList_'],
 }))
 export default class CardMarkets extends Component {
   constructor(props) {
     super(props);
+    let { type='2' } = parse(props.location.search, true).query || {}
     this.state = {
-      type: '2',
+      type,
       typeVisible: false,
       denoVisible: false,
       minDeno: null,
-      maxDeno: null,
+      maxDeno: null ,
       type_page: 2,
     };
 
-    this.setVisible = (type, visible) => {
-      this.setState({
-        [type]: visible,
-      });
-    };
+    // this.setVisible = (type, visible) => {
+    //   this.setState({
+    //     [type]: visible,
+    //   });
+    // };
 
     this.reSetPage = () => {
       this.state.pagination.page = 1;
@@ -39,8 +42,8 @@ export default class CardMarkets extends Component {
 
     //select Card Type
     this.selectType = d => {
-      console.log('card type');
-      this.filter = Object.assign(this.filter, { card_type: d.type });
+      // console.log('card type');
+      this.filter = Object.assign(this.filter, {card_type: d.type});
       this.reSetPage();
       this.reloadList();
       this.setState({
@@ -62,9 +65,9 @@ export default class CardMarkets extends Component {
 
     //after set filter，reload data
     this.reloadList = () => {
-      const { type_page } = this.state;
+      const {type_page} = this.state;
       // this.setState({ loading: true });
-      const { dispatch } = this.props;
+      const {dispatch} = this.props;
       if (+type_page === 2) {
         //购买
         dispatch({
@@ -129,9 +132,9 @@ export default class CardMarkets extends Component {
         return message.error('请输入正确范围');
       }
       if (a && !b) {
-        this.filter = Object.assign(this.filter, { minDenomination: a });
+        this.filter = Object.assign(this.filter, {minDenomination: a});
       } else if (!a && b) {
-        this.filter = Object.assign(this.filter, { maxDenomination: b });
+        this.filter = Object.assign(this.filter, {maxDenomination: b});
       } else if (a && b) {
         this.filter = Object.assign(this.filter, {
           minDenomination: a,
@@ -141,7 +144,7 @@ export default class CardMarkets extends Component {
         return message.error('请至少输入一个范围');
       }
       if (this.state.type_page === 0) {
-        this.setState({ denoVisible: false });
+        this.setState({denoVisible: false});
       }
       this.reSetPage();
       this.reloadList();
@@ -149,7 +152,13 @@ export default class CardMarkets extends Component {
   }
 
   changeTab = type => {
-    this.fetchData({ type }, () => {
+    this.fetchData({type}, () => {
+      //this.props.dispatch(routerRedux.replace({pathname: '/card/market', query: {type:1}}))
+      //this.props.history.replace(`/card/market?type=${type}`)
+      //routerRedux.push({pathname:`/card/market?type=${type}`})
+      this.props.dispatch(
+        routerRedux.replace({search: `?type=${type}`})
+      )
       this.setState({
         type,
       });
@@ -161,8 +170,8 @@ export default class CardMarkets extends Component {
   }
 
   fetchData = (params_, callback) => {
-    const params = { ...params_ };
-    const { type } = this.state;
+    const params = {...params_};
+    const {type} = this.state;
 
     params.type = params.type || type;
     this.props
@@ -194,13 +203,13 @@ export default class CardMarkets extends Component {
     // if (sorter.field) {
     //   params.sorter = `${sorter.field}_${sorter.order}`;
     // }
-    console.log(this.filter);
+    // console.log(this.filter);
 
     this.fetchData();
   };
 
   initColumns = () => {
-    const { type } = this.state;
+    const {type} = this.state;
     let columns = [
       {
         title: '用户名',
@@ -210,19 +219,19 @@ export default class CardMarkets extends Component {
         title: '类型',
         dataIndex: 'type',
         filterDropdown: (
-          <div style={{ padding: '0 10px 0 10px' }} className={styles.filterDropdownCard}>
+          <div style={{padding: '0 10px 0 10px'}} className={styles.filterDropdownCard}>
             {CONFIG.card_type
               ? CONFIG.card_type.map(item => {
-                  return (
-                    <div
-                      className={styles.typeName}
-                      key={item.type}
-                      onClick={() => this.selectType(item)}
-                    >
-                      {item.name}
-                    </div>
-                  );
-                })
+                return (
+                  <div
+                    className={styles.typeName}
+                    key={item.type}
+                    onClick={() => this.selectType(item)}
+                  >
+                    {item.name}
+                  </div>
+                );
+              })
               : null}
           </div>
         ),
@@ -233,12 +242,10 @@ export default class CardMarkets extends Component {
         filterIcon: (
           <Icon
             type="down"
-            onClick={() => this.setState({ typeVisible: !this.state.typeVisible })}
+            onClick={() => this.setState({typeVisible: !this.state.typeVisible})}
           />
         ),
         render: (text, record) => {
-          console.log(record);
-          console.log('record');
           return (
             <span>
               {CONFIG.card_type[record.card_type - 1]
@@ -267,11 +274,11 @@ export default class CardMarkets extends Component {
             <div className={styles.range}>
               <span>区间:</span>
               <span className={styles.min}>
-                <Input value={this.state.minDeno} onChange={e => this.setMinDeno(e)} />
+                <Input value={this.state.minDeno} onChange={e => this.setMinDeno(e)}/>
               </span>
               <span>---</span>
               <span className={styles.max}>
-                <Input value={this.state.maxDeno} onChange={e => this.setMaxDeno(e)} />
+                <Input value={this.state.maxDeno} onChange={e => this.setMaxDeno(e)}/>
               </span>
             </div>
             <div className={styles.rangeBtns}>
@@ -298,13 +305,13 @@ export default class CardMarkets extends Component {
             <span>
               {this.denoBuyList(record)
                 ? this.denoBuyList(record).map((m, index) => {
-                    return (
-                      <span key={index}>
-                        {m}
-                        {index < this.denoBuyList(record).length - 1 ? '/' : null}
-                      </span>
-                    );
-                  })
+                  return (
+                    <span key={index}>
+                      {m}
+                      {index < this.denoBuyList(record).length - 1 ? '/' : null}
+                    </span>
+                  );
+                })
                 : null}
             </span>
           );
@@ -338,14 +345,12 @@ export default class CardMarkets extends Component {
             <Button
               type="primary"
               onClick={() => {
-                console.log('record');
-                console.log(record);
                 this.props.history.push({
                   pathname: `/card/deal-detail/${record.id}`,
                 });
               }}
             >
-              购买
+              {type === '2' ? '购买' : '出售'}
             </Button>
           );
         },
@@ -361,6 +366,7 @@ export default class CardMarkets extends Component {
   };
 
   denoBuyList = r => {
+    // console.log(r)
     const a = [];
     if (r.money instanceof Array) {
       return r.money;
@@ -382,17 +388,17 @@ export default class CardMarkets extends Component {
   };
 
   render() {
-    const { list, loading } = this.props;
-    const { type } = this.state;
-    const { items, pagination } = list || {};
-    console.log(pagination);
+    const {list, loading} = this.props;
+    const {type} = this.state;
+    const {items, pagination} = list || {};
+    // console.log(pagination);
     return (
       <div>
         <Tabs onChange={this.changeTab} activeKey={type}>
           {/*出售广告*/}
-          <Tabs.TabPane tab="我要购买" key="2" />
+          <Tabs.TabPane tab="我要购买" key="2"/>
           {/*购买广告*/}
-          <Tabs.TabPane tab="我要出售" key="1" />
+          <Tabs.TabPane tab="我要出售" key="1"/>
         </Tabs>
 
         <Table

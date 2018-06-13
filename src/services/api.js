@@ -177,12 +177,26 @@ export async function getTransTerms() {
   return request('/itunes/user/trans_term/all');
 }
 
-// 出售／创建订单
-export async function postSellOrder(params) {
+// 出售创建订单
+export async function createSellOrder(params) {
   return request('/itunes/order/sell/create', {
     method: 'POST',
     body: params,
   });
+}
+
+// 购买创建订单
+export async function createBuyOrder(params) {
+  return request('/itunes/order/buy/create', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+
+//获取订单详情
+export async function getOrderDetail(params) {
+  return request(`/itunes/order/detail?${stringify(params)}`);
 }
 
 //getToken
@@ -204,13 +218,6 @@ export async function postSell(params) {
 //创建购买广告
 export async function addBuyAd(params) {
   return request('/itunes/ad/card/buy', {
-    method: 'POST',
-    body: params,
-  });
-}
-
-export async function ensureBuyOrder(params) {
-  return request('/itunes/order/buy/create', {
     method: 'POST',
     body: params,
   });
