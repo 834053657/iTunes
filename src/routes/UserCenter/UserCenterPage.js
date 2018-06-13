@@ -17,7 +17,7 @@ import styles from './UserCenterPage.less';
   currentUser: user.currentUser,
   loading: loading.models.global,
 }))
-export default class Analysis extends Component {
+export default class UserCenterPage extends Component {
   state = {
     emailModalVisible: false,
     mobileModalVisible: false,
