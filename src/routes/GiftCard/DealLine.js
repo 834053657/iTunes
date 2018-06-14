@@ -1,13 +1,18 @@
-import React, {Component} from 'react';
-import {connect} from 'dva';
-import {Button, Icon, Avatar, Select} from 'antd';
-import styles from './OrderDetail.less';
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { Button, Icon, Avatar, Select } from 'antd';
+import styles from './DealLine.less';
 import StepModel from './Step';
+import BuyerEnsure from './MarketBuy/BuyerEnsure';
+import SellerEnsure from './MarketBuy/SellerEnsure';
+import SendCard from './MarketSell/Seller/SendCard';
+import WaitBuyerCheck from './MarketSell/Buyer/WaitBuyerCheck';
 
 const Option = Select.Option;
 
-@connect(({card}) => ({
-  card,
+@connect(({ card, user }) => ({
+  user: user.currentUser.user,
+  detail: card.odDetail,
 }))
 export default class OrderDetail extends Component {
   constructor(props) {
@@ -16,137 +21,95 @@ export default class OrderDetail extends Component {
   }
 
   componentDidMount() {
-    const {params: {id}} = this.props.match || {};
+    console.log('DealLine');
+    const { params: { id } } = this.props.match || {};
     this.props.dispatch({
-      type: 'card/getOrderDetail',
+      type: 'card/fetchOrderDetail',
       payload: id,
-    })
+    });
   }
 
+  orderTitle = (ad, cards, order, user) => {
+    if (order.order_type === 1) {
+      if (user.id === ad.owner.id) {
+        return '您向XX出售';
+      } else {
+        return 'XX向您出售';
+      }
+    } else {
+      if (user.id === ad.owner.id) {
+        return 'XX向您购买';
+      } else {
+        return '您向XX购买';
+      }
+    }
+  };
+
+  //判断订单
+  orderType = () => {
+    const { detail } = this.props;
+    //console.log('detail.order.order_type');
+    //console.log(detail.order.order_type);
+    if (detail.order.order_type === 1) {
+      //主动购买
+      return 2;
+    } else {
+      //主动出售
+      return 1;
+    }
+  };
+  //判断买家和卖家
+  Identify = () => {
+    const { detail } = this.props;
+    const { user } = this.props;
+    if (!Object.keys(detail.ad).length) {
+      return false;
+    }
+    if (detail.order.order_type === 1) {
+      if (user.id === detail.ad.owner.id) {
+        return '卖家';
+      } else {
+        return '买家';
+      }
+    } else {
+      if (user.id === detail.ad.owner.id) {
+        return '卖家';
+      } else {
+        return '买家';
+      }
+    }
+  };
+
   render() {
-    const steps = [{title: '打开交易'}, {title: '确认信息'}, {title: '完成'}];
+    const { ad = {}, cards = {}, order = {} } = this.props.detail || {};
+    const { detail } = this.props;
+    const { user } = this.props;
+    const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
+    if (!Object.keys(ad).length) {
+      return false;
+    }
+    console.log('sdfhjksadfuasd');
+    console.log(this.orderType());
+    console.log(this.Identify());
+
     return (
-      <div className={styles.stepTwoBox}>
-        <StepModel steps={steps} current={1}/>
-        <div className={styles.bottom}>
-          <div className={styles.bottomLeft}>
-            <div className={styles.orderInfo}>
-              <h5>
-                <span>订单：</span>
-                <span className={styles.text}>115216524713875</span>
-              </h5>
-              <div className={styles.orderDescribe}>
-                您向Jason购买总面额300的亚马逊美卡亚马逊美卡
-              </div>
-              <div className={styles.price}>
-                <span>单价：</span>
-                <span>1</span>RMB
-              </div>
-              <div>
-                <span>总价：</span>
-                <span>100</span>RMB
-              </div>
-            </div>
-
-            <div className={styles.guarantee}>
-              <h5>
-                保障时间剩余 &nbsp;
-                <Icon type="clock-circle-o"/>
-                &nbsp;
-                {'30'}分钟
-              </h5>
-
-              <Button
-                type="danger"
-                onClick={() => {
-                  this.props.history.push({pathname: `/card/buy-appeal`});
-                }}
-              >
-                申诉
-              </Button>
-              <Button type="primary">确认释放</Button>
-            </div>
-
-            <div className={styles.chatInfo}>
-              <Select defaultValue="lucy" style={{width: 120}}>
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
-                <Option value="Yiminghe">yiminghe</Option>
-              </Select>
-              <ul>
-                <li>
-                  <div className={styles.leftAvatar}>
-                    <span className={styles.avaTop}>
-                      <Avatar className={styles.avatar} size="large" icon="user"/>
-                    </span>
-                    <span className={styles.avaName}>Jason</span>
-                  </div>
-                  <div className={styles.chatItem}>
-                    <p className={styles.chatText}>
-                      您好，请稍等片刻待我确认请稍等片刻待我确认请稍等片刻待我确认
-                    </p>
-                    <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-                  </div>
-                </li>
-                <li>
-                  <div className={styles.leftAvatar}>
-                    <span className={styles.avaTop}>
-                      <Avatar className={styles.avatar} size="large" icon="user"/>
-                    </span>
-                    <span className={styles.avaName}>Jason</span>
-                  </div>
-                  <div className={styles.chatItem}>
-                    <p className={styles.chatText}>
-                      您好，请稍等片刻待我确认请稍等片刻待我确认请稍等片刻待我确认
-                    </p>
-                    <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-                  </div>
-                </li>
-                <li>
-                  <div className={styles.leftAvatar}>
-                    <span className={styles.avaTop}>
-                      <Avatar className={styles.avatar} size="large" icon="user"/>
-                    </span>
-                    <span className={styles.avaName}>Jason</span>
-                  </div>
-                  <div className={styles.chatItem}>
-                    <p className={styles.chatText}>
-                      您好，请稍等片刻待我确认请稍等片刻待我确认请稍等片刻待我确认
-                    </p>
-                    <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className={styles.stepBottomRight}>
-            <div className={styles.largeBtnBox}>
-              <Button>查看礼品卡清单</Button>
-            </div>
-
-            <div className={styles.ownerInfo}>
-              <div className={styles.userInfo}>
-                <div className={styles.avatar}>
-                  <Avatar size="large" icon="user"/>
-                </div>
-                <div className={styles.avatarRight}>
-                  <div className={styles.top}>
-                    <span className={styles.name}>nickname</span>
-                    <span className={styles.online}>&nbsp;</span>
-                  </div>
-                  <div className={styles.infoBottom}>
-                    <span className={styles.dealTit}>30日成单：</span>
-                    <span className={styles.dealNum}>ownerInfo.month_volume</span>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.term}>
-                <h3>交易条款：</h3>
-                <p>info.term</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className={styles.dealLine}>
+        {//我要购买列表 买家视角 订单状态：确认信息
+        this.orderType() === 2 && this.Identify() === '买家' ? (
+          <BuyerEnsure detail={detail} user={user} orderTitle={this.orderTitle} />
+        ) : null}
+        {//我要购买列表 卖家视角 订单状态：确认信息
+        this.orderType() === 2 && this.Identify() === '卖家' ? (
+          <SellerEnsure detail={detail} user={user} orderTitle={this.orderTitle} />
+        ) : null}
+        {//我要出售列表 卖家视角 订单状态：输入cdk
+        this.orderType() === 1 && this.Identify() === '买家' ? (
+          <SendCard detail={detail} user={user} orderTitle={this.orderTitle} />
+        ) : null}
+        {//我要出售列表 买家视角 订单状态：等待买家查收
+        this.orderType() === 1 && this.Identify() === '卖家' ? (
+          <WaitBuyerCheck detail={detail} user={user} orderTitle={this.orderTitle} />
+        ) : null}
       </div>
     );
   }

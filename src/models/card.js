@@ -28,9 +28,9 @@ export default {
     appeal: null,
     adDetail: {},
     odDetail: {
-      ad:{},
-      cards:{},
-      order:{},
+      ad: {},
+      cards: {},
+      order: {},
     },
   },
 
@@ -64,11 +64,19 @@ export default {
     //发送确认订单请求
     *createBuyOrder({ payload }, { call, put }) {
       const res = yield call(createBuyOrder, payload);
-      return res;
+      if (res.code === 0) {
+        return res.data;
+      } else {
+        message.error(res.msg);
+      }
     },
     *createSellOrder({ payload }, { call, put }) {
       const res = yield call(createSellOrder, payload);
-      return res;
+      if (res.code === 0) {
+        return res.data;
+      } else {
+        message.error(res.msg);
+      }
     },
     *getToken({ payload }, { call, put }) {
       const res = yield call(getToken, payload);
@@ -79,7 +87,7 @@ export default {
       // })
     },
     //获取订单详情
-    *getOrderDetail({ payload }, { call, put }) {
+    *fetchOrderDetail({ payload }, { call, put }) {
       const res = yield call(getOrderDetail, payload);
       if (res.code === 0) {
         yield put({
@@ -171,15 +179,16 @@ export default {
     GET_OD_DETAIL(state, action) {
       return {
         ...state,
-        odDetail: action.payload,
+        odDetail: {
+          ...action.payload,
+        },
       };
     },
     GET_AD_DETAIL(state, action) {
-      const newState =  {
+      const newState = {
         ...state,
         adDetail: action.payload,
-      }
-      console.log('GET_AD_DETAIL', newState, action.payload);
+      };
       return newState;
     },
     GET_SELL_DETAIL(state, action) {
@@ -189,8 +198,6 @@ export default {
       };
     },
     GET_APPEAL_INFO(state, action) {
-      console.log('action');
-      console.log(action);
       return {
         ...state,
         appeal: action.payload,
