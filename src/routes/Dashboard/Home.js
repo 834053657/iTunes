@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { map } from 'lodash';
 import moment from 'moment';
+// import LinesEllipsis from 'react-lines-ellipsis'
 import {
   Row,
   Col,
@@ -73,7 +74,7 @@ export default class Analysis extends Component {
       //autoplaySpeed: 5000,
       slidesToShow: 1,
       slidesToScroll: 1,
-      autoplay: true,
+      autoplay: false,
     },
   };
 
@@ -139,6 +140,13 @@ export default class Analysis extends Component {
     }
   }
 
+  getContent = v => {
+    if (v.content.length > 350)
+      return (<span>{`${v.content.substr(0, 350)}... `}<a href={v.link} target="_blank">更多</a></span>);
+    else
+      return (<span>{v.content}</span>);
+  }
+
   render() {
     const { rangePickerValue, salesType, currentTabKey, settings } = this.state;
     const { chart, loading, statistics, banners } = this.props;
@@ -154,7 +162,9 @@ export default class Analysis extends Component {
               </a>
               <Row className={styles.content}>
                 <Col span={16}>
-                  <div className={styles.content_title}>{item.title}</div>
+                  <div className={styles.content_title}>
+                    <a href={item.link} target="_blank">{item.title}</a>
+                  </div>
                 </Col>
                 <Col span={8}>
                   <div className={styles.content_date}>
@@ -164,7 +174,9 @@ export default class Analysis extends Component {
                   </div>
                 </Col>
                 <Col span={24}>
-                  <div className={styles.desc}>{item.content}</div>.
+                  <div className={styles.desc}>
+                    {this.getContent(item)}
+                  </div>
                 </Col>
               </Row>
             </div>
@@ -172,6 +184,8 @@ export default class Analysis extends Component {
         );
       });
     }
+
+    
 
     // const {
     //   visitData,

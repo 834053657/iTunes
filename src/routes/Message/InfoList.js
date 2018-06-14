@@ -17,6 +17,7 @@ const columns = [
     title: '发布时间',
     dataIndex: 'publish_at',
     width: '30%',
+    align: 'right',
     render: val => (
       <span>{val ? moment(new Date(val * 1000)).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>
     ),

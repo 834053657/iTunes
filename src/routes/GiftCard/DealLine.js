@@ -36,13 +36,11 @@ export default class OrderDetail extends Component {
       } else {
         return 'XX向您出售';
       }
-    } else {
-      if (user.id === ad.owner.id) {
+    } else if (user.id === ad.owner.id) {
         return 'XX向您购买';
       } else {
         return '您向XX购买';
       }
-    }
   };
 
   //判断订单
@@ -71,13 +69,11 @@ export default class OrderDetail extends Component {
       } else {
         return '买家';
       }
-    } else {
-      if (user.id === detail.ad.owner.id) {
+    } else if (user.id === detail.ad.owner.id) {
         return '卖家';
       } else {
         return '买家';
       }
-    }
   };
 
   render() {
