@@ -310,6 +310,9 @@ export const getRouterData = app => {
     '/user/change-password/:code': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/User/ChangePassword')),
     },
+    '/wallet': {
+      component: dynamicWrapper(app, ['user', 'wallet'], () => import('../routes/Wallet/Layout')),
+    },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },

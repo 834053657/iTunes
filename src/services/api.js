@@ -242,3 +242,9 @@ export async function getAppealInfo(params) {
 export async function getCaptcha(params) {
   return request(`/itunes/user/captcha?${stringify(params)}`);
 }
+
+//礼品卡列表actions结束
+
+export async function getTransfers(params) {
+  return request(`/itunes/user/get_transfers?${stringify(params)}`);
+}

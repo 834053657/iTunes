@@ -4,6 +4,7 @@ import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
+import numeral from 'numeral';
 import NoticeIcon from '../CustomNoticeIcon';
 // import HeaderSearch from '../HeaderSearch';
 import TopMenu from '../TopMenu';
@@ -74,6 +75,7 @@ export default class GlobalHeader extends PureComponent {
       notices,
       noticesCount,
     } = this.props;
+    const { wallet } = currentUser || {};
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userCenter">
@@ -121,6 +123,14 @@ export default class GlobalHeader extends PureComponent {
           </Dropdown>
           {currentUser.token && currentUser.user ? (
             <span>
+              <Link to="/wallet">
+                <Icon type="wallet" style={{ fontSize: '16px', marginRight: '6px' }} />{' '}
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: `${numeral(wallet.amount || 0).format('0,0')}￥`,
+                  }}
+                />
+              </Link>
               <NoticeIcon
                 className={styles.action}
                 count={noticesCount}
