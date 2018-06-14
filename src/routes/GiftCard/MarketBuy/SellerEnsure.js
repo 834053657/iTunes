@@ -1,40 +1,45 @@
 import React, { Component } from 'react';
-import { connect } from 'dva/index';
-import { Button, Icon, Steps, Avatar, Select } from 'antd';
-import styles from '../../MarketBuy/StepTwo.less';
-import StepModel from '../../Step';
+import { connect } from 'dva';
+import { Button, Icon, Avatar, Select } from 'antd';
+import styles from './OrderDetail.less';
+import StepModel from '../Step';
 
-const Step = Steps.Step;
 const Option = Select.Option;
 
-@connect(({ card }) => ({
-  card,
-}))
-export default class BuyCard extends Component {
+export default class SellerEnsure extends Component {
   constructor(props) {
     super();
+    this.state = {
+      detail: props.detail,
+      user: props.user,
+    };
+  }
+  componentDidMount() {
+    console.log(this.state.detail);
   }
 
-  componentWillMount() {}
-
-  componentDidMount() {}
-
-  componentWillUnmount() {}
-
   render() {
-    const steps = [{ title: '查收礼品卡' }, { title: '确认信息3' }, { title: '完成' }];
+    const { ad = {}, cards = {}, order = {} } = this.state.detail || {};
+    const { user, detail } = this.state;
+    const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
+    console.log('ad');
+    console.log(ad);
     return (
       <div className={styles.stepTwoBox}>
+        <div>SellerEnsure</div>
         <StepModel steps={steps} current={1} />
-
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
             <div className={styles.orderInfo}>
               <h5>
                 <span>订单：</span>
-                <span className={styles.text}>115216524713875</span>
+                <span className={styles.text}>{order.order_no || '-'}</span>
               </h5>
-              <div className={styles.orderDescribe}>Jason向您出售总面额50的亚马逊美卡</div>
+              <div className={styles.orderDescribe}>
+                {this.props.orderTitle(ad, cards, order, user)}
+                总面额{order.money}的
+                {order.order_type ? CONFIG.card_type[order.order_type].name || '-' : '-'}
+              </div>
               <div className={styles.price}>
                 <span>单价：</span>
                 <span>1</span>RMB
@@ -50,8 +55,9 @@ export default class BuyCard extends Component {
                 保障时间剩余 &nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                {'30'}分钟
+                {ad.guarantee_time}分钟
               </h5>
+
               <Button
                 type="danger"
                 onClick={() => {
@@ -62,6 +68,7 @@ export default class BuyCard extends Component {
               </Button>
               <Button type="primary">确认释放</Button>
             </div>
+
             <div className={styles.chatInfo}>
               <Select defaultValue="lucy" style={{ width: 120 }}>
                 <Option value="jack">Jack</Option>
@@ -116,13 +123,7 @@ export default class BuyCard extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button
-                onClick={() => {
-                  this.props.history.push({ pathname: `/card/card-preview` });
-                }}
-              >
-                查看礼品卡清单
-              </Button>
+              <Button>查看礼品卡清单</Button>
             </div>
 
             <div className={styles.ownerInfo}>

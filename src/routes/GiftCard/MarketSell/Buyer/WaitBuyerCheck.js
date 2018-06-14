@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
+import React, {Component} from 'react';
+import {connect} from 'dva';
 import {
   Table,
   Tabs,
@@ -12,27 +12,34 @@ import {
   Steps,
   Avatar,
 } from 'antd';
-import styles from './ReceiveCard.less';
+import styles from './WaitBuyerCheck.less';
 import StepModel from '../../Step';
 
 const Step = Steps.Step;
 
-@connect(({ card }) => ({
+@connect(({card}) => ({
   card,
 }))
-export default class Process extends Component {
+export default class WaitBuyerCheck extends Component {
   constructor(props) {
     super();
-    this.state = {};
+    this.state = {
+      detail: props.detail,
+      user: props.user
+    };
   }
 
-  componentWillMount() {}
-
-  componentDidMount() {}
-
-  componentWillUnmount() {}
+  count = (order) => {
+    let a = 0;
+    order.order_detail.map(o => {
+      return a + o.count
+    })
+    return a
+  }
 
   render() {
+    const {user, detail} = this.state
+    const {ad = {}, cards = {}, order = {}} = this.state.detail;
     const steps = [
       {title: "查收礼品卡"},
       {title: "确认信息"},
@@ -48,48 +55,58 @@ export default class Process extends Component {
           <div className={styles.orderInfo}>
             <h5>
               <span>订单：</span>
-              <span className={styles.text}>115216524713875</span>
+              <span className={styles.text}>{order.order_no || '-'}</span>
             </h5>
-            <div className={styles.orderDescribe}>您向Jason购买总面额300的亚马逊美卡亚马逊美卡</div>
+            <div className={styles.orderDescribe}>
+              {this.props.orderTitle(ad, cards, order, user)}
+              总面额{order.money}的
+              {order.order_type ? CONFIG.card_type[order.order_type].name || '-' : '-'}
+            </div>
           </div>
           <ul>
             <li className={styles.item}>
               <span className={styles.title}>类型：</span>
-              <div className={styles.content}>type[info.card_type].name</div>
+              <div className={styles.content}>
+                {order.order_type ? CONFIG.card_type[order.order_type].name || '-' : '-'}
+              </div>
             </li>
             <li className={styles.item}>
               <span className={styles.title}>单价：</span>
-              <div className={styles.content}>info.unit_priceRMB</div>
+              <div className={styles.content}>
+                {ad.unit_price}
+              </div>
             </li>
             <li className={styles.item}>
               <span className={styles.title}>数量：</span>
-              <div className={styles.content}>passwordType(info.password_type)</div>
+              <div className={styles.content}>
+                {this.count(order)}
+              </div>
             </li>
             <li className={styles.item}>
-              <span className={styles.title}>面额：</span>
-              <div className={styles.content}>passwordType(info.password_type)</div>
+              <span className={styles.title}>总面额：</span>
+              <div className={styles.content}>{order.money}</div>
             </li>
             <li className={styles.item}>
               <span className={styles.title}>总价：</span>
-              <div className={styles.content}>amountMoney()RMB</div>
+              <div className={styles.content}>{order.amount}RMB</div>
             </li>
           </ul>
           <div className={styles.bottom}>
             <h4>
               对方剩余&nbsp;
-              <Icon type="clock-circle-o" />
+              <Icon type="clock-circle-o"/>
               &nbsp;10分钟确认
             </h4>
             <h4>
               请在&nbsp;
-              <Icon type="clock-circle-o" />
+              <Icon type="clock-circle-o"/>
               &nbsp;10分钟内确认
             </h4>
             <Button
               type="primary"
               size="large"
               onClick={() => {
-                this.props.history.push({ pathname: `/card/ad-ensureInfo` });
+                this.props.history.push({pathname: `/card/ad-ensureInfo`});
               }}
             >
               立即查收
@@ -100,7 +117,7 @@ export default class Process extends Component {
         <div className={styles.right}>
           <div className={styles.userInfo}>
             <div className={styles.avatar}>
-              <Avatar size="large" icon="user" />
+              <Avatar size="large" icon="user"/>
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>

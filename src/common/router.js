@@ -210,7 +210,7 @@ export const getRouterData = app => {
     },
     '/card/ad-receiveCard': {
       component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/MarketSell/Buyer/ReceiveCard')
+        import('../routes/GiftCard/MarketSell/Buyer/WaitBuyerCheck')
       ),
     },
     '/card/ad-ensureInfo': {
