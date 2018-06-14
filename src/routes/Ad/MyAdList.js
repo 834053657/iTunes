@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
+import { delay } from 'lodash'
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import {
@@ -49,7 +50,7 @@ export default class List extends Component {
     dispatch({
       type: 'ad/updateAd',
       payload: { id: r.id, status },
-      callback: this.refreshGrid(),
+      callback: this.refreshGrid,
     });
   };
 
@@ -71,7 +72,7 @@ export default class List extends Component {
     dispatch({
       type: 'ad/deleteAd',
       payload: { id: r.id },
-      callback: this.refreshGrid(),
+      callback: this.refreshGrid,
     });
   };
 

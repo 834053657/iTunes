@@ -42,16 +42,15 @@ export default {
     *updateAd({ payload, callback }, { call, put }) {
       const response = yield call(fakeAd, payload);
       if (response.code === 0) {
+        yield put({
+          type: 'fakeAd',
+          payload: response,
+        });
         message.success('操作成功');
+        if (callback) callback();
       } else {
         message.error(response.msg);
       }
-
-      yield put({
-        type: 'fakeAd',
-        payload: response,
-      });
-      if (callback) callback();
     },
     *deleteAd({ payload, callback }, { call, put }) {
       const response = yield call(removeAd, payload);
