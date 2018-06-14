@@ -169,10 +169,10 @@ export function getSystemUrl(env) {
   let web_name = '凯歌交易平台';
 
   if (env === 'dev') {
-    // base_url = 'http://47.106.111.213:3000/mock/19';
-    base_url = 'http://47.106.111.213:9001';
+    base_url = 'http://47.106.111.213:3000/mock/19';
     web_name += '(DEV)';
     socket_url = 'http://localhost:3000/socket/push';
+    // socket_url = 'http://47.106.111.213:9000/socket.io/';
   } else if (env === 'test') {
     base_url = 'http://47.106.111.213:9001';
     web_name += '(TEST)';
@@ -185,7 +185,10 @@ export function getSystemUrl(env) {
 export function getMessageContent(msgObj) {
   //get language
   const lang = 'zh_CN';
-  return CONFIG[`message_type_${lang}`][msgObj.msg_type];
+  if (msgObj.msg_type === 1)
+    return msgObj.title;
+  else
+    return CONFIG[`message_type_${lang}`][msgObj.msg_type];
 }
 
 export function playAudio() {

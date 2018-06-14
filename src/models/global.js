@@ -47,8 +47,8 @@ export default {
       const res = yield call(queryMessageList, payload);
 
       // only for ui test
-      if (payload && payload.type === 2) res.data.items = [];
-      if (payload && payload.type === 3) res.data.items = res.data.items.slice(0, 2);
+      // if (payload && payload.type === 2) res.data.items = [];
+      // if (payload && payload.type === 3) res.data.items = res.data.items.slice(0, 2);
 
       yield put({
         type: 'saveNotices',
