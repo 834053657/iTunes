@@ -182,7 +182,7 @@ export default class PayMethodForm extends Component {
   render() {
     const { formItemLayout } = this.state;
     const { form, submitting, initialValues = {} } = this.props;
-    const PAY_MENTS = omit(CONFIG.payments, 'sys_transfer');
+    const PAY_MENTS = omit(CONFIG.payments, 'site');
     const { getFieldDecorator } = form;
 
     return (

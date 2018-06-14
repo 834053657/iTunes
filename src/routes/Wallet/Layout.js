@@ -17,6 +17,7 @@ const { TabPane } = Tabs;
   ...wallet,
   currentUser: user.currentUser,
   transferLoading: loading.effects['wallet/fetchTransfer'],
+  rechargSubmitting: loading.effects['wallet/sendRecharge'],
 }))
 export default class Layout extends Component {
   state = {};
@@ -29,37 +30,22 @@ export default class Layout extends Component {
     };
   }
 
-  componentDidMount() {
-    this.handleFetchTransfer();
-  }
-
-  handleFetchTransfer = params => {
-    const { activeKey } = this.state;
-
-    if (activeKey === '3') {
-      this.props.dispatch({
-        type: 'wallet/fetchTransfer',
-        payload: params,
-      });
-    }
-  };
+  componentDidMount() {}
 
   handleTabsChange = activeKey => {
-    this.handleFetchTransfer();
+    this.setState({
+      activeKey,
+    });
     this.props.dispatch(
       routerRedux.replace({
         search: stringify({ activeKey }),
       })
     );
-    this.setState({
-      activeKey,
-    });
   };
 
   render() {
     const { activeKey } = this.state;
     const { wallet = {} } = this.props.currentUser || {};
-    const { transfer = {}, transferLoading } = this.props;
 
     return (
       <Fragment>
@@ -72,15 +58,18 @@ export default class Layout extends Component {
               <h1>我的钱包</h1>
               <div>
                 总资产折合：<span
+                  className="text-blue"
                   dangerouslySetInnerHTML={{
                     __html: `${numeral(wallet.amount || 0).format('0,0')}￥`,
                   }}
                 />{' '}
                 CNY | 冻结：<span
+                  className="text-blue"
                   dangerouslySetInnerHTML={{
                     __html: `${numeral(wallet.frozen || 0).format('0,0')}￥`,
                   }}
-                />
+                />{' '}
+                CNY
               </div>
             </Col>
           </Row>
@@ -88,19 +77,13 @@ export default class Layout extends Component {
           <div className={styles.content}>
             <Tabs onChange={this.handleTabsChange} type="card" activeKey={activeKey}>
               <TabPane tab="充值" key="1">
-                {activeKey === '1' && <RechargeForm />}
+                {activeKey === '1' && <RechargeForm {...this.props} />}
               </TabPane>
               <TabPane tab="提现" key="2">
-                {activeKey === '2' && <WithdrawForm />}
+                {activeKey === '2' && <WithdrawForm {...this.props} />}
               </TabPane>
               <TabPane tab="交易记录" key="3">
-                {activeKey === '3' && (
-                  <TransferList
-                    data={transfer}
-                    loading={transferLoading}
-                    onChange={this.handleFetchTransfer}
-                  />
-                )}
+                {activeKey === '3' && <TransferList {...this.props} />}
               </TabPane>
             </Tabs>
           </div>

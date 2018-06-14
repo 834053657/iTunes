@@ -1,7 +1,7 @@
 import { message } from 'antd';
-import { stringify } from 'qs';
+import { mapKeys } from 'lodash';
 import { routerRedux } from 'dva/router';
-import { getTransfers } from '../services/api';
+import { getTransfers, queryPayments, userRecharge, userWithdraw } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 
@@ -9,6 +9,7 @@ export default {
   namespace: 'wallet',
 
   state: {
+    sysPayments: {},
     transfer: {
       list: [],
       pagination: {
@@ -29,26 +30,49 @@ export default {
         message.error(response.msg);
       }
     },
-    // *sendVerify({ payload, callback }, { call }) {
-    //   const response = yield call(postVerify, payload);
-    //   if (callback) {
-    //     yield call(callback, response);
-    //   }
-    // },
+    *fetchSysPayments(_, { call, put }) {
+      // 获取服务器字典
+      const response = yield call(queryPayments) || {};
+      if (response && response.code === 0) {
+        yield put({
+          type: 'savePayments',
+          payload: mapKeys(response.data, 'id'),
+        });
+      }
+    },
+    *sendRecharge({ payload, callback }, { call }) {
+      const response = yield call(userRecharge, payload);
+      if (callback) {
+        yield call(callback, response);
+      }
+    },
+    *sendWithdraw({ payload, callback }, { call }) {
+      const response = yield call(userWithdraw, payload);
+      if (callback) {
+        yield call(callback, response);
+      }
+    },
   },
 
   reducers: {
     saveList(state, { payload }) {
+      const pagination = {
+        ...state.transfer.pagination,
+        page: payload.paginator.page,
+        total: payload.paginator.total,
+      };
       return {
         ...state,
         transfer: {
-          list: payload.results,
-          pagination: {
-            ...state.transfer.pagination,
-            page: payload.pagination.page,
-            total: payload.pagination.total,
-          },
+          list: payload.items,
+          pagination,
         },
+      };
+    },
+    savePayments(state, { payload }) {
+      return {
+        ...state,
+        sysPayments: payload,
       };
     },
   },
