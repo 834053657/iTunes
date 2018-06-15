@@ -105,7 +105,7 @@ export default class TransferList extends Component {
   renderDetail = modalInfo => {
     const { created_at, amount, fee, goods_type, trade_type } = modalInfo || {};
     return (
-      <DescriptionList col={1} style={{ marginBottom: 24 }}>
+      <DescriptionList col={1} className={styles.detailBox}>
         <Description term="产品类型">
           {goods_type ? CONFIG.goods_type[goods_type] : '无'}
         </Description>
@@ -129,7 +129,6 @@ export default class TransferList extends Component {
   render() {
     const { modalInfo } = this.state;
     const { transfer = {}, transferLoading } = this.props;
-    console.log(transfer);
     const { list = [], pagination = {} } = transfer || {};
 
     return (

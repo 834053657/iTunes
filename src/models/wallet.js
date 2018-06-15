@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import { mapKeys } from 'lodash';
 import { routerRedux } from 'dva/router';
-import { getTransfers, queryPayments, userRecharge, userWithdraw } from '../services/api';
+import { getTransfers, queryPayments, userRecharge, userWithdraw, queryFee } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 
@@ -31,13 +31,22 @@ export default {
       }
     },
     *fetchSysPayments(_, { call, put }) {
-      // 获取服务器字典
       const response = yield call(queryPayments) || {};
       if (response && response.code === 0) {
         yield put({
           type: 'savePayments',
           payload: mapKeys(response.data, 'id'),
         });
+      }
+    },
+    *fetchFee({ payload, callback }, { call, put }) {
+      const response = yield call(queryFee, payload) || {};
+      if (response.code === 0) {
+        if (callback) {
+          yield call(callback, response.data);
+        }
+      } else {
+        message.error(response.msg);
       }
     },
     *sendRecharge({ payload, callback }, { call }) {

@@ -70,7 +70,8 @@ class RechargeForm extends Component {
 
   renderPaymentInfo = () => {
     const { form, sysPayments } = this.props;
-    const id = form.getFieldValue('user_payment_id');
+    const id = form.getFieldValue('platform_payment_id');
+    console.log(id);
     if (!id) {
       return null;
     }
@@ -126,7 +127,7 @@ class RechargeForm extends Component {
                 },
               ],
             })(
-              <Select placeholder="选择充值方式">
+              <Select size="large" placeholder="选择充值方式">
                 {map(sysPayments, ({ id, payment_method }) => (
                   <Option key={id} value={id}>
                     {payment_method && CONFIG.payments[payment_method]
@@ -147,7 +148,7 @@ class RechargeForm extends Component {
                 },
               ],
             })(
-              <Select placeholder="请选择您的充值账号">
+              <Select size="large" placeholder="请选择您的充值账号">
                 {map(userPayments, item => (
                   <Option key={item.id} value={item.id}>
                     <span>
@@ -170,7 +171,14 @@ class RechargeForm extends Component {
                   message: '请输入充值金额！',
                 },
               ],
-            })(<InputNumber style={{ width: '100%' }} size="large" placeholder="充值金额" />)}
+            })(
+              <InputNumber
+                precision={2}
+                style={{ width: '100%' }}
+                size="large"
+                placeholder="充值金额"
+              />
+            )}
           </FormItem>
           <FormItem className={styles.buttonBox}>
             <Button

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, InputNumber, message } from 'antd';
 import { map } from 'lodash';
 import classNames from 'classnames';
+import { yuan } from 'components/Charts';
+
 import styles from './RechargeForm.less';
 
 const FormItem = Form.Item;
@@ -18,6 +20,10 @@ const formItemLayout = {
 };
 
 class WithdrawForm extends Component {
+  state = {
+    fee: 0,
+    oldAmount: 0,
+  };
   static defaultProps = {
     className: '',
     onGetCaptcha: () => {},
@@ -41,10 +47,35 @@ class WithdrawForm extends Component {
           callback: res => {
             if (res.code === 0) {
               message.success('提现成功');
+              this.setState({
+                fee: 0,
+                oldAmount: 0,
+              });
               this.props.form.resetFields();
             } else {
               message.success(res.msg);
             }
+          },
+        });
+      }
+    });
+  };
+
+  handleGetFee = e => {
+    e.preventDefault();
+    const { form } = this.props;
+    const { oldAmount } = this.state;
+
+    this.props.form.validateFields(['amount'], { force: true }, (err, value) => {
+      if (!err && oldAmount !== value.amount) {
+        this.props.dispatch({
+          type: 'wallet/fetchFee',
+          payload: value,
+          callback: (res = {}) => {
+            this.setState({
+              oldAmount: value.amount,
+              fee: res.fee,
+            });
           },
         });
       }
@@ -101,10 +132,23 @@ class WithdrawForm extends Component {
                   message: '请输入提现金额！',
                 },
               ],
-            })(<InputNumber style={{ width: '100%' }} size="large" placeholder="提现金额" />)}
+            })(
+              <InputNumber
+                onBlur={this.handleGetFee}
+                // formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                // parser={value => value.replace(/￥\s?|(,*)/g, '')}
+                style={{ width: '100%' }}
+                precision={2}
+                size="large"
+                placeholder="提现金额"
+              />
+            )}
           </FormItem>
           <FormItem {...formItemLayout} label="手续费">
-            123
+            <span
+              className="text-blue"
+              dangerouslySetInnerHTML={{ __html: yuan(this.state.fee) }}
+            />
           </FormItem>
           <FormItem {...formItemLayout} label="输入密码">
             {getFieldDecorator('password', {

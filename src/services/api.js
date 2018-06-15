@@ -28,6 +28,13 @@ export async function queryPayments(params) {
   return request('/itunes/wallet/platform/payments');
 }
 
+export async function queryFee(params) {
+  return request('/itunes/wallet/fee', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function userRecharge(params) {
   return request('/itunes/wallet/recharge', {
     method: 'POST',
