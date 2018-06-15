@@ -30,7 +30,7 @@ export default class Help extends PureComponent {
 
     return (
       <PageHeaderLayout className={styles.title} title="帮助">
-        <Content type="help" />
+        <Content type="1" />
       </PageHeaderLayout>
     );
   }

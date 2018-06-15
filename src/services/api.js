@@ -86,7 +86,7 @@ export async function removeTerms(params) {
 }
 
 export async function queryStaticDtl(params) {
-  return request(`/itunes/info/static?${stringify(params)}`);
+  return request(`/itunes/config/footer?${stringify(params)}`);
 }
 
 export async function queryProjectNotice() {
