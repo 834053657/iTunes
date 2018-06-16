@@ -30,19 +30,30 @@ const app = dva({
   history: createHistory(),
 });
 
+// 参考文档 https://socket.io/docs/client-api/#with-extraheaders
 const options = {
-  extraHeaders: {
-    UID: '1xxx',
-    TOKEN: 'xxx',
-    language: 'CN-zh',
+  // 'force new connection' : true,
+  // extraHeaders: {
+  //   'ITUNES-UID': 11211,
+  //   'TUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
+  //   'ITUNES-LANGUAGE': 'CN-zh',
+  // },
+  transportOptions: {
+    polling: {
+      extraHeaders: {
+        'ITUNES-UID': 11211,
+        'TUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
+        'ITUNES-LANGUAGE': 'CN-zh',
+      },
+    },
   },
 };
 
 // 2. Plugins
-if (process.env.KG_API_ENV === 'dev' || !process.env.KG_API_ENV) {
-  // 暂时写法 只在开发环境打开socket
-  app.use(dvaSocket(CONFIG.socket_url, options));
-}
+// if (process.env.KG_API_ENV === 'dev' || !process.env.KG_API_ENV) {
+// 暂时写法 只在开发环境打开socket
+app.use(dvaSocket(CONFIG.socket_url, options));
+// }
 app.use(createLoading());
 
 // 3. Register global model
@@ -53,5 +64,7 @@ app.router(require('./router').default);
 
 // 5. Start
 app.start('#root');
+
+// app.use(dvaSocket(CONFIG.socket_url, options));
 
 export default app._store; // eslint-disable-line
