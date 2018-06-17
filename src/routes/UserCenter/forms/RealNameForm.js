@@ -70,7 +70,7 @@ export default class RealNameForm extends Component {
     let imageUrl = null;
     if (Array.isArray(fileList) && fileList[0] && fileList[0].status === 'done') {
       const file = fileList[0];
-      imageUrl = upload.prefix + file.response.hash;
+      imageUrl = file.response ? upload.prefix + file.response.hash : file.url;
     }
 
     const uploadButton = (
@@ -105,7 +105,6 @@ export default class RealNameForm extends Component {
   };
 
   normFile = e => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -113,7 +112,7 @@ export default class RealNameForm extends Component {
   };
 
   render() {
-    const { form, submitting } = this.props;
+    const { form, submitting, initialValues = {} } = this.props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -129,6 +128,7 @@ export default class RealNameForm extends Component {
         <Form onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout} label="真实姓名">
             {getFieldDecorator('name', {
+              initialValue: initialValues.name,
               rules: [
                 {
                   required: true,
@@ -139,6 +139,7 @@ export default class RealNameForm extends Component {
           </FormItem>
           <FormItem {...formItemLayout} label="身份证号">
             {getFieldDecorator('cardno', {
+              initialValue: initialValues.cardno,
               rules: [
                 {
                   required: true,
@@ -151,6 +152,9 @@ export default class RealNameForm extends Component {
 
           <FormItem>
             {getFieldDecorator('front_image', {
+              initialValue: initialValues.front_image
+                ? [{ url: initialValues.front_image, status: 'done' }]
+                : [],
               valuePropName: 'fileList',
               getValueFromEvent: this.normFile,
               rules: [
@@ -163,6 +167,9 @@ export default class RealNameForm extends Component {
           </FormItem>
           <FormItem>
             {getFieldDecorator('back_image', {
+              initialValue: initialValues.back_image
+                ? [{ url: initialValues.back_image, status: 'done' }]
+                : [],
               valuePropName: 'fileList',
               getValueFromEvent: this.normFile,
               rules: [

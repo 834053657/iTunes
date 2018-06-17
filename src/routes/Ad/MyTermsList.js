@@ -77,7 +77,7 @@ export default class TermsList extends Component {
     dispatch({
       type: 'ad/deleteTerms',
       payload: { id: r.id },
-      callback: this.refreshGrid(),
+      callback: this.refreshGrid,
     });
   };
 

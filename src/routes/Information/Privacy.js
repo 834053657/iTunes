@@ -27,7 +27,7 @@ export default class Privacy extends PureComponent {
 
     return (
       <PageHeaderLayout className={styles.title} title="隐私">
-        <Content type="privacy" />
+        <Content type="2" />
       </PageHeaderLayout>
     );
   }

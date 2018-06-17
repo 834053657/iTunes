@@ -15,7 +15,7 @@ export default {
     wechat: '微信支付',
     alipay: '支付宝',
     bank: '银行卡',
-    sys_transfer: '站内转账',
+    site: '站内转账',
   },
   ad_type: {
     1: '买入',
@@ -90,5 +90,10 @@ export default {
     1: '密码',
     2: '图片',
     3: '密码和图片',
+  },
+  tradeType: {
+    1: '交易',
+    2: '充值',
+    3: '提现',
   },
 };

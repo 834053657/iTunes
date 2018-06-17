@@ -71,7 +71,7 @@ export default class InfoDetail extends PureComponent {
     ];
 
     return (
-      <PageHeaderLayout title="咨询详情" breadcrumbList={breadcrumbList}>
+      <PageHeaderLayout title="资讯详情" breadcrumbList={breadcrumbList}>
         <div className={clsString}>
           <Card bordered={false}>
             <div>

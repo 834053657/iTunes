@@ -47,8 +47,8 @@ export default {
       const res = yield call(queryMessageList, payload);
 
       // only for ui test
-      if (payload && payload.type === 2) res.data.items = [];
-      if (payload && payload.type === 3) res.data.items = res.data.items.slice(0, 2);
+      // if (payload && payload.type === 2) res.data.items = [];
+      // if (payload && payload.type === 3) res.data.items = res.data.items.slice(0, 2);
 
       yield put({
         type: 'saveNotices',
@@ -140,13 +140,13 @@ export default {
 
       console.log('notices', items);
       map(items, v => {
-        if (v.msg_type === 104 && v.content && v.content.goods_type && v.content.order_id)
+        if (v.msg_type === 104 && v.content && v.content.goods_type && v.content.ref_id)
           tmp1.push(v);
         else newItems.push(v);
       });
       const orderMessages =
         groupBy(tmp1, d => {
-          return `${d.content.goods_type}_${d.content.order_id}`;
+          return `${d.content.goods_type}_${d.content.ref_id}`;
         }) || [];
       // console.log(111, orderMessages);
       map(orderMessages, v => {

@@ -1,10 +1,18 @@
 import { Server, SocketIO } from 'mock-socket';
 import createSocket from 'dva-socket.io';
-import { push_system_message, enter_chat_room, leave_chat_room, receive_message } from '../services/socket';
+import {
+  push_system_message,
+  enter_chat_room,
+  leave_chat_room,
+  receive_message,
+} from '../services/socket';
 import { playAudio } from './utils';
 
 export function dvaSocket(url, option) {
-  const isDev = process.env.NODE_ENV === 'development';
+  // 如需调试线上socket 请吧isDev 设置成false
+  const isDev = false;
+  // const isDev = process.env.NODE_ENV === 'development';
+
   if (isDev) {
     const mockServer = new Server(url);
     mockServer.on('connection', async server => {
@@ -59,7 +67,7 @@ export function dvaSocket(url, option) {
         receive_message: (data, dispatch, getState) => {
           const { data: msg } = data;
           const { appeal } = getState().card;
-          const { data : { appeal_info } } = appeal;
+          const { data: { appeal_info } } = appeal;
 
           // appeal_info.unshift(msg);
           // console.log(555, appeal);
@@ -85,6 +93,7 @@ export function dvaSocket(url, option) {
         pull_system_message: {
           evaluate: (action, dispatch, getState) => action.type === 'push_system_message',
           data: ({ payload }) => {
+            console.log('socket - push_system_messag');
             return payload;
           },
         },

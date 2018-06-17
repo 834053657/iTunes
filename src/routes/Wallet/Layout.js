@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Icon, Tabs } from 'antd';
+import { Row, Col, Icon, Tabs, Alert } from 'antd';
+import { routerRedux, Link } from 'dva/router';
 import numeral from 'numeral';
 import { stringify } from 'qs';
-import { routerRedux } from 'dva/router';
+import { findIndex } from 'lodash';
 import { getQueryString } from '../../utils/utils';
 import RechargeForm from './forms/RechargeForm';
 import WithdrawForm from './forms/WithdrawForm';
@@ -17,6 +18,7 @@ const { TabPane } = Tabs;
   ...wallet,
   currentUser: user.currentUser,
   transferLoading: loading.effects['wallet/fetchTransfer'],
+  rechargSubmitting: loading.effects['wallet/sendRecharge'],
 }))
 export default class Layout extends Component {
   state = {};
@@ -29,37 +31,36 @@ export default class Layout extends Component {
     };
   }
 
-  componentDidMount() {
-    this.handleFetchTransfer();
-  }
-
-  handleFetchTransfer = params => {
-    const { activeKey } = this.state;
-
-    if (activeKey === '3') {
-      this.props.dispatch({
-        type: 'wallet/fetchTransfer',
-        payload: params,
-      });
-    }
-  };
+  componentDidMount() {}
 
   handleTabsChange = activeKey => {
-    this.handleFetchTransfer();
+    this.setState({
+      activeKey,
+    });
     this.props.dispatch(
       routerRedux.replace({
         search: stringify({ activeKey }),
       })
     );
-    this.setState({
-      activeKey,
-    });
   };
 
   render() {
     const { activeKey } = this.state;
-    const { wallet = {} } = this.props.currentUser || {};
-    const { transfer = {}, transferLoading } = this.props;
+    const { wallet = {}, payments = [] } = this.props.currentUser || {};
+    const hadEnabledPayment = findIndex(payments, i => i.status === 4);
+    const Warning = (
+      <Alert
+        message="请注意!"
+        description={
+          <span>
+            您当前没有已认证支付账号，请前往 <Link to="/user-center/index">个人中心</Link>{' '}
+            填写支付方式信息并提交审核
+          </span>
+        }
+        type="warning"
+        showIcon
+      />
+    );
 
     return (
       <Fragment>
@@ -72,15 +73,18 @@ export default class Layout extends Component {
               <h1>我的钱包</h1>
               <div>
                 总资产折合：<span
+                  className="text-blue"
                   dangerouslySetInnerHTML={{
                     __html: `${numeral(wallet.amount || 0).format('0,0')}￥`,
                   }}
                 />{' '}
                 CNY | 冻结：<span
+                  className="text-blue"
                   dangerouslySetInnerHTML={{
                     __html: `${numeral(wallet.frozen || 0).format('0,0')}￥`,
                   }}
-                />
+                />{' '}
+                CNY
               </div>
             </Col>
           </Row>
@@ -88,19 +92,17 @@ export default class Layout extends Component {
           <div className={styles.content}>
             <Tabs onChange={this.handleTabsChange} type="card" activeKey={activeKey}>
               <TabPane tab="充值" key="1">
-                {activeKey === '1' && <RechargeForm />}
+                {!hadEnabledPayment
+                  ? activeKey === '1' && <RechargeForm {...this.props} />
+                  : Warning}
               </TabPane>
               <TabPane tab="提现" key="2">
-                {activeKey === '2' && <WithdrawForm />}
+                {hadEnabledPayment
+                  ? activeKey === '2' && <WithdrawForm {...this.props} />
+                  : Warning}
               </TabPane>
               <TabPane tab="交易记录" key="3">
-                {activeKey === '3' && (
-                  <TransferList
-                    data={transfer}
-                    loading={transferLoading}
-                    onChange={this.handleFetchTransfer}
-                  />
-                )}
+                {activeKey === '3' && <TransferList {...this.props} />}
               </TabPane>
             </Tabs>
           </div>

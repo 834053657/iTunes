@@ -35,7 +35,7 @@ export default class TermsModal extends Component {
             title: values.title,
             content: values.content,
           },
-          callback: this.props.onOK(),
+          callback: this.props.onOK,
         });
       }
     });

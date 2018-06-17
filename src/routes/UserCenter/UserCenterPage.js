@@ -2,7 +2,19 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { Link } from 'dva/router';
-import { Row, Col, Avatar, Divider, Upload, message, Button, Icon, Modal, Popconfirm } from 'antd';
+import {
+  Row,
+  Col,
+  Avatar,
+  Divider,
+  Upload,
+  message,
+  Button,
+  Icon,
+  Modal,
+  Popconfirm,
+  Popover,
+} from 'antd';
 import { map } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import EmailModal from './modals/EmailModal';
@@ -177,6 +189,10 @@ export default class UserCenterPage extends Component {
 
   renderRealNameModal = () => {
     const { realNameModalVisible } = this.state;
+    const { currentUser } = this.props;
+    const { auth } = currentUser || {};
+    const { real_name = {} } = auth || {};
+    const { auth_detail = {} } = real_name || {};
     return (
       <Modal
         width={500}
@@ -187,7 +203,11 @@ export default class UserCenterPage extends Component {
         footer={null}
       >
         {realNameModalVisible && (
-          <RealNameForm onCancel={this.hideRealNameModal} onSubmit={this.handleSubmitRealName} />
+          <RealNameForm
+            initialValues={auth_detail}
+            onCancel={this.hideRealNameModal}
+            onSubmit={this.handleSubmitRealName}
+          />
         )}
       </Modal>
     );
@@ -451,10 +471,25 @@ export default class UserCenterPage extends Component {
                           {real_name.status && CONFIG.auth_status[real_name.status]
                             ? CONFIG.auth_status[real_name.status]
                             : CONFIG.auth_status[1]}
+                          {real_name.status === 3 ? (
+                            <Popover
+                              placement="bottomRight"
+                              title="审核反馈"
+                              content={real_name.reason}
+                              trigger="click"
+                            >
+                              <a> 原因 </a>
+                            </Popover>
+                          ) : null}
                         </div>
                       </div>
                     </div>
-                    <div className={styles.box_item_content} />
+                    <div className={styles.box_item_content}>
+                      <div className={styles.mb4}>
+                        {real_name.auth_detail && real_name.auth_detail.name}
+                      </div>
+                      <div>{real_name.auth_detail && real_name.auth_detail.cardno}</div>
+                    </div>
                     <ul className={styles.box_item_action}>
                       <li>
                         {/*{
@@ -521,6 +556,16 @@ export default class UserCenterPage extends Component {
                               {item.status && CONFIG.auth_status[item.status]
                                 ? CONFIG.auth_status[item.status]
                                 : '-'}
+                              {item.status === 3 ? (
+                                <Popover
+                                  placement="bottomRight"
+                                  title="审核反馈"
+                                  content={item.reason}
+                                  trigger="click"
+                                >
+                                  <a> 原因 </a>
+                                </Popover>
+                              ) : null}
                             </div>
                           </div>
                         </div>

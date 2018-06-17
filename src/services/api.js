@@ -24,6 +24,31 @@ export async function readMessage(params) {
   });
 }
 
+export async function queryPayments(params) {
+  return request('/itunes/wallet/platform/payments');
+}
+
+export async function queryFee(params) {
+  return request('/itunes/wallet/fee', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function userRecharge(params) {
+  return request('/itunes/wallet/recharge', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function userWithdraw(params) {
+  return request('/itunes/wallet/recharge', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function queryMyAdList(params) {
   return request(`/itunes/user/ad/all?${stringify(params)}`);
 }
@@ -61,7 +86,7 @@ export async function removeTerms(params) {
 }
 
 export async function queryStaticDtl(params) {
-  return request(`/itunes/info/static?${stringify(params)}`);
+  return request(`/itunes/config/footer?${stringify(params)}`);
 }
 
 export async function queryProjectNotice() {
@@ -276,5 +301,5 @@ export async function sendQuickMsg(params) {
 //礼品卡列表actions结束
 
 export async function getTransfers(params) {
-  return request(`/itunes/user/get_transfers?${stringify(params)}`);
+  return request(`/itunes/wallet/tansaction?${stringify(params)}`);
 }

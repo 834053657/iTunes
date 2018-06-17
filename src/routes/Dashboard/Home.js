@@ -2,20 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { map } from 'lodash';
 import moment from 'moment';
-import {
-  Row,
-  Col,
-  Icon,
-  Card,
-  Tabs,
-  Table,
-  Radio,
-  DatePicker,
-  Tooltip,
-  Menu,
-  Dropdown,
-} from 'antd';
-import numeral from 'numeral';
+// import LinesEllipsis from 'react-lines-ellipsis'
+import { Row, Col, Icon, Tooltip } from 'antd';
 import {
   ChartCard,
   yuan,
@@ -27,25 +15,11 @@ import {
   Pie,
   TimelineChart,
 } from 'components/Charts';
-import Trend from 'components/Trend';
-import NumberInfo from 'components/NumberInfo';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { getTimeDistance } from '../../utils/utils';
 import styles from './Home.less';
 import HomeIcon from '../../../public/home_icon.png';
-
-const { TabPane } = Tabs;
-const { RangePicker } = DatePicker;
-
-const rankingListData = [];
-for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
-    title: `工专路 ${i} 号店`,
-    total: 323234,
-  });
-}
 
 const Yuan = ({ children }) => (
   <span
@@ -62,9 +36,6 @@ const Yuan = ({ children }) => (
 }))
 export default class Analysis extends Component {
   state = {
-    salesType: 'all',
-    currentTabKey: '',
-    rangePickerValue: getTimeDistance('year'),
     settings: {
       dots: true,
       //fade: true,
@@ -73,7 +44,7 @@ export default class Analysis extends Component {
       //autoplaySpeed: 5000,
       slidesToShow: 1,
       slidesToScroll: 1,
-      autoplay: true,
+      autoplay: false,
     },
   };
 
@@ -93,55 +64,22 @@ export default class Analysis extends Component {
     // });
   }
 
-  handleChangeSalesType = e => {
-    this.setState({
-      salesType: e.target.value,
-    });
+  getContent = v => {
+    if (v.content.length > 350)
+      return (
+        <span>
+          {`${v.content.substr(0, 350)}... `}
+          <a href={v.link} target="_blank">
+            更多
+          </a>
+        </span>
+      );
+    else return <span>{v.content}</span>;
   };
-
-  handleTabChange = key => {
-    this.setState({
-      currentTabKey: key,
-    });
-  };
-
-  handleRangePickerChange = rangePickerValue => {
-    this.setState({
-      rangePickerValue,
-    });
-
-    this.props.dispatch({
-      type: 'chart/fetchSalesData',
-    });
-  };
-
-  selectDate = type => {
-    this.setState({
-      rangePickerValue: getTimeDistance(type),
-    });
-
-    this.props.dispatch({
-      type: 'chart/fetchSalesData',
-    });
-  };
-
-  isActive(type) {
-    const { rangePickerValue } = this.state;
-    const value = getTimeDistance(type);
-    if (!rangePickerValue[0] || !rangePickerValue[1]) {
-      return;
-    }
-    if (
-      rangePickerValue[0].isSame(value[0], 'day') &&
-      rangePickerValue[1].isSame(value[1], 'day')
-    ) {
-      return styles.currentDate;
-    }
-  }
 
   render() {
-    const { rangePickerValue, salesType, currentTabKey, settings } = this.state;
-    const { chart, loading, statistics, banners } = this.props;
+    const { settings } = this.state;
+    const { statistics, banners } = this.props;
 
     const bannersContent = [];
     if (banners && banners.length > 0) {
@@ -154,7 +92,11 @@ export default class Analysis extends Component {
               </a>
               <Row className={styles.content}>
                 <Col span={16}>
-                  <div className={styles.content_title}>{item.title}</div>
+                  <div className={styles.content_title}>
+                    <a href={item.link} target="_blank">
+                      {item.title}
+                    </a>
+                  </div>
                 </Col>
                 <Col span={8}>
                   <div className={styles.content_date}>
@@ -164,7 +106,7 @@ export default class Analysis extends Component {
                   </div>
                 </Col>
                 <Col span={24}>
-                  <div className={styles.desc}>{item.content}</div>.
+                  <div className={styles.desc}>{this.getContent(item)}</div>
                 </Col>
               </Row>
             </div>
@@ -172,18 +114,6 @@ export default class Analysis extends Component {
         );
       });
     }
-
-    // const {
-    //   visitData,
-    //   visitData2,
-    //   salesData,
-    //   searchData,
-    //   offlineData,
-    //   offlineChartData,
-    //   salesTypeData,
-    //   salesTypeDataOnline,
-    //   salesTypeDataOffline,
-    // } = chart;
 
     const topColResponsiveProps = {
       xs: 24,
@@ -193,7 +123,6 @@ export default class Analysis extends Component {
       xl: 6,
       style: { marginBottom: 24 },
     };
-    console.log(statistics);
     return (
       <Fragment>
         <Row gutter={24}>
@@ -206,18 +135,18 @@ export default class Analysis extends Component {
             </a>
           </Col>
         </Row>
-        {/* (<button
-            onClick={() => {
-              this.props.dispatch({
-                type: 'push_system_message',
-                payload: {
-                  abc: 123,
-                },
-              });
-            }}
-          >
-            测试推送消息
-          </button>) */}
+        {/*<button
+          onClick={() => {
+            this.props.dispatch({
+              type: 'push_system_message',
+              payload: {
+                abc: 123,
+              },
+            });
+          }}
+        >
+          测试推送消息
+        </button>*/}
         <div className={styles.banner}>
           <Slider {...settings}>{bannersContent}</Slider>
         </div>

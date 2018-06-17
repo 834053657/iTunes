@@ -27,7 +27,6 @@ export default class PayMethodForm extends Component {
   constructor(props) {
     super(props);
     const { payment_detail = {} } = props.initialValues || {};
-    console.log(payment_detail, payment_detail.bank_account);
 
     this.state = {
       formItemLayout: {
@@ -182,7 +181,8 @@ export default class PayMethodForm extends Component {
   render() {
     const { formItemLayout } = this.state;
     const { form, submitting, initialValues = {} } = this.props;
-    const PAY_MENTS = omit(CONFIG.payments, 'sys_transfer');
+    const { id } = initialValues || {};
+    const PAY_MENTS = omit(CONFIG.payments, 'site');
     const { getFieldDecorator } = form;
 
     return (
@@ -209,7 +209,7 @@ export default class PayMethodForm extends Component {
               取消
             </Button>
             <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
-              确定
+              {id ? '更新' : '确定'}
             </Button>
           </FormItem>
         </Form>

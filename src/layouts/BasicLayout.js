@@ -193,7 +193,9 @@ class BasicLayout extends React.Component {
       payload: { all: false, id: item.id },
       callback: () => {
         if (item.msg_type === 1) {
-          this.props.dispatch(routerRedux.push(`/message/info-detail/${item.id}`));
+          this.props.dispatch(
+            routerRedux.push(`/message/info-detail/${item.content && item.content.ref_id}`)
+          );
         } else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(item.msg_type) >= 0) {
           Modal.success({
             // title: item.title,
@@ -204,9 +206,9 @@ class BasicLayout extends React.Component {
         } else if ([101, 102, 103, 104, 105, 106, 107].indexOf(item.msg_type) >= 0) {
           //todo redict to order detail
           if (item.content && item.content.goods_type === 1)
-            this.props.dispatch(routerRedux.push(`/itunes/order/${item.content.order_id}`));
+            this.props.dispatch(routerRedux.push(`/itunes/order/${item.content.ref_id}`));
           else if (item.content && item.content.goods_type === 2) {
-            this.props.dispatch(routerRedux.push(`/card/order/${item.content.order_id}`));
+            this.props.dispatch(routerRedux.push(`/card/order/${item.content.ref_id}`));
           }
         } else {
           // todo
