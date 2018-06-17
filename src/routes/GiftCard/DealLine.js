@@ -33,7 +33,7 @@ export default class OrderDetail extends Component {
 
   componentDidMount() {
     const { params: { id } } = this.props.match || {};
-<<<<<<< HEAD
+
     this.props.dispatch({
       type: 'card/fetchOrderDetail',
       payload: id,
@@ -63,7 +63,6 @@ export default class OrderDetail extends Component {
     const { params: { id } } = this.props.match || {};
 
     this.leaveRoom(id);
-=======
     const { order } = this.props.detail;
     this.props
       .dispatch({
@@ -78,7 +77,6 @@ export default class OrderDetail extends Component {
       .then(() => {
         //this.initStatue(order)
       });
->>>>>>> 971b0d3c50e096f22e63d831eb154d711c0bd043
   }
 
   initStatue = order => {
