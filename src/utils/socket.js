@@ -1,3 +1,5 @@
+import { message } from 'antd';
+import { routerRedux } from 'dva/router';
 import { Server, SocketIO } from 'mock-socket';
 import createSocket from 'dva-socket.io';
 import {
@@ -12,11 +14,11 @@ export function dvaSocket(url, option) {
   // 如需调试线上socket 请吧isDev 设置成false
   const isDev = false;
   // const isDev = process.env.NODE_ENV === 'development';
-
+console.log('socket-url', url);
   if (isDev) {
     const mockServer = new Server(url);
     mockServer.on('connection', async server => {
-      console.log('mock-socket connected......');
+      console.log('*************8mock-socket connected......');
       // const res = await push_system_message();
       // mockServer.emit('test', res);
     });
@@ -47,7 +49,7 @@ export function dvaSocket(url, option) {
     {
       on: {
         push_system_message: (data, dispatch, getState) => {
-          const { data: msg } = data;
+          const { data: msg } = JSON.parse(data);
           const { oldNotices } = getState().global;
 
           oldNotices.unshift(msg);
@@ -57,6 +59,9 @@ export function dvaSocket(url, option) {
             payload: rs,
           });
           playAudio();
+        },
+        test: (data, dispatch, getState) => {
+          console.log(888, data);
         },
         enter_room: (data, dispatch, getState) => {
           console.log(data);
@@ -79,6 +84,13 @@ export function dvaSocket(url, option) {
         },
       },
       emit: {
+        'set_user_id': {
+          evaluate: (action, dispatch, getState) => action.type === 'set_socket_token',
+          data: ({ payload }) => {
+            console.log('ppp', payload);
+            return JSON.stringify(payload);
+          },
+        },
         post_quick_message: {
           evaluate: (action, dispatch, getState) => action.type === 'post_quick_message',
           data: ({ payload }) => {
@@ -100,13 +112,14 @@ export function dvaSocket(url, option) {
         enter_chat_room: {
           evaluate: (action, dispatch, getState) => action.type === 'enter_chat_room',
           data: ({ payload }) => {
-            return payload;
+            console.log('enter_chat_room', payload);
+            return JSON.stringify(payload);
           },
         },
         leave_chat_room: {
           evaluate: (action, dispatch, getState) => action.type === 'leave_chat_room',
           data: ({ payload }) => {
-            return payload;
+            return JSON.stringify(payload);
           },
         },
         send_message: {

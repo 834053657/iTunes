@@ -33,7 +33,7 @@ export default class WaitBuyerCheck extends Component {
   }
 
   count = (order) => {
-    let a = 0;
+    const a = 0;
     order.order_detail.map(o => {
       return a + o.count
     })
@@ -53,7 +53,7 @@ export default class WaitBuyerCheck extends Component {
       {title: "完成"}
     ]
 
-    let userInfo = ad.owner;
+    const userInfo = ad.owner;
 
     return (
       <div className={styles.receiveCard}>
@@ -103,7 +103,7 @@ export default class WaitBuyerCheck extends Component {
           <div className={styles.bottom}>
             <h4>
               对方剩余&nbsp;
-              <Icon type="clock-circle-o"/>
+              <Icon type="clock-circle-o" />
               &nbsp;10分钟发卡
             </h4>
             <Button
@@ -121,7 +121,7 @@ export default class WaitBuyerCheck extends Component {
         <div className={styles.right}>
           <div className={styles.userInfo}>
             <div className={styles.avatar}>
-              <Avatar size="large" src={userInfo.avatar}/>
+              <Avatar size="large" src={userInfo.avatar} />
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>

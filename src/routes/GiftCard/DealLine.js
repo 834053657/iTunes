@@ -34,6 +34,31 @@ export default class OrderDetail extends Component {
       type: 'card/fetchOrderDetail',
       payload: id,
     });
+
+    this.enterRoom(id);
+  }
+
+  enterRoom = order_id => {
+    console.log('order_id', order_id);
+    this.props.dispatch({
+      type: 'enter_chat_room',
+      payload: { order_id },
+    });
+  }
+
+  leaveRoom = order_id => {
+    console.log('order_id', order_id);
+    this.props.dispatch({
+      type: 'leave_chat_room',
+      payload: { order_id },
+    });
+  }
+
+  componentWillUnmount() {
+    console.log('leave room...');
+    const { params: { id } } = this.props.match || {};
+
+    this.leaveRoom(id);
   }
 
   orderTitle = (ad, cards, order, user) => {
@@ -55,8 +80,6 @@ export default class OrderDetail extends Component {
       [type]: value,
     });
   };
-
-  componentWillMount() {}
 
   pageStatus = () => {
     //1--8  主动出售

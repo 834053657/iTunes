@@ -34,7 +34,7 @@ export default class Process extends Component {
   }
 
   renderInput = (item, index) => {
-    let iptArr = [];
+    const iptArr = [];
     for (let i = 0; i < item.count; i++) {
       iptArr.push({
         password: '',
@@ -64,7 +64,7 @@ export default class Process extends Component {
     const { setStatus } = this.props;
     const { ad = {}, cards = {}, order = {} } = this.state.detail;
 
-    let userInfo = ad.owner;
+    const userInfo = ad.owner;
 
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (

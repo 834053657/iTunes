@@ -22,7 +22,7 @@ export default class BuyerEnsure extends Component {
     const { ad, cards, order } = this.props.detail;
     const { user, detail } = this.state;
     const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
-    let userInfo = ad.owner;
+    const userInfo = ad.owner;
     return (
       <div className={styles.stepTwoBox}>
         <div>BuyerEnsure</div>

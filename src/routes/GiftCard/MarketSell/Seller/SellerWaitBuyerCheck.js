@@ -97,14 +97,14 @@ export default class SellerWaitBuyerCheck extends Component {
                 pageStatus === 6 ? (
                   <h5>
                     保障时间剩余 &nbsp;
-                    <Icon type="clock-circle-o"/>
+                    <Icon type="clock-circle-o" />
                     &nbsp;
                     {'30'}分钟
                   </h5>
                 ) : (
                   <h5>
                     买家查收卡密时间剩余 &nbsp;
-                    <Icon type="clock-circle-o"/>
+                    <Icon type="clock-circle-o" />
                     &nbsp;
                     {'30'}分钟
                   </h5>
@@ -138,7 +138,7 @@ export default class SellerWaitBuyerCheck extends Component {
                 <li>
                   <div className={styles.leftAvatar}>
                     <span className={styles.avaTop}>
-                      <Avatar className={styles.avatar} size="large" icon="user"/>
+                      <Avatar className={styles.avatar} size="large" icon="user" />
                     </span>
                     <span className={styles.avaName}>Jason</span>
                   </div>
@@ -166,7 +166,7 @@ export default class SellerWaitBuyerCheck extends Component {
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
-                  <Avatar size="large" icon="user"/>
+                  <Avatar size="large" icon="user" />
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>

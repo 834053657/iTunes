@@ -169,7 +169,8 @@ export function getSystemUrl(env) {
   let web_name = '凯歌交易平台';
 
   if (env === 'dev') {
-    base_url = 'http://47.106.111.213:3000/mock/19';
+    // base_url = 'http://47.106.111.213:3000/mock/19';
+    base_url = 'http://47.106.111.213:9001';
     web_name += '(DEV)';
     // socket_url = 'http://localhost:3000/socket/push';
     socket_url = 'http://47.106.111.213:9000/socket.io';
@@ -186,8 +187,22 @@ export function getSystemUrl(env) {
 export function getMessageContent(msgObj) {
   //get language
   const lang = 'zh_CN';
-  if (msgObj.msg_type === 1) return msgObj.title;
-  else return CONFIG[`message_type_${lang}`][msgObj.msg_type];
+  let msgText = CONFIG[`message_type_${lang}`][msgObj.msg_type];
+  
+  if (msgObj.msg_type === 1)  {
+    return msgObj.title;
+  } else {
+    msgText = CONFIG[`message_type_${lang}`][msgObj.msg_type];
+    if ([11, 22, 42, 108].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace('%reason%', msgObj.content && msgObj.content.reason);
+    }
+
+    if ([101, 102, 103, 104, 105, 106, 107, 108].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace('%order_id%', msgObj.content && msgObj.content.order_id);
+    }
+
+    return msgText;
+  }
 }
 
 export function playAudio() {

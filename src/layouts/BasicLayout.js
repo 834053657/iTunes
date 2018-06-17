@@ -114,6 +114,7 @@ class BasicLayout extends React.Component {
     if (token && user.id) {
       this.props.dispatch({
         type: 'user/fetchCurrent',
+        callback: this.setSocketToken,
       });
       this.props.dispatch({
         type: 'global/fetchNotices',
@@ -124,6 +125,14 @@ class BasicLayout extends React.Component {
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
   }
+
+  setSocketToken = (uid, token, language) => {
+    this.props.dispatch({
+      type: 'set_socket_token',
+      payload: { id: uid, token, language },
+    });
+  }
+
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
@@ -206,9 +215,9 @@ class BasicLayout extends React.Component {
         } else if ([101, 102, 103, 104, 105, 106, 107].indexOf(item.msg_type) >= 0) {
           //todo redict to order detail
           if (item.content && item.content.goods_type === 1)
-            this.props.dispatch(routerRedux.push(`/itunes/order/${item.content.ref_id}`));
+            this.props.dispatch(routerRedux.push(`/itunes/order/${item.content.order_id}`));
           else if (item.content && item.content.goods_type === 2) {
-            this.props.dispatch(routerRedux.push(`/card/order/${item.content.ref_id}`));
+            this.props.dispatch(routerRedux.push(`/card/deal-line/${item.content.order_id}`));
           }
         } else {
           // todo
@@ -217,7 +226,7 @@ class BasicLayout extends React.Component {
 
         this.props.dispatch({
           type: 'global/fetchNotices',
-          payload: { type: 3 },
+          payload: { status: 0, type: 3},
         });
       },
     });

@@ -25,7 +25,7 @@ export default class EnsureBuyInfo extends Component {
     const { setStatus } = this.props;
     const { ad, cards, order, trader } = this.props.detail;
 
-    let userInfo = ad.owner;
+    const userInfo = ad.owner;
 
     const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (

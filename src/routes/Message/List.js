@@ -38,12 +38,14 @@ export default class List extends Component {
         if (row.msg_type === -1)
           return (
             <Link to={`/message/info-detail/${row.id}`}>
-              <Icon type="file-text" /> {val}
+              <span className={row.status === 1 ? styles.read : ''}>
+                <Icon type="file-text" /> {val}
+              </span>
             </Link>
           );
         else
           return (
-            <a onClick={() => this.readMsg(row)}>
+            <a onClick={() => this.readMsg(row)} className={row.status === 1 ? styles.read : ''}>
               {row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />}{' '}
               {row.msg_type === 1 ? val : getMessageContent(row)}
             </a>
@@ -96,9 +98,9 @@ export default class List extends Component {
     } else if ([101, 102, 103, 104, 105, 106, 107].indexOf(row.msg_type) >= 0) {
       //todo redirect to order detail
       if (row.content && row.content.goods_type === 1)
-        this.props.dispatch(routerRedux.push(`/itunes/order/${row.content.ref_id}`));
+        this.props.dispatch(routerRedux.push(`/itunes/order/${row.content.order_id}`));
       else if (row.content && row.content.goods_type === 2) {
-        this.props.dispatch(routerRedux.push(`/card/order/${row.content.ref_id}`));
+        this.props.dispatch(routerRedux.push(`/card/deal-line/${row.content.order_id}`));
       }
     } else {
       // todo
