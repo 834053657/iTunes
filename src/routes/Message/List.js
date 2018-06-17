@@ -71,8 +71,8 @@ export default class List extends Component {
         type: 'message/readMessage',
         payload: { all: false, id: row.id },
         callback: () => {
-          this.showMsg(row);
           this.changeNotice();
+          this.showMsg(row);
         },
       });
     } else {
