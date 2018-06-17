@@ -23,13 +23,17 @@ export default class OrderDetail extends Component {
     super();
     this.state = {
       pageStatus: 5,
+      status: null,
     };
   }
 
   getPageState = () => {};
 
+  componentWillMount() {}
+
   componentDidMount() {
     const { params: { id } } = this.props.match || {};
+<<<<<<< HEAD
     this.props.dispatch({
       type: 'card/fetchOrderDetail',
       payload: id,
@@ -59,7 +63,57 @@ export default class OrderDetail extends Component {
     const { params: { id } } = this.props.match || {};
 
     this.leaveRoom(id);
+=======
+    const { order } = this.props.detail;
+    this.props
+      .dispatch({
+        type: 'card/fetchOrderDetail',
+        payload: id,
+      })
+      .then(() => {
+        this.setState({
+          status: order.status,
+        });
+      })
+      .then(() => {
+        //this.initStatue(order)
+      });
+>>>>>>> 971b0d3c50e096f22e63d831eb154d711c0bd043
   }
+
+  initStatue = order => {
+    const s = this.state.status;
+    console.log(order);
+    console.log(s);
+    //5 发送CDK      卖家视图   打开        1
+    //1 等待买家查收  买家视图   等待查收      2
+
+    //11 买家确认         卖家视图    等待查收    2
+    //14 买家确认          买家视图   等待查收    2
+
+    if (s === 1) {
+      this.setState({ pageStatus: 5 });
+      console.log(5);
+    }
+    if (s === 2) {
+      if (this.orderType() === 1) {
+        this.setState({ pageStatus: 1 });
+        console.log(1);
+      }
+    }
+    if (s === 2) {
+      if (this.orderType() === 2) {
+        if (this.identify() === '买家') {
+          this.setState({ pageStatus: 14 });
+          console.log(14);
+        }
+        if (this.identify() === '卖家') {
+          this.setState({ pageStatus: 11 });
+          console.log(11);
+        }
+      }
+    }
+  };
 
   orderTitle = (ad, cards, order, user) => {
     if (order.order_type === 1) {
@@ -83,52 +137,46 @@ export default class OrderDetail extends Component {
 
   pageStatus = () => {
     //1--8  主动出售
-    //1 等待买家查收  买家视图
-    //2 买家确认     买家视图
-    //3 已完成       买家视图
-    //4 卖家已取消    买家视图
+    //1 等待买家查收  买家视图   等待查收
+    //2 买家确认     买家视图     等待查收
+    //3 已完成       买家视图    已完成
+    //4 卖家已取消    买家视图    已取消
     //
-    //5 发送CDK      卖家视图
-    //6 等待卖家查收   卖家视图
-    //7 保障中       卖家视图
-    //8 已完成       卖家视图
-    //9 卖家已取消    卖家视图
+    //5 发送CDK      卖家视图   打开
+    //6 等待卖家查收   卖家视图   等待查收
+    //7 保障中       卖家视图    保障中
+    //8 已完成       卖家视图    已完成
+    //9 卖家已取消    卖家视图    已取消
+    //
     //11--20  主动购买
-    //11 买家确认         卖家视图
-    //12 已完成           卖家视图
-    //13 卖家已取消       卖家视图
+    //11 买家确认         卖家视图    等待查收
+    //12 已完成           卖家视图   已完成
+    //13 卖家已取消       卖家视图    已取消
     //
-    //14 买家确认          买家视图
-    //15 卖家已取消        买家视图
-    //16 查看礼品卡代码     买家视图
-    //17 已完成           买家视图
-    //20 申诉           主动出售 买家视图
-    //21 申诉           主动出售 卖家视图
-    //22 申诉           主动购买 买家视图
-    //23 申诉           主动购买 卖家视图
+    //14 买家确认          买家视图   等待查收
+    //15 卖家已取消        买家视图   已取消
+    //16 查看礼品卡代码     买家视图   保障中
+    //17 已完成           买家视图   已完成
+    //
+    //20 申诉           主动出售 买家视图   申述中
+    //21 申诉           主动出售 卖家视图   申述中
+    //22 申诉           主动购买 买家视图   申述中
+    //23 申诉           主动购买 卖家视图   申述中
   };
 
   //判断订单
   orderType = () => {
     const { detail } = this.props;
-    //console.log('detail.order.order_type');
-    //console.log(detail.order.order_type);
     if (detail.order.order_type === 1) {
-      //我要出售
-      this.setState({
-        pageStatus: 0,
-      });
+      //我要出售页面
       return 1;
     } else {
-      //我要购买
-      this.setState({
-        pageStatus: 10,
-      });
+      //我要购买页面
       return 2;
     }
   };
   //判断买家和卖家
-  Identify = () => {
+  identify = () => {
     const { detail } = this.props;
     const { user } = this.props;
     if (!Object.keys(detail.ad).length) {
@@ -153,7 +201,7 @@ export default class OrderDetail extends Component {
     const { user } = this.props;
     const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
     const { pageStatus } = this.state;
-
+    //console.log(this.state.status)
     if (!Object.keys(ad).length) {
       return false;
     }
