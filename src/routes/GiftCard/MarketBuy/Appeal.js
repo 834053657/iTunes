@@ -89,7 +89,12 @@ export default class Process extends Component {
     const { previewVisible, previewImage, fileList } = this.state;
     const { card } = this.props;
     const { getFieldDecorator } = this.props.form;
-    console.log('appeal');
+
+    const { order, ad, cards, trader } = this.props.detail;
+    const { pageStatus, setStatus } = this.props;
+
+    let steps = null;
+    steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
 
     let appeal;
     if (card.appeal) {
@@ -102,7 +107,6 @@ export default class Process extends Component {
           <div className="ant-upload-text">Upload</div>
         </div>
       );
-      const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
       const formItemLayout = {
         labelCol: {
           xs: { span: 24 },
@@ -120,16 +124,43 @@ export default class Process extends Component {
             <div className={styles.orderInfo}>
               <h5>
                 <span>订单：</span>
-                <span>15216524713875</span>
+                <span>{order.order_no || '-'}</span>
               </h5>
               <div className={styles.orderDescribe}>
-                您向Jason购买总面额300的亚马逊美卡亚马逊美卡
+                {pageStatus === 20
+                  ? `${trader.nickname}向您出售总面额${order.money}的${
+                      CONFIG.card_type[order.order_type].name
+                    }`
+                  : null}
+                {pageStatus === 21
+                  ? `您向${ad.owner.nickname}出售总面额${order.money}的${
+                      CONFIG.card_type[order.order_type].name
+                    }`
+                  : null}
+                {pageStatus === 22
+                  ? `您向${ad.owner.nickname}购买总面额${order.money}的${
+                      CONFIG.card_type[order.order_type].name
+                    }`
+                  : null}
+                {pageStatus === 23
+                  ? `${trader.nickname}向您购买总面额${order.money}的${
+                      CONFIG.card_type[order.order_type].name
+                    }`
+                  : null}
               </div>
             </div>
             <div className={styles.tabs}>
-              <Tabs animated={false} defaultActiveKey="1">
+              <Tabs
+                onChange={e => {
+                  if (+e === 1) {
+                    this.props.setStatus('pageStatus', 14);
+                  }
+                }}
+                animated={false}
+                defaultActiveKey="2"
+              >
                 <TabPane tab="订单详情" key="1">
-                  <Detail />
+                  d
                 </TabPane>
                 <TabPane tab="申诉中" key="2">
                   <AppealInfoAppealInfo info={info} />
@@ -196,72 +227,14 @@ export default class Process extends Component {
   }
 }
 
-function Detail() {
-  return (
-    <div className={styles.tabOne}>
-      <div className={styles.left}>
-        <ul>
-          <li className={styles.item}>
-            <span className={styles.title}>类型：</span>
-            <div className={styles.content}>type[info.card_type].name</div>
-          </li>
-          <li className={styles.item}>
-            <span className={styles.title}>单价：</span>
-            <div className={styles.content}>info.unit_price RMB</div>
-          </li>
-          <li className={styles.item}>
-            <span className={styles.title}>面额：</span>
-            <div className={styles.content}>passwordType(info.password_type)</div>
-          </li>
-          <li className={styles.item}>
-            <span className={styles.title}>总价：</span>
-            <div className={styles.content}>amountMoney() RMB</div>
-          </li>
-          <li className={styles.item}>
-            <span className={styles.title}>保障时间：</span>
-            <div className={styles.content}>info.guarantee_time分钟</div>
-          </li>
-        </ul>
-      </div>
-      <div className={styles.stepBottomRight}>
-        <div className={styles.largeBtnBox}>
-          <Button>查看礼品卡清单</Button>
-        </div>
-
-        <div className={styles.ownerInfo}>
-          <div className={styles.userInfo}>
-            <div className={styles.avatar}>
-              <Avatar size="large" icon="user" />
-            </div>
-            <div className={styles.avatarRight}>
-              <div className={styles.top}>
-                <span className={styles.name}>nickname</span>
-                <span className={styles.online}>&nbsp;</span>
-              </div>
-              <div className={styles.infoBottom}>
-                <span className={styles.dealTit}>30日成单：</span>
-                <span className={styles.dealNum}>ownerInfo.month_volume</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.term}>
-            <h3>交易条款：</h3>
-            <p>info.term</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function AppealInfoAppealInfo(props) {
   const { info } = props;
   return (
     <div>
       <ul className={styles.tabTwoTab}>
-        {info.map(i => {
+        {info.map((i, index) => {
           return (
-            <li>
+            <li key={index}>
               <div className={styles.leftAvatar}>
                 <span className={styles.avaTop}>
                   <Avatar className={styles.avatar} size="large" src={i.avatar} />

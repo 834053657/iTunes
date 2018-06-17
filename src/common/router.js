@@ -139,10 +139,6 @@ export const getRouterData = app => {
     '/message/list': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/List')),
     },
-    //礼品卡路由控制
-    '/card/card-markets': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/CardMarkets')),
-    },
     '/card/sell-card': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/SellCard')),
     },
@@ -152,71 +148,14 @@ export const getRouterData = app => {
     '/card/deal-detail/:id': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealDetail')),
     },
-    '/card/sell-detail/:id': {
-      component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/MarketSell/Seller/SellDetail')
-      ),
-    },
     '/card/deal-line/:id': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealLine')),
     },
     '/card/market': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/List')),
     },
-    '/card/detail/:id': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealDetail')),
-    },
-    '/card/order/:id': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/OrderDetail')),
-    },
-    '/card/market-buy': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketOne')),
-    },
-    '/card/market-sell': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketTwo')),
-    },
-    '/card/buy-stepTwo': {
-      component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/MarketBuy/StepTwo')
-      ),
-    },
-    '/card/buy-appeal': {
+    '/card/appeal': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketBuy/Appeal')),
-    },
-    '/card/buy-finish': {
-      component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/MarketBuy/StepThree')
-      ),
-    },
-    '/card/sell-sendCard': {
-      component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/MarketSell/Seller/SendCard')
-      ),
-    },
-    '/card/sell-ensureInfo': {
-      component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/MarketSell/Seller/EnsureInfo')
-      ),
-    },
-    '/card/sell-dealFinish': {
-      component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/MarketSell/Seller/DealFinish')
-      ),
-    },
-    '/card/card-preview': {
-      component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/PreviewCard/PreviewCard')
-      ),
-    },
-    '/card/ad-receiveCard': {
-      component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/MarketSell/Buyer/WaitBuyerCheck')
-      ),
-    },
-    '/card/ad-ensureInfo': {
-      component: dynamicWrapper(app, ['card'], () =>
-        import('../routes/GiftCard/MarketSell/Buyer/EnsureBuyInfo')
-      ),
     },
 
     '/form/step-form': {

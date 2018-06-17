@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Button, Icon, Input, Avatar } from 'antd';
+import { routerRedux } from 'dva/router';
+import { Button, Icon, Input, Avatar, Badge } from 'antd';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
+import { sendCDK } from '../../../../services/api';
 
 @connect(({ card }) => ({
   card,
@@ -10,10 +12,60 @@ import StepModel from '../../Step';
 export default class Process extends Component {
   constructor(props) {
     super();
-    this.state = {};
+    this.state = {
+      detail: props.detail,
+      user: props.user,
+    };
+    this.cardsData = [];
+    this.data = {
+      order_id: this.state.detail.order.id,
+      cards: [],
+    };
   }
 
+  componentWillMount() {
+    const { order_detail = {} } = this.state.detail.order;
+    order_detail.map(o => {
+      return this.cardsData.push({
+        money: o.money,
+        cards: [],
+      });
+    });
+  }
+
+  renderInput = (item, index) => {
+    let iptArr = [];
+    for (let i = 0; i < item.count; i++) {
+      iptArr.push({
+        password: '',
+        picture: '',
+      });
+    }
+    this.cardsData[index].cards = iptArr;
+    return iptArr;
+  };
+
+  writePassword = (e, item, index, i) => {
+    this.cardsData[index].cards[i].password = e.target.value;
+    console.log(this.cardsData);
+  };
+
+  sendCDK = () => {
+    this.data.cards = this.cardsData;
+    console.log(this.data);
+    this.props.dispatch({
+      type: 'card/sendCDK',
+      payload: this.data,
+    });
+  };
+
   render() {
+    const { user, detail } = this.state;
+    const { setStatus } = this.props;
+    const { ad = {}, cards = {}, order = {} } = this.state.detail;
+
+    let userInfo = ad.owner;
+
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.sendBox}>
@@ -22,7 +74,7 @@ export default class Process extends Component {
           <div className={styles.orderInfo}>
             <div className={styles.price}>
               <span>类型：</span>
-              <p>美国亚马逊卡</p>
+              <p>{order.order_type ? CONFIG.card_type[order.order_type - 1].name || '-' : '-'}</p>
             </div>
             <div className={styles.price}>
               <span>要求：</span>
@@ -42,8 +94,9 @@ export default class Process extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <span className={styles.name}>nickname</span>
-                    <span className={styles.online}>&nbsp;</span>
+                    <Badge offset={[12, 8]} status="default" dot>
+                      <span className={styles.name}>owner.nickname</span>
+                    </Badge>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>
@@ -59,75 +112,40 @@ export default class Process extends Component {
           </div>
         </div>
         <div className={styles.bottom}>
-          <div className={styles.denomination}>
-            <header>
-              <span>item.money</span>
-              面额 item.items.length
-              <div>
-                <Button>导入</Button>
-              </div>
-            </header>
-            <section className={styles.iptSection}>
-              <div className={styles.left}>
-                <span>卡密：</span>
-              </div>
-              <div className={styles.right}>
-                <div className={styles.iptBox}>
-                  <div className={styles.input}>
-                    <Input type="text" />
-                    <Input type="text" />
-                    <Input type="text" />
+          {order.order_detail.map((item, index) => {
+            return (
+              <div key={index} className={styles.denomination}>
+                <header>
+                  <span>{item.money}</span>
+                  面额 ({item.count})
+                  <div>
+                    <Button>导入</Button>
                   </div>
-                </div>
-              </div>
-            </section>
-          </div>
-          <div className={styles.denomination}>
-            <header>
-              <span>item.money</span>
-              面额 item.items.length
-              <div>
-                <Button>导入</Button>
-              </div>
-            </header>
-            <section className={styles.iptSection}>
-              <div className={styles.left}>
-                <span>卡密：</span>
-              </div>
-              <div className={styles.right}>
-                <div className={styles.iptBox}>
-                  <div className={styles.input}>
-                    <Input type="text" />
-                    <Input type="text" />
-                    <Input type="text" />
+                </header>
+                <section className={styles.iptSection}>
+                  <div className={styles.left}>
+                    <span>卡密：</span>
                   </div>
-                </div>
-              </div>
-            </section>
-          </div>
-          <div className={styles.denomination}>
-            <header>
-              <span>item.money</span>
-              面额 item.items.length
-              <div>
-                <Button>导入</Button>
-              </div>
-            </header>
-            <section className={styles.iptSection}>
-              <div className={styles.left}>
-                <span>卡密：</span>
-              </div>
-              <div className={styles.right}>
-                <div className={styles.iptBox}>
-                  <div className={styles.input}>
-                    <Input type="text" />
-                    <Input type="text" />
-                    <Input type="text" />
+                  <div className={styles.right}>
+                    <div className={styles.iptBox}>
+                      <div className={styles.input}>
+                        {this.renderInput(item, index).map((n, i) => {
+                          return (
+                            <Input
+                              key={i}
+                              type="text"
+                              onChange={e => this.writePassword(e, item, index, i)}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </section>
               </div>
-            </section>
-          </div>
+            );
+          })}
+
           <div>
             <div className={styles.amount}>
               <h4>
@@ -153,7 +171,8 @@ export default class Process extends Component {
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push({ pathname: `/card/sell-ensureInfo` });
+                  this.sendCDK();
+                  setStatus('pageStatus', 6);
                 }}
               >
                 发布

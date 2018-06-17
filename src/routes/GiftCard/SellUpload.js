@@ -59,7 +59,7 @@ export default class SellUpload extends Component {
             console.log(this.token);
             return {
               token:
-                'onb47_1uVKhYASIOfAaGwTGYIfjkL8K3TiDxwk_g:B8tGsCE_jo9BGZaW3VgO0tbrU5U=:eyJkZWFkbGluZSI6MTUyODY4ODQwNSwic2NvcGUiOiJpbWFnZXM6NTI3NTZlOGEzODUzNDU2ZjlmMDczZjkwZTA1YjAyNDIifQ==',
+                'eyJkZWFkbGluZSI6MTUyODQzMzYxNywic2NvcGUiOiJpbWFnZTpkNmY2M2ExMmVhYmI0ZDI2ODkwYmM5MDQ3N2RlOTAwOSJ9:',
             };
           }}
           onPreview={this.handlePreview}

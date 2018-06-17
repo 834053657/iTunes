@@ -19,11 +19,10 @@ export default class BuyerEnsure extends Component {
   }
 
   render() {
-    const { ad = {}, cards = {}, order = {} } = this.state.detail || {};
+    const { ad, cards, order } = this.props.detail;
     const { user, detail } = this.state;
     const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
-    console.log('ad');
-    console.log(ad);
+    let userInfo = ad.owner;
     return (
       <div className={styles.stepTwoBox}>
         <div>BuyerEnsure</div>
@@ -61,7 +60,7 @@ export default class BuyerEnsure extends Component {
               <Button
                 type="danger"
                 onClick={() => {
-                  this.props.history.push({ pathname: `/card/buy-appeal` });
+                  this.props.setStatus('pageStatus', 21);
                 }}
               >
                 申诉
@@ -129,22 +128,22 @@ export default class BuyerEnsure extends Component {
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
-                  <Avatar size="large" icon="user" />
+                  <Avatar size="large" src={userInfo.avatar} />
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <span className={styles.name}>nickname</span>
+                    <span className={styles.name}>{userInfo.nickname}</span>
                     <span className={styles.online}>&nbsp;</span>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>
-                    <span className={styles.dealNum}>ownerInfo.month_volume</span>
+                    <span className={styles.dealNum}>{userInfo.month_volume}</span>
                   </div>
                 </div>
               </div>
               <div className={styles.term}>
                 <h3>交易条款：</h3>
-                <p>info.term</p>
+                <p>{order.term}</p>
               </div>
             </div>
           </div>

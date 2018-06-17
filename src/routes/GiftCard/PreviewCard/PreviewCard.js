@@ -9,7 +9,7 @@ const TabPane = Tabs.TabPane;
 @connect(({ card }) => ({
   card,
 }))
-export default class Process extends Component {
+export default class PreviewCard extends Component {
   constructor(props) {
     super();
     this.state = {};
@@ -17,11 +17,12 @@ export default class Process extends Component {
 
   changeTab = e => {
     if (+e === 1) {
-      this.props.history.push({ pathname: `/card/sell-ensureInfo` });
+      this.props.setStatus('pageStatus', 14);
     }
   };
 
   render() {
+    const { order, ad, cards } = this.props.detail;
     const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.stepBox}>
@@ -29,16 +30,16 @@ export default class Process extends Component {
         <div className={styles.orderInfo}>
           <h5>
             <span>订单：</span>
-            <span className={styles.text}>115216524713875</span>
+            <span className={styles.text}>{order.order_no}</span>
           </h5>
           <div className={styles.orderDescribe}>您向Jason购买总面额300的亚马逊美卡亚马逊美卡</div>
           <div className={styles.price}>
             <span>单价：</span>
-            <span>1</span>RMB
+            <span>{ad.unit_price}</span>RMB
           </div>
           <div>
             <span>总价：</span>
-            <span>100</span>RMB
+            <span>{order.money}</span>RMB
           </div>
         </div>
         <div className={styles.tabsLine}>
@@ -47,8 +48,7 @@ export default class Process extends Component {
               Content of Tab Pane 1
             </TabPane>
             <TabPane tab="礼品卡清单" key="2">
-              {' '}
-              <CardInfoList />{' '}
+              <Checklist cards={cards} />
             </TabPane>
           </Tabs>
         </div>
@@ -57,174 +57,64 @@ export default class Process extends Component {
   }
 }
 
-function CardInfoList() {
+function Checklist(props) {
+  const { cards } = props;
   return (
-    <div>
-      <PicWithText />
-    </div>
-  );
-}
-
-function OnlyText() {
-  return (
-    <div className={styles.denomination}>
-      <header>
-        <span>item.money</span>
-        面额 （item.items.length）
-      </header>
-      <section>
-        <div className={styles.left}>
-          <span>卡密：</span>
-        </div>
-        <div className={styles.right}>
-          <div className={styles.iptBox}>
-            <div className={styles.input}>ddqwdqwdwqdqwhdk1hkdhkd1221</div>
-          </div>
-          <div className={styles.iptBox}>
-            <div className={styles.input}>ddqwdqwdwqdqwhdk1hkdhkd1221</div>
-          </div>
-          <div className={styles.iptBox}>
-            <div className={styles.input}>ddqwdqwdwqdqwhdk1hkdhkd1221</div>
-          </div>
-          <div className={styles.iptBox}>
-            <div className={styles.input}>ddqwdqwdwqdqwhdk1hkdhkd1221</div>
-          </div>
-          <div className={styles.iptBox}>
-            <div className={styles.input}>ddqwdqwdwqdqwhdk1hkdhkd1221</div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function OnlyPic() {
-  return (
-    <div>
-      <div className={styles.denomination}>
-        <header>
-          <span>item.money</span>
-          面额 （item.items.length）
-        </header>
-        <section className={styles.onlyPic}>
-          <div className={styles.left}>
-            <span>卡图：</span>
-          </div>
-          <div className={styles.center}>
-            <div>
-              <div className={styles.imgBox}>
-                <img
-                  width="85%"
-                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                  alt=""
-                />
-                <Icon className={styles.iconDel} type="minus-circle-o" />
+    <div className={styles.denominationBox}>
+      {cards
+        ? Object.keys(cards).map((card, index) => {
+            return (
+              <div key={index} className={styles.picWithText}>
+                <header>
+                  <span>{card}</span>
+                  面额 （{cards[card].length})
+                </header>
+                <section className={styles.picBox}>
+                  <div className={styles.left}>
+                    <ul>
+                      {cards[card]
+                        ? cards[card].map(item => {
+                            return (
+                              <li key={item.id}>
+                                {item.password ? (
+                                  <div className={styles.cardTop}>
+                                    <span className={styles.title}>卡密：</span>
+                                    <div className={styles.text}>{item.password}</div>
+                                  </div>
+                                ) : null}
+                                {item.picture ? (
+                                  <div className={styles.cardBottom}>
+                                    <span className={styles.title}>卡图：</span>
+                                    <div className={styles.receiveBox}>
+                                      <img width="100%" src={item.picture} alt="" />
+                                    </div>
+                                  </div>
+                                ) : null}
+                              </li>
+                            );
+                          })
+                        : null}
+                    </ul>
+                  </div>
+                  <div className={styles.receipt}>
+                    <div className={styles.left}>
+                      <span>收据:</span>
+                    </div>
+                    <div className={styles.right}>
+                      <div className={styles.imgBox}>
+                        <img
+                          width="85%"
+                          src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </section>
               </div>
-              <div className={styles.imgBox}>
-                <img
-                  width="85%"
-                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
-          <div className={styles.receipt}>
-            <div className={styles.left}>
-              <span>收据:</span>
-            </div>
-            <div className={styles.right}>
-              <div className={styles.imgBox}>
-                <img
-                  width="85%"
-                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                  alt=""
-                />
-                <Icon className={styles.iconDel} type="minus-circle-o" />
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-  );
-}
-
-function PicWithText() {
-  return (
-    <div className={styles.picWithText}>
-      <header>
-        <span>item.money</span>
-        面额 （item.items.length）
-      </header>
-      <section className={styles.picBox}>
-        <div className={styles.left}>
-          <ul>
-            <li>
-              <div className={styles.cardTop}>
-                <span className={styles.title}>卡密：</span>
-                <div className={styles.text}>ddqwdqwdwqdqwhdk1hkdhkd1221</div>
-              </div>
-              <div className={styles.cardBottom}>
-                <span className={styles.title}>卡图：</span>
-                <div className={styles.receiveBox}>
-                  <img
-                    width="100%"
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    alt=""
-                  />
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className={styles.cardTop}>
-                <span className={styles.title}>卡密：</span>
-                <div className={styles.text}>ddqwdqwdwqdqwhdk1hkdhkd1221</div>
-              </div>
-              <div className={styles.cardBottom}>
-                <span className={styles.title}>卡图：</span>
-                <div className={styles.receiveBox}>
-                  <img
-                    width="100%"
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    alt=""
-                  />
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className={styles.cardTop}>
-                <span className={styles.title}>卡密：</span>
-                <div className={styles.text}>ddqwdqwdwqdqwhdk1hkdhkd1221</div>
-              </div>
-              <div className={styles.cardBottom}>
-                <span className={styles.title}>卡图：</span>
-                <div className={styles.receiveBox}>
-                  <img
-                    width="100%"
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    alt=""
-                  />
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div className={styles.receipt}>
-          <div className={styles.left}>
-            <span>收据:</span>
-          </div>
-          <div className={styles.right}>
-            <div className={styles.imgBox}>
-              <img
-                width="85%"
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+            );
+          })
+        : null}
     </div>
   );
 }

@@ -193,7 +193,6 @@ export async function createBuyOrder(params) {
   });
 }
 
-
 //获取订单详情
 export async function getOrderDetail(params) {
   return request(`/itunes/order/detail?${stringify(params)}`);
@@ -241,6 +240,37 @@ export async function getAppealInfo(params) {
 
 export async function getCaptcha(params) {
   return request(`/itunes/user/captcha?${stringify(params)}`);
+}
+
+//发送CDK
+export async function sendCDK(params) {
+  return request('/itunes/order/sell/ship', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//释放订单
+export async function releaseOrder(params) {
+  return request('/itunes/order/release', {
+    method: 'POST',
+    body: params,
+  });
+}
+//评价订单
+export async function ratingOrder(params) {
+  return request('/itunes/order/rating', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//发送快捷短语
+export async function sendQuickMsg(params) {
+  return request('/itunes/socket/post_quick_message', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 //礼品卡列表actions结束

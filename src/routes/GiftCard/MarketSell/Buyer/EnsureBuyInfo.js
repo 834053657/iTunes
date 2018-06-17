@@ -10,7 +10,7 @@ const Option = Select.Option;
 @connect(({ card }) => ({
   card,
 }))
-export default class BuyCard extends Component {
+export default class EnsureBuyInfo extends Component {
   constructor(props) {
     super();
   }
@@ -22,7 +22,12 @@ export default class BuyCard extends Component {
   componentWillUnmount() {}
 
   render() {
-    const steps = [{ title: '查收礼品卡' }, { title: '确认信息3' }, { title: '完成' }];
+    const { setStatus } = this.props;
+    const { ad, cards, order, trader } = this.props.detail;
+
+    let userInfo = ad.owner;
+
+    const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.stepTwoBox}>
         <StepModel steps={steps} current={1} />
@@ -34,14 +39,18 @@ export default class BuyCard extends Component {
                 <span>订单：</span>
                 <span className={styles.text}>115216524713875</span>
               </h5>
-              <div className={styles.orderDescribe}>Jason向您出售总面额50的亚马逊美卡</div>
+              <div className={styles.orderDescribe}>
+                {`${trader.nickname}向您出售总面额${order.money}的${
+                  CONFIG.card_type[order.order_type].name
+                }`}
+              </div>
               <div className={styles.price}>
                 <span>单价：</span>
-                <span>1</span>RMB
+                <span>{ad.unit_price}</span>RMB
               </div>
               <div>
                 <span>总价：</span>
-                <span>100</span>RMB
+                <span>{order.amount}</span>RMB
               </div>
             </div>
 
@@ -55,48 +64,37 @@ export default class BuyCard extends Component {
               <Button
                 type="danger"
                 onClick={() => {
-                  this.props.history.push({ pathname: `/card/buy-appeal` });
+                  this.props.setStatus('pageStatus', 21);
                 }}
               >
                 申诉
               </Button>
-              <Button type="primary">确认释放</Button>
+              <Button
+                onClick={() => {
+                  setStatus('pageStatus', 3);
+                }}
+                type="primary"
+              >
+                确认释放
+              </Button>
             </div>
             <div className={styles.chatInfo}>
-              <Select defaultValue="lucy" style={{ width: 120 }}>
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
-                <Option value="Yiminghe">yiminghe</Option>
+              <Select
+                defaultValue="快捷短语"
+                style={{ width: 260 }}
+                onSelect={e => this.selectTerm(e)}
+              >
+                {CONFIG.term
+                  ? CONFIG.term.map(t => {
+                      return (
+                        <Option key={t.id} value={t.id}>
+                          {t.content}
+                        </Option>
+                      );
+                    })
+                  : null}
               </Select>
               <ul>
-                <li>
-                  <div className={styles.leftAvatar}>
-                    <span className={styles.avaTop}>
-                      <Avatar className={styles.avatar} size="large" icon="user" />
-                    </span>
-                    <span className={styles.avaName}>Jason</span>
-                  </div>
-                  <div className={styles.chatItem}>
-                    <p className={styles.chatText}>
-                      您好，请稍等片刻待我确认请稍等片刻待我确认请稍等片刻待我确认
-                    </p>
-                    <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-                  </div>
-                </li>
-                <li>
-                  <div className={styles.leftAvatar}>
-                    <span className={styles.avaTop}>
-                      <Avatar className={styles.avatar} size="large" icon="user" />
-                    </span>
-                    <span className={styles.avaName}>Jason</span>
-                  </div>
-                  <div className={styles.chatItem}>
-                    <p className={styles.chatText}>
-                      您好，请稍等片刻待我确认请稍等片刻待我确认请稍等片刻待我确认
-                    </p>
-                    <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-                  </div>
-                </li>
                 <li>
                   <div className={styles.leftAvatar}>
                     <span className={styles.avaTop}>
@@ -128,22 +126,22 @@ export default class BuyCard extends Component {
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
-                  <Avatar size="large" icon="user" />
+                  <Avatar size="large" src={userInfo.avatar} />
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <span className={styles.name}>nickname</span>
+                    <span className={styles.name}>{userInfo.nickname}</span>
                     <span className={styles.online}>&nbsp;</span>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>
-                    <span className={styles.dealNum}>ownerInfo.month_volume</span>
+                    <span className={styles.dealNum}>{userInfo.month_volume}</span>
                   </div>
                 </div>
               </div>
               <div className={styles.term}>
                 <h3>交易条款：</h3>
-                <p>info.term</p>
+                <p>{order.term}</p>
               </div>
             </div>
           </div>

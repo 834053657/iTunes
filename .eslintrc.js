@@ -13,6 +13,7 @@ module.exports = {
     camelcase: [0],
     radix: [0],
     'default-case': [0],
+    'no-plusplus': [1],
     'react/jsx-tag-spacing': [1],
     'prefer-const': [1],
     'no-lonely-if': [1],

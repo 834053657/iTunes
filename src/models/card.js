@@ -10,6 +10,10 @@ import {
   addBuyAd,
   getAppealInfo,
   getOrderDetail,
+  sendCDK,
+  sendQuickMsg,
+  releaseOrder,
+  ratingOrder,
 } from '../services/api';
 
 export default {
@@ -131,6 +135,45 @@ export default {
         type: 'GET_APPEAL_INFO',
         payload: res,
       });
+    },
+    //发送CDK
+    *sendCDK({ payload }, { call, put }) {
+      const res = yield call(sendCDK, payload);
+      if (res.code === 0) {
+        return res.data;
+      } else {
+        message.error(res.msg);
+      }
+    },
+    //释放订单
+    *releaseOrder({ payload }, { call, put }) {
+      const res = yield call(releaseOrder, payload);
+      if (res.code === 0) {
+        return res;
+      } else {
+        message.error(res.msg);
+        return res;
+      }
+    },
+    //释放订单
+    *ratingOrder({ payload }, { call, put }) {
+      console.log('dsgfdfsgdfgs');
+      const res = yield call(ratingOrder, payload);
+      if (res.code === 0) {
+        return res;
+      } else {
+        message.error(res.msg);
+        return res;
+      }
+    },
+    //发送快捷短语
+    *sendQuickMsg({ payload }, { call, put }) {
+      const res = yield call(sendQuickMsg, payload);
+      if (res.code === 0) {
+        return res.data;
+      } else {
+        message.error(res.msg);
+      }
     },
   },
 

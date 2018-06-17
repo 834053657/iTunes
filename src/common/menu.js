@@ -24,12 +24,8 @@ const menuData = [
     path: 'card',
     children: [
       {
-        name: '交易大厅by_elvin',
-        path: 'market',
-      },
-      {
         name: '交易大厅',
-        path: 'market-buy',
+        path: 'market',
       },
       {
         name: '发布购买广告',

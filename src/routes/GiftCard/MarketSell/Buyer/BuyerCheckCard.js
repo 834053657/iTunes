@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
+import {routerRedux} from "dva/router";
+import {stringify} from "qs";
+
 import {
   Table,
   Tabs,
@@ -12,7 +15,7 @@ import {
   Steps,
   Avatar,
 } from 'antd';
-import styles from './WaitBuyerCheck.less';
+import styles from './BuyerCheckCard.less';
 import StepModel from '../../Step';
 
 const Step = Steps.Step;
@@ -37,16 +40,24 @@ export default class WaitBuyerCheck extends Component {
     return a
   }
 
+  componentWillMount() {
+  }
+
   render() {
     const {user, detail} = this.state
-    const {ad = {}, cards = {}, order = {}} = this.state.detail;
+    const {setStatus, pageStatus} = this.props
+    const {ad, cards, order, trader} = this.state.detail;
     const steps = [
       {title: "查收礼品卡"},
       {title: "确认信息"},
       {title: "完成"}
     ]
+
+    let userInfo = ad.owner;
+
     return (
       <div className={styles.receiveCard}>
+        WaitBuyerCheck
         <StepModel
           steps={steps}
           current={0}
@@ -58,16 +69,14 @@ export default class WaitBuyerCheck extends Component {
               <span className={styles.text}>{order.order_no || '-'}</span>
             </h5>
             <div className={styles.orderDescribe}>
-              {this.props.orderTitle(ad, cards, order, user)}
-              总面额{order.money}的
-              {order.order_type ? CONFIG.card_type[order.order_type].name || '-' : '-'}
+              {`${trader.nickname}向您出售总面额${order.money}的${CONFIG.card_type[order.order_type].name}`}
             </div>
           </div>
           <ul>
             <li className={styles.item}>
               <span className={styles.title}>类型：</span>
               <div className={styles.content}>
-                {order.order_type ? CONFIG.card_type[order.order_type].name || '-' : '-'}
+                {order.order_type ? CONFIG.card_type[order.order_type - 1].name || '-' : '-'}
               </div>
             </li>
             <li className={styles.item}>
@@ -95,18 +104,13 @@ export default class WaitBuyerCheck extends Component {
             <h4>
               对方剩余&nbsp;
               <Icon type="clock-circle-o"/>
-              &nbsp;10分钟确认
-            </h4>
-            <h4>
-              请在&nbsp;
-              <Icon type="clock-circle-o"/>
-              &nbsp;10分钟内确认
+              &nbsp;10分钟发卡
             </h4>
             <Button
               type="primary"
               size="large"
               onClick={() => {
-                this.props.history.push({pathname: `/card/ad-ensureInfo`});
+                setStatus('pageStatus', 2)
               }}
             >
               立即查收
@@ -117,22 +121,22 @@ export default class WaitBuyerCheck extends Component {
         <div className={styles.right}>
           <div className={styles.userInfo}>
             <div className={styles.avatar}>
-              <Avatar size="large" icon="user"/>
+              <Avatar size="large" src={userInfo.avatar}/>
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>
+                <span className={styles.name}>{userInfo.nickname}</span>
                 <span className={styles.online}>&nbsp;</span>
-                <span className={styles.name}>ownerInfo.nickname</span>
               </div>
               <div className={styles.infoBottom}>
                 <span className={styles.dealTit}>30日成单：</span>
-                <span className={styles.dealNum}>ownerInfo.month_volume</span>
+                <span className={styles.dealNum}>{userInfo.month_volume}</span>
               </div>
             </div>
           </div>
           <div className={styles.term}>
             <h3>交易条款：</h3>
-            <p>info.term</p>
+            <p>{order.term}</p>
           </div>
         </div>
       </div>
