@@ -138,7 +138,6 @@ export default {
       const tmp1 = [];
       let tmp2 = [];
 
-      console.log('notices', items);
       map(items, v => {
         if (v.msg_type === 104 && v.content && v.content.goods_type && v.content.ref_id)
           tmp1.push(v);
