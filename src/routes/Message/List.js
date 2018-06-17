@@ -72,12 +72,22 @@ export default class List extends Component {
         payload: { all: false, id: row.id },
         callback: () => {
           this.showMsg(row);
+          this.changeNotice();
         },
       });
     } else {
       this.showMsg(row);
     }
   };
+
+  changeNotice = () => {
+    const { dispatch } = this.props;
+
+    this.props.dispatch({
+      type: 'global/fetchNotices',
+      payload: { status: 0 },
+    });
+  }
 
   showMsg = row => {
     const { dispatch } = this.props;
