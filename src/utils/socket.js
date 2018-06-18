@@ -60,9 +60,6 @@ export function dvaSocket(url, option) {
           });
           playAudio();
         },
-        test: (data, dispatch, getState) => {
-          console.log(888, data);
-        },
         enter_room: (data, dispatch, getState) => {
           console.log(data);
         },
@@ -70,17 +67,25 @@ export function dvaSocket(url, option) {
           console.log(data);
         },
         receive_message: (data, dispatch, getState) => {
-          const { data: msg } = data;
-          const { appeal } = getState().card;
-          const { data: { appeal_info } } = appeal;
+          const { data: msg } = JSON.parse(data); // order msg type 快捷短语/申述聊天
+          const { content } = msg;
 
-          // appeal_info.unshift(msg);
-          // console.log(555, appeal);
-          dispatch({
-            type: 'card/GET_APPEAL_INFO',
-            payload: appeal,
-          });
-          playAudio();
+          if (content && content.order_msg_type === 1) { // 快捷短语
+            const { appeal } = getState().card;
+            const { data: { appeal_info } } = appeal;
+
+            // appeal_info.unshift(msg);
+            // console.log(555, appeal);
+            dispatch({
+              type: 'card/GET_APPEAL_INFO',
+              payload: appeal,
+            });
+            playAudio();
+          } else if (content && content.order_msg_type === 2) { // 申述聊天
+            console.log(data);
+          } else {
+            console.log(data);
+          }
         },
       },
       emit: {
@@ -97,10 +102,6 @@ export function dvaSocket(url, option) {
             console.log('ppp', payload);
             return payload;
           },
-        },
-        test: {
-          evaluate: (action, dispatch, getState) => action.type === 'send-message2',
-          data: action => 'client send a message',
         },
         pull_system_message: {
           evaluate: (action, dispatch, getState) => action.type === 'push_system_message',
@@ -125,7 +126,7 @@ export function dvaSocket(url, option) {
         send_message: {
           evaluate: (action, dispatch, getState) => action.type === 'send_message',
           data: ({ payload }) => {
-            return payload;
+            return JSON.stringify(payload);
           },
         },
       },

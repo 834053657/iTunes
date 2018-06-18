@@ -33,7 +33,7 @@ export default class WaitBuyerCheck extends Component {
   }
 
   count = order => {
-    let a = 0;
+    const a = 0;
     order.order_detail.map(o => {
       return a + o.count;
     });
@@ -48,7 +48,7 @@ export default class WaitBuyerCheck extends Component {
     const { ad, cards, order, trader } = this.state.detail;
     const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
 
-    let userInfo = ad.owner;
+    const userInfo = ad.owner;
 
     return (
       <div className={styles.receiveCard}>
