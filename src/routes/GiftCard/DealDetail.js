@@ -55,6 +55,7 @@ export default class DealDeatil extends Component {
   };
 
   handlerSell = async () => {
+    console.log(this.props.detail);
     this.props
       .dispatch({
         type: 'card/createBuyOrder',
@@ -66,9 +67,9 @@ export default class DealDeatil extends Component {
         });
       })
       .then(() => {
-        this.props.history.push({
-          pathname: `/card/deal-line/${this.state.orderId}`,
-        });
+        console.log(this.state.orderId);
+
+        this.props.dispatch(routerRedux.push(`/card/deal-line/${this.state.orderId}`));
       });
   };
 

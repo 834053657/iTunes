@@ -23,15 +23,16 @@ export default class CardMarkets extends Component {
       minDeno: null,
       maxDeno: null,
       type_page: 2,
+      pagination: 1,
     };
     // this.setVisible = (type, visible) => {
     //   this.setState({
     //     [type]: visible,
     //   });
     // };
+    this.filter = {};
 
     this.reSetPage = () => {
-      this.state.pagination.page = 1;
       this.setState({
         pagination: {
           page: 1,
@@ -39,6 +40,7 @@ export default class CardMarkets extends Component {
         },
       });
       this.filter = Object.assign(this.filter, this.state.pagination);
+      console.log(this.filter);
     };
 
     //select Card Type
@@ -74,16 +76,12 @@ export default class CardMarkets extends Component {
         dispatch({
           type: 'card/fetchCardList',
           payload: this.filter,
-        }).then(() => {
-          // this.setState({ loading: false });
         });
       } else if (+type_page === 1) {
         //出售
         dispatch({
           type: 'card/fetchCardList',
           payload: this.filter,
-        }).then(() => {
-          // this.setState({ loading: false });
         });
       }
     };
@@ -203,8 +201,6 @@ export default class CardMarkets extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props.location.search.split('=', 2)[1]);
-
     this.fetchData();
   }
 
@@ -224,6 +220,9 @@ export default class CardMarkets extends Component {
   };
 
   handleTableChange = (pagination, filtersArg, sorter) => {
+    console.log(pagination);
+    console.log(filtersArg);
+    console.log(sorter);
     // const { dispatch, getValue } = this.props;
     // const { formValues } = this.state;
     //
@@ -276,7 +275,9 @@ export default class CardMarkets extends Component {
         ),
         filterDropdownVisible: this.state.typeVisible,
         onFilterDropdownVisibleChange: e => {
-          this.setVisible('typeVisible', e);
+          this.setState({
+            typeVisible: e,
+          });
         },
         filterIcon: (
           <Icon
@@ -305,7 +306,9 @@ export default class CardMarkets extends Component {
         title: '面额',
         dataIndex: 'denomination',
         onFilterDropdownVisibleChange: e => {
-          this.setVisible('denoVisible', e);
+          this.setState({
+            denoVisible: e,
+          });
         },
         filterDropdownVisible: this.state.denoVisible,
         filterDropdown: (

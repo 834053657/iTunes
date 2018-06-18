@@ -32,36 +32,6 @@ export default class OrderDetail extends Component {
 
   componentDidMount() {
     const { params: { id } } = this.props.match || {};
-
-    this.props.dispatch({
-      type: 'card/fetchOrderDetail',
-      payload: id,
-    });
-
-    this.enterRoom(id);
-  }
-
-  enterRoom = order_id => {
-    console.log('order_id', order_id);
-    this.props.dispatch({
-      type: 'enter_chat_room',
-      payload: { order_id },
-    });
-  };
-
-  leaveRoom = order_id => {
-    console.log('order_id', order_id);
-    this.props.dispatch({
-      type: 'leave_chat_room',
-      payload: { order_id },
-    });
-  };
-
-  componentWillUnmount() {
-    console.log('leave room...');
-    const { params: { id } } = this.props.match || {};
-
-    this.leaveRoom(id);
     const { order } = this.props.detail;
     this.props
       .dispatch({
@@ -77,14 +47,15 @@ export default class OrderDetail extends Component {
     const s = this.props.detail.order.status;
     console.log(s === 2);
     //5 发送CDK      卖家视图   打开        1
+    //1 等待买家查收  买家视图   等待查收      2
+
+    //11 买家确认         卖家视图    等待查收    2
+    //14 买家确认          买家视图   等待查收    2
+
     if (s === 1) {
       this.setState({ pageStatus: 5 });
       console.log(5);
     }
-
-    //1 等待买家查收  买家视图   等待查收      2
-    //11 买家确认         卖家视图    等待查收    2
-    //14 买家确认          买家视图   等待查收    2
     if (s === 2) {
       if (this.orderType() === 1) {
         this.setState({ pageStatus: 1 });
