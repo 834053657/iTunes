@@ -22,8 +22,7 @@ export default class OrderDetail extends Component {
   constructor(props) {
     super();
     this.state = {
-      pageStatus: 5,
-      status: null,
+      pageStatus: null,
     };
   }
 
@@ -40,29 +39,22 @@ export default class OrderDetail extends Component {
         payload: id,
       })
       .then(() => {
-        this.setState({
-          status: order.status,
-        });
-      })
-      .then(() => {
-        //this.initStatue(order)
+        this.initStatue(order);
       });
   }
 
-  initStatue = order => {
-    const s = this.state.status;
-    console.log(order);
-    console.log(s);
+  initStatue = () => {
+    const s = this.props.detail.order.status;
+    console.log(s === 2);
     //5 发送CDK      卖家视图   打开        1
-    //1 等待买家查收  买家视图   等待查收      2
-
-    //11 买家确认         卖家视图    等待查收    2
-    //14 买家确认          买家视图   等待查收    2
-
     if (s === 1) {
       this.setState({ pageStatus: 5 });
       console.log(5);
     }
+
+    //1 等待买家查收  买家视图   等待查收      2
+    //11 买家确认         卖家视图    等待查收    2
+    //14 买家确认          买家视图   等待查收    2
     if (s === 2) {
       if (this.orderType() === 1) {
         this.setState({ pageStatus: 1 });

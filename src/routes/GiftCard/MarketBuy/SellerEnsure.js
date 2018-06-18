@@ -37,12 +37,12 @@ export default class SellerEnsure extends Component {
                 <span className={styles.text}>{order.order_no || '-'}</span>
               </h5>
               <div className={styles.orderDescribe}>
-                {pageStatus === 11
+                {pageStatus === 11 && CONFIG.card_type
                   ? `${trader.nickname}向您购买总面额${order.money}的${
-                      CONFIG.card_type[order.order_type].name
+                      CONFIG.card_type[order.order_type - 1].name
                     }`
                   : `您向${ad.owner.nickname}购买总面额${order.money}的${
-                      CONFIG.card_type[order.order_type].name
+                      CONFIG.card_type[order.order_type - 1].name
                     }`}
               </div>
               <div className={styles.price}>

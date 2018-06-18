@@ -13,13 +13,27 @@ const Option = Select.Option;
 export default class EnsureBuyInfo extends Component {
   constructor(props) {
     super();
+    this.state = {
+      term: '快捷短语',
+    };
   }
 
-  componentWillMount() {}
-
-  componentDidMount() {}
-
-  componentWillUnmount() {}
+  selectTerm = e => {
+    if (!CONFIG.term) {
+      return false;
+    }
+    this.setState({
+      term: CONFIG.term[CONFIG.term.findIndex(t => t.id === e)].content || '-',
+    });
+    console.log(e);
+    this.props.dispatch({
+      type: 'card/sendQuickMsg',
+      payload: {
+        order_id: 'orderId',
+        quick_message_id: e,
+      },
+    });
+  };
 
   render() {
     const { setStatus } = this.props;
@@ -41,7 +55,7 @@ export default class EnsureBuyInfo extends Component {
               </h5>
               <div className={styles.orderDescribe}>
                 {`${trader.nickname}向您出售总面额${order.money}的${
-                  CONFIG.card_type[order.order_type].name
+                  CONFIG.card_type[order.order_type - 1].name
                 }`}
               </div>
               <div className={styles.price}>
@@ -80,7 +94,7 @@ export default class EnsureBuyInfo extends Component {
             </div>
             <div className={styles.chatInfo}>
               <Select
-                defaultValue="快捷短语"
+                defaultValue={this.state.term}
                 style={{ width: 260 }}
                 onSelect={e => this.selectTerm(e)}
               >

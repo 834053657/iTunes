@@ -17,14 +17,13 @@ export default class CardMarkets extends Component {
     super(props);
     const { type = '2' } = getQueryString(props.location.search);
     this.state = {
-      type,
+      type: this.props.location.search.split('=', 2)[1],
       typeVisible: false,
       denoVisible: false,
       minDeno: null,
       maxDeno: null,
       type_page: 2,
     };
-
     // this.setVisible = (type, visible) => {
     //   this.setState({
     //     [type]: visible,
@@ -164,8 +163,48 @@ export default class CardMarkets extends Component {
       });
     });
   };
+  denoType = r => {
+    return r.condition instanceof Array;
+  };
+
+  findDeno = (m, r) => {
+    const money = [];
+    const a = r.condition instanceof Array;
+    if (!a && r.condition) {
+      if (m === 'min') {
+        return r.condition.min_money;
+      }
+      if (m === 'max') {
+        return r.condition.max_money;
+      }
+    }
+  };
+
+  denoList = r => {
+    const a = [];
+    if (this.denoType(r)) {
+      r.condition.map(i => {
+        return a.push(i.money);
+      });
+      console.log(a);
+      console.log('aaaa');
+      return a;
+    }
+  };
+
+  denoBuyList = r => {
+    // console.log(r)
+    const a = [];
+    if (r.money instanceof Array) {
+      return r.money;
+    } else {
+      return false;
+    }
+  };
 
   componentDidMount() {
+    console.log(this.props.location.search.split('=', 2)[1]);
+
     this.fetchData();
   }
 
@@ -301,20 +340,46 @@ export default class CardMarkets extends Component {
           </div>
         ),
         render: (text, record) => {
-          return (
-            <span>
-              {this.denoBuyList(record)
-                ? this.denoBuyList(record).map((m, index) => {
-                    return (
-                      <span key={index}>
-                        {m}
-                        {index < this.denoBuyList(record).length - 1 ? '/' : null}
-                      </span>
-                    );
-                  })
-                : null}
-            </span>
-          );
+          console.log(this.denoType(record));
+          if (type === '2') {
+            return (
+              <span>
+                {this.denoBuyList(record)
+                  ? this.denoBuyList(record).map((m, index) => {
+                      return (
+                        <span key={index}>
+                          {m}
+                          {index < this.denoBuyList(record).length - 1 ? '/' : null}
+                        </span>
+                      );
+                    })
+                  : null}
+              </span>
+            );
+          } else {
+            return (
+              <span>
+                {this.denoType(record) ? (
+                  this.denoList(record) ? (
+                    this.denoList(record).map((i, index) => {
+                      return (
+                        <span key={index}>
+                          {i}
+                          {index < this.denoList(record).length - 1 ? '/' : null}
+                        </span>
+                      );
+                    })
+                  ) : null
+                ) : (
+                  <span>
+                    {record.condition.min_money}
+                    {' - '}
+                    {record.condition.max_money}
+                  </span>
+                )}
+              </span>
+            );
+          }
         },
       },
       {
@@ -365,26 +430,17 @@ export default class CardMarkets extends Component {
     return columns;
   };
 
-  denoBuyList = r => {
-    // console.log(r)
-    const a = [];
-    if (r.money instanceof Array) {
-      return r.money;
-    } else {
-      return false;
-    }
-  };
-
   amountMoney = r => {
-    let a = 0;
-    if (r.cards instanceof Array) {
-      r.cards.map(i => {
-        return (a += i.money * i.count);
-      });
-      return a;
-    } else {
-      return false;
-    }
+    // let a = 0;
+    // if (r.cards instanceof Array) {
+    //   r.cards.map(i => {
+    //     return (a += i.money * i.count);
+    //   });
+    //   return a;
+    // } else {
+    //   return false;
+    // }
+    return r.owner.amount;
   };
 
   render() {

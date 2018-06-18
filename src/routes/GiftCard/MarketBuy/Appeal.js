@@ -129,22 +129,22 @@ export default class Process extends Component {
               <div className={styles.orderDescribe}>
                 {pageStatus === 20
                   ? `${trader.nickname}向您出售总面额${order.money}的${
-                      CONFIG.card_type[order.order_type].name
+                      CONFIG.card_type[order.order_type - 1].name
                     }`
                   : null}
                 {pageStatus === 21
                   ? `您向${ad.owner.nickname}出售总面额${order.money}的${
-                      CONFIG.card_type[order.order_type].name
+                      CONFIG.card_type[order.order_type - 1].name
                     }`
                   : null}
                 {pageStatus === 22
                   ? `您向${ad.owner.nickname}购买总面额${order.money}的${
-                      CONFIG.card_type[order.order_type].name
+                      CONFIG.card_type[order.order_type - 1].name
                     }`
                   : null}
                 {pageStatus === 23
                   ? `${trader.nickname}向您购买总面额${order.money}的${
-                      CONFIG.card_type[order.order_type].name
+                      CONFIG.card_type[order.order_type - 1].name
                     }`
                   : null}
               </div>

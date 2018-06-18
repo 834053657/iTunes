@@ -37,7 +37,7 @@ export default class BuyerEnsure extends Component {
               <div className={styles.orderDescribe}>
                 {this.props.orderTitle(ad, cards, order, user)}
                 总面额{order.money}的
-                {order.order_type ? CONFIG.card_type[order.order_type].name || '-' : '-'}
+                {order.order_type ? CONFIG.card_type[order.order_type - 1].name || '-' : '-'}
               </div>
               <div className={styles.price}>
                 <span>单价：</span>

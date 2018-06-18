@@ -259,7 +259,9 @@ export default class DealDeatil extends Component {
           <li className={styles.item}>
             <span className={styles.title}>类型:</span>
             <div className={styles.content}>
-              {card_type && CONFIG.card_type[card_type] ? CONFIG.card_type[card_type].name : '-'}
+              {card_type && CONFIG.card_type[card_type - 1]
+                ? CONFIG.card_type[card_type - 1].name
+                : '-'}
             </div>
           </li>
 
