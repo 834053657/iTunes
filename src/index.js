@@ -41,9 +41,9 @@ const options = {
   transportOptions: {
     polling: {
       extraHeaders: {
-        'ITUNES-UID': 11211,
-        'TUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
-        'ITUNES-LANGUAGE': 'CN-zh',
+        /* 'ITUNES-UID': 11211,
+        'ITUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
+        'ITUNES-LANGUAGE': 'CN-zh', */
       },
     },
   },

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { map } from 'lodash';
 import moment from 'moment';
-// import LinesEllipsis from 'react-lines-ellipsis'
+import TextTruncate from 'react-text-truncate';
 import { Row, Col, Icon, Tooltip } from 'antd';
 import {
   ChartCard,
@@ -106,7 +106,20 @@ export default class Analysis extends Component {
                   </div>
                 </Col>
                 <Col span={24}>
-                  <div className={styles.desc}>{this.getContent(item)}</div>
+                  <div className={styles.desc}>
+                    <TextTruncate
+                      line={13}
+                      truncateText="…"
+                      text={item.content}
+                      className=""
+                      textTruncateChild={
+                        <a href={item.link} target="_blank">
+                          更多
+                        </a>
+                      }
+                    />
+                  </div>
+                  {/*<div className={styles.desc}>{this.getContent(item)}</div>*/}
                 </Col>
               </Row>
             </div>

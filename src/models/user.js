@@ -38,10 +38,11 @@ export default {
         payload: response,
       });
     },
-    *fetchCurrent(_, { call, put }) {
+    *fetchCurrent({ payload, callback }, { call, put }) {
       const response = yield call(queryCurrent);
       if (response.code === 0 && response.data) {
-        const app = dva();
+        const { data: { user } } = response;
+        /* const app = dva();
         const options = {
           'force new connection': true,
           extraHeaders: {
@@ -58,7 +59,7 @@ export default {
               },
             },
           },
-        };
+        }; */
         // TODO 在这里带上拿到的TOKEN 重连socket 是不是比较好?
         // TODO 或者从新注册一次插件？
         // yield app.use(dvaSocket(CONFIG.socket_url, options));
@@ -67,6 +68,7 @@ export default {
           type: 'saveCurrentUser',
           payload: response.data,
         });
+        callback && callback(user.id, response.data.token, 'CN-zh');
       } else {
         message.error(response.msg);
       }
