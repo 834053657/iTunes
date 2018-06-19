@@ -25,7 +25,7 @@ export default class UploadComponent extends Component {
   fileChange = info => {
     console.log(info);
     const file = info.file;
-    let m = {
+    const m = {
       uid: file.uid,
       name: file.name,
       status: file.status,

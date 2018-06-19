@@ -133,6 +133,10 @@ export default class SaleCard extends Component {
       this.data.multiple = e;
     };
 
+    this.ordersAmountChange = e => {
+      this.data.concurrency_order = e;
+    };
+
     this.selCondition = e => {
       this.setState({
         condition_type: e,
@@ -415,6 +419,10 @@ export default class SaleCard extends Component {
                 <Icon type="down" />
               </Button>
             </Dropdown>
+          </li>
+          <li>
+            <span className={styles.tableLeft}>同时处理订单数：</span>
+            <InputNumber onChange={e => this.ordersAmountChange(e)} />
           </li>
         </ul>
         <div className={styles.footerBox}>

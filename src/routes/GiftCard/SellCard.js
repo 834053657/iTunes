@@ -81,8 +81,11 @@ export default class BuyCard extends Component {
     };
 
     this.unitPriceChange = e => {
-      console.log(e);
       this.data.unit_price = e;
+    };
+
+    this.ordersAmountChange = e => {
+      this.data.concurrency_order = e;
     };
 
     //添加面额种类
@@ -302,6 +305,11 @@ export default class BuyCard extends Component {
               </Button>
             </Dropdown>
           </li>
+          <li>
+            <span className={styles.tableLeft}>同时处理订单数：</span>
+            <InputNumber onChange={e => this.ordersAmountChange(e)} />
+          </li>
+
           <li>
             <span className={styles.tableLeft}>包含：</span>
             <RadioGroup onChange={e => this.changePasswordType(e)} value={this.state.passwordType}>

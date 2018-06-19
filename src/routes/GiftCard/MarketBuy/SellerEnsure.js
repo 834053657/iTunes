@@ -82,16 +82,10 @@ export default class SellerEnsure extends Component {
                   </Button>
                   <Button
                     onClick={() => {
-                      this.props
-                        .dispatch({
-                          type: 'card/releaseOrder',
-                          payload: { order_id: order.id },
-                        })
-                        .then(res => {
-                          if (res.code === 0) {
-                            setStatus('pageStatus', 17);
-                          }
-                        });
+                      this.props.dispatch({
+                        type: 'card/releaseOrder',
+                        payload: { order_id: order.id },
+                      });
                     }}
                     type="primary"
                   >

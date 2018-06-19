@@ -37,8 +37,8 @@ export default class Process extends Component {
     const iptArr = [];
     for (let i = 0; i < item.count; i++) {
       iptArr.push({
-        password: '',
-        picture: '',
+        password: null,
+        picture: null,
       });
     }
     this.cardsData[index].cards = iptArr;
@@ -46,7 +46,7 @@ export default class Process extends Component {
   };
 
   writePassword = (e, item, index, i) => {
-    this.cardsData[index].cards[i].password = e.target.value;
+    this.cardsData[index].cards[i].password = +e.target.value;
     console.log(this.cardsData);
   };
 
@@ -74,15 +74,15 @@ export default class Process extends Component {
           <div className={styles.orderInfo}>
             <div className={styles.price}>
               <span>类型：</span>
-              <p>{order.order_type ? CONFIG.card_type[order.order_type - 1].name || '-' : '-'}</p>
+              <p>{order.order_type ? CONFIG.card_type[ad.card_type - 1].name || '-' : '-'}</p>
             </div>
             <div className={styles.price}>
               <span>要求：</span>
-              <p>卡密和图</p>
+              <p>{CONFIG.cardPwdType[ad.password_type] || '-'}</p>
             </div>
             <div className={styles.price}>
               <span>保障时间：</span>
-              <p>20</p>分钟
+              <p>{ad.guarantee_time}</p>分钟
             </div>
           </div>
 
@@ -90,23 +90,22 @@ export default class Process extends Component {
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
-                  <Avatar size="large" icon="user" />
+                  <Avatar size="large" src={userInfo.avatar} />
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <Badge offset={[12, 8]} status="default" dot>
-                      <span className={styles.name}>owner.nickname</span>
-                    </Badge>
+                    <span className={styles.name}>{userInfo.nickname}</span>
+                    <span className={styles.online}>&nbsp;</span>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>
-                    <span className={styles.dealNum}>ownerInfo.month_volume</span>
+                    <span className={styles.dealNum}>{userInfo.month_volume}</span>
                   </div>
                 </div>
               </div>
               <div className={styles.term}>
                 <h3>交易条款：</h3>
-                <p>info.term</p>
+                <p>{order.term}</p>
               </div>
             </div>
           </div>
@@ -149,15 +148,15 @@ export default class Process extends Component {
           <div>
             <div className={styles.amount}>
               <h4>
-                <span className={styles.title}>150</span>
+                <span className={styles.title}>{order.money}</span>
                 <span>总面额：</span>
               </h4>
               <h4>
-                <span className={styles.title}>1RMB</span>
+                <span className={styles.title}>{ad.unit_price}RMB</span>
                 <span>单价：</span>
               </h4>
               <h4>
-                <span className={styles.title}>120000RMB</span>
+                <span className={styles.title}>{order.money}RMB</span>
                 <span>总价：</span>
               </h4>
             </div>
@@ -165,14 +164,13 @@ export default class Process extends Component {
               <div>
                 请在&nbsp;
                 <Icon type="delete" />
-                &nbsp;30分钟内发卡
+                &nbsp; {ad.deadline}分钟内发卡
               </div>
               <Button>取消</Button>
               <Button
                 type="primary"
                 onClick={() => {
                   this.sendCDK();
-                  setStatus('pageStatus', 6);
                 }}
               >
                 发布

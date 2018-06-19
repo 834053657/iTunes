@@ -219,6 +219,7 @@ export async function createBuyOrder(params) {
 
 //获取订单详情
 export async function getOrderDetail(params) {
+  console.log(params);
   return request(`/itunes/order/detail?${stringify(params)}`);
 }
 
@@ -260,6 +261,13 @@ export async function getAppealInfo(params) {
   return request(`/itunes/card/order/get_appeal_info`);
 }
 
+export async function postCheck(params) {
+  return request('/itunes/order/check', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 //礼品卡列表actions结束
 
 export async function getCaptcha(params) {
@@ -268,12 +276,19 @@ export async function getCaptcha(params) {
 
 //发送CDK
 export async function sendCDK(params) {
-  return request('/itunes/order/sell/ship', {
+  return request('/itunes/order/ship', {
     method: 'POST',
     body: params,
   });
 }
 
+//取消订单
+export async function cacelOrder(params) {
+  return request('/itunes/order/cancel', {
+    method: 'POST',
+    body: params,
+  });
+}
 //释放订单
 export async function releaseOrder(params) {
   return request('/itunes/order/release', {

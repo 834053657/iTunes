@@ -20,9 +20,6 @@ import StepModel from '../../Step';
 
 const Step = Steps.Step;
 
-@connect(({ card }) => ({
-  card,
-}))
 export default class WaitBuyerCheck extends Component {
   constructor(props) {
     super();
@@ -38,6 +35,16 @@ export default class WaitBuyerCheck extends Component {
       return a + o.count;
     });
     return a;
+  };
+
+  handlePostCheck = () => {
+    const { params: { id } } = this.props.match || {};
+    this.props.dispatch({
+      type: 'card/submitCheck',
+      payload: {
+        id,
+      },
+    });
   };
 
   componentWillMount() {}
@@ -96,13 +103,7 @@ export default class WaitBuyerCheck extends Component {
               <Icon type="clock-circle-o" />
               &nbsp;10分钟发卡
             </h4>
-            <Button
-              type="primary"
-              size="large"
-              onClick={() => {
-                setStatus('pageStatus', 2);
-              }}
-            >
+            <Button type="primary" size="large" onClick={this.handlePostCheck}>
               立即查收
             </Button>
           </div>

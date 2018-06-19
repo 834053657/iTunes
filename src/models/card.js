@@ -15,8 +15,116 @@ import {
   ratingOrder,
   addSellAd,
   addBuyAd,
+  cacelOrder,
+  postCheck,
 } from '../services/api';
 
+//判断买家和卖家
+function identify(detail, user) {
+  if (!Object.keys(detail.ad).length) {
+    return false;
+  }
+  if (detail.order.order_type === 1) {
+    if (user.id === detail.ad.owner.id) {
+      return '卖家';
+    } else {
+      return '买家';
+    }
+  } else if (user.id === detail.ad.owner.id) {
+    return '买家';
+  } else {
+    return '卖家';
+  }
+}
+
+function initStatue(detail, user) {
+  const { order: { status, order_type } } = detail || {};
+  //主动出售
+  //5 发送CDK      卖家视图   打开        1
+  //1 等待买家查收  买家视图   等待查收      2
+
+  //主动购买
+  //11 买家确认         卖家视图    等待查收    2
+  //14 买家确认          买家视图   等待查收    2
+  let pageStatus;
+  switch (status) {
+    case 1:
+      pageStatus = 5;
+      break;
+    case 2:
+      if (order_type === 2) {
+        if (identify(detail, user) === '买家') {
+          pageStatus = 1;
+        } else {
+          // '卖家'
+          pageStatus = 6;
+        }
+      }
+      break;
+    case 3:
+      if (order_type === 2) {
+        if (identify(detail, user) === '买家') {
+          pageStatus = 2;
+        } else {
+          // '卖家'
+          pageStatus = 7;
+        }
+      } else if (identify(detail, user) === '买家') {
+        pageStatus = 14;
+      } else {
+        // '卖家'
+        pageStatus = 11;
+      }
+      break;
+    case 4:
+      if (order_type === 2) {
+        if (identify(detail, user) === '买家') {
+          pageStatus = 20;
+        } else {
+          // '卖家'
+          pageStatus = 21;
+        }
+      } else if (identify(detail, user) === '买家') {
+        pageStatus = 22;
+      } else {
+        // '卖家'
+        pageStatus = 23;
+      }
+      break;
+    case 5:
+      if (order_type === 2) {
+        if (identify(detail, user) === '买家') {
+          pageStatus = 3;
+        } else {
+          // '卖家'
+          pageStatus = 8;
+        }
+      } else if (identify(detail, user) === '买家') {
+        pageStatus = 17;
+      } else {
+        // '卖家'
+        pageStatus = 12;
+      }
+      break;
+    case 6:
+      if (order_type === 2) {
+        if (identify(detail, user) === '买家') {
+          pageStatus = 4;
+        } else {
+          // '卖家'
+          pageStatus = 9;
+        }
+      } else if (identify(detail, user) === '买家') {
+        pageStatus = 15;
+      } else {
+        // '卖家'
+        pageStatus = 13;
+      }
+      break;
+  }
+  return pageStatus;
+  //主动购买  买家打开
+}
 export default {
   namespace: 'card',
 
@@ -52,7 +160,6 @@ export default {
       }
     },
     *fetchCardList({ payload }, { put, call }) {
-      console.log(payload);
       const res = yield call(getCardlist, payload);
       yield put({
         type: 'GET_CARD_LIST',
@@ -77,9 +184,9 @@ export default {
     },
     *createSellOrder({ payload }, { call, put }) {
       const res = yield call(createSellOrder, payload);
-      console.log(res);
+      if (!res) return null;
       if (res.code === 0) {
-        return res;
+        return res.data;
       } else {
         message.error(res.msg);
       }
@@ -93,12 +200,17 @@ export default {
       // })
     },
     //获取订单详情
-    *fetchOrderDetail({ payload }, { call, put }) {
+    *fetchOrderDetail({ payload }, { call, put, select }) {
       const res = yield call(getOrderDetail, payload);
       if (res.code === 0) {
+        const currentUser = yield select(state => state.user.currentUser) || {};
+        const pageStatus = initStatue(res.data, currentUser.user);
         yield put({
           type: 'GET_OD_DETAIL',
-          payload: res.data,
+          payload: {
+            ...res.data,
+            pageStatus,
+          },
         });
       } else {
         message.error(res.msg);
@@ -143,28 +255,62 @@ export default {
         payload: res,
       });
     },
+    //立即查收
+    *submitCheck({ payload }, { call, put }) {
+      const res = yield call(postCheck, {
+        order_id: payload.id,
+      });
+      if (res.code === 0) {
+        yield put({
+          type: 'fetchOrderDetail',
+          payload: {
+            id: payload.id,
+          },
+        });
+      } else {
+        message.error(res.msg);
+      }
+    },
     //发送CDK
     *sendCDK({ payload }, { call, put }) {
       const res = yield call(sendCDK, payload);
       if (res.code === 0) {
-        return res.data;
+        yield put({
+          type: 'fetchOrderDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
       } else {
         message.error(res.msg);
+      }
+    },
+    //取消订单
+    *cacelOrder({ payload }, { call, put }) {
+      const res = yield call(cacelOrder, payload);
+      if (res.code === 0) {
+        return res;
+      } else {
+        message.error(res.msg);
+        return res;
       }
     },
     //释放订单
     *releaseOrder({ payload }, { call, put }) {
       const res = yield call(releaseOrder, payload);
       if (res.code === 0) {
-        return res;
+        yield put({
+          type: 'fetchOrderDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
       } else {
         message.error(res.msg);
-        return res;
       }
     },
-    //释放订单
+    //评价订单
     *ratingOrder({ payload }, { call, put }) {
-      console.log('dsgfdfsgdfgs');
       const res = yield call(ratingOrder, payload);
       if (res.code === 0) {
         return res;
@@ -226,11 +372,11 @@ export default {
         token: action.payload,
       };
     },
-    GET_OD_DETAIL(state, action) {
+    GET_OD_DETAIL(state, { payload }) {
       return {
         ...state,
         odDetail: {
-          ...action.payload,
+          ...payload,
         },
       };
     },
@@ -253,6 +399,15 @@ export default {
         appeal: action.payload,
       };
     },
+    // (state, {payload}) {
+    //   return {
+    //     ...state,
+    //     odDetail: {
+    //       ...state.odDetail,
+    //       pageStatus: payload
+    //     },
+    //   };
+    // },changePageStatus
   },
 
   subscriptions: {},

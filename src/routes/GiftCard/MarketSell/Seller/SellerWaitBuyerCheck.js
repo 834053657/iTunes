@@ -17,25 +17,37 @@ export default class SellerWaitBuyerCheck extends Component {
     console.log(props);
   }
 
+  cancelOrder = () => {
+    console.log(this.props);
+    this.props
+      .dispatch({
+        type: 'card/cacelOrder',
+        payload: { order_id: this.props.detail.order.id },
+      })
+      .then(() => {
+        this.props.setStatus('pageStatus', 9);
+      });
+  };
+
   componentWillMount() {}
 
   componentDidMount() {
-    this.props.dispatch({
-      type: 'enter_chat_room',
-      payload: {
-        order_id: 123,
-      },
-    });
+    // this.props.dispatch({
+    //   type: 'enter_chat_room',
+    //   payload: {
+    //     order_id: 123,
+    //   },
+    // });
   }
 
   componentWillUnmount() {
-    this.props.dispatch({
-      type: 'leave_chat_room',
-      payload: {
-        order_id: 123,
-        room_id: 'xxx',
-      },
-    });
+    // this.props.dispatch({
+    //   type: 'leave_chat_room',
+    //   payload: {
+    //     order_id: 123,
+    //     room_id: 'xxx',
+    //   },
+    // });
   }
 
   selectTerm = e => {
@@ -53,26 +65,32 @@ export default class SellerWaitBuyerCheck extends Component {
     console.log('this.props');
     console.log(this.props.detail);
     const { detail, pageStatus } = this.props;
+    const { trader, order, ad } = this.props.detail;
+    const userInfo = ad.owner;
 
     return (
       <div className={styles.stepTwoBox}>
-        SellerWaitBuyerCheck
         <StepModel steps={steps} current={1} />
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
             <div className={styles.orderInfo}>
               <h5>
                 <span>订单：</span>
-                <span className={styles.text}>115216524713875</span>
+                <span className={styles.text}>{order.order_no || '-'}</span>
               </h5>
-              <div className={styles.orderDescribe}>您向Jason出售总面额50的亚马逊美卡</div>
+              <div className={styles.orderDescribe}>
+                {CONFIG.card_type
+                  ? `您向${ad.owner.nickname}出售总面额${order.money}的
+                  ${CONFIG.card_type[order.order_type - 1].name}`
+                  : null}
+              </div>
               <div className={styles.price}>
                 <span>单价：</span>
-                <span>1</span>RMB
+                <span>{ad.unit_price}</span>RMB
               </div>
               <div>
                 <span>总价：</span>
-                <span>100</span>RMB
+                <span>{order.money}</span>RMB
               </div>
             </div>
 
@@ -82,7 +100,7 @@ export default class SellerWaitBuyerCheck extends Component {
                   保障时间剩余 &nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  {'30'}分钟
+                  {ad.guarantee_time}分钟
                 </h5>
               ) : (
                 <h5>
@@ -94,6 +112,7 @@ export default class SellerWaitBuyerCheck extends Component {
               )}
 
               <Button
+                onClick={this.cancelOrder}
                 style={{ borderColor: 'red', backgroundColor: '#fff', color: 'red' }}
                 type="danger"
               >
@@ -149,22 +168,22 @@ export default class SellerWaitBuyerCheck extends Component {
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
-                  <Avatar size="large" icon="user" />
+                  <Avatar size="large" src={userInfo.avatar} />
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <span className={styles.name}>nickname</span>
+                    <span className={styles.name}>{userInfo.nickname}</span>
                     <span className={styles.online}>&nbsp;</span>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>
-                    <span className={styles.dealNum}>ownerInfo.month_volume</span>
+                    <span className={styles.dealNum}>{userInfo.month_volume}</span>
                   </div>
                 </div>
               </div>
               <div className={styles.term}>
                 <h3>交易条款：</h3>
-                <p>info.term</p>
+                <p>{order.term}</p>
               </div>
             </div>
           </div>

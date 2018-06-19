@@ -6,6 +6,7 @@ import { postSellOrder } from '../../services/api';
 import styles from './DealDetail.less';
 
 @connect(({ card }) => ({
+  card,
   detail: card.adDetail,
 }))
 export default class DealDeatil extends Component {
@@ -35,15 +36,12 @@ export default class DealDeatil extends Component {
           this.setState({
             orderId: res.order_id,
           });
-          this.props.history.push({
-            pathname: `/card/deal-line/${res.order_id}`,
-          });
+          this.props.dispatch(routerRedux.push(`/card/deal-line/${res.order_id}`));
         }
       });
   };
 
   handlerSell = async () => {
-    console.log(this.postData);
     this.props
       .dispatch({
         type: 'card/createSellOrder',
@@ -376,6 +374,7 @@ export default class DealDeatil extends Component {
   render() {
     const { detail } = this.props;
     const { owner = {}, ad_type, term } = detail || {};
+    const userInfo = owner;
     return (
       <div className={styles.detailBox}>
         <h1>{ad_type === 1 ? '主动出售视图 ad_type = 1' : '主动购买视图 ad_type = 2'}</h1>
@@ -383,23 +382,21 @@ export default class DealDeatil extends Component {
         <div className={styles.right}>
           <div className={styles.userInfo}>
             <div className={styles.avatar}>
-              <Avatar size="large" src={owner.avatar} />
+              <Avatar size="large" src={userInfo.avatar} />
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>
-                <Badge offset={[12, 8]} status={owner.online ? 'success' : 'default'} dot>
-                  <span className={styles.name}>{owner.nickname}</span>
-                </Badge>
-                {/*<span className={styles.online}>&nbsp;</span>*/}
+                <span className={styles.name}>{userInfo.nickname}</span>
+                <span className={styles.online}>&nbsp;</span>
               </div>
               <div className={styles.infoBottom}>
-                <span className={styles.dealTit}>30日成单:</span>
-                <span className={styles.dealNum}>{owner.month_volume}</span>
+                <span className={styles.dealTit}>30日成单：</span>
+                <span className={styles.dealNum}>{userInfo.month_volume}</span>
               </div>
             </div>
           </div>
           <div className={styles.term}>
-            <h3>交易条款:</h3>
+            <h3>交易条款：</h3>
             <p>{term}</p>
           </div>
         </div>
