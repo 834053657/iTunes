@@ -232,7 +232,7 @@ export async function getToken(params) {
 }
 
 //创建出售
-export async function postSell(params) {
+export async function addSellAd(params) {
   console.log('post postSell in api');
   return request('/itunes/ad/card/sell', {
     method: 'POST',

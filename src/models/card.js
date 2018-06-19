@@ -7,13 +7,14 @@ import {
   getSellDetail,
   createSellOrder,
   createBuyOrder,
-  addBuyAd,
   getAppealInfo,
   getOrderDetail,
   sendCDK,
   sendQuickMsg,
   releaseOrder,
   ratingOrder,
+  addSellAd,
+  addBuyAd,
 } from '../services/api';
 
 export default {
@@ -76,8 +77,9 @@ export default {
     },
     *createSellOrder({ payload }, { call, put }) {
       const res = yield call(createSellOrder, payload);
+      console.log(res);
       if (res.code === 0) {
-        return res.data;
+        return res;
       } else {
         message.error(res.msg);
       }
@@ -128,7 +130,12 @@ export default {
       const res = yield call(addBuyAd, payload);
       return res;
     },
-    //添加购买广告
+    //添加出售广告
+    *addSellAd({ payload }, { call, put }) {
+      const res = yield call(addSellAd, payload);
+      return res;
+    },
+    //获取申诉详情
     *getAppealInfo({ payload }, { call, put }) {
       const res = yield call(getAppealInfo, payload);
       yield put({

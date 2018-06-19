@@ -17,7 +17,7 @@ export default class CardMarkets extends Component {
     super(props);
     const { type = '2' } = getQueryString(props.location.search);
     this.state = {
-      type: this.props.location.search.split('=', 2)[1],
+      type: this.props.location.search.split('=', 2)[1] || '2',
       typeVisible: false,
       denoVisible: false,
       minDeno: null,
@@ -184,8 +184,6 @@ export default class CardMarkets extends Component {
       r.condition.map(i => {
         return a.push(i.money);
       });
-      console.log(a);
-      console.log('aaaa');
       return a;
     }
   };
@@ -207,7 +205,6 @@ export default class CardMarkets extends Component {
   fetchData = (params_, callback) => {
     const params = { ...params_ };
     const { type } = this.state;
-
     params.type = params.type || type;
     this.props
       .dispatch({
@@ -343,7 +340,6 @@ export default class CardMarkets extends Component {
           </div>
         ),
         render: (text, record) => {
-          console.log(this.denoType(record));
           if (type === '2') {
             return (
               <span>
@@ -453,7 +449,7 @@ export default class CardMarkets extends Component {
     // console.log(pagination);
     return (
       <div>
-        <Tabs onChange={this.changeTab} activeKey={type}>
+        <Tabs onChange={this.changeTab} defaultActiveKey="2" activeKey={type}>
           {/*出售广告*/}
           <Tabs.TabPane tab="我要购买" key="2" />
           {/*购买广告*/}

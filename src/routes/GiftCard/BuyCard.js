@@ -239,17 +239,24 @@ export default class SaleCard extends Component {
       </Menu>
     ) : null;
 
+    const { items } = this.props.card.terms;
     const termsMenu = (
       <Menu>
-        {this.props.card.terms.items
-          ? this.props.card.terms.items.map(t => {
+        {items ? (
+          items.filter(i => i.status === 3) ? (
+            items.filter(i => i.status === 3).map(t => {
               return (
                 <Menu.Item key={t.id} onClick={() => this.selectTermTitle(t)}>
                   {t.title}
                 </Menu.Item>
               );
             })
-          : null}
+          ) : (
+            <Menu.Item>请等待条款审核</Menu.Item>
+          )
+        ) : (
+          <Menu.Item>请在我的订单里新建条款</Menu.Item>
+        )}
       </Menu>
     );
 

@@ -31,45 +31,32 @@ export default class DealDeatil extends Component {
         payload: this.postData,
       })
       .then(res => {
-        this.setState({
-          orderId: res.order_id,
-        });
-      })
-      .then(() => {
-        this.props.history.push({
-          pathname: `/card/deal-line/${this.state.orderId}`,
-        });
+        if (res) {
+          this.setState({
+            orderId: res.order_id,
+          });
+          this.props.history.push({
+            pathname: `/card/deal-line/${res.order_id}`,
+          });
+        }
       });
-  };
-
-  handlerBuy = () => {
-    this.props
-      .dispatch({
-        type: 'card/ensureBuyOrder',
-        payload: this.postData,
-      })
-      .then(() => {
-        this.postData.order_detail = [];
-      });
-    this.props.history.push({ pathname: `/card/buy-stepTwo` });
   };
 
   handlerSell = async () => {
-    console.log(this.props.detail);
+    console.log(this.postData);
     this.props
       .dispatch({
-        type: 'card/createBuyOrder',
+        type: 'card/createSellOrder',
         payload: this.postData,
       })
       .then(res => {
-        this.setState({
-          orderId: res.order_id,
-        });
-      })
-      .then(() => {
-        console.log(this.state.orderId);
-
-        this.props.dispatch(routerRedux.push(`/card/deal-line/${this.state.orderId}`));
+        console.log(res);
+        if (res) {
+          this.setState({
+            orderId: res.order_id,
+          });
+          this.props.dispatch(routerRedux.push(`/card/deal-line/${res.order_id}`));
+        }
       });
   };
 
@@ -82,7 +69,7 @@ export default class DealDeatil extends Component {
       this.postData.order_detail[index].count = e;
     } else {
       this.postData.order_detail.push({
-        money: d,
+        money: +d,
         count: e,
       });
     }
@@ -97,21 +84,21 @@ export default class DealDeatil extends Component {
       this.postData.order_detail[index].count = e;
     } else {
       this.postData.order_detail.push({
-        money: c.money,
+        money: +c.money,
         count: e,
       });
     }
   };
 
   changeRangeDataNum = (e, index) => {
-    this.state.orderData[index].conut = e;
+    this.state.orderData[index].count = e;
     this.postData.order_detail = this.state.orderData;
   };
 
   addDenoInRange = () => {
     const { orderData, denoValue } = this.state;
     orderData.push({
-      money: denoValue,
+      money: +denoValue,
     });
     this.setState({
       orderData,
@@ -124,9 +111,12 @@ export default class DealDeatil extends Component {
       type: 'card/fetchAdDetail',
       payload: { id },
       callback: res => {
-        if (res.ad_type === 1) {
-          this.postData.order_type = 2;
-        } else if (res.ad_type === 2) {
+        // if (res.ad_type === 1) {
+        //   this.postData.order_type = 2;
+        // } else if (res.ad_type === 2) {
+        //   this.postData.order_type = 1;
+        // }
+        if (res.ad_type === 2) {
           this.postData.order_type = 1;
         }
       },
@@ -154,8 +144,8 @@ export default class DealDeatil extends Component {
                 <span className={styles.denoTitle}>{c.money}面额:</span>
                 <div className={styles.denoIpt}>
                   <InputNumber
-                    min={c.min_count}
-                    max={c.max_count}
+                    min={+c.min_count}
+                    max={+c.max_count}
                     defaultValue={0}
                     onChange={e => this.changeFixedNum(e, c)}
                   />
@@ -179,8 +169,9 @@ export default class DealDeatil extends Component {
             }}
             value={this.state.denoValue}
           />
-
-          <h5>可添加面额：1-1000</h5>
+          <h5>
+            可添加面额：{condition.min_money}-{condition.max_money}
+          </h5>
           <div>
             <Button onClick={() => this.setState({ addDenoVisible: false })}>取消</Button>
             <Button
@@ -345,7 +336,7 @@ export default class DealDeatil extends Component {
                     <div className={styles.denoIpt}>
                       <InputNumber
                         min={0}
-                        max={18}
+                        max={19}
                         defaultValue={0}
                         onChange={e => this.changeNum(e, d)}
                       />

@@ -148,7 +148,7 @@ export default class BuyCard extends Component {
       this.data.cards = this.state.cards;
       this.props
         .dispatch({
-          type: 'card/addCardSell',
+          type: 'card/addSellAd',
           payload: this.data,
         })
         .then(res => {

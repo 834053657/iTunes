@@ -69,19 +69,19 @@ export function dvaSocket(url, option) {
         leave_room: (data, dispatch, getState) => {
           console.log(data);
         },
-        receive_message: (data, dispatch, getState) => {
-          const { data: msg } = data;
-          const { appeal } = getState().card;
-          const { data: { appeal_info } } = appeal;
-
-          // appeal_info.unshift(msg);
-          // console.log(555, appeal);
-          dispatch({
-            type: 'card/GET_APPEAL_INFO',
-            payload: appeal,
-          });
-          playAudio();
-        },
+        // receive_message: (data, dispatch, getState) => {
+        //   const { data: msg } = data;
+        //   const { appeal } = getState().card;
+        //   const { data: { appeal_info } } = appeal;
+        //
+        //   // appeal_info.unshift(msg);
+        //   // console.log(555, appeal);
+        //   dispatch({
+        //     type: 'card/GET_APPEAL_INFO',
+        //     payload: appeal,
+        //   });
+        //   playAudio();
+        // },
       },
       emit: {
         set_user_id: {

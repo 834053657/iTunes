@@ -3,13 +3,15 @@ import { connect } from 'dva';
 import { Form, Tabs, Button, Icon, Input, Steps, Avatar, Upload, Modal } from 'antd';
 import styles from './appeal.less';
 import StepModel from '../Step';
+import UploadComponent from './Upload';
 
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
 
 const FormItem = Form.Item;
-@connect(({ card }) => ({
+@connect(({ card, user }) => ({
   card,
+  user,
 }))
 @Form.create()
 export default class Process extends Component {
@@ -61,6 +63,8 @@ export default class Process extends Component {
   handleChange = ({ fileList }) => this.setState({ fileList });
 
   componentWillMount() {
+    //console.log("componentWillMount");
+    //console.log(this.props.user);
     this.props.dispatch({
       type: 'card/getAppealInfo',
     });
@@ -170,22 +174,7 @@ export default class Process extends Component {
                         <div className={styles.addPic}>
                           <span className={styles.addTitle}>上传图片:</span>
                           <div className={styles.addBox}>
-                            <Upload
-                              action="//jsonplaceholder.typicode.com/posts/"
-                              listType="picture-card"
-                              fileList={fileList}
-                              onPreview={this.handlePreview}
-                              onChange={this.handleChange}
-                            >
-                              {fileList.length >= 3 ? null : uploadButton}
-                            </Upload>
-                            <Modal
-                              visible={previewVisible}
-                              footer={null}
-                              onCancel={this.handleCancel}
-                            >
-                              <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                            </Modal>
+                            <UploadComponent />
                           </div>
                         </div>
                       </div>
