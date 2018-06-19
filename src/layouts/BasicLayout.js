@@ -197,9 +197,16 @@ class BasicLayout extends React.Component {
     this.props.dispatch(routerRedux.push('/message/list'));
   };
   handleNoticeRead = item => {
+    let type = 'global/readNotices';
+    let payload = { all: false, id: item.id };
+
+    if (item.msg_type === 104) {
+      type = 'global/readOrderNotices';
+      payload = { all: false, id: item.id, order_id: item.content && item.content.order_id };
+    }
     this.props.dispatch({
-      type: 'global/readNotices',
-      payload: { all: false, id: item.id },
+      type,
+      payload,
       callback: () => {
         if (item.msg_type === 1) {
           this.props.dispatch(

@@ -65,7 +65,7 @@ export default class List extends Component {
   }
 
   fetchData = (params_, callback) => {
-    let params = { ...params_ };
+    const params = { ...params_ };
     const { type, card_type, order_by, password_type, denominFilterValue } = this.state;
     params.type = params.type || type;
     params.card_type = params.card_type || card_type;
@@ -101,7 +101,7 @@ export default class List extends Component {
       return newObj;
     }, {});
 
-    let params1 = {
+    const params1 = {
       page: pagination.current,
       page_size: pagination.pageSize,
       card_type: filters.type,

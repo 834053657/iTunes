@@ -9,6 +9,7 @@ import {
   postVerifyCaptcha,
   queryMessageList,
   readMessage,
+  readOrderMessage,
 } from '../services/api';
 
 export default {
@@ -100,6 +101,14 @@ export default {
       });
       if (callback) callback();
     },
+    *readOrderNotices({ payload, callback }, { call, put }) {
+      const res = yield call(readOrderMessage, payload);
+      yield put({
+        type: 'setReadOrderMessage',
+        payload: res,
+      });
+      if (callback) callback();
+    },
     *sendVerify({ payload, callback }, { call }) {
       const res = yield call(postVerify, payload);
       if (res.code === 0) {
@@ -177,6 +186,12 @@ export default {
       };
     },
     setReadMessage(state, { payload }) {
+      console.log(payload);
+      return {
+        ...state,
+      };
+    },
+    setReadOrderMessage(state, { payload }) {
       console.log(payload);
       return {
         ...state,
