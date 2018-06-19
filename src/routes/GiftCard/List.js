@@ -1,182 +1,43 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { parse } from 'url';
 import { connect } from 'dva';
 import { stringify } from 'qs';
-import { filter } from 'lodash';
-import { Table, Tabs, Button, Icon, Pagination, Input, message } from 'antd';
+import { map, filter } from 'lodash';
+import { Table, Tabs, Button, Icon, Pagination, Input, message, Popover, Form } from 'antd';
 import { routerRedux } from 'dva/router';
+import FilterDemoinForm from './forms/FilterDemoinForm';
 import { getQueryString } from '../../utils/utils';
-import styles from './CardMarkets.less';
+import styles from './List.less';
+
+const InputGroup = Input.Group;
+const FormItem = Form.Item;
 
 @connect(({ card, loading }) => ({
   list: card.list,
   loading: loading.effects['card/fetchCardList_'],
 }))
-export default class CardMarkets extends Component {
+export default class List extends Component {
   constructor(props) {
     super(props);
-    console.log(props.location.search);
     const { type = '2' } = getQueryString(props.location.search);
     this.state = {
-      type: this.props.location.search.split('=', 2)[1] || '2',
-      typeVisible: false,
+      type,
       denoVisible: false,
-      minDeno: null,
-      maxDeno: null,
-      type_page: 2,
-      pagination: 1,
-    };
-    // this.setVisible = (type, visible) => {
-    //   this.setState({
-    //     [type]: visible,
-    //   });
-    // };
-    this.filter = {};
-
-    this.reSetPage = () => {
-      this.setState({
-        pagination: {
-          page: 1,
-          page_size: 10,
-        },
-      });
-      this.filter = Object.assign(this.filter, this.state.pagination);
-      console.log(this.filter);
-    };
-
-    //select Card Type
-    this.selectType = d => {
-      // console.log('card type');
-      this.filter = Object.assign(this.filter, { card_type: d.type });
-      this.reSetPage();
-      this.reloadList();
-      this.setState({
-        typeVisible: false,
-      });
-    };
-
-    this.changePage = e => {
-      this.state.pagination.page = e;
-      this.setState({
-        pagination: {
-          page: e,
-          page_size: 10,
-        },
-      });
-      this.filter = Object.assign(this.filter, this.state.pagination);
-      this.reloadList();
-    };
-
-    //after set filter，reload data
-    this.reloadList = () => {
-      const { type_page } = this.state;
-      // this.setState({ loading: true });
-      const { dispatch } = this.props;
-      if (+type_page === 2) {
-        //购买
-        dispatch({
-          type: 'card/fetchCardList',
-          payload: this.filter,
-        });
-      } else if (+type_page === 1) {
-        //出售
-        dispatch({
-          type: 'card/fetchCardList',
-          payload: this.filter,
-        });
-      }
-    };
-
-    // //单价排序
-    // this.tableChange = (pagination, filter, sorter) => {
-    //   //升序
-    //   if (sorter.order && sorter.order === 'ascend') {
-    //     this.filter = Object.assign(this.filter, { unit_price: 0 });
-    //     this.reSetPage();
-    //     this.reloadList();
-    //   }
-    //   //降序
-    //   if (sorter.order && sorter.order === 'descend') {
-    //     this.filter = Object.assign(this.filter, { unit_price: 1 });
-    //     this.reSetPage();
-    //     this.reloadList();
-    //   }
-    // };
-
-    this.setMinDeno = e => {
-      this.setState({
-        minDeno: e.target.value,
-      });
-    };
-
-    this.setMaxDeno = e => {
-      this.setState({
-        maxDeno: e.target.value,
-      });
-    };
-
-    this.resetRangeFilter = () => {
-      this.setState({
-        minDeno: null,
-        maxDeno: null,
-      });
-    };
-
-    this.setRangeFilter = () => {
-      const a = parseInt(this.state.minDeno);
-      const b = parseInt(this.state.maxDeno);
-      if (isNaN(this.state.minDeno) || isNaN(this.state.maxDeno)) {
-        return message.error('输入格式错误');
-      }
-      if (a >= b) {
-        return message.error('请输入正确范围');
-      }
-      if (a && !b) {
-        this.filter = Object.assign(this.filter, { minDenomination: a });
-      } else if (!a && b) {
-        this.filter = Object.assign(this.filter, { maxDenomination: b });
-      } else if (a && b) {
-        this.filter = Object.assign(this.filter, {
-          minDenomination: a,
-          maxDenomination: b,
-        });
-      } else {
-        return message.error('请至少输入一个范围');
-      }
-      if (this.state.type_page === 0) {
-        this.setState({ denoVisible: false });
-      }
-      this.reSetPage();
-      this.reloadList();
+      denominFilterValue: undefined,
     };
   }
 
   changeTab = type => {
     this.fetchData({ type }, () => {
-      //this.props.dispatch(routerRedux.replace({pathname: '/card/market', query: {type:1}}))
-      //this.props.history.replace(`/card/market?type=${type}`)
-      //routerRedux.push({pathname:`/card/market?type=${type}`})
       this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
       this.setState({
         type,
       });
     });
   };
+
   denoType = r => {
     return r.condition instanceof Array;
-  };
-
-  findDeno = (m, r) => {
-    const money = [];
-    const a = r.condition instanceof Array;
-    if (!a && r.condition) {
-      if (m === 'min') {
-        return r.condition.min_money;
-      }
-      if (m === 'max') {
-        return r.condition.max_money;
-      }
-    }
   };
 
   denoList = r => {
@@ -204,13 +65,24 @@ export default class CardMarkets extends Component {
   }
 
   fetchData = (params_, callback) => {
-    const params = { ...params_ };
-    const { type } = this.state;
+    let params = { ...params_ };
+    const { type, card_type, order_by, password_type, denominFilterValue } = this.state;
     params.type = params.type || type;
+    params.card_type = params.card_type || card_type;
+    params.order_by = params.order_by || order_by;
+    params.password_type = params.password_type || password_type;
+    params.denominFilterValue = params.denominFilterValue || denominFilterValue;
+    if (params.denominFilterValue) {
+      params.min_money = params.denominFilterValue.min;
+      params.max_money = params.denominFilterValue.max;
+      delete params.denominFilterValue;
+    }
     this.props
       .dispatch({
         type: 'card/fetchCardList_',
-        payload: params,
+        payload: {
+          ...params,
+        },
       })
       .then(() => {
         callback && callback();
@@ -218,34 +90,59 @@ export default class CardMarkets extends Component {
   };
 
   handleTableChange = (pagination, filtersArg, sorter) => {
-    console.log(pagination);
-    console.log(filtersArg);
-    console.log(sorter);
-    // const { dispatch, getValue } = this.props;
-    // const { formValues } = this.state;
-    //
-    // const filters = Object.keys(filtersArg).reduce((obj, key) => {
-    //   const newObj = { ...obj };
-    //   newObj[key] = getValue(filtersArg[key]);
-    //   return newObj;
-    // }, {});
+    const getValue = obj =>
+      Object.keys(obj)
+        .map(key => obj[key])
+        .join(',');
 
-    // const params = {
-    //   page: pagination.current,
-    //   page_size: pagination.pageSize,
-    //   ...formValues,
-    //   // ...filters,
-    // };
-    // if (sorter.field) {
-    //   params.sorter = `${sorter.field}_${sorter.order}`;
-    // }
-    // console.log(this.filter);
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
 
+    let params1 = {
+      page: pagination.current,
+      page_size: pagination.pageSize,
+      card_type: filters.type,
+      password_type: filters.password_type,
+    };
+    if (sorter.field) {
+      params1.order_by = sorter.field; //`${sorter.field}_${sorter.order}`;
+    }
+    // console.log(params);
+    this.setState({
+      ...params1,
+    });
+
+    this.fetchData(params1);
+  };
+
+  handleResetFilterDemoin = () => {
+    this.setState({
+      denominFilterValue: undefined,
+      denoVisible: false,
+    });
     this.fetchData();
   };
 
-  initColumns = () => {
-    const { type } = this.state;
+  handleFilterDemoin = value => {
+    this.setState({
+      denominFilterValue: value,
+      denoVisible: false,
+    });
+    this.fetchData({
+      denominFilterValue: value,
+    });
+  };
+
+  initColumns = (type, denominFilterValue) => {
+    const cardTypes = map(CONFIG.card_type, item => {
+      return { text: item.name, value: item.type };
+    });
+    const cardPwdType = map(CONFIG.cardPwdType, (text, value) => {
+      return { text, value };
+    });
     let columns = [
       {
         title: '用户名',
@@ -254,35 +151,8 @@ export default class CardMarkets extends Component {
       {
         title: '类型',
         dataIndex: 'type',
-        filterDropdown: (
-          <div style={{ padding: '0 10px 0 10px' }} className={styles.filterDropdownCard}>
-            {CONFIG.card_type
-              ? CONFIG.card_type.map(item => {
-                  return (
-                    <div
-                      className={styles.typeName}
-                      key={item.type}
-                      onClick={() => this.selectType(item)}
-                    >
-                      {item.name}
-                    </div>
-                  );
-                })
-              : null}
-          </div>
-        ),
-        filterDropdownVisible: this.state.typeVisible,
-        onFilterDropdownVisibleChange: e => {
-          this.setState({
-            typeVisible: e,
-          });
-        },
-        filterIcon: (
-          <Icon
-            type="down"
-            onClick={() => this.setState({ typeVisible: !this.state.typeVisible })}
-          />
-        ),
+        filterMultiple: false,
+        filters: cardTypes,
         render: (text, record) => {
           return (
             <span>
@@ -296,6 +166,9 @@ export default class CardMarkets extends Component {
       {
         title: type === '2' ? '包含' : '要求',
         dataIndex: 'password_type',
+        width: '200px',
+        filters: cardPwdType,
+        filterMultiple: false,
         render: (v, row) => {
           return <span>{v ? CONFIG.cardPwdType[v] : '-'}</span>;
         },
@@ -308,37 +181,18 @@ export default class CardMarkets extends Component {
             denoVisible: e,
           });
         },
+        filterIcon: (
+          <Icon
+            type="filter"
+            style={{ color: this.state.denominFilterValue ? '#108ee9' : '#aaa' }}
+          />
+        ),
         filterDropdownVisible: this.state.denoVisible,
         filterDropdown: (
-          <div className={styles.denoRange}>
-            <div className={styles.range}>
-              <span>区间:</span>
-              <span className={styles.min}>
-                <Input value={this.state.minDeno} onChange={e => this.setMinDeno(e)} />
-              </span>
-              <span>---</span>
-              <span className={styles.max}>
-                <Input value={this.state.maxDeno} onChange={e => this.setMaxDeno(e)} />
-              </span>
-            </div>
-            <div className={styles.rangeBtns}>
-              <Button
-                onClick={() => {
-                  this.resetRangeFilter();
-                }}
-              >
-                重置
-              </Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  this.setRangeFilter();
-                }}
-              >
-                确定
-              </Button>
-            </div>
-          </div>
+          <FilterDemoinForm
+            onSubmit={this.handleFilterDemoin}
+            onCancel={this.handleResetFilterDemoin}
+          />
         ),
         render: (text, record) => {
           if (type === '2') {
@@ -445,26 +299,25 @@ export default class CardMarkets extends Component {
 
   render() {
     const { list, loading } = this.props;
-    const { type } = this.state;
+    const { type, denominFilterValue } = this.state;
     const { items, pagination } = list || {};
-    // console.log(pagination);
     return (
-      <div>
+      <div className={styles.page}>
+        <h2>礼品卡大厅</h2>
         <Tabs onChange={this.changeTab} defaultActiveKey="2" activeKey={type}>
           {/*出售广告*/}
           <Tabs.TabPane tab="我要购买" key="2" />
           {/*购买广告*/}
           <Tabs.TabPane tab="我要出售" key="1" />
         </Tabs>
-
         <Table
           rowKey={row => row.id}
           dataSource={items}
-          columns={this.initColumns()}
+          columns={this.initColumns(type, denominFilterValue)}
           onChange={this.handleTableChange}
           pagination={{
             ...pagination,
-            showQuickJumper: true,
+            // showQuickJumper: true,
           }}
           loading={loading}
         />
