@@ -59,7 +59,7 @@ export default class List extends Component {
     },
     {
       title: '交易产品',
-      dataIndex: 'order_type',
+      dataIndex: 'goods_type',
       render: (val, row) => (val && CONFIG.goods_type[val] ? CONFIG.goods_type[val] : '-'),
     },
     {
@@ -71,21 +71,13 @@ export default class List extends Component {
     },
     {
       title: '交易类型',
-      dataIndex: 'status',
-      render(val, row) {
-        if (val === 4) {
-          return (
-            <span>
-              <Badge status={statusMap[3]} text={val ? `${CONFIG.ad_status[4]}` : '-'} />
-              <Tooltip title={row.reason}>
-                <span className={styles.reason}>原因</span>
-              </Tooltip>
-            </span>
-          );
-        } else {
-          return <Badge status={statusMap[val - 1]} text={val ? CONFIG.ad_status[val] : '-'} />;
-        }
-      },
+      dataIndex: 'order_type',
+      render: (val, row) => (
+        <span>
+          {val && CONFIG.order_type[val] ? CONFIG.order_type[val] : '-'}{' '}
+          {row.passive ? '(挂单)' : null}
+        </span>
+      ),
     },
     {
       title: '金额',
