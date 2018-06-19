@@ -247,6 +247,11 @@ class BasicLayout extends React.Component {
       return;
     }
 
+    if (key === 'order') {
+      this.props.dispatch(routerRedux.push('/order/my'));
+      return;
+    }
+
     if (key === 'logout') {
       this.props.dispatch({
         type: 'login/logout',

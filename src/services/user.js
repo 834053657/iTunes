@@ -100,3 +100,7 @@ export async function updateAvatar(params) {
 export async function getG2Secret(params) {
   return request(`/itunes/user/2fa_secret?${stringify(params)}`);
 }
+
+export async function queryMyOrderList(params) {
+  return request(`/itunes/user/order/all?${stringify(params)}`);
+}

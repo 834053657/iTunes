@@ -92,7 +92,7 @@ export default class Layout extends Component {
           <div className={styles.content}>
             <Tabs onChange={this.handleTabsChange} type="card" activeKey={activeKey}>
               <TabPane tab="充值" key="1">
-                {!hadEnabledPayment
+                {hadEnabledPayment
                   ? activeKey === '1' && <RechargeForm {...this.props} />
                   : Warning}
               </TabPane>
