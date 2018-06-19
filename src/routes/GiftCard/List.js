@@ -15,6 +15,7 @@ import styles from './CardMarkets.less';
 export default class CardMarkets extends Component {
   constructor(props) {
     super(props);
+    console.log(props.location.search);
     const { type = '2' } = getQueryString(props.location.search);
     this.state = {
       type: this.props.location.search.split('=', 2)[1],
