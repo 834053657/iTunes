@@ -117,6 +117,9 @@ export const getRouterData = app => {
     '/ad/terms': {
       component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/MyTermsList')),
     },
+    '/order/my': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/MyOrderList')),
+    },
     // 帮助，隐私，条款路由控制
     '/information/help': {
       component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Help')),

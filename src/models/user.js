@@ -16,6 +16,7 @@ import {
   postPayMethod,
   deletePayMethod,
   updateAvatar,
+  queryMyOrderList,
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 
@@ -28,6 +29,10 @@ export default {
     forgetPassword: {},
     changePassword: {},
     g2Info: {},
+    myOrders: {
+      list: [],
+      pagination: {},
+    },
   },
 
   effects: {
@@ -192,6 +197,16 @@ export default {
         message.error(response.msg);
       }
     },
+    *fetchMyOrderList({ payload, callback }, { call, put }) {
+      const res = yield call(queryMyOrderList, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'saveMyOrderList',
+          payload: res.data,
+        });
+        callback && callback();
+      }
+    },
   },
 
   reducers: {
@@ -220,6 +235,16 @@ export default {
         currentUser: {
           ...state.currentUser,
           notifyCount: action.payload,
+        },
+      };
+    },
+    saveMyOrderList(state, { payload }) {
+      const { items = [], paginator } = payload || {};
+      return {
+        ...state,
+        myOrders: {
+          list: items,
+          pagination: { ...paginator, current: paginator.page },
         },
       };
     },

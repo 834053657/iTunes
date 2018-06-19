@@ -48,7 +48,6 @@ export async function userWithdraw(params) {
     body: params,
   });
 }
-
 export async function queryMyAdList(params) {
   return request(`/itunes/user/ad/all?${stringify(params)}`);
 }
