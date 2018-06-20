@@ -6,6 +6,24 @@ export default {
   socket_url,
   base_url,
   web_name,
+  videoAuthConcat: [
+    {
+      text: '客服电话1',
+      account: '123',
+    },
+    {
+      text: '客服电话2',
+      account: '1234',
+    },
+    {
+      text: '客服电话3',
+      account: '1235',
+    },
+    {
+      text: '客服QQ1',
+      account: '312321312321',
+    },
+  ],
   web_sub_title: 'Itunes & 礼品卡 在线交易平台',
   language: {
     zh_CN: '简体中文',

@@ -118,9 +118,9 @@ export default class GlobalHeader extends PureComponent {
         )}
 
         <div className={styles.right}>
-          <Dropdown overlay={language}>
+          {/*  <Dropdown overlay={language}>
             <span className={`${styles.action}`}>EN/CN</span>
-          </Dropdown>
+          </Dropdown>*/}
           {currentUser.token && currentUser.user ? (
             <span>
               <Link to="/wallet">
