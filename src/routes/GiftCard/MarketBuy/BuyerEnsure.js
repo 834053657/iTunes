@@ -6,6 +6,9 @@ import StepModel from '../Step';
 
 const Option = Select.Option;
 
+@connect(({ card }) => ({
+  card,
+}))
 export default class BuyerEnsure extends Component {
   constructor(props) {
     super();
@@ -60,7 +63,10 @@ export default class BuyerEnsure extends Component {
               <Button
                 type="danger"
                 onClick={() => {
-                  this.props.setStatus('pageStatus', 21);
+                  this.props.dispatch({
+                    type: 'card/appealOrder',
+                    payload: { order_id: order.id },
+                  });
                 }}
               >
                 申诉

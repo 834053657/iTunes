@@ -23,6 +23,7 @@ export default class OrderDetail extends Component {
     super();
     this.state = {
       pageStatus: null,
+      orderId: props.match.params.id,
     };
   }
 
@@ -35,6 +36,9 @@ export default class OrderDetail extends Component {
   fetchData = () => {
     const { params: { id } } = this.props.match || {};
     const { order } = this.props.detail;
+    this.setState({
+      orderId: id,
+    });
     console.log(id);
     this.props.dispatch({
       type: 'card/fetchOrderDetail',
@@ -288,6 +292,7 @@ export default class OrderDetail extends Component {
             detail={detail}
             user={user}
             orderTitle={this.orderTitle}
+            orderId={this.state.orderId}
           />
         ) : null}
       </div>

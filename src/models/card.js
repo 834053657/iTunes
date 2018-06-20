@@ -17,6 +17,7 @@ import {
   addBuyAd,
   cacelOrder,
   postCheck,
+  appealOrder,
 } from '../services/api';
 
 //判断买家和卖家
@@ -184,6 +185,7 @@ export default {
     },
     *createSellOrder({ payload }, { call, put }) {
       const res = yield call(createSellOrder, payload);
+      console.log(res);
       if (!res) return null;
       if (res.code === 0) {
         return res.data;
@@ -298,6 +300,20 @@ export default {
     //释放订单
     *releaseOrder({ payload }, { call, put }) {
       const res = yield call(releaseOrder, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'fetchOrderDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
+      } else {
+        message.error(res.msg);
+      }
+    },
+    //申诉订单
+    *appealOrder({ payload }, { call, put }) {
+      const res = yield call(appealOrder, payload);
       if (res.code === 0) {
         yield put({
           type: 'fetchOrderDetail',

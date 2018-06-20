@@ -27,12 +27,15 @@ export default class DealDeatil extends Component {
   }
 
   ensureOrder = () => {
+    console.log(this.postData);
+
     this.props
       .dispatch({
         type: 'card/createBuyOrder',
         payload: this.postData,
       })
       .then(res => {
+        console.log(res);
         if (res) {
           this.setState({
             orderId: res.order_id,
@@ -70,7 +73,7 @@ export default class DealDeatil extends Component {
       });
     } else {
       this.postData.order_detail.push({
-        money: +d,
+        money: d,
         count: e,
       });
     }
@@ -97,8 +100,8 @@ export default class DealDeatil extends Component {
       this.postData.order_detail[index].count = +e;
     } else {
       this.postData.order_detail.push({
-        money: +c.money,
-        count: +e,
+        money: parseInt(c.money),
+        count: parseInt(e),
       });
     }
   };

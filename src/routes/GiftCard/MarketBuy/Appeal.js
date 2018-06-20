@@ -12,6 +12,7 @@ const FormItem = Form.Item;
 @connect(({ card, user }) => ({
   card,
   user,
+  appealInfo: card.appeal,
 }))
 @Form.create()
 export default class Process extends Component {
@@ -29,6 +30,8 @@ export default class Process extends Component {
         },
       ],
     };
+    //当前订单ID
+    this.id = props.orderId;
   }
 
   handleCancel = () => this.setState({ previewVisible: false });
@@ -63,35 +66,39 @@ export default class Process extends Component {
   handleChange = ({ fileList }) => this.setState({ fileList });
 
   componentWillMount() {
-    //console.log("componentWillMount");
-    //console.log(this.props.user);
+    console.log(this.id);
     this.props.dispatch({
       type: 'card/getAppealInfo',
+      payload: {
+        order_id: this.id,
+        order_msg_type: 2,
+        goods_type: 2,
+      },
     });
   }
 
   componentDidMount() {
-    this.props.dispatch({
-      type: 'enter_chat_room',
-      payload: {
-        order_id: 123,
-      },
-    });
+    // this.props.dispatch({
+    //   type: 'enter_chat_room',
+    //   payload: {
+    //     order_id: this.id,
+    //   },
+    // });
   }
 
   componentWillUnmount() {
-    this.props.dispatch({
-      type: 'leave_chat_room',
-      payload: {
-        order_id: 123,
-        room_id: 'xxx',
-      },
-    });
+    // this.props.dispatch({
+    //   type: 'leave_chat_room',
+    //   payload: {
+    //     order_id: this.id,
+    //     room_id: 'xxx',
+    //   },
+    // });
   }
 
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
-    const { card } = this.props;
+    const { card, appealInfo } = this.props;
     const { getFieldDecorator } = this.props.form;
 
     const { order, ad, cards, trader } = this.props.detail;
@@ -221,22 +228,23 @@ function AppealInfoAppealInfo(props) {
   return (
     <div>
       <ul className={styles.tabTwoTab}>
-        {info.map((i, index) => {
-          return (
-            <li key={index}>
-              <div className={styles.leftAvatar}>
-                <span className={styles.avaTop}>
-                  <Avatar className={styles.avatar} size="large" src={i.avatar} />
-                </span>
-                <span className={styles.avaName}>{i.user_name}</span>
-              </div>
-              <div className={styles.chatItem}>
-                <p className={styles.chatText}>{i.content.cont}</p>
-                <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-              </div>
-            </li>
-          );
-        })}
+        {info &&
+          info.map((i, index) => {
+            return (
+              <li key={index}>
+                <div className={styles.leftAvatar}>
+                  <span className={styles.avaTop}>
+                    <Avatar className={styles.avatar} size="large" src={i.avatar} />
+                  </span>
+                  <span className={styles.avaName}>{i.user_name}</span>
+                </div>
+                <div className={styles.chatItem}>
+                  <p className={styles.chatText}>{i.content.cont || ''}</p>
+                  <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
+                </div>
+              </li>
+            );
+          })}
       </ul>
     </div>
   );

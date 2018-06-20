@@ -269,7 +269,7 @@ export async function getSellDetail(params) {
 
 //获取申诉详情
 export async function getAppealInfo(params) {
-  return request(`/itunes/card/order/get_appeal_info`);
+  return request(`/itunes/message/get_chat_history?${stringify(params)}`);
 }
 
 export async function postCheck(params) {
@@ -303,6 +303,13 @@ export async function cacelOrder(params) {
 //释放订单
 export async function releaseOrder(params) {
   return request('/itunes/order/release', {
+    method: 'POST',
+    body: params,
+  });
+}
+//申诉
+export async function appealOrder(params) {
+  return request('/itunes/order/appeal', {
     method: 'POST',
     body: params,
   });

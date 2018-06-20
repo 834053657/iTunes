@@ -75,7 +75,11 @@ export default class SellerEnsure extends Component {
                   <Button
                     type="danger"
                     onClick={() => {
-                      this.props.setStatus('pageStatus', 21);
+                      console.log('appeal');
+                      this.props.dispatch({
+                        type: 'card/appealOrder',
+                        payload: { order_id: order.id },
+                      });
                     }}
                   >
                     申诉

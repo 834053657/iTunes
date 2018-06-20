@@ -101,7 +101,7 @@ export default class SaleCard extends Component {
       this.setState({
         condition: a,
       });
-      this.data.condition = a;
+      this.data.condition = parseInt(a);
     };
 
     this.changeMinCount = (e, index) => {
@@ -110,7 +110,7 @@ export default class SaleCard extends Component {
       this.setState({
         condition: a,
       });
-      this.data.condition = a;
+      this.data.condition = parseInt(a);
     };
 
     this.changeMaxCount = (e, index) => {
@@ -119,7 +119,7 @@ export default class SaleCard extends Component {
       this.setState({
         condition: a,
       });
-      this.data.condition = a;
+      this.data.condition = parseInt(a);
     };
 
     this.addAdvertising = () => {
