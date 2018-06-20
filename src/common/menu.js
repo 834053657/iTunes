@@ -8,7 +8,7 @@ let menuData = [
   {
     name: 'Itunes',
     path: 'itunes',
-    hide: true,
+    // hide: true,
     children: [
       {
         name: '交易大厅',

@@ -13,9 +13,11 @@ import {
   message,
   Popover,
 } from 'antd';
-import styles from './SellCard.less';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import OnlyPicture from './SellOnlyPicture';
 import PicWithText from './SellPicWithText';
+import SellForm from './forms/SellForm';
+import styles from './SellCard.less';
 
 const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
@@ -183,6 +185,10 @@ export default class BuyCard extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'card/fetchTerms',
+      payload: {
+        status: 3,
+        page_size: 10000,
+      },
     });
   }
 
@@ -262,203 +268,212 @@ export default class BuyCard extends Component {
       </div>
     );
 
+    const breadcrumbList = [
+      { title: '广告管理', href: '/ad/my' },
+      { title: '礼品卡', href: '/card/market' },
+      { title: '创建出售' },
+    ];
+
+    const { terms } = this.props.card || {};
+
     return (
       <div className={styles.addSale}>
-        <header>
-          <span>广告管理 /</span>
-          <span>礼品卡 /</span>
-          <span className={styles.sale}>创建出售</span>
-        </header>
-        <ul className={styles.submitTable}>
-          <li>
-            <span className={styles.tableLeft}>类型：</span>
-            <Dropdown overlay={cardTypeMenu} trigger={['click']}>
-              <Button>
-                {this.state.defaultCardTypeName ? this.state.defaultCardTypeName : '选择'}
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </li>
-          <li>
-            <span className={styles.tableLeft}>单价：</span>
-            <InputNumber onChange={e => this.unitPriceChange(e)} />
-          </li>
-          <li>
-            <span className={styles.tableLeft}>保障时间：</span>
-            <Dropdown overlay={guaranteeTimeMenu} trigger={['click']}>
-              <Button>
-                {this.state.defaultGuaTime ? this.state.defaultGuaTime : '选择'}
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </li>
-          <li>
-            <span className={styles.tableLeft}>
-              交易条款
-              <i>(可选)</i>
-              ：
-            </span>
-            <Dropdown overlay={termsMenu} trigger={['click']}>
-              <Button>
-                {this.state.defaultTermTitle ? this.state.defaultTermTitle : '选择'}
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </li>
-          <li>
-            <span className={styles.tableLeft}>同时处理订单数：</span>
-            <InputNumber onChange={e => this.ordersAmountChange(e)} />
-          </li>
+        <PageHeaderLayout breadcrumbList={breadcrumbList}>
+          {/*<SellForm terms={terms} />*/}
+          <ul className={styles.submitTable}>
+            <li>
+              <span className={styles.tableLeft}>类型：</span>
+              <Dropdown overlay={cardTypeMenu} trigger={['click']}>
+                <Button>
+                  {this.state.defaultCardTypeName ? this.state.defaultCardTypeName : '选择'}
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+            </li>
+            <li>
+              <span className={styles.tableLeft}>单价：</span>
+              <InputNumber onChange={e => this.unitPriceChange(e)} />
+            </li>
+            <li>
+              <span className={styles.tableLeft}>保障时间：</span>
+              <Dropdown overlay={guaranteeTimeMenu} trigger={['click']}>
+                <Button>
+                  {this.state.defaultGuaTime ? this.state.defaultGuaTime : '选择'}
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+            </li>
+            <li>
+              <span className={styles.tableLeft}>
+                交易条款
+                <i>(可选)</i>
+                ：
+              </span>
+              <Dropdown overlay={termsMenu} trigger={['click']}>
+                <Button>
+                  {this.state.defaultTermTitle ? this.state.defaultTermTitle : '选择'}
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+            </li>
+            <li>
+              <span className={styles.tableLeft}>同时处理订单数：</span>
+              <InputNumber onChange={e => this.ordersAmountChange(e)} />
+            </li>
 
-          <li>
-            <span className={styles.tableLeft}>包含：</span>
-            <RadioGroup onChange={e => this.changePasswordType(e)} value={this.state.passwordType}>
-              <Radio value={1}>有卡密</Radio>
-              <Radio value={2}>有图</Radio>
-              <Radio value={3}>有图有卡密</Radio>
-            </RadioGroup>
-          </li>
-          <li>
-            <span className={styles.tableLeft}>&nbsp;</span>
-            <Popover
-              key={this.state.date}
-              placement="topRight"
-              content={addDenoBox}
-              title="添加面额"
-              trigger="click"
-              visible={this.state.addDenoVisible}
-              onVisibleChange={() => {
-                this.setVisible('addDenoVisible', !this.state.addDenoVisible);
-              }}
-            >
-              <Button
-                style={{ width: '260px', borderStyle: 'dashed' }}
-                onClick={() => {
-                  this.setState({
-                    date: new Date(),
-                  });
+            <li>
+              <span className={styles.tableLeft}>包含：</span>
+              <RadioGroup
+                onChange={e => this.changePasswordType(e)}
+                value={this.state.passwordType}
+              >
+                <Radio value={1}>有卡密</Radio>
+                <Radio value={2}>有图</Radio>
+                <Radio value={3}>有图有卡密</Radio>
+              </RadioGroup>
+            </li>
+            <li>
+              <span className={styles.tableLeft}>&nbsp;</span>
+              <Popover
+                key={this.state.date}
+                placement="topRight"
+                content={addDenoBox}
+                title="添加面额"
+                trigger="click"
+                visible={this.state.addDenoVisible}
+                onVisibleChange={() => {
+                  this.setVisible('addDenoVisible', !this.state.addDenoVisible);
                 }}
               >
-                + 添加面额
-              </Button>
-            </Popover>
-          </li>
-        </ul>
-        {this.state.passwordType === 1
-          ? this.state.cards.map((item, index) => {
-              return (
-                <div key={index + 'cards'} className={styles.denomination}>
-                  <header>
-                    <span>{item.money}</span>
-                    面额 （{item.items.length}）
-                    <div>
-                      <Button>导入</Button>
-                      <Button>删除</Button>
-                    </div>
-                  </header>
-                  <section>
-                    <div className={styles.left}>
-                      <span>卡密：</span>
-                    </div>
-                    <div className={styles.right}>
-                      {item.items.map((card, i) => {
-                        return (
-                          <div key={index + 'item'} className={styles.iptBox}>
-                            <div className={styles.input}>
-                              <Input
-                                type="text"
-                                value={this.state.cards[index].items[i].password}
-                                onChange={e => {
-                                  this.denoIptValueChange(e, i, index);
-                                }}
-                              />
-                            </div>
-                            <div className={styles.icon}>
-                              <Icon
-                                onClick={() => {
-                                  this.delCDKBox(item.money, i);
-                                }}
-                                type="delete"
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-
-                      <div className={styles.addBtn}>
-                        <Button
-                          style={{ width: '580px', borderStyle: 'dashed' }}
-                          onClick={() => {
-                            this.addCDKBox(item.money);
-                          }}
-                        >
-                          + 添加卡密
-                        </Button>
+                <Button
+                  style={{ width: '260px', borderStyle: 'dashed' }}
+                  onClick={() => {
+                    this.setState({
+                      date: new Date(),
+                    });
+                  }}
+                >
+                  + 添加面额
+                </Button>
+              </Popover>
+            </li>
+          </ul>
+          {this.state.passwordType === 1
+            ? this.state.cards.map((item, index) => {
+                return (
+                  <div key={index + 'cards'} className={styles.denomination}>
+                    <header>
+                      <span>{item.money}</span>
+                      面额 （{item.items.length}）
+                      <div>
+                        <Button>导入</Button>
+                        <Button>删除</Button>
                       </div>
-                    </div>
-                  </section>
-                </div>
-              );
-            })
-          : null}
+                    </header>
+                    <section>
+                      <div className={styles.left}>
+                        <span>卡密：</span>
+                      </div>
+                      <div className={styles.right}>
+                        {item.items.map((card, i) => {
+                          return (
+                            <div key={index + 'item'} className={styles.iptBox}>
+                              <div className={styles.input}>
+                                <Input
+                                  type="text"
+                                  value={this.state.cards[index].items[i].password}
+                                  onChange={e => {
+                                    this.denoIptValueChange(e, i, index);
+                                  }}
+                                />
+                              </div>
+                              <div className={styles.icon}>
+                                <Icon
+                                  onClick={() => {
+                                    this.delCDKBox(item.money, i);
+                                  }}
+                                  type="delete"
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
 
-        {this.state.passwordType === 2
-          ? this.state.cards.map((item, index) => {
-              return (
-                <OnlyPicture
-                  key={index}
-                  item={item}
-                  styles={styles}
-                  index={index}
-                  getToken={() => this.getToken()}
-                />
-              );
-            })
-          : null}
+                        <div className={styles.addBtn}>
+                          <Button
+                            style={{ width: '580px', borderStyle: 'dashed' }}
+                            onClick={() => {
+                              this.addCDKBox(item.money);
+                            }}
+                          >
+                            + 添加卡密
+                          </Button>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                );
+              })
+            : null}
 
-        {this.state.passwordType === 3
-          ? this.state.cards.map((item, index) => {
-              return (
-                <PicWithText
-                  key={index}
-                  item={item}
-                  styles={styles}
-                  index={index}
-                  handlePreview={this.handlePreview}
-                  changeFileData={({ fileList }) => this.changeFileData({ fileList }, index)}
-                  addCDKBox={this.addCDKBox}
-                  delCDKBox={this.delCDKBox}
-                  changePTPass={this.denoIptValueChange}
-                />
-              );
-            })
-          : null}
+          {this.state.passwordType === 2
+            ? this.state.cards.map((item, index) => {
+                return (
+                  <OnlyPicture
+                    key={index}
+                    item={item}
+                    styles={styles}
+                    index={index}
+                    getToken={() => this.getToken()}
+                  />
+                );
+              })
+            : null}
 
-        {this.state.cards.length ? (
-          <div>
-            <div className={styles.amount}>
-              <h4>
-                <span>总面额：</span>
-                <span>150</span>
-              </h4>
-              <h5>
-                <span>总价：</span>
-                <span>120RMB</span>
-              </h5>
+          {this.state.passwordType === 3
+            ? this.state.cards.map((item, index) => {
+                return (
+                  <PicWithText
+                    key={index}
+                    item={item}
+                    styles={styles}
+                    index={index}
+                    handlePreview={this.handlePreview}
+                    changeFileData={({ fileList }) => this.changeFileData({ fileList }, index)}
+                    addCDKBox={this.addCDKBox}
+                    delCDKBox={this.delCDKBox}
+                    changePTPass={this.denoIptValueChange}
+                  />
+                );
+              })
+            : null}
+
+          {this.state.cards.length ? (
+            <div>
+              <div className={styles.amount}>
+                <h4>
+                  <span>总面额：</span>
+                  <span>150</span>
+                </h4>
+                <h5>
+                  <span>总价：</span>
+                  <span>120RMB</span>
+                </h5>
+              </div>
             </div>
+          ) : null}
+          <div className={styles.footer}>
+            <Button>取消</Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                this.addAdvertising();
+              }}
+            >
+              发布
+            </Button>
           </div>
-        ) : null}
-        <div className={styles.footer}>
-          <Button>取消</Button>
-          <Button
-            type="primary"
-            onClick={() => {
-              this.addAdvertising();
-            }}
-          >
-            发布
-          </Button>
-        </div>
+        </PageHeaderLayout>
       </div>
     );
   }
