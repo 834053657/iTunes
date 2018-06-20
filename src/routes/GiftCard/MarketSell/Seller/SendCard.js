@@ -5,6 +5,8 @@ import { Button, Icon, Input, Avatar, Badge } from 'antd';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
 import { sendCDK } from '../../../../services/api';
+import OnlyPicture from './OnlyPic';
+import PicWithText from './PicWithText';
 
 @connect(({ card }) => ({
   card,
@@ -65,6 +67,7 @@ export default class Process extends Component {
     const { ad = {}, cards = {}, order = {} } = this.state.detail;
 
     const userInfo = ad.owner;
+    console.log(order.order_detail);
 
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (
@@ -110,71 +113,87 @@ export default class Process extends Component {
             </div>
           </div>
         </div>
-        <div className={styles.bottom}>
-          {order.order_detail.map((item, index) => {
-            return (
-              <div key={index} className={styles.denomination}>
-                <header>
-                  <span>{item.money}</span>
-                  面额 ({item.count})
-                  <div>
-                    <Button>导入</Button>
-                  </div>
-                </header>
-                <section className={styles.iptSection}>
-                  <div className={styles.left}>
-                    <span>卡密：</span>
-                  </div>
-                  <div className={styles.right}>
-                    <div className={styles.iptBox}>
-                      <div className={styles.input}>
-                        {this.renderInput(item, index).map((n, i) => {
-                          return (
-                            <Input
-                              key={i}
-                              type="text"
-                              onChange={e => this.writePassword(e, item, index, i)}
-                            />
-                          );
-                        })}
-                      </div>
+        <div className={styles.denomination}>
+          <div className={styles.bottom}>
+            {CONFIG.cardPwdType[ad.password_type] === '密码'
+              ? order.order_detail.map((item, index) => {
+                  return (
+                    <div key={index} className={styles.denomination}>
+                      <header>
+                        <span>{item.money}</span>
+                        面额 ({item.count})
+                        <div>
+                          <Button>导入</Button>
+                        </div>
+                      </header>
+                      <section className={styles.iptSection}>
+                        <div className={styles.left}>
+                          <span>卡密：</span>
+                        </div>
+                        <div className={styles.right}>
+                          <div className={styles.iptBox}>
+                            <div className={styles.input}>
+                              {this.renderInput(item, index).map((n, i) => {
+                                return (
+                                  <Input
+                                    key={i}
+                                    type="text"
+                                    onChange={e => this.writePassword(e, item, index, i)}
+                                  />
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      </section>
                     </div>
-                  </div>
-                </section>
-              </div>
-            );
-          })}
+                  );
+                })
+              : null}
 
-          <div>
-            <div className={styles.amount}>
-              <h4>
-                <span className={styles.title}>{order.money}</span>
-                <span>总面额：</span>
-              </h4>
-              <h4>
-                <span className={styles.title}>{ad.unit_price}RMB</span>
-                <span>单价：</span>
-              </h4>
-              <h4>
-                <span className={styles.title}>{order.money}RMB</span>
-                <span>总价：</span>
-              </h4>
-            </div>
-            <div className={styles.footer}>
-              <div>
-                请在&nbsp;
-                <Icon type="delete" />
-                &nbsp; {ad.deadline}分钟内发卡
+            {CONFIG.cardPwdType[ad.password_type] === '图片'
+              ? order.order_detail.map((item, index) => {
+                  return <OnlyPicture key={index} item={item} />;
+                })
+              : null}
+
+            {CONFIG.cardPwdType[ad.password_type] === '密码和图片'
+              ? order.order_detail.map((item, index) => {
+                  return <PicWithText key={index} item={item} />;
+                })
+              : null}
+
+            <div>
+              <div className={styles.amount}>
+                <h4>
+                  <span className={styles.title}>{order.money}</span>
+                  <span>总面额：</span>
+                </h4>
+                <h4>
+                  <span className={styles.title}>{ad.unit_price}RMB</span>
+                  <span>单价：</span>
+                </h4>
+                <h4>
+                  <span className={styles.title}>{order.money}RMB</span>
+                  <span>总价：</span>
+                </h4>
               </div>
-              <Button>取消</Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  this.sendCDK();
-                }}
-              >
-                发布
-              </Button>
+              <div className={styles.footer}>
+                <div>
+                  请在&nbsp;
+                  <Icon type="delete" />
+                  &nbsp; {ad.deadline}分钟内发卡
+                </div>
+                <Button>取消</Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.sendCDK();
+                  }}
+                >
+                  发布
+                </Button>
+              </div>
             </div>
           </div>
         </div>

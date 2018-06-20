@@ -285,12 +285,12 @@ export default class SaleCard extends Component {
 
           <li>
             <span className={styles.tableLeft}>单价：</span>
-            <InputNumber onChange={e => this.unitPriceChange(e)} /> RMB
+            <InputNumber min={1} onChange={e => this.unitPriceChange(e)} /> RMB
           </li>
 
           <li>
             <span className={styles.tableLeft}>倍数：</span>
-            <InputNumber onChange={e => this.multChange(e)} />
+            <InputNumber min={1} onChange={e => this.multChange(e)} />
           </li>
 
           {/*------------条件-----------*/}
