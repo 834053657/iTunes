@@ -17,25 +17,27 @@ export default class UploadComponent extends Component {
       previewImage: '',
       fileList: [],
       token:
-        'onb47_1uVKhYASIOfAaGwTGYIfjkL8K3TiDxwk_g:iOPowb3L9SfQ6b932TmAP88E_V0=:eyJkZWFkbGluZSI6MTUyOTM4MjkzMSwic2NvcGUiOiJpbWFnZXMifQ==',
+        'onb47_1uVKhYASIOfAaGwTGYIfjkL8K3TiDxwk_g:nm3Si4_ea1sIZePV53YNwtPNwRs=:eyJkZWFkbGluZSI6MTUyOTQ5MDQ1Nywic2NvcGUiOiJpbWFnZXMifQ==',
     };
     this.previewUrl = 'http://images.91jianke.com/';
   }
 
   fileChange = info => {
-    console.log(info);
+    this.previewUrl = 'http://images.91jianke.com/';
     const file = info.file;
+    const id = file.response.hash;
     const m = {
       uid: file.uid,
       name: file.name,
       status: file.status,
       url: this.previewUrl + file.resopnse,
     };
+    this.previewUrl += id;
+    this.props.getUrl ? this.props.getUrl(this.previewUrl) : null;
+    this.props.onlyPic ? this.props.onlyPic(this.previewUrl) : null;
   };
 
   componentWillMount() {
-    console.log(this.props.user);
-
     this.props
       .dispatch({
         type: 'global/fetchConfigs',
@@ -52,8 +54,8 @@ export default class UploadComponent extends Component {
   handleCancel = () => this.setState({ previewVisible: false });
 
   render() {
-    const { item, index, getToken } = this.props;
-
+    const { item, index } = this.props;
+    const { picNum } = this.props;
     const self = this;
     const uploadProp = {
       name: 'file',
@@ -74,6 +76,11 @@ export default class UploadComponent extends Component {
         }
         self.setState({ fileList: [...info.fileList] });
       },
+      onRemove(info) {
+        console.log(info);
+        console.log('info in remove');
+        self.props.remove ? self.props.remove(info) : null;
+      },
     };
 
     return (
@@ -81,10 +88,12 @@ export default class UploadComponent extends Component {
         <div className={styles.right}>
           <div className={styles.addBtn}>
             <Upload {...uploadProp}>
-              <div>
-                <Icon type="plus" />
-                <div className="ant-upload-text">上传</div>
-              </div>
+              {this.state.fileList.length < picNum ? (
+                <div>
+                  <Icon type="plus" />
+                  <div className="ant-upload-text">上传</div>
+                </div>
+              ) : null}
             </Upload>
             <Modal visible={self.state.previewVisible} footer={null} onCancel={self.handleCancel}>
               <img alt="example" style={{ width: '100%' }} src={self.state.previewImage} />

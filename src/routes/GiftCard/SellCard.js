@@ -37,14 +37,6 @@ export default class BuyCard extends Component {
     this.items = [];
     this.data = {};
 
-    //upload
-    this.getToken = () => {
-      return this.props.dispatch({
-        type: 'card/getToken',
-        payload: { bucket: 'image' },
-      });
-    };
-
     this.setVisible = (type, visible) => {
       this.setState({
         [type]: visible,
@@ -60,7 +52,6 @@ export default class BuyCard extends Component {
     };
 
     this.selectCardType = e => {
-      console.log(e);
       this.setState({
         defaultCardTypeName: e.name,
       });
@@ -68,7 +59,6 @@ export default class BuyCard extends Component {
     };
 
     this.selectGuaTime = e => {
-      console.log(e);
       this.setState({
         defaultGuaTime: e,
       });
@@ -126,6 +116,7 @@ export default class BuyCard extends Component {
         });
       }
     };
+
     //删除密码框
     this.delCDKBox = (m, i) => {
       const index = this.state.cards.findIndex(item => {
@@ -140,10 +131,42 @@ export default class BuyCard extends Component {
       }
     };
 
+    //只有图片函数类
+    this.onlyPic = (info, item, index) => {
+      const c = this.state.cards;
+      c[index].items.push({
+        picture: info,
+      });
+      this.setState({
+        cards: c,
+      });
+      console.log(c);
+    };
+    this.remove = (info, index) => {
+      const c = this.state.cards;
+    };
+
     //卡密数据获取
     this.denoIptValueChange = (e, i, index) => {
       const a = this.state.cards;
       a[index].items[i].password = e.target.value;
+      this.setState({
+        cards: a,
+      });
+    };
+
+    //卡图获取
+    this.getUrl = (url, index, i) => {
+      const a = this.state.cards;
+      a[index].items[i].picture = url;
+      this.setState({
+        cards: a,
+      });
+    };
+    //凭证获取
+    this.getReceipt = (url, index) => {
+      const a = this.state.cards;
+      a[index].receipt = url;
       this.setState({
         cards: a,
       });
@@ -157,8 +180,6 @@ export default class BuyCard extends Component {
           payload: this.data,
         })
         .then(res => {
-          console.log('res');
-          console.log(res);
           this.data = {};
           this.props.history.push({ pathname: '/ad/my' });
         })
@@ -166,19 +187,6 @@ export default class BuyCard extends Component {
           console.log('发送失败，失败原因：' + err);
         });
     };
-
-    //SellPicWithText Component Function
-    this.handlePreview = file => {
-      console.log('file');
-      console.log(file);
-    };
-    this.changeFileData = ({ fileList }, index) => {
-      console.log('fileList');
-      console.log({ fileList });
-      console.log(index);
-      console.log(this.state.cards);
-    };
-    this.handleCancel = () => {};
   }
 
   componentWillMount() {
@@ -197,6 +205,9 @@ export default class BuyCard extends Component {
   componentWillUnmount() {}
 
   render() {
+    if (!CONFIG.card_type) {
+      return false;
+    }
     const cardTypeMenu = (
       <Menu>
         {CONFIG.card_type.map(t => {
@@ -358,6 +369,7 @@ export default class BuyCard extends Component {
               </Popover>
             </li>
           </ul>
+
           {this.state.passwordType === 1
             ? this.state.cards.map((item, index) => {
                 return (
@@ -424,7 +436,9 @@ export default class BuyCard extends Component {
                     item={item}
                     styles={styles}
                     index={index}
-                    getToken={() => this.getToken()}
+                    onlyPic={info => this.onlyPic(info, item, index)}
+                    remove={info => this.remove(info, index)}
+                    getReceipt={url => this.getReceipt(url, index)}
                   />
                 );
               })
@@ -438,11 +452,11 @@ export default class BuyCard extends Component {
                     item={item}
                     styles={styles}
                     index={index}
-                    handlePreview={this.handlePreview}
-                    changeFileData={({ fileList }) => this.changeFileData({ fileList }, index)}
                     addCDKBox={this.addCDKBox}
                     delCDKBox={this.delCDKBox}
                     changePTPass={this.denoIptValueChange}
+                    getUrl={(url, i) => this.getUrl(url, index, i)}
+                    getReceipt={url => this.getReceipt(url, index)}
                   />
                 );
               })

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Modal, Input, Button, Icon, Upload, message, Popover } from 'antd';
-import UploadComponent from './MarketBuy/Upload';
+import UploadComponent from '../../MarketBuy/Upload';
+import styles from '../Seller/SendCard.less';
 
 export default class OnlyPicture extends Component {
   renderItem = (item, key) => {
-    const { styles, getToken } = this.props;
+    const { getToken } = this.props;
     const imgContent = (
       <div className={styles.contentBox}>
         <img width="85%" src={item.src} alt="" />
@@ -22,13 +23,13 @@ export default class OnlyPicture extends Component {
   };
 
   render() {
-    const { item, styles, index, changeFileData } = this.props;
+    const { item, index, changeFileData } = this.props;
     console.log(item);
     return (
       <div className={styles.denomination}>
         <header>
-          <span>{item.money}</span>
-          面额 （{item.items.length}）
+          <span>item.money</span>
+          面额 item.items.length
         </header>
         <section className={styles.onlyPic}>
           <div className={styles.left}>

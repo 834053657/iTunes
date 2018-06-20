@@ -17,6 +17,7 @@ export default class DealDeatil extends Component {
       addDenoVisible: false,
       denoValue: '',
       orderData: [],
+      totalPrice: 0,
     };
     this.postData = {
       // order_type: props.card.adDetail.ad_type, //1代表购买  2代表出售
@@ -58,13 +59,15 @@ export default class DealDeatil extends Component {
       });
   };
 
-  changeNum = (e, d) => {
+  changeNum = (e, d, stock) => {
     const index = this.postData.order_detail.findIndex(t => {
       return t.money === d;
     });
-
     if (index >= 0) {
       this.postData.order_detail[index].count = e;
+      this.setState({
+        num: e,
+      });
     } else {
       this.postData.order_detail.push({
         money: +d,
@@ -73,17 +76,29 @@ export default class DealDeatil extends Component {
     }
   };
 
+  blurNum = (e, d, stock) => {
+    // let totalPrice = 0;
+    // this.postData.order_detail.map(o => {
+    //   totalPrice = totalPrice + o.money * o.count
+    //   return totalPrice
+    // })
+    // console.log(totalPrice);
+    // this.setState({
+    //   totalPrice: this.state.num * d + totalPrice
+    // })
+  };
+
   changeFixedNum = (e, c) => {
     const index = this.postData.order_detail.findIndex(t => {
-      return t.money === c.money;
+      return +t.money === +c.money;
     });
 
     if (index >= 0) {
-      this.postData.order_detail[index].count = e;
+      this.postData.order_detail[index].count = +e;
     } else {
       this.postData.order_detail.push({
         money: +c.money,
-        count: e,
+        count: +e,
       });
     }
   };
@@ -275,7 +290,7 @@ export default class DealDeatil extends Component {
           <li className={styles.item}>{this.renderCondition(detail)}</li>
           <li className={styles.item}>
             <span className={styles.title}>总价:</span>
-            <div className={styles.content}>{33}RMB</div>
+            <div className={styles.content}>{this.state.totalPrice}</div>
           </li>
           <li className={styles.item}>
             <span className={styles.title}>发卡期限:</span>
@@ -334,9 +349,10 @@ export default class DealDeatil extends Component {
                     <div className={styles.denoIpt}>
                       <InputNumber
                         min={0}
-                        max={19}
+                        max={stock[d]}
                         defaultValue={0}
-                        onChange={e => this.changeNum(e, d)}
+                        //onBlur={e => this.blurNum(e, d, stock[d])}
+                        onChange={e => this.changeNum(e, d, stock[d])}
                       />
                     </div>
                     <span className={styles.last}>库存({stock[d] || 0})</span>
@@ -348,7 +364,7 @@ export default class DealDeatil extends Component {
 
           <li className={styles.item}>
             <span className={styles.title}>总价:</span>
-            <div className={styles.content}>{33}RMB</div>
+            <div className={styles.content}>{this.state.totalPrice}</div>
           </li>
 
           <li className={styles.item}>

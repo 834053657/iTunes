@@ -116,12 +116,19 @@ export default class List extends Component {
   };
 
   fetch = params => {
+    const { page, page_size } = this.state;
+    let newParams = { ...params };
+    newParams.page = params.page || page;
+    newParams.page_size = params.page_size || page_size;
+    if (newParams.type) {
+      newParams.status = params.type || this.state.type;
+      delete newParams.type;
+    }
+
     this.props.dispatch({
       type: 'user/fetchMyOrderList',
       payload: {
-        type: this.state.type,
-        pagination: this.props.pagination,
-        ...params,
+        ...newParams,
       },
     });
   };

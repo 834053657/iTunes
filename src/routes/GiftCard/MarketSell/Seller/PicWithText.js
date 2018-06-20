@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 import { Modal, Input, Button, Icon, Upload, message } from 'antd';
-import styles from './picWithText.less';
-import UploadComponent from './MarketBuy/Upload';
+import styles from '../../picWithText.less';
+import UploadComponent from '../../MarketBuy/Upload';
 
 export default class PicWithText extends Component {
   state = {};
@@ -16,6 +16,8 @@ export default class PicWithText extends Component {
       previewImage: '',
     };
 
+    console.log('item');
+    console.log(item);
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -26,8 +28,8 @@ export default class PicWithText extends Component {
     return (
       <div className={styles.denomination}>
         <header>
-          <span>{item.money}</span>
-          面额 （{item.items.length}）
+          <span>{item.money || '-'}</span>
+          面额 （{item.count || '-'}）
         </header>
         <section className={styles.onlyPic}>
           <div className={styles.left}>

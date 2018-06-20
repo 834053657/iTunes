@@ -240,7 +240,7 @@ export default class List extends Component {
         title: '总面额',
         dataIndex: 'total_denomination',
         render: (text, record) => {
-          return <span>{this.amountMoney(record)}</span>;
+          return <span>{record.total_money}</span>;
         },
       },
       {
@@ -282,19 +282,6 @@ export default class List extends Component {
       columns = filter(columns, item => item.dataIndex !== 'total_denomination');
     }
     return columns;
-  };
-
-  amountMoney = r => {
-    // let a = 0;
-    // if (r.cards instanceof Array) {
-    //   r.cards.map(i => {
-    //     return (a += i.money * i.count);
-    //   });
-    //   return a;
-    // } else {
-    //   return false;
-    // }
-    return r.owner.amount;
   };
 
   render() {
