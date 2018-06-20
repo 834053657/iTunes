@@ -207,10 +207,10 @@ export async function getCardlist(params) {
   return request(`/itunes/ad/card/all?${stringify(params)}`);
 }
 
-//获取交易条款
-export async function getTransTerms() {
-  return request('/itunes/user/trans_term/all');
-}
+// //获取交易条款
+// export async function getTransTerms(params) {
+//   return request(`/itunes/user/trans_term/all?${stringify(params)}`);
+// }
 
 // 出售创建订单
 export async function createSellOrder(params) {

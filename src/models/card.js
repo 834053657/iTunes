@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import {
   getCardlist,
-  getTransTerms,
+  queryTermsList,
   getToken,
   getAdDetail,
   getSellDetail,
@@ -167,12 +167,16 @@ export default {
         payload: res,
       });
     },
-    *fetchTerms(_, { put, call }) {
-      const res = yield call(getTransTerms);
-      yield put({
-        type: 'GET_TERMS',
-        payload: res,
-      });
+    *fetchTerms({ payload }, { put, call }) {
+      const res = yield call(queryTermsList, payload);
+      if (res.code === 0 && res.data) {
+        yield put({
+          type: 'GET_TERMS',
+          payload: res.data.items,
+        });
+      } else {
+        message.error(res.msg);
+      }
     },
     //发送确认订单请求
     *createBuyOrder({ payload }, { call, put }) {
@@ -373,7 +377,7 @@ export default {
     GET_TERMS(state, action) {
       return {
         ...state,
-        terms: action.payload.data,
+        terms: action.payload,
       };
     },
     ADD_SELL(state, action) {
