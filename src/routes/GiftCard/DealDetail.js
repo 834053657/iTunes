@@ -77,28 +77,28 @@ export default class DealDeatil extends Component {
   };
 
   blurNum = (e, d, stock) => {
-    let totalPrice = 0;
+    // let totalPrice = 0;
     // this.postData.order_detail.map(o => {
-    //   totalPrice = totalPrice + o.money * o.count;
-    //   return totalPrice;
-    // });
+    //   totalPrice = totalPrice + o.money * o.count
+    //   return totalPrice
+    // })
     // console.log(totalPrice);
-    this.setState({
-      totalPrice: this.state.num * d + totalPrice,
-    });
+    // this.setState({
+    //   totalPrice: this.state.num * d + totalPrice
+    // })
   };
 
   changeFixedNum = (e, c) => {
     const index = this.postData.order_detail.findIndex(t => {
-      return t.money === c.money;
+      return +t.money === +c.money;
     });
 
     if (index >= 0) {
-      this.postData.order_detail[index].count = e;
+      this.postData.order_detail[index].count = +e;
     } else {
       this.postData.order_detail.push({
         money: +c.money,
-        count: e,
+        count: +e,
       });
     }
   };
@@ -351,7 +351,7 @@ export default class DealDeatil extends Component {
                         min={0}
                         max={stock[d]}
                         defaultValue={0}
-                        onBlur={e => this.blurNum(e, d, stock[d])}
+                        //onBlur={e => this.blurNum(e, d, stock[d])}
                         onChange={e => this.changeNum(e, d, stock[d])}
                       />
                     </div>
