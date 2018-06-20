@@ -35,6 +35,10 @@ export async function readOrderMessage(params) {
   });
 }
 
+export async function queryChatHistory(params) {
+  return request(`/itunes/message/get_chat_history?${stringify(params)}`);
+}
+
 export async function queryPayments(params) {
   return request('/itunes/wallet/platform/payments');
 }

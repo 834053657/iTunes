@@ -232,6 +232,7 @@ export default class OrderDetail extends Component {
     const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
     // const {pageStatus} = this.state;
     //console.log(this.state.status)
+    // pageStatus = 14;
     if (!Object.keys(ad).length) {
       return false;
     }

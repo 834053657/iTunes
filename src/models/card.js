@@ -18,6 +18,7 @@ import {
   cacelOrder,
   postCheck,
   appealOrder,
+  queryChatHistory,
 } from '../services/api';
 
 //判断买家和卖家
@@ -146,6 +147,8 @@ export default {
       cards: {},
       order: {},
     },
+    quickMsgList: [],
+    chatMsgList: [],
   },
 
   effects: {
@@ -348,6 +351,20 @@ export default {
         message.error(res.msg);
       }
     },
+    *fetchQuickMsgList({ payload }, { call, put }) {
+      const res = yield call(queryChatHistory, payload);
+      yield put({
+        type: 'setQuickMsgList',
+        payload: res,
+      });
+    },
+    *fetchChatMsgList({ payload }, { call, put }) {
+      const res = yield call(queryChatHistory, payload);
+      yield put({
+        type: 'setChatMsgList',
+        payload: res,
+      });
+    },
   },
 
   reducers: {
@@ -417,6 +434,20 @@ export default {
       return {
         ...state,
         appeal: action.payload,
+      };
+    },
+    setQuickMsgList(state, { payload }) {
+      const { data } = payload || {};
+      return {
+        ...state,
+        quickMsgList: data,
+      };
+    },
+    setChatMsgList(state, { payload }) {
+      const { data } = payload || {};
+      return {
+        ...state,
+        chatMsgList: data,
       };
     },
     // changePageStatus(state, {payload}) {

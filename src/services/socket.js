@@ -14,5 +14,5 @@ export async function leave_chat_room(params) {
 }
 
 export async function receive_message(params) {
-  return request(`/itunes/socket/leave_chat_room?${stringify(params)}`);
+  return request(`/itunes/socket/receive_message?${stringify(params)}`);
 }

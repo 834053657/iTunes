@@ -117,7 +117,7 @@ export default class List extends Component {
 
   fetch = params => {
     const { page, page_size } = this.state;
-    let newParams = { ...params };
+    const newParams = { ...params };
     newParams.page = params.page || page;
     newParams.page_size = params.page_size || page_size;
     if (newParams.type) {

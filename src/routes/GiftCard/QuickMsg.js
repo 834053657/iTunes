@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { Button, Icon, Steps, Avatar, Select } from 'antd';
+import { map } from 'lodash';
+import moment from 'moment';
 import styles from './MarketBuy/StepTwo.less';
 
 const Step = Steps.Step;
@@ -15,6 +17,18 @@ export default class QuickMsg extends Component {
     this.state = {
       term: '快捷短语',
     };
+  }
+
+  componentDidMount() {
+    const { dispatch, detail: { order = {} } } = this.props;
+    dispatch({
+      type: 'card/fetchQuickMsgList',
+      payload: {
+        order_id: order.id,
+        order_msg_type: 1, // 1快捷短语  2 申诉
+        goods_type: 2, // 1: 'itunes', 2: '礼品卡'
+      }
+    });
   }
 
   selectTerm = e => {
@@ -34,8 +48,22 @@ export default class QuickMsg extends Component {
     });
   };
 
+  sendQuickMsg = (e) =>{
+    const { order = {} } = this.props.detail;
+    if (e) {
+      this.props.dispatch({
+        type: 'send_message',
+        payload: {
+          order_id: order.id,
+          quick_msg_id: e.id,
+          content: e.content,
+        },
+      });
+    }
+  }
+
   render() {
-    const { setStatus } = this.props;
+    const { setStatus, card: { quickMsgList = [] } } = this.props;
     const { ad, cards, order, trader } = this.props.detail;
 
     const userInfo = ad.owner;
@@ -45,12 +73,12 @@ export default class QuickMsg extends Component {
         <Select
           defaultValue={this.state.term}
           style={{ width: 260 }}
-          onSelect={e => this.selectTerm(e)}
+          onSelect={this.sendQuickMsg}
         >
           {CONFIG.term
             ? CONFIG.term.map(t => {
                 return (
-                  <Option key={t.id} value={t.id}>
+                  <Option key={t.id} value={t}>
                     {t.content}
                   </Option>
                 );
@@ -58,20 +86,26 @@ export default class QuickMsg extends Component {
             : null}
         </Select>
         <ul>
-          <li>
-            <div className={styles.leftAvatar}>
-              <span className={styles.avaTop}>
-                <Avatar className={styles.avatar} size="large" icon="user" />
-              </span>
-              <span className={styles.avaName}>Jason</span>
-            </div>
-            <div className={styles.chatItem}>
-              <p className={styles.chatText}>
-                您好，请稍等片刻待我确认请稍等片刻待我确认请稍等片刻待我确认
-              </p>
-              <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-            </div>
-          </li>
+          {
+             map(quickMsgList, d => {
+              return (
+                <li>
+                  <div className={styles.leftAvatar}>
+                    <span className={styles.avaTop}>
+                      <Avatar className={styles.avatar} src={d.sender && d.sender.avatar} size="large" icon="user" />
+                    </span>
+                    <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
+                  </div>
+                  <div className={styles.chatItem}>
+                    <p className={styles.chatText}>
+                      {d.content && d.content.content}
+                    </p>
+                    <div className={styles.chatTime}>{moment(d.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}</div>
+                  </div>
+                </li>
+              );
+            })
+          }
         </ul>
       </div>
     );

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Tabs, Button, Icon, Input, Steps, Avatar, Upload, Modal } from 'antd';
+import { map } from 'lodash';
+import moment from 'moment';
 import styles from './appeal.less';
 import StepModel from '../Step';
 import UploadComponent from './Upload';
@@ -29,6 +31,7 @@ export default class Process extends Component {
           url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
         },
       ],
+      imageUrls: [],
     };
     //当前订单ID
     this.id = props.orderId;
@@ -44,7 +47,7 @@ export default class Process extends Component {
   };
 
   handleSubmit = e => {
-    const { dispatch, card: { appeal: { data } } } = this.props;
+    const { dispatch, detail: { order = {} } } = this.props;
 
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -54,8 +57,8 @@ export default class Process extends Component {
         dispatch({
           type: 'send_message',
           payload: {
-            order_id: data.order_id,
-            content: values.content,
+            order_id: order.id,
+            content: this.getMsgContent(values.content),
           },
           // callback: () => {}, // todo re-load appeal details
         });
@@ -63,10 +66,29 @@ export default class Process extends Component {
     });
   };
 
+  getMsgContent = (text) => {
+    const { imageUrls = [] } = this.state;
+    let content = `<p>${text}</p>`;
+
+    content += imageUrls.length > 0 ? `<ul className="picBox">` : '';
+    map(imageUrls, (d, i) => {
+      content += `<li>
+                  <img
+                    height="120px"
+                    src="${d}"
+                    alt="#"
+                  />
+                </li>`;
+    })
+    content += imageUrls.length > 0 ? `</ul>` : '';
+
+    return content;
+  }
+
   handleChange = ({ fileList }) => this.setState({ fileList });
 
   componentWillMount() {
-    console.log(this.id);
+    /* console.log(this.id);
     this.props.dispatch({
       type: 'card/getAppealInfo',
       payload: {
@@ -74,16 +96,19 @@ export default class Process extends Component {
         order_msg_type: 2,
         goods_type: 2,
       },
-    });
+    }); */
   }
 
   componentDidMount() {
-    // this.props.dispatch({
-    //   type: 'enter_chat_room',
-    //   payload: {
-    //     order_id: this.id,
-    //   },
-    // });
+    const { dispatch, detail: { order = {} } } = this.props;
+    dispatch({
+      type: 'card/fetchChatMsgList',
+      payload: {
+        order_id: order.id,
+        order_msg_type: 2, // 1快捷短语  2 申诉
+        goods_type: 2, // 1: 'itunes', 2: '礼品卡'
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -97,7 +122,9 @@ export default class Process extends Component {
   }
 
   getImgsUrl = url => {
-    console.log(url);
+    this.setState({
+      imageUrls: url,
+    });
   };
 
   render() {
@@ -107,6 +134,7 @@ export default class Process extends Component {
 
     const { order, ad, cards, trader } = this.props.detail;
     const { pageStatus, setStatus } = this.props;
+    const { chatMsgList = [] } = card;
 
     let steps = null;
     steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
@@ -178,7 +206,7 @@ export default class Process extends Component {
                   d
                 </TabPane>
                 <TabPane tab="申诉中" key="2">
-                  <AppealInfoAppealInfo />
+                  <AppealInfo data={chatMsgList} />
                   <Form onSubmit={this.handleSubmit}>
                     <div className={styles.submitAppeal}>
                       <div>
@@ -227,7 +255,41 @@ export default class Process extends Component {
   }
 }
 
-function AppealInfoAppealInfo(props) {
+function AppealInfo(props) {
+  const { data = [] } = props;
+  return (
+    <div>
+      <ul className={styles.tabTwoTab}>
+        {
+          map(data, d => {
+            return (
+              <li className={styles.appealItem}>
+                <div className={styles.leftAvatar}>
+                  <span className={styles.avaTop}>
+                    <Avatar className={styles.avatar} size="large" src={d.sender && d.sender.avatar} />
+                  </span>
+                  <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
+                </div>
+                <div className={styles.chatItem}>
+                  <div className={styles.chatText}>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: d.content && d.content.content,
+                      }}
+                    />
+                  </div>
+                  <div className={styles.chatTime}>{moment(d.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}</div>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  );
+}
+
+function AppealInfoAppealInfo2(props) {
   const { info } = props;
   return (
     <div>
