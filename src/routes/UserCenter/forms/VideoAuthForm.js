@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DescriptionList from 'components/DescriptionList';
+import { map } from 'lodash';
 import styles from './VideoAuthForm.less';
 
 const { Description } = DescriptionList;
@@ -18,10 +19,11 @@ export default class VideoAuthForm extends Component {
           size="large"
           col="1"
         >
-          <Description term="客服电话1">321321321</Description>
-          <Description term="客服电话2">321321321</Description>
-          <Description term="客服电话3">321321321</Description>
-          <Description term="客服QQ1">312321312321</Description>
+          {map(CONFIG.videoAuthConcat, (item, index) => (
+            <Description key={index} term={item.text}>
+              {item.account}
+            </Description>
+          ))}
         </DescriptionList>
       </div>
     );

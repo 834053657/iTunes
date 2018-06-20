@@ -322,8 +322,9 @@ export default class UserCenterPage extends Component {
       uploadLoading,
     } = this.state;
     const { currentUser } = this.props;
-    const { auth, user = {}, payments = [], upload = {} } = currentUser || {};
+    const { auth, user = {}, payments = [], upload = {}, trade = {} } = currentUser || {};
     const { real_name = {}, video = {} } = auth || {};
+    const { first_trade_at } = trade || {};
 
     return (
       <Fragment>
@@ -356,8 +357,18 @@ export default class UserCenterPage extends Component {
                 </div>
                 <Divider />
                 <p>
-                  本帐号于<span> 2017-11-13 15:31:16 </span>注册, <br />
-                  首次交易在<span> 2018-01-19 10:56:39</span>
+                  本帐号于<span>
+                    {' '}
+                    {user.created_at
+                      ? moment(user.created_at * 1000).format('YYYY-MM-DD hh:mm:ss')
+                      : '-'}{' '}
+                  </span>注册, <br />
+                  首次交易在<span>
+                    {' '}
+                    {first_trade_at
+                      ? moment(first_trade_at * 1000).format('YYYY-MM-DD hh:mm:ss')
+                      : '-'}{' '}
+                  </span>
                 </p>
               </div>
             </div>
@@ -492,10 +503,7 @@ export default class UserCenterPage extends Component {
                     </div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        {/*{
-                          real_name.status === 3 && <a onClick={this.showRealNameModal}>编辑</a>
-                        }*/}
-                        <a onClick={this.showRealNameModal}>编辑</a>
+                        {real_name.status === 3 && <a onClick={this.showRealNameModal}>编辑</a>}
                       </li>
                     </ul>
                   </div>
@@ -570,8 +578,7 @@ export default class UserCenterPage extends Component {
                           </div>
                         </div>
                         {this.getMethodContent(item)}
-                        {
-                          // item.status === 4 ? (
+                        {~[1, 3].indexOf(item.status) ? (
                           <ul className={styles.box_item_action}>
                             <li>
                               <a onClick={this.showPayMethodModal.bind(this, item)}>设置</a>
@@ -585,8 +592,7 @@ export default class UserCenterPage extends Component {
                               </Popconfirm>
                             </li>
                           </ul>
-                          // ) : null
-                        }
+                        ) : null}
                       </div>
                     );
                   })}
