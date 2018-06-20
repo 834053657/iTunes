@@ -71,14 +71,10 @@ export default class OrderDetail extends Component {
 
     this.leaveRoom(id);
     const { order } = this.props.detail;
-    this.props
-      .dispatch({
-        type: 'card/fetchOrderDetail',
-        payload: id,
-      })
-      .then(() => {
-        this.initStatue(order);
-      });
+    this.props.dispatch({
+      type: 'card/fetchOrderDetail',
+      payload: id,
+    });
   }
 
   componentDidMount() {

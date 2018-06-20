@@ -241,11 +241,43 @@ function AppealInfoAppealInfo(props) {
           </div>
           <div className={styles.chatItem}>
             <div className={styles.chatText}>
-              <p>i.content.cont</p>
+              <p>
+                i.打撒奥所多sad水电费价格杜甫的说法吧时代峰峻的手法规及进度GV觉得很失败是觉得很舒服是dsvjdsf
+                机话费圣诞节回复的er_name打撒奥所多sad水电费价格杜甫的说法吧时代峰峻的手法规及进度GV觉得很失败是觉得很舒服是dsvjdsf
+                机话费圣诞节回复的er_name
+              </p>
               <ul className={styles.picBox}>
                 <li>
                   <img
-                    height="160px"
+                    height="120px"
+                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    alt="#"
+                  />
+                </li>
+                <li>
+                  <img
+                    height="120px"
+                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    alt="#"
+                  />
+                </li>
+                <li>
+                  <img
+                    height="120px"
+                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    alt="#"
+                  />
+                </li>
+                <li>
+                  <img
+                    height="120px"
+                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    alt="#"
+                  />
+                </li>
+                <li>
+                  <img
+                    height="120px"
                     src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
                     alt="#"
                   />

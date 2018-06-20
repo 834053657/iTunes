@@ -12,8 +12,8 @@ import { playAudio } from './utils';
 
 export function dvaSocket(url, option) {
   // 如需调试线上socket 请吧isDev 设置成false
-  // const isDev = false;
-  const isDev = process.env.NODE_ENV === 'development';
+  const isDev = false;
+  // const isDev = process.env.NODE_ENV === 'development';
   console.log('socket-url', url);
   if (isDev) {
     const mockServer = new Server(url);
