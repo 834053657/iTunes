@@ -3,6 +3,7 @@ import { connect } from 'dva/index';
 import { Button, Icon, Steps, Avatar, Select } from 'antd';
 import styles from '../../MarketBuy/StepTwo.less';
 import StepModel from '../../Step';
+import QuickMsg from '../../QuickMsg';
 
 const Step = Steps.Step;
 const Option = Select.Option;
@@ -36,7 +37,7 @@ export default class EnsureBuyInfo extends Component {
   };
 
   render() {
-    const { setStatus } = this.props;
+    const { detail, setStatus } = this.props;
     const { ad, cards, order, trader } = this.props.detail;
 
     const userInfo = ad.owner;
@@ -92,39 +93,9 @@ export default class EnsureBuyInfo extends Component {
                 确认释放
               </Button>
             </div>
-            <div className={styles.chatInfo}>
-              <Select
-                defaultValue={this.state.term}
-                style={{ width: 260 }}
-                onSelect={e => this.selectTerm(e)}
-              >
-                {CONFIG.term
-                  ? CONFIG.term.map(t => {
-                      return (
-                        <Option key={t.id} value={t.id}>
-                          {t.content}
-                        </Option>
-                      );
-                    })
-                  : null}
-              </Select>
-              <ul>
-                <li>
-                  <div className={styles.leftAvatar}>
-                    <span className={styles.avaTop}>
-                      <Avatar className={styles.avatar} size="large" icon="user" />
-                    </span>
-                    <span className={styles.avaName}>Jason</span>
-                  </div>
-                  <div className={styles.chatItem}>
-                    <p className={styles.chatText}>
-                      您好，请稍等片刻待我确认请稍等片刻待我确认请稍等片刻待我确认
-                    </p>
-                    <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-                  </div>
-                </li>
-              </ul>
-            </div>
+
+            {/*快捷短语*/}
+            <QuickMsg detail={detail} />
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>

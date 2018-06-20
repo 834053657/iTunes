@@ -178,7 +178,7 @@ export default class Process extends Component {
                   d
                 </TabPane>
                 <TabPane tab="申诉中" key="2">
-                  <AppealInfoAppealInfo info={info} />
+                  <AppealInfoAppealInfo />
                   <Form onSubmit={this.handleSubmit}>
                     <div className={styles.submitAppeal}>
                       <div>
@@ -232,23 +232,29 @@ function AppealInfoAppealInfo(props) {
   return (
     <div>
       <ul className={styles.tabTwoTab}>
-        {info &&
-          info.map((i, index) => {
-            return (
-              <li key={index}>
-                <div className={styles.leftAvatar}>
-                  <span className={styles.avaTop}>
-                    <Avatar className={styles.avatar} size="large" src={i.avatar} />
-                  </span>
-                  <span className={styles.avaName}>{i.user_name}</span>
-                </div>
-                <div className={styles.chatItem}>
-                  <p className={styles.chatText}>{i.content.cont || ''}</p>
-                  <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-                </div>
-              </li>
-            );
-          })}
+        <li className={styles.appealItem}>
+          <div className={styles.leftAvatar}>
+            <span className={styles.avaTop}>
+              <Avatar className={styles.avatar} size="large" src="" />
+            </span>
+            <span className={styles.avaName}>i.user_name</span>
+          </div>
+          <div className={styles.chatItem}>
+            <div className={styles.chatText}>
+              <p>i.content.cont</p>
+              <ul className={styles.picBox}>
+                <li>
+                  <img
+                    height="160px"
+                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    alt="#"
+                  />
+                </li>
+              </ul>
+            </div>
+            <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
+          </div>
+        </li>
       </ul>
     </div>
   );
