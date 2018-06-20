@@ -234,8 +234,8 @@ export default class BuyCard extends Component {
 
     const termsMenu = (
       <Menu>
-        {this.props.card.terms.items
-          ? this.props.card.terms.items.map(t => {
+        {this.props.card.terms
+          ? this.props.card.terms.map(t => {
               return (
                 <Menu.Item key={t.id} onClick={() => this.selectTermTitle(t)}>
                   {t.title}

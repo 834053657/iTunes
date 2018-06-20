@@ -21,6 +21,10 @@ export default class PreviewCard extends Component {
     }
   };
 
+  componentWillMount() {
+    console.log('componentWillMount in preview');
+  }
+
   render() {
     const { order, ad, cards } = this.props.detail;
     const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];

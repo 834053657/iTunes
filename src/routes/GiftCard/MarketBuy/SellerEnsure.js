@@ -135,7 +135,14 @@ export default class SellerEnsure extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button onClick={() => setStatus('pageStatus', 16)}>查看礼品卡清单</Button>
+              <Button
+                onClick={this.props.dispatch({
+                  type: 'card/changePageStatus',
+                  payload: 16,
+                })}
+              >
+                查看礼品卡清单
+              </Button>
             </div>
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>

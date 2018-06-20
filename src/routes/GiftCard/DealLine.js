@@ -272,16 +272,18 @@ export default class OrderDetail extends Component {
           />
         ) : null}
 
-        {//我要购买列表 买家视角 订单状态：确认信息 礼品卡清单
-        // this.orderType() === 2 && this.Identify() === '买家'
-        pageStatus === 16 ? (
-          <PreviewCard
-            setStatus={this.setStatus}
-            detail={detail}
-            user={user}
-            orderTitle={this.orderTitle}
-          />
-        ) : null}
+        {
+          //我要购买列表 买家视角 订单状态：确认信息 礼品卡清单
+          // this.orderType() === 2 && this.Identify() === '买家'
+          // pageStatus === 16 ? (
+          //   <PreviewCard
+          //     setStatus={this.setStatus}
+          //     detail={detail}
+          //     user={user}
+          //     orderTitle={this.orderTitle}
+          //   />
+          // ) : null
+        }
 
         {//我要购买列表 买家视角 订单状态：确认信息 礼品卡清单
         // this.orderType() === 2 && this.Identify() === '买家'

@@ -96,6 +96,10 @@ export default class Process extends Component {
     // });
   }
 
+  getImgsUrl = url => {
+    console.log(url);
+  };
+
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
     const { card, appealInfo } = this.props;
@@ -181,7 +185,7 @@ export default class Process extends Component {
                         <div className={styles.addPic}>
                           <span className={styles.addTitle}>上传图片:</span>
                           <div className={styles.addBox}>
-                            <UploadComponent />
+                            <UploadComponent picNum={1000} appealPic={this.getImgsUrl} />
                           </div>
                         </div>
                       </div>

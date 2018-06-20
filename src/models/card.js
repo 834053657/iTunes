@@ -419,7 +419,7 @@ export default {
         appeal: action.payload,
       };
     },
-    // (state, {payload}) {
+    // changePageStatus(state, {payload}) {
     //   return {
     //     ...state,
     //     odDetail: {
@@ -427,7 +427,7 @@ export default {
     //       pageStatus: payload
     //     },
     //   };
-    // },changePageStatus
+    // },
   },
 
   subscriptions: {},
