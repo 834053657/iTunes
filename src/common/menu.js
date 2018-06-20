@@ -1,6 +1,6 @@
 import { isUrl } from '../utils/utils';
 
-const menuData = [
+let menuData = [
   {
     name: '首页',
     path: 'home',
@@ -8,6 +8,7 @@ const menuData = [
   {
     name: 'Itunes',
     path: 'itunes',
+    hide: true,
     children: [
       {
         name: '交易大厅',
@@ -196,6 +197,8 @@ if (__KG_API_ENV__ === 'dev') {
     }
   );
 }
+
+menuData = menuData.filter(item => !item.hide);
 
 function formatter(data, parentPath = '/', parentAuthority) {
   return data.map(item => {

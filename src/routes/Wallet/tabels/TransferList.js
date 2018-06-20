@@ -2,13 +2,15 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
-import { Table, Tabs, Button, Icon, Card, Modal } from 'antd';
+import { Table, Tabs, Button, Icon, Card, Modal, Badge, Tooltip } from 'antd';
 import { yuan } from 'components/Charts';
 import DescriptionList from 'components/DescriptionList';
 import styles from './TransferList.less';
 
 const { Description } = DescriptionList;
 const Yuan = ({ children }) => <span dangerouslySetInnerHTML={{ __html: yuan(children) }} />;
+
+const statusMap = ['default', 'processing', 'success', 'error'];
 
 export default class TransferList extends Component {
   constructor(props) {
@@ -75,6 +77,26 @@ export default class TransferList extends Component {
       dataIndex: 'fee',
       render: (v, row) => {
         return <Yuan>{v}</Yuan>;
+      },
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      render: (val, row) => {
+        if (val === 1) {
+          return (
+            <span>
+              <Badge status={statusMap[0]} text={val ? `${CONFIG.trans_term_status[1]}` : '-'} />
+              <Tooltip title={row.reason}>
+                <span className={styles.reason}>原因</span>
+              </Tooltip>
+            </span>
+          );
+        } else {
+          return (
+            <Badge status={statusMap[val - 1]} text={val ? CONFIG.trans_term_status[val] : '-'} />
+          );
+        }
       },
     },
     {
