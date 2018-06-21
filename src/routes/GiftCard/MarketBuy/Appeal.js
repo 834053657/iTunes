@@ -100,14 +100,14 @@ export default class Appeal extends Component {
 
   componentDidMount() {
     const { dispatch, detail: { order = {} } } = this.props;
-    // dispatch({
-    //   type: 'card/fetchChatMsgList',
-    //   payload: {
-    //     order_id: order.id,
-    //     order_msg_type: 2, // 1快捷短语  2 申诉
-    //     goods_type: 2, // 1: 'itunes', 2: '礼品卡'
-    //   }
-    // });
+    dispatch({
+      type: 'card/fetchChatMsgList',
+      payload: {
+        order_id: order.id,
+        order_msg_type: 2, // 1快捷短语  2 申诉
+        goods_type: 2, // 1: 'itunes', 2: '礼品卡'
+      },
+    });
   }
 
   componentWillUnmount() {
