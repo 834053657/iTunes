@@ -33,11 +33,13 @@ const app = dva({
 // 参考文档 https://socket.io/docs/client-api/#with-extraheaders
 const options = {
   // 'force new connection' : true,
+  // forceNew: true,
   // extraHeaders: {
   //   'ITUNES-UID': 11211,
   //   'TUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
   //   'ITUNES-LANGUAGE': 'CN-zh',
   // },
+  autoConnect: false,
   transportOptions: {
     polling: {
       extraHeaders: {

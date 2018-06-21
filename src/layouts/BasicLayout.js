@@ -112,6 +112,9 @@ class BasicLayout extends React.Component {
       type: 'global/fetchConfigs',
     });
     if (token && user.id) {
+      // this.props.dispatch({
+      //   type: 'SOCKET/OPEN',
+      // });
       this.props.dispatch({
         type: 'user/fetchCurrent',
         callback: this.setSocketToken,
@@ -128,7 +131,7 @@ class BasicLayout extends React.Component {
 
   setSocketToken = (uid, token, language) => {
     this.props.dispatch({
-      type: 'set_socket_token',
+      type: 'SOCKET/OPEN',
       payload: { id: uid, token, language },
     });
   };
