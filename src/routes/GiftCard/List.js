@@ -12,9 +12,10 @@ import styles from './List.less';
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
 
-@connect(({ card, loading }) => ({
+@connect(({ card, loading, user }) => ({
   list: card.list,
   loading: loading.effects['card/fetchCardList_'],
+  user: user.currentUser.user,
 }))
 export default class List extends Component {
   constructor(props) {
@@ -263,10 +264,12 @@ export default class List extends Component {
           return (
             <Button
               type="primary"
+              disabled={record.owner.id === this.props.user.id}
               onClick={() => {
-                this.props.history.push({
-                  pathname: `/card/deal-detail/${record.id}`,
-                });
+                console.log(record);
+                // this.props.history.push({
+                //   pathname: `/card/deal-detail/${record.id}`,
+                // });
               }}
             >
               {type === '2' ? '购买' : '出售'}
