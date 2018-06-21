@@ -38,15 +38,16 @@ const options = {
   //   'TUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
   //   'ITUNES-LANGUAGE': 'CN-zh',
   // },
-  transportOptions: {
-    polling: {
-      extraHeaders: {
-        /* 'ITUNES-UID': 11211,
-        'ITUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
-        'ITUNES-LANGUAGE': 'CN-zh', */
-      },
-    },
-  },
+  autoConnect: true,
+  // transportOptions: {
+  //   polling: {
+  //     extraHeaders: {
+  //        'ITUNES-UID': 11211,
+  //       'ITUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
+  //       'ITUNES-LANGUAGE': 'CN-zh',
+  //     },
+  //   },
+  // },
 };
 
 // 2. Plugins

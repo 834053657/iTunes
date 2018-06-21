@@ -128,7 +128,7 @@ export default class Appeal extends Component {
 
   getUserType = sender => {
     return null;
-  }
+  };
 
   render() {
     const { previewVisible, previewImage, fileList } = this.state;

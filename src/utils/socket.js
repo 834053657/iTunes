@@ -49,6 +49,10 @@ export function dvaSocket(url, option) {
     option,
     {
       on: {
+        connect: (data, dispatch, getState, socket) => {
+          console.log('xxx');
+          socket.emit('set_user_id', JSON.stringify({ xx: 111 }));
+        },
         push_system_message: (data, dispatch, getState) => {
           const { data: msg } = JSON.parse(data);
           const { oldNotices } = getState().global;
@@ -77,13 +81,15 @@ export function dvaSocket(url, option) {
           const { currentUser: { user = {} } } = getState().user;
           console.log(getState().user);
           console.log(user);
+          if (msg.sender && user.id === msg.sender.id) {
+            msg.sender.avatar = user.avatar;
+          }
 
           // console.log(data);
           console.log(msg);
           if (msg && msg.order_msg_type === 1) {
             // 快捷短语
             const { quickMsgList } = getState().card;
-            console.log(123);
 
             quickMsgList.unshift(msg);
             dispatch({
@@ -101,11 +107,10 @@ export function dvaSocket(url, option) {
               payload: { data: chatMsgList },
             });
             // playAudio();
-          }
-          else {
+          } else {
             dispatch({
-             type: 'card/fetchOrderDetail',
-             payload: { id: msg.content && msg.content.order_id},
+              type: 'card/fetchOrderDetail',
+              payload: { id: msg.content && msg.content.order_id },
             });
           }
 
@@ -114,10 +119,13 @@ export function dvaSocket(url, option) {
       },
       emit: {
         set_user_id: {
-          evaluate: (action, dispatch, getState) => action.type === 'set_socket_token',
+          evaluate: (action, dispatch, getState, socket) => action.type === 'set_socket_token',
           data: ({ payload }) => {
             console.log('ppp', JSON.stringify(payload));
             return JSON.stringify(payload);
+          },
+          callback: () => {
+            console.log('set_user_id cb');
           },
         },
         post_quick_message: {

@@ -73,7 +73,7 @@ export default {
           type: 'saveCurrentUser',
           payload: response.data,
         });
-        callback && callback(user.id, response.data.token, 'CN-zh');
+        callback && setTimeout(callback(user.id, response.data.token, 'CN-zh'), 3000);
       } else {
         message.error(response.msg);
       }

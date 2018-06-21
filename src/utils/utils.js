@@ -170,7 +170,7 @@ export function getSystemUrl(env) {
 
   if (env === 'dev') {
     // base_url = 'http://47.106.111.213:3000/mock/19';
-     base_url = 'http://47.106.111.213:9001';
+    base_url = 'http://47.106.111.213:9001';
     web_name += '(DEV)';
     // socket_url = 'http://localhost:3000/socket/push';
     socket_url = 'http://47.106.111.213:9000/socket.io';
@@ -193,12 +193,34 @@ export function getMessageContent(msgObj) {
     return msgObj.title;
   } else {
     msgText = CONFIG[`message_type_${lang}`][msgObj.msg_type];
-    if ([11, 22, 42, 108].indexOf(msgObj.msg_type) >= 0) {
+    if ([11, 12].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace(
+        '%auth_type%',
+        msgObj.content && msgObj.content.auth_type === 1 ? '实名认证' : '视频认证'
+      );
+    }
+
+    if ([21, 22].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace(
+        '%payment_method%',
+        msgObj.content && msgObj.content.payment_method === 'bank' ? '银行账号' : '支付宝账号'
+      );
+      msgText = msgText.replace(
+        '%account%',
+        msgObj.content && msgObj.content.account ? `${msgObj.content.account.substr(0, 3)}...` : ''
+      );
+    }
+
+    if ([41, 42].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace('%title%', msgObj.title);
+    }
+
+    if ([12, 22, 42, 108].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace('%reason%', msgObj.content && msgObj.content.reason);
     }
 
     if ([101, 102, 103, 104, 105, 106, 107, 108].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('%order_no%', msgObj.content && msgObj.content.order_no || '');
+      msgText = msgText.replace('%order_no%', (msgObj.content && msgObj.content.order_no) || '');
     }
 
     return msgText;
