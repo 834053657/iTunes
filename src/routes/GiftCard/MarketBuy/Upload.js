@@ -16,13 +16,14 @@ export default class UploadComponent extends Component {
       previewVisible: false,
       previewImage: '',
       fileList: [],
-      token:
-        'onb47_1uVKhYASIOfAaGwTGYIfjkL8K3TiDxwk_g:MpJD3XIu-wYWEjleDqEwn5Iyv64=:eyJkZWFkbGluZSI6MTUyOTUwODc2Miwic2NvcGUiOiJpbWFnZXMifQ==',
     };
     this.previewUrl = 'http://images.91jianke.com/';
   }
 
   fileChange = info => {
+    const { currentUser } = this.props.user || {};
+    const { user = {}, upload = {} } = currentUser || {};
+    console.log(upload);
     this.previewUrl = 'http://images.91jianke.com/';
     const file = info.file;
     const id = file.response.hash;
@@ -35,7 +36,7 @@ export default class UploadComponent extends Component {
     this.previewUrl += id;
     this.props.getUrl ? this.props.getUrl(this.previewUrl) : null;
     this.props.onlyPic ? this.props.onlyPic(this.previewUrl) : null;
-    this.props.appealPic ? this.props.appealPic(info) : null;
+    //this.props.appealPic ? this.props.appealPic(info, upload.prefix) : null;
     this.props.sendPic ? this.props.sendPic(info, this.previewUrl) : null;
   };
 
@@ -56,29 +57,14 @@ export default class UploadComponent extends Component {
   handleCancel = () => this.setState({ previewVisible: false });
 
   uploadHandler = info => {
-    const { upload } = this.props.currentUser || {};
-    console.log(info);
-
+    const { currentUser } = this.props.user || {};
+    const { user = {}, upload = {} } = currentUser || {};
+    this.props.changeAppealPic && this.props.changeAppealPic(info, upload.prefix);
     if (info.file.status === 'uploading') {
       this.setState({
         uploadLoading: true,
       });
     } else if (info.file.status === 'done') {
-      console.log(info);
-      // const url = upload.prefix + info.file.response.hash;
-
-      // self.fileChange(info);
-      // self.setState({ fileList: [...info.fileList] });
-      // this.props.dispatch({
-      //   type: 'user/submitChangeAvatar',
-      //   payload: {
-      //     avatar,
-      //   },
-      //   callback: () => {
-      //     message.success('修改头像成功');
-      //     this.setState({ uploadLoading: false });
-      //   },
-      // });
       this.fileChange(info);
     } else if (info.file.status === 'error') {
       this.setState({ uploadLoading: false });
@@ -90,11 +76,7 @@ export default class UploadComponent extends Component {
   };
 
   beforeUpload = file => {
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('头像必须小于2!');
-    }
-    return isLt2M;
+    console.log(file);
   };
 
   render() {
@@ -103,32 +85,6 @@ export default class UploadComponent extends Component {
     const { item, index } = this.props;
     const { picNum } = this.props;
     const self = this;
-    // const uploadProp = {
-    //   name: 'file',
-    //   action: 'http://up-z2.qiniu.com/',
-    //   listType: 'picture-card',
-    //   headers: {
-    //     authorization: 'authorization-text',
-    //   },
-    //   multiple:true,
-    //   onPreview: self.handlePreview,
-    //   fileList: this.state.fileList,
-    //   data: { token },
-    //   onChange(info) {
-    //     if (info.file.status === 'done') {
-    //       self.fileChange(info);
-    //       message.success(`${info.file.name} 上传成功`);
-    //     } else if (info.file.status === 'error') {
-    //       message.error(`${info.file.name} file upload failed.`);
-    //     }
-    //     self.setState({ fileList: [...info.fileList] });
-    //   },
-    //   onRemove(info) {
-    //     console.log(info);
-    //     console.log('info in remove');
-    //     self.props.remove ? self.props.remove(info) : null;
-    //   },
-    // };
 
     return (
       <div className={styles.upload}>

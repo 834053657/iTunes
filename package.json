@@ -6,7 +6,7 @@
   "scripts": {
     "precommit": "npm run lint-staged",
     "start": "cross-env HARD_SOURCE=none KG_API_ENV=dev ESLINT=none roadhog dev",
-    "start:test": "cross-env KG_API_ENV=test ESLINT=none roadhog dev",
+    "start:test": "cross-env HARD_SOURCE=none KG_API_ENV=test ESLINT=none roadhog dev",
     "start:no-proxy": "cross-env __KG_API_ENV__=dev NO_PROXY=true ESLINT=none roadhog dev",
     "build": "cross-env ESLINT=none roadhog build",
     "site": "roadhog-api-doc static && gh-pages -d dist",

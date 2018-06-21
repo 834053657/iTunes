@@ -148,7 +148,7 @@ export default class Analysis extends Component {
             </a>
           </Col>
         </Row>
-        {/*<button
+        <button
           onClick={() => {
             this.props.dispatch({
               type: 'push_system_message',
@@ -159,7 +159,7 @@ export default class Analysis extends Component {
           }}
         >
           测试推送消息
-        </button>*/}
+        </button>
         <div className={styles.banner}>
           <Slider {...settings}>{bannersContent}</Slider>
         </div>

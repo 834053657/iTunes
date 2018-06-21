@@ -47,7 +47,7 @@ export default class Layout extends Component {
   render() {
     const { activeKey } = this.state;
     const { wallet = {}, payments = [] } = this.props.currentUser || {};
-    const hadEnabledPayment = findIndex(payments, i => i.status === 4);
+    const hadEnabledPayment = ~findIndex(payments, i => i.status === 4);
     const Warning = (
       <Alert
         message="请注意!"

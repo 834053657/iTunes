@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Icon, Avatar, Select } from 'antd';
+import { Button, Icon, Avatar, Select, Badge } from 'antd';
 import styles from './OrderDetail.less';
 import StepModel from '../Step';
 import QuickMsg from '../QuickMsg';
+import SetInterval from '../SetInterval';
 
 const Option = Select.Option;
 
@@ -43,7 +44,6 @@ export default class SellerEnsure extends Component {
 
     return (
       <div className={styles.stepTwoBox}>
-        SellerEnsure
         <StepModel steps={steps} current={1} />
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
@@ -75,7 +75,8 @@ export default class SellerEnsure extends Component {
                 保障时间剩余 &nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                {ad.guarantee_time}分钟
+                <SetInterval time={order.guarantee_at} />
+                分钟
               </h5>
               {pageStatus === 11 ? (
                 <div>
@@ -120,7 +121,7 @@ export default class SellerEnsure extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button onClick={this.preview}>查看礼品卡清单1</Button>
+              <Button onClick={this.preview}>查看礼品卡清单</Button>
             </div>
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>
@@ -129,8 +130,13 @@ export default class SellerEnsure extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <span className={styles.name}>{userInfo.nickname}</span>
-                    <span className={styles.online}>&nbsp;</span>
+                    <Badge
+                      status={userInfo.online ? 'success' : 'default'}
+                      offset={[11, 10]}
+                      dot={true}
+                    >
+                      <span className={styles.name}>{userInfo.nickname}</span>
+                    </Badge>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>

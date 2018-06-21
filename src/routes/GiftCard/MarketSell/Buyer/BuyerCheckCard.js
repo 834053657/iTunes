@@ -14,6 +14,7 @@ import {
   InputNumber,
   Steps,
   Avatar,
+  Badge,
 } from 'antd';
 import styles from './BuyerCheckCard.less';
 import StepModel from '../../Step';
@@ -97,16 +98,17 @@ export default class WaitBuyerCheck extends Component {
             </li>
           </ul>
           <div className={styles.bottom}>
-            <h4>
-              对方剩余&nbsp;
-              <Icon type="clock-circle-o" />
-              &nbsp;10分钟发卡
-            </h4>
             {order.status === 2 ? (
               <Button type="primary" size="large" onClick={this.handlePostCheck}>
                 立即查收
               </Button>
-            ) : null}
+            ) : (
+              <h4>
+                对方剩余&nbsp;
+                <Icon type="clock-circle-o" />
+                &nbsp;10分钟发卡
+              </h4>
+            )}
           </div>
         </div>
         <div className={styles.right}>
@@ -116,8 +118,13 @@ export default class WaitBuyerCheck extends Component {
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>
-                <span className={styles.name}>{userInfo.nickname}</span>
-                <span className={styles.online}>&nbsp;</span>
+                <Badge
+                  status={userInfo.online ? 'success' : 'default'}
+                  offset={[11, 10]}
+                  dot={true}
+                >
+                  <span className={styles.name}>{userInfo.nickname}</span>
+                </Badge>
               </div>
               <div className={styles.infoBottom}>
                 <span className={styles.dealTit}>30日成单：</span>

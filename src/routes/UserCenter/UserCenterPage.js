@@ -503,7 +503,9 @@ export default class UserCenterPage extends Component {
                     </div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        {real_name.status === 3 && <a onClick={this.showRealNameModal}>编辑</a>}
+                        {!!~[1, 3].indexOf(real_name.status) && (
+                          <a onClick={this.showRealNameModal}>编辑</a>
+                        )}
                       </li>
                     </ul>
                   </div>

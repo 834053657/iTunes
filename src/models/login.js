@@ -67,6 +67,9 @@ export default {
           payload: {},
         });
         reloadAuthorized();
+        yield put({
+          type: 'SOCKET/CLOSE',
+        });
         yield put(routerRedux.push('/user/login'));
       }
     },

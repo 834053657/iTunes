@@ -231,18 +231,17 @@ export default class BuyCard extends Component {
         })}
       </Menu>
     );
-
+    console.log(this.props.card.terms);
     const termsMenu = (
       <Menu>
-        {this.props.card.terms
-          ? this.props.card.terms.map(t => {
-              return (
-                <Menu.Item key={t.id} onClick={() => this.selectTermTitle(t)}>
-                  {t.title}
-                </Menu.Item>
-              );
-            })
-          : null}
+        {this.props.card.terms &&
+          this.props.card.terms.map(t => {
+            return (
+              <Menu.Item key={t.id} onClick={() => this.selectTermTitle(t)}>
+                {t.title}
+              </Menu.Item>
+            );
+          })}
       </Menu>
     );
 

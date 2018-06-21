@@ -14,6 +14,7 @@ import {
   Upload,
   Modal,
   Rate,
+  Badge,
 } from 'antd';
 import styles from './DealFinish.less';
 import StepModel from './Step';
@@ -155,8 +156,13 @@ export default class DealFinish extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <span className={styles.name}>{userInfo.nickname}</span>
-                    <span className={styles.online}>&nbsp;</span>
+                    <Badge
+                      status={userInfo.online ? 'success' : 'default'}
+                      offset={[11, 10]}
+                      dot={true}
+                    >
+                      <span className={styles.name}>{userInfo.nickname}</span>
+                    </Badge>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>
