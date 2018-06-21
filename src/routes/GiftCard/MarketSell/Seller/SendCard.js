@@ -5,8 +5,8 @@ import { Button, Icon, Input, Avatar, Badge } from 'antd';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
 import { sendCDK } from '../../../../services/api';
-import OnlyPicture from './OnlyPic';
-import PicWithText from './PicWithText';
+import SendOnlyPicture from './OnlyPic';
+import SendPicWithText from './PicWithText';
 
 @connect(({ card }) => ({
   card,
@@ -52,6 +52,35 @@ export default class Process extends Component {
     console.log(this.cardsData);
   };
 
+  //只有图片 上传图片
+  sendPic = (info, url, i, index) => {
+    this.cardsData[index].cards[i].picture = url;
+    console.log(this.cardsData);
+  };
+
+  //只有图片 上传密码
+  sendRec = (info, url, index) => {
+    this.cardsData[index].receipt = url;
+  };
+
+  changePTPass = (e, i, index) => {
+    this.cardsData[index].cards[i].password = e.target.value;
+    console.log(e);
+    console.log(i);
+    console.log(index);
+    console.log(this.cardsData);
+  };
+
+  sendPicWithText = (info, url, i, index) => {
+    this.cardsData[index].cards[i].picture = url;
+    console.log(this.cardsData);
+  };
+
+  sendRecWithText = (info, url, index) => {
+    this.cardsData[index].receipt = url;
+    console.log(this.cardsData);
+  };
+
   sendCDK = () => {
     this.data.cards = this.cardsData;
     console.log(this.data);
@@ -64,10 +93,9 @@ export default class Process extends Component {
   render() {
     const { user, detail } = this.state;
     const { setStatus } = this.props;
-    const { ad = {}, cards = {}, order = {} } = this.state.detail;
+    const { ad = {}, cards = {}, order = {} } = this.props.detail;
 
     const userInfo = ad.owner;
-    console.log(order.order_detail);
 
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (
@@ -115,7 +143,7 @@ export default class Process extends Component {
         </div>
         <div className={styles.denomination}>
           <div className={styles.bottom}>
-            {CONFIG.cardPwdType[ad.password_type] === '密码'
+            {CONFIG.cardPwdType[ad.password_type] === '有卡密'
               ? order.order_detail.map((item, index) => {
                   return (
                     <div key={index} className={styles.denomination}>
@@ -151,15 +179,32 @@ export default class Process extends Component {
                 })
               : null}
 
-            {CONFIG.cardPwdType[ad.password_type] === '图片'
+            {CONFIG.cardPwdType[ad.password_type] === '有卡图'
               ? order.order_detail.map((item, index) => {
-                  return <OnlyPicture key={index} item={item} />;
+                  return (
+                    <SendOnlyPicture
+                      key={index}
+                      item={item}
+                      renderInput={this.renderInput(item, index)}
+                      sendPic={(info, url, i) => this.sendPic(info, url, i, index)}
+                      sendRec={(info, url) => this.sendRec(info, url, index)}
+                    />
+                  );
                 })
               : null}
 
-            {CONFIG.cardPwdType[ad.password_type] === '密码和图片'
+            {CONFIG.cardPwdType[ad.password_type] === '有图有卡密'
               ? order.order_detail.map((item, index) => {
-                  return <PicWithText key={index} item={item} />;
+                  return (
+                    <SendPicWithText
+                      key={index}
+                      item={item}
+                      renderInput={this.renderInput(item, index)}
+                      changePTPass={(e, i) => this.changePTPass(e, i, index)}
+                      sendPicWithText={(info, url, i) => this.sendPicWithText(info, url, i, index)}
+                      sendRecWithText={(info, url) => this.sendRecWithText(info, url, index)}
+                    />
+                  );
                 })
               : null}
 

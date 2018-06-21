@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
 
 import { Modal, Input, Button, Icon, Upload, message } from 'antd';
-import styles from '../../picWithText.less';
+import styles from './OnlyPic.less';
 import UploadComponent from '../../MarketBuy/Upload';
 
-export default class PicWithText extends Component {
-  state = {};
+export default class SendPicWithText extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      iptValue: props.renderInput,
+    };
+  }
+
+  changeValue = (e, i) => {
+    const a = this.state.iptValue;
+    a[i].password = e.target.value;
+    this.setState({
+      iptValue: a,
+    });
+  };
 
   render() {
-    const { item, index, changeFileData, addCDKBox, delCDKBox, changePTPass } = this.props;
+    const { item, index, changePTPass } = this.props;
     const { ptFileList } = this.state;
 
     const state = {
@@ -16,8 +29,6 @@ export default class PicWithText extends Component {
       previewImage: '',
     };
 
-    console.log('item');
-    console.log(item);
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -26,7 +37,7 @@ export default class PicWithText extends Component {
     );
 
     return (
-      <div className={styles.denomination}>
+      <div className={styles.denominationPWT}>
         <header>
           <span>{item.money || '-'}</span>
           面额 （{item.count || '-'}）
@@ -34,58 +45,44 @@ export default class PicWithText extends Component {
         <section className={styles.onlyPic}>
           <div className={styles.left}>
             <ul>
-              {console.log(item)}
-              {item.items && item.items.length
-                ? item.items.map((d, i) => {
-                    return (
-                      <li key={i}>
-                        <div className={styles.cardTop}>
-                          <span className={styles.title}>卡密：</span>
-                          <div className={styles.input}>
-                            <Input
-                              value={d.password}
-                              onChange={e => changePTPass(e, i, index)}
-                              type="text"
-                            />
-                          </div>
-                          <Icon
-                            className={styles.iconDel}
-                            type="minus-circle-o"
-                            onClick={() => {
-                              delCDKBox(item.money, i);
+              {this.props.renderInput &&
+                this.props.renderInput.map((d, i) => {
+                  return (
+                    <li className={styles.leftSquare} key={i}>
+                      <div className={styles.cardTop}>
+                        <span className={styles.title}>卡密：</span>
+                        <div className={styles.input}>
+                          <Input
+                            value={this.state.iptValue[i].password}
+                            onChange={e => {
+                              changePTPass(e, i);
+                              this.changeValue(e, i);
                             }}
+                            type="text"
                           />
                         </div>
-                        <div className={styles.cardBottom}>
-                          <span className={styles.title}>卡图：</span>
-                          <UploadComponent
-                            picNum={1}
-                            changeFileData={changeFileData}
-                            getUrl={url => this.props.getUrl(url, i)}
-                          />
-                        </div>
-                      </li>
-                    );
-                  })
-                : null}
+                      </div>
+                      <div className={styles.cardBottom}>
+                        <span className={styles.title}>卡图：</span>
+                        <UploadComponent
+                          picNum={1}
+                          sendPic={(info, url) => this.props.sendPicWithText(info, url, i)}
+                        />
+                      </div>
+                    </li>
+                  );
+                })}
             </ul>
-            <div className={styles.addBtn}>
-              <Button
-                onClick={() => {
-                  addCDKBox(item.money);
-                }}
-                className={styles.uploadButton}
-              >
-                添加
-              </Button>
-            </div>
           </div>
           <div className={styles.receipt}>
             <div className={styles.left}>
               <span>收据:</span>
             </div>
             <div className={styles.right}>
-              <UploadComponent picNum={1} getUrl={this.props.getReceipt} />
+              <UploadComponent
+                picNum={1}
+                sendPic={(info, url) => this.props.sendRecWithText(info, url)}
+              />
             </div>
           </div>
         </section>

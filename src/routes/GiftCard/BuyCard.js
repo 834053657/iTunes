@@ -139,19 +139,19 @@ export default class SaleCard extends Component {
 
     this.selCondition = e => {
       this.setState({
-        condition_type: e,
+        condition_type: +e,
         condition: +e === 1 ? [] : {},
       });
       this.data.condition = +e === 1 ? [] : {};
-      this.data.condition_type = e;
+      this.data.condition_type = +e;
     };
 
     this.changeMinMoney = e => {
       console.log(this.data);
-      this.data.condition.min_money = e.target.value;
+      this.data.condition.min_money = +e.target.value;
     };
     this.changeMaxMoney = e => {
-      this.data.condition.max_money = e.target.value;
+      this.data.condition.max_money = +e.target.value;
     };
 
     this.addBuyAd = () => {
@@ -206,7 +206,6 @@ export default class SaleCard extends Component {
 
   render() {
     const { condition_type, condition } = this.state;
-
     const cardTypeMenu = CONFIG.card_type ? (
       <Menu>
         {CONFIG.card_type.map(t => {
@@ -243,7 +242,7 @@ export default class SaleCard extends Component {
       </Menu>
     ) : null;
 
-    const { items } = this.props.card.terms;
+    const items = this.props.card.terms;
     const termsMenu = (
       <Menu>
         {items ? (

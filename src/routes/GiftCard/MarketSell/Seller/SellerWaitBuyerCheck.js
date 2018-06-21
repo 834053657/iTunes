@@ -20,16 +20,18 @@ export default class SellerWaitBuyerCheck extends Component {
 
   cancelOrder = () => {
     console.log(this.props);
-    this.props
-      .dispatch({
-        type: 'card/cacelOrder',
-        payload: { order_id: this.props.detail.order.id },
-      })
-      .then(() => {
-        this.props.setStatus('pageStatus', 9);
-      });
+    this.props.dispatch({
+      type: 'card/cacelOrder',
+      payload: { order_id: this.props.detail.order.id },
+    });
   };
 
+  preview = () => {
+    this.props.dispatch({
+      type: 'card/changePageStatus',
+      payload: 16,
+    });
+  };
   componentWillMount() {}
 
   componentDidMount() {
@@ -126,13 +128,7 @@ export default class SellerWaitBuyerCheck extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button
-                onClick={() => {
-                  this.props.history.push({ pathname: `/card/card-preview` });
-                }}
-              >
-                查看礼品卡清单
-              </Button>
+              <Button onClick={this.preview}>查看礼品卡清单</Button>
             </div>
 
             <div className={styles.ownerInfo}>

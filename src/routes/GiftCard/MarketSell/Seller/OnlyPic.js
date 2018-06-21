@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Modal, Input, Button, Icon, Upload, message, Popover } from 'antd';
 import UploadComponent from '../../MarketBuy/Upload';
-import styles from '../Seller/SendCard.less';
+import styles from './OnlyPic.less';
 
-export default class OnlyPicture extends Component {
+export default class SendOnlyPicture extends Component {
   renderItem = (item, key) => {
     const { getToken } = this.props;
     const imgContent = (
@@ -28,8 +28,8 @@ export default class OnlyPicture extends Component {
     return (
       <div className={styles.denomination}>
         <header>
-          <span>item.money</span>
-          面额 item.items.length
+          <span>{item.money}</span>
+          面额 {item.count}
         </header>
         <section className={styles.onlyPic}>
           <div className={styles.left}>
@@ -37,11 +37,16 @@ export default class OnlyPicture extends Component {
           </div>
           <div className={styles.center}>
             <div className={styles.addBtn}>
-              <UploadComponent
-                picNum={1000}
-                onlyPic={info => this.props.onlyPic(info)}
-                remove={info => this.props.remove(info)}
-              />
+              {this.props.renderInput &&
+                this.props.renderInput.map((u, i) => {
+                  return (
+                    <UploadComponent
+                      key={i}
+                      picNum={1}
+                      sendPic={(info, url) => this.props.sendPic(info, url, i)}
+                    />
+                  );
+                })}
             </div>
           </div>
           <div className={styles.receipt}>
@@ -52,8 +57,7 @@ export default class OnlyPicture extends Component {
               <div className={styles.addBtn}>
                 <UploadComponent
                   picNum={1}
-                  changeFileData={changeFileData}
-                  getUrl={this.props.getReceipt}
+                  sendPic={(info, url) => this.props.sendRec(info, url)}
                 />
               </div>
             </div>

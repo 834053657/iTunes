@@ -36,6 +36,7 @@ export default class UploadComponent extends Component {
     this.props.getUrl ? this.props.getUrl(this.previewUrl) : null;
     this.props.onlyPic ? this.props.onlyPic(this.previewUrl) : null;
     this.props.appealPic ? this.props.appealPic(info) : null;
+    this.props.sendPic ? this.props.sendPic(info, this.previewUrl) : null;
   };
 
   componentWillMount() {

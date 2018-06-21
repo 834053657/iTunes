@@ -63,6 +63,7 @@ export async function userWithdraw(params) {
     body: params,
   });
 }
+
 export async function queryMyAdList(params) {
   return request(`/itunes/user/ad/all?${stringify(params)}`);
 }
@@ -201,6 +202,7 @@ export async function queryNotices() {
 export async function queryStatistics() {
   return request('/itunes/statistics/trade');
 }
+
 export async function queryConfigs() {
   return request('/itunes/defines');
 }
@@ -234,7 +236,9 @@ export async function createBuyOrder(params) {
 
 //获取订单详情
 export async function getOrderDetail(params) {
-  console.log(params);
+  if (!params) {
+    return false;
+  }
   return request(`/itunes/order/detail?${stringify(params)}`);
 }
 
@@ -254,6 +258,7 @@ export async function addSellAd(params) {
     body: params,
   });
 }
+
 //创建购买广告
 export async function addBuyAd(params) {
   return request('/itunes/ad/card/buy', {
@@ -266,6 +271,7 @@ export async function addBuyAd(params) {
 export async function getAdDetail(params) {
   return request(`/itunes/ad/card/detail?${stringify(params)}`);
 }
+
 //创建出售
 export async function getSellDetail(params) {
   return request(`/itunes/ad/card/sell/detail?${stringify(params)}`);
@@ -304,6 +310,7 @@ export async function cacelOrder(params) {
     body: params,
   });
 }
+
 //释放订单
 export async function releaseOrder(params) {
   return request('/itunes/order/release', {
@@ -311,6 +318,7 @@ export async function releaseOrder(params) {
     body: params,
   });
 }
+
 //申诉
 export async function appealOrder(params) {
   return request('/itunes/order/appeal', {
@@ -318,6 +326,7 @@ export async function appealOrder(params) {
     body: params,
   });
 }
+
 //评价订单
 export async function ratingOrder(params) {
   return request('/itunes/order/rating', {

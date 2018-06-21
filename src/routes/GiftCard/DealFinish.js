@@ -51,6 +51,13 @@ export default class DealFinish extends Component {
     }
   };
 
+  previewCard = () => {
+    this.props.dispatch({
+      type: 'card/changePageStatus',
+      payload: 16,
+    });
+  };
+
   render() {
     const { order, ad, cards, trader } = this.props.detail;
     const { pageStatus } = this.props;
@@ -133,10 +140,15 @@ export default class DealFinish extends Component {
 
           <div className={styles.right}>
             <div className={styles.largeBtnBox}>
-              <Button>查看礼品卡清单</Button>
+              <Button onClick={this.previewCard}>查看礼品卡清单</Button>
             </div>
 
             <div className={styles.ownerInfo}>
+              <div>
+                <Button type="default" onClick={this.jumpAppeal}>
+                  申诉记录
+                </Button>
+              </div>
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
                   <Avatar size="large" src={userInfo.avatar} />

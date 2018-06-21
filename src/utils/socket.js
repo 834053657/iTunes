@@ -12,8 +12,8 @@ import { playAudio } from './utils';
 
 export function dvaSocket(url, option) {
   // 如需调试线上socket 请吧isDev 设置成false
-  // const isDev = false;
-  const isDev = process.env.NODE_ENV === 'development';
+  const isDev = false;
+  // const isDev = process.env.NODE_ENV === 'development';
   console.log('socket-url', url);
   if (isDev) {
     const mockServer = new Server(url);
@@ -75,6 +75,8 @@ export function dvaSocket(url, option) {
           // const { data: msg } = JSON.parse(data); // order msg type 快捷短语/申述聊天
           const { data: msg } = data;
 
+          console.log(data);
+          console.log(msg);
           if (msg && msg.order_msg_type === 1) {
             // 快捷短语
             const { quickMsgList } = getState().card;
@@ -97,13 +99,13 @@ export function dvaSocket(url, option) {
               payload: { data: chatMsgList },
             });
             playAudio();
-          } else {
-            console.log(data);
-            dispatch({
-              type: 'card/fetchOrderDetail',
-              payload: { id: msg.content && msg.content.order_id},
-            });
           }
+          // else {
+          //   dispatch({
+          //     type: 'card/fetchOrderDetail',
+          //     payload: { id: msg.content && msg.content.order_id},
+          //   });
+          // }
         },
       },
       emit: {
@@ -125,7 +127,7 @@ export function dvaSocket(url, option) {
           evaluate: (action, dispatch, getState) => action.type === 'push_system_message',
           data: ({ payload }) => {
             console.log('socket - push_system_messag');
-           return JSON.stringify(payload);
+            return JSON.stringify(payload);
           },
         },
         enter_chat_room: {

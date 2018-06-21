@@ -39,7 +39,6 @@ export default class OrderDetail extends Component {
     this.setState({
       orderId: id,
     });
-    console.log(id);
     this.props.dispatch({
       type: 'card/fetchOrderDetail',
       payload: { id },
@@ -50,7 +49,6 @@ export default class OrderDetail extends Component {
   };
 
   enterRoom = order_id => {
-    console.log('order_id', order_id);
     this.props.dispatch({
       type: 'enter_chat_room',
       payload: { order_id },
@@ -58,7 +56,6 @@ export default class OrderDetail extends Component {
   };
 
   leaveRoom = order_id => {
-    console.log('order_id', order_id);
     this.props.dispatch({
       type: 'leave_chat_room',
       payload: { order_id },
@@ -66,7 +63,6 @@ export default class OrderDetail extends Component {
   };
 
   componentWillUnmount() {
-    console.log('leave room...');
     const { params: { id } } = this.props.match || {};
 
     this.leaveRoom(id);
@@ -83,24 +79,24 @@ export default class OrderDetail extends Component {
     this.enterRoom(id);
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    console.log(nextProps, nextState);
-    // if (nextState.pageStatus === 6) {
-    //   this.fetchData()
-    // }
-    return true;
-    // const {params: {id}} = this.props.match || {};
-    // const {order} = this.props.detail;
-    // console.log(id)
-    // this.props
-    //   .dispatch({
-    //     type: 'card/fetchOrderDetail',
-    //     payload: {"id": id},
-    //   })
-    //   .then(() => {
-    //     this.initStatue(order);
-    //   });
-  }
+  // componentWillUpdate(nextProps, nextState) {
+  //   console.log(nextProps, nextState);
+  //   // if (nextState.pageStatus === 6) {
+  //   //   this.fetchData()
+  //   // }
+  //   return true;
+  //   // const {params: {id}} = this.props.match || {};
+  //   // const {order} = this.props.detail;
+  //   // console.log(id)
+  //   // this.props
+  //   //   .dispatch({
+  //   //     type: 'card/fetchOrderDetail',
+  //   //     payload: {"id": id},
+  //   //   })
+  //   //   .then(() => {
+  //   //     this.initStatue(order);
+  //   //   });
+  // }
 
   // initStatue = () => {
   //   const s = this.props.detail.order.status;
@@ -303,18 +299,16 @@ export default class OrderDetail extends Component {
           />
         ) : null}
 
-        {
-          //我要购买列表 买家视角 订单状态：确认信息 礼品卡清单
-          // this.orderType() === 2 && this.Identify() === '买家'
-          // pageStatus === 16 ? (
-          //   <PreviewCard
-          //     setStatus={this.setStatus}
-          //     detail={detail}
-          //     user={user}
-          //     orderTitle={this.orderTitle}
-          //   />
-          // ) : null
-        }
+        {//我要购买列表 买家视角 订单状态：确认信息 礼品卡清单
+        pageStatus === 16 ? (
+          <PreviewCard
+            setStatus={this.setStatus}
+            detail={detail}
+            user={user}
+            orderTitle={this.orderTitle}
+            orderId={this.state.orderId}
+          />
+        ) : null}
 
         {//我要购买列表 买家视角 订单状态：确认信息 礼品卡清单
         // this.orderType() === 2 && this.Identify() === '买家'

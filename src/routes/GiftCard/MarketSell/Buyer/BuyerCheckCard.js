@@ -59,7 +59,6 @@ export default class WaitBuyerCheck extends Component {
 
     return (
       <div className={styles.receiveCard}>
-        WaitBuyerCheck
         <StepModel steps={steps} current={0} />
         <div className={styles.left}>
           <div className={styles.orderInfo}>

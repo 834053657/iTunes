@@ -16,6 +16,20 @@ export default class SellerEnsure extends Component {
     super();
   }
 
+  cancelOrder = () => {
+    console.log(this.props);
+    this.props.dispatch({
+      type: 'card/cacelOrder',
+      payload: { order_id: this.props.detail.order.id },
+    });
+  };
+  preview = () => {
+    this.props.dispatch({
+      type: 'card/changePageStatus',
+      payload: 16,
+    });
+  };
+
   render() {
     const { ad = {}, cards = {}, order = {}, trader } = this.props.detail;
     const { user, detail, pageStatus, setStatus } = this.props;
@@ -65,6 +79,7 @@ export default class SellerEnsure extends Component {
               {pageStatus === 11 ? (
                 <div>
                   <Button
+                    onClick={this.cancelOrder}
                     style={{ borderColor: 'red', backgroundColor: '#fff', color: 'red' }}
                     type="danger"
                   >
@@ -104,14 +119,7 @@ export default class SellerEnsure extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button
-                onClick={this.props.dispatch({
-                  type: 'card/changePageStatus',
-                  payload: 16,
-                })}
-              >
-                查看礼品卡清单
-              </Button>
+              <Button onClick={this.preview}>查看礼品卡清单1</Button>
             </div>
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>

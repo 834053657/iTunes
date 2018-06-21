@@ -127,6 +127,7 @@ function initStatue(detail, user) {
   return pageStatus;
   //主动购买  买家打开
 }
+
 export default {
   namespace: 'card',
 
@@ -298,10 +299,14 @@ export default {
     *cacelOrder({ payload }, { call, put }) {
       const res = yield call(cacelOrder, payload);
       if (res.code === 0) {
-        return res;
+        yield put({
+          type: 'fetchOrderDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
       } else {
         message.error(res.msg);
-        return res;
       }
     },
     //释放订单
@@ -450,15 +455,16 @@ export default {
         chatMsgList: data,
       };
     },
-    // changePageStatus(state, {payload}) {
-    //   return {
-    //     ...state,
-    //     odDetail: {
-    //       ...state.odDetail,
-    //       pageStatus: payload
-    //     },
-    //   };
-    // },
+    changePageStatus(state, { payload }) {
+      return {
+        ...state,
+        odDetail: {
+          ...state.odDetail,
+          pageStatus: payload,
+          olderPageStatus: state.odDetail.pageStatus,
+        },
+      };
+    },
   },
 
   subscriptions: {},

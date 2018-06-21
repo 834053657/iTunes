@@ -21,14 +21,14 @@ export default class QuickMsg extends Component {
 
   componentDidMount() {
     const { dispatch, detail: { order = {} } } = this.props;
-    dispatch({
-      type: 'card/fetchQuickMsgList',
-      payload: {
-        order_id: order.id,
-        order_msg_type: 1, // 1快捷短语  2 申诉
-        goods_type: 2, // 1: 'itunes', 2: '礼品卡'
-      }
-    });
+    // dispatch({
+    //   type: 'card/fetchQuickMsgList',
+    //   payload: {
+    //     order_id: order.id,
+    //     order_msg_type: 1, // 1快捷短语  2 申诉
+    //     goods_type: 2, // 1: 'itunes', 2: '礼品卡'
+    //   }
+    // });
   }
 
   selectTerm = e => {
@@ -48,7 +48,7 @@ export default class QuickMsg extends Component {
     });
   };
 
-  sendQuickMsg = (e) =>{
+  sendQuickMsg = e => {
     const { order = {} } = this.props.detail;
     if (e) {
       this.props.dispatch({
@@ -60,7 +60,7 @@ export default class QuickMsg extends Component {
         },
       });
     }
-  }
+  };
 
   render() {
     const { setStatus, card: { quickMsgList = [] } } = this.props;
@@ -70,11 +70,7 @@ export default class QuickMsg extends Component {
 
     return (
       <div className={styles.chatInfo}>
-        <Select
-          defaultValue={this.state.term}
-          style={{ width: 260 }}
-          onSelect={this.sendQuickMsg}
-        >
+        <Select defaultValue={this.state.term} style={{ width: 260 }} onSelect={this.sendQuickMsg}>
           {CONFIG.term
             ? CONFIG.term.map(t => {
                 return (
@@ -86,26 +82,29 @@ export default class QuickMsg extends Component {
             : null}
         </Select>
         <ul>
-          {
-             map(quickMsgList, d => {
-              return (
-                <li>
-                  <div className={styles.leftAvatar}>
-                    <span className={styles.avaTop}>
-                      <Avatar className={styles.avatar} src={d.sender && d.sender.avatar} size="large" icon="user" />
-                    </span>
-                    <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
+          {map(quickMsgList, d => {
+            return (
+              <li>
+                <div className={styles.leftAvatar}>
+                  <span className={styles.avaTop}>
+                    <Avatar
+                      className={styles.avatar}
+                      src={d.sender && d.sender.avatar}
+                      size="large"
+                      icon="user"
+                    />
+                  </span>
+                  <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
+                </div>
+                <div className={styles.chatItem}>
+                  <p className={styles.chatText}>{d.content && d.content.content}</p>
+                  <div className={styles.chatTime}>
+                    {moment(d.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
                   </div>
-                  <div className={styles.chatItem}>
-                    <p className={styles.chatText}>
-                      {d.content && d.content.content}
-                    </p>
-                    <div className={styles.chatTime}>{moment(d.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}</div>
-                  </div>
-                </li>
-              );
-            })
-          }
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
     );
