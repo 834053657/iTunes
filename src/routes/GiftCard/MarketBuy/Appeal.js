@@ -126,6 +126,10 @@ export default class Appeal extends Component {
     });
   };
 
+  getUserType = sender => {
+    return null;
+  }
+
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
     const { card, appealInfo } = this.props;
@@ -263,6 +267,8 @@ function AppealInfo(props) {
                   />
                 </span>
                 <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
+                <br />
+                <span className={styles.avaName}>{this.getUserType(d.sender)}</span>
               </div>
               <div className={styles.chatItem}>
                 <div className={styles.chatText}>
