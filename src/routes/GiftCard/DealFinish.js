@@ -64,9 +64,9 @@ export default class DealFinish extends Component {
     let steps = null;
     let userInfo = null;
     if (pageStatus === 12 || pageStatus === 13 || pageStatus === 3 || pageStatus === 4) {
-      userInfo = trader;
-    } else if (pageStatus === 15 || pageStatus === 17 || pageStatus === 8 || pageStatus === 9) {
       userInfo = ad.owner;
+    } else if (pageStatus === 15 || pageStatus === 17 || pageStatus === 8 || pageStatus === 9) {
+      userInfo = trader;
     }
 
     if (pageStatus === 12 || pageStatus === 17) {

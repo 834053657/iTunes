@@ -271,14 +271,14 @@ export default class OrderDetail extends Component {
         ) : null}
 
         {//已完成/取消订单
-        pageStatus === 3 ||
-        pageStatus === 4 || //主动出售 已完成/取消订单  买家
-        pageStatus === 8 ||
-        pageStatus === 9 || //主动出售 已完成/取消订单  卖家
-        pageStatus === 12 ||
-        pageStatus === 13 || //主动购买 已完成/取消订单  卖家
-        pageStatus === 15 ||
-        pageStatus === 17 ? ( //主动购买 已完成/取消订单  卖家
+        pageStatus === 3 || //主动出售 已完成  买家
+        pageStatus === 4 || //主动出售 取消订单  买家
+        pageStatus === 8 || //主动出售 已完成  卖家
+        pageStatus === 9 || //主动出售 已取消  卖家
+        pageStatus === 12 || //主动购买 已完成  卖家
+        pageStatus === 13 || //主动购买 取消订单  卖家
+        pageStatus === 15 || //主动购买  已取消  买家
+        pageStatus === 17 ? ( //主动购买  已完成  买家
           <DealFinish
             pageStatus={pageStatus}
             setStatus={this.setStatus}
