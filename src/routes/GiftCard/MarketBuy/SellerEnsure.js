@@ -43,6 +43,7 @@ export default class SellerEnsure extends Component {
 
     return (
       <div className={styles.stepTwoBox}>
+        SellerEnsure
         <StepModel steps={steps} current={1} />
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>

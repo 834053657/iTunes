@@ -73,6 +73,7 @@ export default class SellerWaitBuyerCheck extends Component {
 
     return (
       <div className={styles.stepTwoBox}>
+        SellerWaitBuyerCheck
         <StepModel steps={steps} current={1} />
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>

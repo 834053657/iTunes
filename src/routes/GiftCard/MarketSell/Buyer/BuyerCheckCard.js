@@ -55,7 +55,7 @@ export default class WaitBuyerCheck extends Component {
     const { ad, cards, order, trader } = this.state.detail;
     const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
 
-    const userInfo = ad.owner;
+    const userInfo = trader;
 
     return (
       <div className={styles.receiveCard}>
@@ -102,9 +102,11 @@ export default class WaitBuyerCheck extends Component {
               <Icon type="clock-circle-o" />
               &nbsp;10分钟发卡
             </h4>
-            <Button type="primary" size="large" onClick={this.handlePostCheck}>
-              立即查收
-            </Button>
+            {order.status === 2 ? (
+              <Button type="primary" size="large" onClick={this.handlePostCheck}>
+                立即查收
+              </Button>
+            ) : null}
           </div>
         </div>
         <div className={styles.right}>

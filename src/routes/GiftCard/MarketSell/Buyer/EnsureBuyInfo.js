@@ -19,6 +19,13 @@ export default class EnsureBuyInfo extends Component {
     };
   }
 
+  preview = () => {
+    this.props.dispatch({
+      type: 'card/changePageStatus',
+      payload: 16,
+    });
+  };
+
   selectTerm = e => {
     if (!CONFIG.term) {
       return false;
@@ -26,7 +33,6 @@ export default class EnsureBuyInfo extends Component {
     this.setState({
       term: CONFIG.term[CONFIG.term.findIndex(t => t.id === e)].content || '-',
     });
-    console.log(e);
     this.props.dispatch({
       type: 'card/sendQuickMsg',
       payload: {
@@ -40,13 +46,13 @@ export default class EnsureBuyInfo extends Component {
     const { detail, setStatus } = this.props;
     const { ad, cards, order, trader } = this.props.detail;
 
-    const userInfo = ad.owner;
+    const userInfo = trader;
 
     const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.stepTwoBox}>
+        EnsureBuyInfo
         <StepModel steps={steps} current={1} />
-
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
             <div className={styles.orderInfo}>
@@ -99,13 +105,7 @@ export default class EnsureBuyInfo extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button
-                onClick={() => {
-                  this.props.history.push({ pathname: `/card/card-preview` });
-                }}
-              >
-                查看礼品卡清单
-              </Button>
+              <Button onClick={this.previewCard}>查看礼品卡清单</Button>
             </div>
 
             <div className={styles.ownerInfo}>

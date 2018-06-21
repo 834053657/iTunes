@@ -51,7 +51,14 @@ function initStatue(detail, user) {
   let pageStatus;
   switch (status) {
     case 1:
-      pageStatus = 5;
+      if (order_type === 2) {
+        if (identify(detail, user) === '买家') {
+          pageStatus = 1;
+        } else {
+          // '卖家'
+          pageStatus = 5;
+        }
+      }
       break;
     case 2:
       if (order_type === 2) {
