@@ -49,6 +49,18 @@ export function dvaSocket(url, option) {
     option,
     {
       on: {
+        connect: (data, dispatch, getState, socket) => {
+          console.log('connect success', data);
+          // const { currentUser } = getState().user;
+          // const { user, token} = currentUser || {}
+          // dispatch({
+          //   type: 'set_socket_token',
+          //   payload: {
+          //     id: user.id,
+          //     token
+          //   }
+          // })
+        },
         push_system_message: (data, dispatch, getState) => {
           const { data: msg } = JSON.parse(data);
           const { oldNotices } = getState().global;
@@ -77,13 +89,15 @@ export function dvaSocket(url, option) {
           const { currentUser: { user = {} } } = getState().user;
           console.log(getState().user);
           console.log(user);
+          if (msg.sender && user.id === msg.sender.id) {
+            msg.sender.avatar = user.avatar;
+          }
 
           // console.log(data);
           console.log(msg);
           if (msg && msg.order_msg_type === 1) {
             // 快捷短语
             const { quickMsgList } = getState().card;
-            console.log(123);
 
             quickMsgList.unshift(msg);
             dispatch({
@@ -114,13 +128,17 @@ export function dvaSocket(url, option) {
         },
       },
       emit: {
-        set_user_id: {
-          evaluate: (action, dispatch, getState) => action.type === 'set_socket_token',
-          data: ({ payload }) => {
-            console.log('ppp', JSON.stringify(payload));
-            return JSON.stringify(payload);
-          },
-        },
+        // set_user_id: {
+        //   evaluate: (action, dispatch, getState) => action.type === 'set_socket_token',
+        //   data: ({ payload }) => {
+        //     console.log('ppp', JSON.stringify(payload));
+        //     return JSON.stringify(payload);
+        //   },
+        //   callback: (data) => {
+        //     console.log('xxxx',data)
+        //   }
+        //
+        // },
         post_quick_message: {
           evaluate: (action, dispatch, getState) => action.type === 'post_quick_message',
           data: ({ payload }) => {
@@ -141,6 +159,9 @@ export function dvaSocket(url, option) {
             console.log('enter_chat_room', payload);
             return JSON.stringify(payload);
           },
+          callback: data => {
+            console.log('enter_chat_room callback', data);
+          },
         },
         leave_chat_room: {
           evaluate: (action, dispatch, getState) => action.type === 'leave_chat_room',
@@ -156,6 +177,45 @@ export function dvaSocket(url, option) {
           },
         },
       },
+      asyncs: [
+        {
+          evaluate: (action, dispatch, getState) => action.type === 'SOCKET/OPEN',
+          request: (action, dispatch, getState, socket) => {
+            console.log('SOCKET/OPEN', socket);
+            // socket.on('connect', (data)=> {
+            //   console.log('connectxxx');
+            // });
+            const { id, language, token } = action.payload;
+            /* eslint no-param-reassign:0 */
+            socket.io.opts.transportOptions = {
+              polling: {
+                extraHeaders: {
+                  'ITUNES-UID': id,
+                  'ITUNES-TOKEN': token,
+                  'ITUNES-LANGUAGE': language,
+                },
+              },
+            };
+            socket.open();
+            // socket.onconnect((data)=> {
+            //   console.log('onconnect')
+            // });
+          },
+        },
+        {
+          evaluate: (action, dispatch, getState) => action.type === 'SOCKET/CLOSE',
+          request: (action, dispatch, getState, socket) => {
+            console.log('SOCKET/CLOSE', socket);
+            // socket.on('connect', (data)=> {
+            //   console.log('connectxxx');
+            // });
+            socket.close();
+            // socket.onconnect((data)=> {
+            //   console.log('onconnect')
+            // });
+          },
+        },
+      ],
     },
     isDev ? SocketIO : null
   );

@@ -108,5 +108,4 @@ class ImageValidation extends Component {
     );
   }
 }
-
 export default Form.create()(ImageValidation);

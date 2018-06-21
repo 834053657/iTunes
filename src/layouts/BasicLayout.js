@@ -112,6 +112,9 @@ class BasicLayout extends React.Component {
       type: 'global/fetchConfigs',
     });
     if (token && user.id) {
+      // this.props.dispatch({
+      //   type: 'SOCKET/OPEN',
+      // });
       this.props.dispatch({
         type: 'user/fetchCurrent',
         callback: this.setSocketToken,
@@ -128,7 +131,7 @@ class BasicLayout extends React.Component {
 
   setSocketToken = (uid, token, language) => {
     this.props.dispatch({
-      type: 'set_socket_token',
+      type: 'SOCKET/OPEN',
       payload: { id: uid, token, language },
     });
   };
@@ -212,13 +215,18 @@ class BasicLayout extends React.Component {
           this.props.dispatch(
             routerRedux.push(`/message/info-detail/${item.content && item.content.ref_id}`)
           );
-        } else if ([11, 12, 21, 22, 31, 32, 33, 34, 41, 42].indexOf(item.msg_type) >= 0) {
-          Modal.success({
+        } else if ([11, 12, 21, 22].indexOf(item.msg_type) >= 0) {
+          /* Modal.success({
             // title: item.title,
             title: '提示',
             content: getMessageContent(item),
             onOk: () => {},
-          });
+          }); */
+          this.props.dispatch(routerRedux.push(`/user-center/index`));
+        } else if ([31, 32, 33, 34].indexOf(item.msg_type) >= 0) {
+          this.props.dispatch(routerRedux.push(`/wallet?activeKey=3`));
+        } else if ([41, 42].indexOf(item.msg_type) >= 0) {
+          this.props.dispatch(routerRedux.push(`/ad/terms`));
         } else if ([101, 102, 103, 104, 105, 106, 107].indexOf(item.msg_type) >= 0) {
           //todo redict to order detail
           if (item.content && item.content.goods_type === 1)
