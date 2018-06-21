@@ -101,11 +101,12 @@ export function dvaSocket(url, option) {
               payload: { data: chatMsgList },
             });
             // playAudio();
-          }
-          else {
+          } else {
+            console.log({ id: msg.content && msg.content.order_id });
+            console.log('{id: msg.content && msg.content.order_id}');
             dispatch({
-             type: 'card/fetchOrderDetail',
-             payload: { id: msg.content && msg.content.order_id},
+              type: 'card/fetchOrderDetail',
+              payload: { id: msg.content && msg.content.order_id },
             });
           }
 

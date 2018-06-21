@@ -145,11 +145,13 @@ export default class DealFinish extends Component {
             </div>
 
             <div className={styles.ownerInfo}>
+              {/*
               <div>
                 <Button type="default" onClick={this.jumpAppeal}>
                   申诉记录
                 </Button>
               </div>
+              */}
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
                   <Avatar size="large" src={userInfo.avatar} />

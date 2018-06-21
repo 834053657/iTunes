@@ -236,11 +236,11 @@ export async function createBuyOrder(params) {
 
 //获取订单详情
 export async function getOrderDetail(params) {
-  console.log('params');
-  console.log(params);
   if (!params) {
     return false;
   }
+  console.log('params');
+  console.log(params);
   return request(`/itunes/order/detail?${stringify(params)}`);
 }
 
