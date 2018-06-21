@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { sumBy } from 'lodash';
 import { Badge, Button, message, InputNumber, Avatar, Popover, Icon, Input } from 'antd';
 import { postSellOrder } from '../../services/api';
 import styles from './DealDetail.less';
@@ -63,6 +64,9 @@ export default class DealDeatil extends Component {
   };
 
   changeNum = (e, d, stock) => {
+    if (e > stock) {
+      message.warning(d + '面额的库存仅为' + stock + ',数量将会调整为最大库存' + stock);
+    }
     const index = this.postData.order_detail.findIndex(t => {
       return t.money === d;
     });
@@ -77,6 +81,16 @@ export default class DealDeatil extends Component {
         count: e,
       });
     }
+    this.setState({
+      buyData: this.postData.order_detail,
+    });
+  };
+
+  calcuBuyTotal = () => {
+    let userBuySum = sumBy(this.state.buyData, row => {
+      return row.money * row.count || 0;
+    });
+    return userBuySum;
   };
 
   blurNum = (e, d, stock) => {
@@ -107,8 +121,10 @@ export default class DealDeatil extends Component {
   };
 
   changeRangeDataNum = (e, index) => {
-    this.state.orderData[index].count = e;
+    let { orderData } = this.state;
+    orderData[index].count = e;
     this.postData.order_detail = this.state.orderData;
+    this.setState({ orderData });
   };
 
   addDenoInRange = () => {
@@ -139,6 +155,27 @@ export default class DealDeatil extends Component {
     });
   }
 
+  calcuMaxCountBuy = item => {
+    const { detail } = this.props;
+    const accountBalance = detail.owner.amount;
+    let { money, count } = item || {};
+    let userBuySum = sumBy(this.state.orderData, row => {
+      return row.money * row.count || 0;
+    });
+
+    console.log(userBuySum);
+    let result = (accountBalance - userBuySum) * 10000 / money / 10000;
+    console.log(result);
+    return parseInt(result);
+  };
+
+  calcuTotalCount = () => {
+    let userBuySum = sumBy(this.state.orderData, row => {
+      return row.money * row.count || 0;
+    });
+    return userBuySum;
+  };
+
   /**
    * ad_type = 1 是主动出售视图
    * ad_type = 2 是主动购买视图
@@ -147,6 +184,8 @@ export default class DealDeatil extends Component {
   renderCondition = detail => {
     const { condition_type, ad_type, money = [], stock = {} } = detail || {};
     let { condition } = detail || {};
+    const accountBalance = detail.owner.amount;
+    console.log(accountBalance);
     let content = null;
     // 主动出售
     if (condition_type === 1) {
@@ -216,7 +255,10 @@ export default class DealDeatil extends Component {
                           defaultValue={0}
                           onChange={e => this.changeRangeDataNum(e, index)}
                         />
-                        <span className={styles.last}>最多可出售xx个</span>
+                        {/*accountBalance/c.money)*/}
+                        <span className={styles.last}>
+                          最多可再出售{this.calcuMaxCountBuy(c)}个
+                        </span>
                       </div>
                     </li>
                   );
@@ -293,7 +335,7 @@ export default class DealDeatil extends Component {
           <li className={styles.item}>{this.renderCondition(detail)}</li>
           <li className={styles.item}>
             <span className={styles.title}>总价:</span>
-            <div className={styles.content}>{this.state.totalPrice}</div>
+            <div className={styles.content}>{this.calcuTotalCount()}</div>
           </li>
           <li className={styles.item}>
             <span className={styles.title}>发卡期限:</span>
@@ -367,7 +409,7 @@ export default class DealDeatil extends Component {
 
           <li className={styles.item}>
             <span className={styles.title}>总价:</span>
-            <div className={styles.content}>{this.state.totalPrice}</div>
+            <div className={styles.content}>{this.calcuBuyTotal()}</div>
           </li>
 
           <li className={styles.item}>
@@ -394,6 +436,7 @@ export default class DealDeatil extends Component {
     const { detail } = this.props;
     const { owner = {}, ad_type, term } = detail || {};
     const userInfo = owner;
+    console.log(term);
     return (
       <div className={styles.detailBox}>
         <h1>{ad_type === 1 ? '主动出售视图 ad_type = 1' : '主动购买视图 ad_type = 2'}</h1>
@@ -405,8 +448,13 @@ export default class DealDeatil extends Component {
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>
-                <span className={styles.name}>{userInfo.nickname}</span>
-                <span className={styles.online}>&nbsp;</span>
+                <Badge
+                  status={userInfo.online ? 'success' : 'default'}
+                  offset={[11, 10]}
+                  dot={true}
+                >
+                  <span className={styles.name}>{userInfo.nickname}</span>
+                </Badge>
               </div>
               <div className={styles.infoBottom}>
                 <span className={styles.dealTit}>30日成单：</span>

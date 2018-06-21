@@ -34,6 +34,7 @@ export default class Appeal extends Component {
     };
     //当前订单ID
     this.id = props.orderId;
+    this.appealPictures = null;
   }
 
   handleCancel = () => this.setState({ previewVisible: false });
@@ -47,12 +48,10 @@ export default class Appeal extends Component {
 
   handleSubmit = e => {
     const { dispatch, detail: { order = {} } } = this.props;
-
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-
         dispatch({
           type: 'send_message',
           payload: {
@@ -68,7 +67,6 @@ export default class Appeal extends Component {
   getMsgContent = text => {
     const { imageUrls = [] } = this.state;
     let content = `<p>${text}</p>`;
-
     content += imageUrls.length > 0 ? `<ul className="picBox">` : '';
     map(imageUrls, (d, i) => {
       content += `<li>
@@ -120,10 +118,20 @@ export default class Appeal extends Component {
     // });
   }
 
-  getImgsUrl = url => {
-    this.setState({
-      imageUrls: url,
+  changeAppealPic = (info, prefix) => {
+    let arr = [];
+    info.fileList.map(file => {
+      if (!file.response) {
+        return false;
+      }
+      return arr.push({ picture: prefix + file.response.hash });
     });
+    this.appealPictures = arr;
+    console.log(this.appealPictures);
+  };
+
+  getUserType = sender => {
+    return null;
   };
 
   render() {
@@ -207,7 +215,7 @@ export default class Appeal extends Component {
                       <div className={styles.addPic}>
                         <span className={styles.addTitle}>上传图片:</span>
                         <div className={styles.addBox}>
-                          <UploadComponent picNum={1000} appealPic={this.getImgsUrl} />
+                          <UploadComponent picNum={10} changeAppealPic={this.changeAppealPic} />
                         </div>
                       </div>
                     </div>
@@ -263,6 +271,8 @@ function AppealInfo(props) {
                   />
                 </span>
                 <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
+                <br />
+                <span className={styles.avaName}>{this.getUserType(d.sender)}</span>
               </div>
               <div className={styles.chatItem}>
                 <div className={styles.chatText}>

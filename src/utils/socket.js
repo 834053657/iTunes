@@ -83,41 +83,44 @@ export function dvaSocket(url, option) {
           console.log(data);
         },
         receive_message: (data, dispatch, getState) => {
-          console.log('receive_message', data);
-          // const { data: msg } = JSON.parse(data); // order msg type 快捷短语/申述聊天
-          const { data: msg } = data;
+          // console.log('receive_message', data);
+          const { data: msg } = JSON.parse(data); // order msg type 快捷短语/申述聊天
+          // const { data: msg } = data;
+          const { currentUser: { user = {} } } = getState().user;
+          console.log(getState().user);
+          console.log(user);
 
-          console.log(data);
+          // console.log(data);
           console.log(msg);
           if (msg && msg.order_msg_type === 1) {
             // 快捷短语
             const { quickMsgList } = getState().card;
+            console.log(123);
 
             quickMsgList.unshift(msg);
-            // console.log(555, appeal);
             dispatch({
               type: 'card/setQuickMsgList',
               payload: { data: quickMsgList },
             });
-            playAudio();
+            // playAudio();
           } else if (msg && msg.order_msg_type === 2) {
             // 申述聊天
             const { chatMsgList } = getState().card;
 
             chatMsgList.unshift(msg);
-            // console.log(555, appeal);
             dispatch({
               type: 'card/setChatMsgList',
               payload: { data: chatMsgList },
             });
-            playAudio();
+            // playAudio();
+          } else {
+            dispatch({
+              type: 'card/fetchOrderDetail',
+              payload: { id: msg.content && msg.content.order_id },
+            });
           }
-          // else {
-          //   dispatch({
-          //     type: 'card/fetchOrderDetail',
-          //     payload: { id: msg.content && msg.content.order_id},
-          //   });
-          // }
+
+          user && user.id !== msg.sender.id ? playAudio() : null;
         },
       },
       emit: {

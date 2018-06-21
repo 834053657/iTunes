@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import { Button, Icon, Steps, Avatar, Select } from 'antd';
+import { Button, Icon, Steps, Avatar, Select, Badge } from 'antd';
 import styles from '../../MarketBuy/StepTwo.less';
 import StepModel from '../../Step';
 import QuickMsg from '../../QuickMsg';
@@ -19,6 +19,13 @@ export default class EnsureBuyInfo extends Component {
     };
   }
 
+  previewCardinEnsure = () => {
+    this.props.dispatch({
+      type: 'card/changePageStatus',
+      payload: 16,
+    });
+  };
+
   selectTerm = e => {
     if (!CONFIG.term) {
       return false;
@@ -26,7 +33,6 @@ export default class EnsureBuyInfo extends Component {
     this.setState({
       term: CONFIG.term[CONFIG.term.findIndex(t => t.id === e)].content || '-',
     });
-    console.log(e);
     this.props.dispatch({
       type: 'card/sendQuickMsg',
       payload: {
@@ -40,13 +46,12 @@ export default class EnsureBuyInfo extends Component {
     const { detail, setStatus } = this.props;
     const { ad, cards, order, trader } = this.props.detail;
 
-    const userInfo = ad.owner;
+    const userInfo = trader;
 
     const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.stepTwoBox}>
         <StepModel steps={steps} current={1} />
-
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
             <div className={styles.orderInfo}>
@@ -86,7 +91,10 @@ export default class EnsureBuyInfo extends Component {
               </Button>
               <Button
                 onClick={() => {
-                  setStatus('pageStatus', 3);
+                  this.props.dispatch({
+                    type: 'card/releaseOrder',
+                    payload: { order_id: order.id },
+                  });
                 }}
                 type="primary"
               >
@@ -99,13 +107,7 @@ export default class EnsureBuyInfo extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button
-                onClick={() => {
-                  this.props.history.push({ pathname: `/card/card-preview` });
-                }}
-              >
-                查看礼品卡清单
-              </Button>
+              <Button onClick={this.previewCardinEnsure}>查看礼品卡清单</Button>
             </div>
 
             <div className={styles.ownerInfo}>
@@ -115,8 +117,13 @@ export default class EnsureBuyInfo extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <span className={styles.name}>{userInfo.nickname}</span>
-                    <span className={styles.online}>&nbsp;</span>
+                    <Badge
+                      status={userInfo.online ? 'success' : 'default'}
+                      offset={[11, 10]}
+                      dot={true}
+                    >
+                      <span className={styles.name}>{userInfo.nickname}</span>
+                    </Badge>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>

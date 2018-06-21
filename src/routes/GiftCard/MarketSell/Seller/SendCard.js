@@ -125,8 +125,13 @@ export default class Process extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <span className={styles.name}>{userInfo.nickname}</span>
-                    <span className={styles.online}>&nbsp;</span>
+                    <Badge
+                      status={userInfo.online ? 'success' : 'default'}
+                      offset={[11, 10]}
+                      dot={true}
+                    >
+                      <span className={styles.name}>{userInfo.nickname}</span>
+                    </Badge>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>

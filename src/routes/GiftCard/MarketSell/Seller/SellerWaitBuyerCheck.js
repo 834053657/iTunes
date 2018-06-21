@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import { Button, Icon, Steps, Avatar, Select } from 'antd';
+import { Button, Icon, Steps, Avatar, Select, Badge } from 'antd';
 import styles from '../../MarketBuy/StepTwo.less';
 import StepModel from '../../Step';
 import QuickMsg from '../../QuickMsg';
@@ -32,6 +32,7 @@ export default class SellerWaitBuyerCheck extends Component {
       payload: 16,
     });
   };
+
   componentWillMount() {}
 
   componentDidMount() {
@@ -138,8 +139,13 @@ export default class SellerWaitBuyerCheck extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <span className={styles.name}>{userInfo.nickname}</span>
-                    <span className={styles.online}>&nbsp;</span>
+                    <Badge
+                      status={userInfo.online ? 'success' : 'default'}
+                      offset={[11, 10]}
+                      dot={true}
+                    >
+                      <span className={styles.name}>{userInfo.nickname}</span>
+                    </Badge>
                   </div>
                   <div className={styles.infoBottom}>
                     <span className={styles.dealTit}>30日成单：</span>
