@@ -130,11 +130,7 @@ export default class SellerEnsure extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <Badge
-                      status={userInfo.online ? 'success' : 'default'}
-                      offset={[11, 10]}
-                      dot
-                    >
+                    <Badge status={userInfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
                       <span className={styles.name}>{userInfo.nickname}</span>
                     </Badge>
                   </div>

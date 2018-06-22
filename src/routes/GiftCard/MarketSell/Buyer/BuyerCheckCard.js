@@ -24,10 +24,6 @@ const Step = Steps.Step;
 export default class WaitBuyerCheck extends Component {
   constructor(props) {
     super();
-    this.state = {
-      detail: props.detail,
-      user: props.user,
-    };
   }
 
   count = order => {
@@ -52,9 +48,9 @@ export default class WaitBuyerCheck extends Component {
   componentWillMount() {}
 
   render() {
-    const { user, detail } = this.state;
+    const { user, detail } = this.props;
     const { setStatus, pageStatus } = this.props;
-    const { ad, cards, order, trader } = this.state.detail;
+    const { ad, cards, order, trader } = detail;
     const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
 
     const userInfo = trader;
@@ -119,11 +115,7 @@ export default class WaitBuyerCheck extends Component {
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>
-                <Badge
-                  status={userInfo.online ? 'success' : 'default'}
-                  offset={[11, 10]}
-                  dot
-                >
+                <Badge status={userInfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
                   <span className={styles.name}>{userInfo.nickname}</span>
                 </Badge>
               </div>

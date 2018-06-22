@@ -35,7 +35,7 @@ export default class OnlyPicture extends Component {
             <span>卡图：</span>
           </div>
           <div className={styles.center}>
-            <div className={styles.addBtn}>
+            <div className={styles.uploadBoxInSendPic}>
               <UploadComponent
                 picNum={1000}
                 onlyPic={info => this.props.onlyPic(info)}

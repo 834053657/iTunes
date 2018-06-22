@@ -33,6 +33,14 @@ export default class OrderDetail extends Component {
     console.log(this.props.match);
   }
 
+  componentWillUnmount() {
+    const { params: { id } } = this.props.match || {};
+    this.leaveRoom(id);
+    this.props.dispatch({
+      type: 'card/GET_OD_DETAIL',
+    });
+  }
+
   fetchData = () => {
     const { params: { id } } = this.props.match || {};
     const { order } = this.props.detail;
@@ -61,17 +69,6 @@ export default class OrderDetail extends Component {
       payload: { order_id },
     });
   };
-
-  componentWillUnmount() {
-    const { params: { id } } = this.props.match || {};
-
-    this.leaveRoom(id);
-    // const { order } = this.props.detail;
-    // this.props.dispatch({
-    //   type: 'card/fetchOrderDetail',
-    //   payload: id,
-    // });
-  }
 
   componentDidMount() {
     const { params: { id } } = this.props.match || {};
