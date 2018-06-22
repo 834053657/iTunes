@@ -56,10 +56,9 @@ export default class List extends Component {
 
   viewAd = (r, action) => {
     // todo
-    if (r.goods_type === 1) {
-      this.props.dispatch(
-        routerRedux.push(`/ad/card/detail?id=${r.id}&ad_type=${r.ad_type}&action=${action}`)
-      );
+    if (r.goods_type !== 1) {
+      //?id=${r.id}&ad_type=${r.ad_type}&action=${action}`
+      this.props.dispatch(routerRedux.push(`/card/a_detail`));
     } else {
       this.props.dispatch(
         routerRedux.push(`/ad/itunes/detail?id=${r.id}&ad_type=${r.ad_type}&action=${action}`)

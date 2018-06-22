@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Button, Icon, Input, Avatar, Badge } from 'antd';
+import CountDown from 'components/CountDown';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
 import { sendCDK } from '../../../../services/api';
@@ -17,12 +18,14 @@ export default class Process extends Component {
     this.state = {
       detail: props.detail,
       user: props.user,
+      time: props.detail.ad.deadline,
     };
     this.cardsData = [];
     this.data = {
       order_id: this.state.detail.order.id,
       cards: [],
     };
+    this.targetTime = new Date().getTime() + props.detail.order.deadline_at * 1000;
   }
 
   componentWillMount() {
@@ -90,13 +93,27 @@ export default class Process extends Component {
     });
   };
 
+  deadline = () => {
+    // setInterval(this.timeChange(), 1 * 1000)
+    // return this.timeChange()
+  };
+
+  timeChange = () => {
+    // let a = this.state.time
+    // this.setState({
+    //   time: a - 1
+    // })
+  };
+
   render() {
-    const { user, detail } = this.state;
+    const { user, detail } = this.props;
     const { setStatus } = this.props;
-    const { ad = {}, cards = {}, order = {} } = this.props.detail;
+    const { ad = {}, cards = {}, order = {} } = detail;
 
     const userInfo = ad.owner;
-
+    console.log(this.props.detail.ad.deadline);
+    console.log(this.targetTime);
+    console.log(detail);
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.sendBox}>
@@ -105,11 +122,15 @@ export default class Process extends Component {
           <div className={styles.orderInfo}>
             <div className={styles.price}>
               <span>类型：</span>
-              <p>{order.order_type ? CONFIG.card_type[ad.card_type - 1].name || '-' : '-'}</p>
+              <p>
+                {CONFIG.card_type && order.order_type
+                  ? CONFIG.card_type[ad.card_type - 1].name || '-'
+                  : '-'}
+              </p>
             </div>
             <div className={styles.price}>
               <span>要求：</span>
-              <p>{CONFIG.cardPwdType[ad.password_type] || '-'}</p>
+              <p>{(CONFIG.cardPwdType && CONFIG.cardPwdType[ad.password_type]) || '-'}</p>
             </div>
             <div className={styles.price}>
               <span>保障时间：</span>
@@ -125,11 +146,7 @@ export default class Process extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <Badge
-                      status={userInfo.online ? 'success' : 'default'}
-                      offset={[11, 10]}
-                      dot
-                    >
+                    <Badge status={userInfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
                       <span className={styles.name}>{userInfo.nickname}</span>
                     </Badge>
                   </div>
@@ -232,7 +249,9 @@ export default class Process extends Component {
                 <div>
                   请在&nbsp;
                   <Icon type="clock-circle-o" />
-                  &nbsp; {ad.deadline}分钟内发卡
+                  &nbsp;
+                  <CountDown formatStr="mm" target={this.targetTime} />
+                  分钟内发卡
                 </div>
                 <Button>取消</Button>
                 <Button

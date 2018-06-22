@@ -51,6 +51,7 @@ export default class Appeal extends Component {
             this.props.form.resetFields();
             this.setState({
               fileList: [],
+              imageUrls: [],
             });
             message.success('发送成功');
           },

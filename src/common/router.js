@@ -141,6 +141,9 @@ export const getRouterData = app => {
     '/card/appeal': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketBuy/Appeal')),
     },
+    '/card/a_detail': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/Ad/PreviewAd')),
+    },
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },

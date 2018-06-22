@@ -14,7 +14,7 @@ const FormItem = Form.Item;
 
 @connect(({ card, loading, user }) => ({
   list: card.list,
-  loading: loading.effects['card/fetchCardList_'],
+  //loading: loading.effects['card/fetchCardList_'],
   user: user.currentUser.user,
 }))
 export default class List extends Component {
@@ -29,6 +29,9 @@ export default class List extends Component {
   }
 
   changeTab = type => {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
     this.fetchData({ type }, () => {
       this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
       this.setState({
@@ -65,6 +68,10 @@ export default class List extends Component {
     this.fetchData();
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   fetchData = (params_, callback) => {
     const params = { ...params_ };
     const { type, card_type, order_by, password_type, denominFilterValue } = this.state;
@@ -86,6 +93,9 @@ export default class List extends Component {
         },
       })
       .then(() => {
+        if (!this.interval) {
+          this.interval = setInterval(this.fetchData, 30 * 1000);
+        }
         callback && callback();
       });
   };
@@ -115,6 +125,10 @@ export default class List extends Component {
     this.setState({
       ...params1,
     });
+
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
 
     this.fetchData(params1);
   };
