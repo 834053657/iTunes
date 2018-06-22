@@ -89,9 +89,9 @@ export function dvaSocket(url, option) {
           const { currentUser: { user = {} } } = getState().user;
           console.log(getState().user);
           console.log(user);
-          if (msg.sender && user.id === msg.sender.id) {
+          /* if (msg.sender && user.id === msg.sender.id) {
             msg.sender.avatar = user.avatar;
-          }
+          } */
 
           // console.log(data);
           console.log(msg);
@@ -174,6 +174,10 @@ export function dvaSocket(url, option) {
           data: ({ payload }) => {
             console.log('send_message', payload);
             return JSON.stringify(payload);
+          },
+          callback: (data, action) => {
+            console.log('send_message callback', data, action);
+            if (action.callback) action.callback();
           },
         },
       },

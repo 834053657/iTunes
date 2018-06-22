@@ -27,12 +27,6 @@ export default class UploadComponent extends Component {
     this.previewUrl = 'http://images.91jianke.com/';
     const file = info.file;
     const id = file.response.hash;
-    const m = {
-      uid: file.uid,
-      name: file.name,
-      status: file.status,
-      url: this.previewUrl + file.resopnse,
-    };
     this.previewUrl += id;
     this.props.getUrl ? this.props.getUrl(this.previewUrl) : null;
     this.props.onlyPic ? this.props.onlyPic(this.previewUrl) : null;
@@ -41,11 +35,9 @@ export default class UploadComponent extends Component {
   };
 
   componentWillMount() {
-    this.props
-      .dispatch({
-        type: 'global/fetchConfigs',
-      })
-      .then(() => {});
+    this.props.dispatch({
+      type: 'global/fetchConfigs',
+    });
   }
 
   handlePreview = file => {

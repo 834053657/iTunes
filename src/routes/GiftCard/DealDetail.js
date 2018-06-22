@@ -118,7 +118,7 @@ export default class DealDeatil extends Component {
 
   calcuBuyTotal = () => {
     console.log(this.postData.order_detail);
-    let userBuySum = sumBy(this.postData.order_detail, row => {
+    const userBuySum = sumBy(this.postData.order_detail, row => {
       return row.money * row.count || 0;
     });
     console.log(this.props.detail);
@@ -127,7 +127,7 @@ export default class DealDeatil extends Component {
   };
 
   changeRangeDataNum = (e, index) => {
-    let { orderData } = this.state;
+    const { orderData } = this.state;
     orderData[index].count = e;
     this.postData.order_detail = this.state.orderData;
     this.setState({ orderData });
@@ -164,19 +164,19 @@ export default class DealDeatil extends Component {
   calcuMaxCountBuy = item => {
     const { detail } = this.props;
     const accountBalance = detail.owner.amount;
-    let { money, count } = item || {};
-    let userBuySum = sumBy(this.state.orderData, row => {
+    const { money, count } = item || {};
+    const userBuySum = sumBy(this.state.orderData, row => {
       return row.money * row.count || 0;
     });
 
     console.log(userBuySum);
-    let result = (accountBalance - userBuySum) * 10000 / money / 10000;
+    const result = (accountBalance - userBuySum) * 10000 / money / 10000;
     console.log(result);
     return parseInt(result);
   };
 
   calcuTotalCount = () => {
-    let userBuySum = sumBy(this.state.orderData, row => {
+    const userBuySum = sumBy(this.state.orderData, row => {
       return row.money * row.count || 0;
     });
     return userBuySum;
@@ -456,7 +456,7 @@ export default class DealDeatil extends Component {
                 <Badge
                   status={userInfo.online ? 'success' : 'default'}
                   offset={[11, 10]}
-                  dot={true}
+                  dot
                 >
                   <span className={styles.name}>{userInfo.nickname}</span>
                 </Badge>

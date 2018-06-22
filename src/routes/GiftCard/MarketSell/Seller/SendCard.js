@@ -128,7 +128,7 @@ export default class Process extends Component {
                     <Badge
                       status={userInfo.online ? 'success' : 'default'}
                       offset={[11, 10]}
-                      dot={true}
+                      dot
                     >
                       <span className={styles.name}>{userInfo.nickname}</span>
                     </Badge>
