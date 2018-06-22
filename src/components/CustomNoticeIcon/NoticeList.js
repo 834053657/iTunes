@@ -38,7 +38,7 @@ export default function CustomNoticeList({
                 title={
                   <div>
                     <div className={styles.title}>
-                      {item.msg_type === 104 && item.count > 1 ? (
+                      {(item.msg_type === 104 || item.msg_type === 108) && item.count > 1 ? (
                         <span>
                           <Badge count={item.count} offset={[5, 20]}>
                             <Icon type="bell" /> {getMessageContent(item)}
