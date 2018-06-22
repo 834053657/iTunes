@@ -58,7 +58,7 @@ export async function userRecharge(params) {
 }
 
 export async function userWithdraw(params) {
-  return request('/itunes/wallet/recharge', {
+  return request('/itunes/wallet/withdraw', {
     method: 'POST',
     body: params,
   });

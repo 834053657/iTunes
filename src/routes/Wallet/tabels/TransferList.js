@@ -10,7 +10,7 @@ import styles from './TransferList.less';
 const { Description } = DescriptionList;
 const Yuan = ({ children }) => <span dangerouslySetInnerHTML={{ __html: yuan(children) }} />;
 
-const statusMap = ['default', 'processing', 'success', 'error'];
+const statusMap = ['default', 'processing', 'error', 'success'];
 
 export default class TransferList extends Component {
   constructor(props) {
@@ -83,18 +83,18 @@ export default class TransferList extends Component {
       title: '状态',
       dataIndex: 'status',
       render: (val, row) => {
-        if (val === 1) {
+        if (val === 3) {
           return (
             <span>
-              <Badge status={statusMap[0]} text={val ? `${CONFIG.trans_term_status[1]}` : '-'} />
+              <Badge status={statusMap[2]} text={CONFIG.transaction_status[val]} />
               <Tooltip title={row.reason}>
-                <span className={styles.reason}>原因</span>
+                <a> 原因 </a>
               </Tooltip>
             </span>
           );
         } else {
           return (
-            <Badge status={statusMap[val - 1]} text={val ? CONFIG.trans_term_status[val] : '-'} />
+            <Badge status={statusMap[val - 1]} text={val ? CONFIG.transaction_status[val] : '-'} />
           );
         }
       },
@@ -105,7 +105,7 @@ export default class TransferList extends Component {
       render: (v, row) => {
         return (
           <Fragment>
-            <a onClick={this.showModal.bind(this, row)}>查看</a>
+            <a onClick={this.showModal.bind(this, row)}>详情</a>
           </Fragment>
         );
       },
@@ -124,8 +124,32 @@ export default class TransferList extends Component {
     });
   };
 
+  getMethodContent = item => {
+    const { paid_type, payment = {} } = item || {};
+    let content = '';
+
+    switch (paid_type) {
+      case 'wechat':
+      case 'alipay':
+        content = (
+          <div>
+            {CONFIG.payments[paid_type] || '无效的支付方式'} - {payment.account}
+          </div>
+        );
+        break;
+      case 'bank':
+        content = (
+          <div>
+            {CONFIG.payments[paid_type] || '无效的支付方式'} - {payment.bank_account}
+          </div>
+        );
+        break;
+    }
+    return content;
+  };
+
   renderDetail = modalInfo => {
-    const { created_at, amount, fee, goods_type, trade_type } = modalInfo || {};
+    const { created_at, amount, fee, goods_type, trade_type, payment } = modalInfo || {};
     return (
       <DescriptionList col={1} className={styles.detailBox}>
         <Description term="产品类型">
@@ -134,7 +158,7 @@ export default class TransferList extends Component {
         <Description term="交易类型">
           {trade_type ? CONFIG.tradeType[trade_type] : '无'}
         </Description>
-        <Description term="账号">3321944288191034921</Description>
+        <Description term="账号">{this.getMethodContent(modalInfo)}</Description>
         <Description term="金额">
           <Yuan>{amount}</Yuan>
         </Description>

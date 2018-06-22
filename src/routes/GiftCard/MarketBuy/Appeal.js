@@ -31,6 +31,7 @@ export default class Appeal extends Component {
         },
       ],
       imageUrls: [],
+      textValue: null,
     };
     //当前订单ID
     this.id = props.orderId;
@@ -58,14 +59,18 @@ export default class Appeal extends Component {
             order_id: order.id,
             content: this.getMsgContent(values.content),
           },
-          // callback: () => {}, // todo re-load appeal details
-        });
-        this.setState({
-          textValue: '',
+          callback: this.cleanMsg,
         });
       }
     });
   };
+
+  cleanMsg = () => {
+    console.log(11111111111111);
+    this.setState({
+      textValue: '',
+    });
+  }
 
   getMsgContent = text => {
     const { imageUrls = [] } = this.state;
@@ -122,7 +127,7 @@ export default class Appeal extends Component {
   }
 
   changeAppealPic = (info, prefix) => {
-    let arr = [];
+    const arr = [];
     info.fileList.map(file => {
       if (!file.response) {
         return false;
@@ -137,7 +142,10 @@ export default class Appeal extends Component {
   };
 
   getUserType = sender => {
-    console.log(sender);
+    console.log(111, sender);
+    if (sender.buyer === 1 && sender.type === 'user') return '买家';
+    else if (sender.buyer === 0 && sender.type === 'user') return '卖家';
+    else if (sender.type === 'admin') return '客服';
     return null;
   };
 
@@ -149,6 +157,8 @@ export default class Appeal extends Component {
     const { order, ad, cards, trader } = this.props.detail;
     const { pageStatus, setStatus } = this.props;
     const { chatMsgList = [] } = card;
+
+    console.log(66, this.state.textValue);
 
     let steps = null;
     steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
@@ -228,6 +238,7 @@ export default class Appeal extends Component {
                     </div>
                     <FormItem label="" {...formItemLayout}>
                       {getFieldDecorator('content', {
+                        initialValue: this.state.textValue,
                         rules: [
                           {
                             required: true,
@@ -267,7 +278,7 @@ export default class Appeal extends Component {
   }
 }
 
-function AppealInfo(props) {
+const AppealInfo = props => {
   const { data = [] } = props;
   return (
     <div>
@@ -285,7 +296,20 @@ function AppealInfo(props) {
                 </span>
                 <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
                 <br />
-                <span className={styles.avaName}>{() => this.getUserType(d.sender)}</span>
+                <span className={styles.avaName}>
+                  {
+                    d.sender && d.sender.buyer === 1 &&
+                    <span>买家</span>
+                  }
+                  {
+                    d.sender && d.sender.buyer !== 1 && d.sender.type === 'user' &&
+                    <span>卖家</span>
+                  }
+                  {
+                    d.sender && d.sender.type === 'admin' &&
+                    <span>客服</span>
+                  }
+                </span>
               </div>
               <div className={styles.chatItem}>
                 <div className={styles.chatText}>
@@ -302,71 +326,6 @@ function AppealInfo(props) {
             </li>
           );
         })}
-      </ul>
-    </div>
-  );
-}
-
-function AppealInfoAppealInfo2(props) {
-  const { info } = props;
-  return (
-    <div>
-      <ul className={styles.tabTwoTab}>
-        <li className={styles.appealItem}>
-          <div className={styles.leftAvatar}>
-            <span className={styles.avaTop}>
-              <Avatar className={styles.avatar} size="large" src="" />
-            </span>
-            <span className={styles.avaName}>i.user_name</span>
-          </div>
-          <div className={styles.chatItem}>
-            <div className={styles.chatText}>
-              <p>
-                i.打撒奥所多sad水电费价格杜甫的说法吧时代峰峻的手法规及进度GV觉得很失败是觉得很舒服是dsvjdsf
-                机话费圣诞节回复的er_name打撒奥所多sad水电费价格杜甫的说法吧时代峰峻的手法规及进度GV觉得很失败是觉得很舒服是dsvjdsf
-                机话费圣诞节回复的er_name
-              </p>
-              <ul className={styles.picBox}>
-                <li>
-                  <img
-                    height="120px"
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    alt="#"
-                  />
-                </li>
-                <li>
-                  <img
-                    height="120px"
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    alt="#"
-                  />
-                </li>
-                <li>
-                  <img
-                    height="120px"
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    alt="#"
-                  />
-                </li>
-                <li>
-                  <img
-                    height="120px"
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    alt="#"
-                  />
-                </li>
-                <li>
-                  <img
-                    height="120px"
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    alt="#"
-                  />
-                </li>
-              </ul>
-            </div>
-            <div className={styles.chatTime}>{new Date().toLocaleDateString()}</div>
-          </div>
-        </li>
       </ul>
     </div>
   );

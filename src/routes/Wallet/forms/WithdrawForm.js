@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, InputNumber, message } from 'antd';
 import { map } from 'lodash';
 import classNames from 'classnames';
-import { yuan } from 'components/Charts';
-
+import numeral from 'numeral';
 import styles from './RechargeForm.less';
 
 const FormItem = Form.Item;
@@ -18,6 +17,8 @@ const formItemLayout = {
     sm: { span: 20 },
   },
 };
+
+const yuan = val => `¥ ${numeral(val).format('0,0')}`;
 
 class WithdrawForm extends Component {
   state = {
@@ -71,10 +72,10 @@ class WithdrawForm extends Component {
         this.props.dispatch({
           type: 'wallet/fetchFee',
           payload: value,
-          callback: (res = {}) => {
+          callback: (data = {}) => {
             this.setState({
               oldAmount: value.amount,
-              fee: res.fee,
+              fee: data.fee,
             });
           },
         });
@@ -145,10 +146,7 @@ class WithdrawForm extends Component {
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="手续费">
-            <span
-              className="text-blue"
-              dangerouslySetInnerHTML={{ __html: yuan(this.state.fee) }}
-            />
+            <span className="text-blue">{`¥ ${this.state.fee}`}</span>
           </FormItem>
           <FormItem {...formItemLayout} label="输入密码">
             {getFieldDecorator('password', {

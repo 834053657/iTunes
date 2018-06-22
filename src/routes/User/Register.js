@@ -50,7 +50,7 @@ export default class Register extends Component {
     });
   };
 
-  onGetCaptcha = (err, code) => {
+  onGetCaptcha = (err, code, loadCaptcha) => {
     const { form } = this.props;
     const mail = form.getFieldValue('email');
     if (!err) {
@@ -76,6 +76,7 @@ export default class Register extends Component {
               }
             }, 1000);
           } else {
+            loadCaptcha();
             message.error(res.msg);
           }
         },

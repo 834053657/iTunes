@@ -3,21 +3,19 @@ import { message } from 'antd';
 import { accountLogin } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
-import { dvaSocket } from '../utils/socket';
 
 export default {
   namespace: 'login',
 
   state: {
-    status: undefined,
+    error: undefined,
     g2Visible: undefined,
     loginInfo: undefined,
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
+    *login({ payload, callback }, { call, put }) {
       const response = yield call(accountLogin, payload);
-      // console.log(response);
       // Login successfully
       if (response.code === 0 && response.data) {
         yield put({
@@ -27,10 +25,7 @@ export default {
           },
         });
         reloadAuthorized();
-        /* if (process.env.KG_API_ENV === 'dev' || !process.env.KG_API_ENV) {
-          // 暂时写法 只在开发环境打开socket
-          dvaSocket(CONFIG.socket_url, {uid: 'abcxx'});
-        } */
+
         yield put(routerRedux.push('/'));
       } else if (response.code === 1000) {
         //  需谷歌验证
@@ -48,9 +43,12 @@ export default {
         yield put({
           type: 'changeLoginStatus',
           payload: {
-            status: 'error',
+            error: response.msg,
           },
         });
+      }
+      if (callback) {
+        yield callback(response);
       }
     },
     *logout(_, { put, select }) {
@@ -83,7 +81,7 @@ export default {
         ...state,
         loginInfo: payload.loginInfo,
         g2Visible: payload.g2Visible,
-        status: payload.status,
+        error: payload.error,
       };
     },
   },

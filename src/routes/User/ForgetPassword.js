@@ -31,6 +31,7 @@ export default class Register extends Component {
           payload: {
             ...values,
           },
+          callback: this.loadCaptcha,
         });
       }
     });

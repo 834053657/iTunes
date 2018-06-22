@@ -46,6 +46,10 @@ export default class MobileModal extends Component {
   };
 
   handleBindSubmit = values => {
+    // this.setState({
+    //   current: this.state.current + 1,
+    // });
+    // delay(this.props.onCancel, 1000);
     this.props.dispatch({
       type: 'user/submitChangeMobile',
       payload: {
@@ -53,10 +57,11 @@ export default class MobileModal extends Component {
         verify_token: this.state.verify_token,
       },
       callback: () => {
-        this.setState({
-          current: this.state.current + 1,
-        });
-        delay(this.props.onCancel, 1000);
+        // this.setState({
+        //   current: this.state.current + 1,
+        // });
+        this.props.onCancel();
+        // delay(this.props.onCancel, 1000);
       },
     });
   };
