@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Tabs, Button, Icon, Input, Steps, Avatar, Upload, Modal } from 'antd';
+
+import { Form, Tabs, Button, Icon, Input, Steps, Avatar, Upload, Modal, message } from 'antd';
 import { map } from 'lodash';
 import moment from 'moment';
 import styles from './appeal.less';
@@ -22,16 +23,10 @@ export default class Appeal extends Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: [
-        {
-          uid: -1,
-          name: 'xxx.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-      ],
+      fileList: [],
       imageUrls: [],
-      textValue: null,
+      textValue: '',
+      shouldCleanPic: false,
     };
     //当前订单ID
     this.id = props.orderId;
@@ -39,13 +34,6 @@ export default class Appeal extends Component {
   }
 
   handleCancel = () => this.setState({ previewVisible: false });
-
-  handlePreview = file => {
-    this.setState({
-      previewImage: file.url || file.thumbUrl,
-      previewVisible: true,
-    });
-  };
 
   handleSubmit = e => {
     const { dispatch, detail: { order = {} } } = this.props;
@@ -59,25 +47,24 @@ export default class Appeal extends Component {
             order_id: order.id,
             content: this.getMsgContent(values.content),
           },
-          callback: this.cleanMsg,
+          callback: () => {
+            this.props.form.resetFields();
+            this.setState({
+              fileList: [],
+            });
+            message.success('发送成功');
+          },
         });
       }
     });
   };
-
-  cleanMsg = () => {
-    console.log(11111111111111);
-    this.setState({
-      textValue: '',
-    });
-  }
 
   getMsgContent = text => {
     const { imageUrls = [] } = this.state;
     let content = `<p>${text}</p>`;
     content += imageUrls.length > 0 ? `<ul className="${styles.picbox}">` : '';
     map(imageUrls, (d, i) => {
-      content += `<li>
+      content += `<li class="{{float:left}}">
                   <img
                     height="120px"
                     src="${d}"
@@ -92,18 +79,6 @@ export default class Appeal extends Component {
 
   handleChange = ({ fileList }) => this.setState({ fileList });
 
-  componentWillMount() {
-    /* console.log(this.id);
-    this.props.dispatch({
-      type: 'card/getAppealInfo',
-      payload: {
-        order_id: this.id,
-        order_msg_type: 2,
-        goods_type: 2,
-      },
-    }); */
-  }
-
   componentDidMount() {
     const { dispatch, detail: { order = {} } } = this.props;
     dispatch({
@@ -116,16 +91,6 @@ export default class Appeal extends Component {
     });
   }
 
-  componentWillUnmount() {
-    // this.props.dispatch({
-    //   type: 'leave_chat_room',
-    //   payload: {
-    //     order_id: this.id,
-    //     room_id: 'xxx',
-    //   },
-    // });
-  }
-
   changeAppealPic = (info, prefix) => {
     const arr = [];
     info.fileList.map(file => {
@@ -135,30 +100,52 @@ export default class Appeal extends Component {
       return arr.push(prefix + file.response.hash);
     });
     this.appealPictures = arr;
-    console.log(this.appealPictures);
     this.setState({
       imageUrls: arr,
     });
   };
 
   getUserType = sender => {
-    console.log(111, sender);
     if (sender.buyer === 1 && sender.type === 'user') return '买家';
     else if (sender.buyer === 0 && sender.type === 'user') return '卖家';
     else if (sender.type === 'admin') return '客服';
     return null;
   };
 
+  handlePreview = file => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  };
+
+  uploadHandler = info => {
+    const { currentUser } = this.props.user || {};
+    const { user = {}, upload = {} } = currentUser || {};
+    this.changeAppealPic && this.changeAppealPic(info, upload.prefix);
+    if (info.file.status === 'uploading') {
+      this.setState({
+        uploadLoading: true,
+      });
+    } else if (info.file.status === 'error') {
+      this.setState({ uploadLoading: false });
+      message.error('上传错误，可能请求已过期，请刷新页面重试');
+    }
+    this.setState({
+      fileList: info.fileList,
+    });
+  };
+
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
     const { card, appealInfo } = this.props;
     const { getFieldDecorator } = this.props.form;
+    const { currentUser } = this.props.user || {};
+    const { user = {}, upload = {} } = currentUser || {};
 
     const { order, ad, cards, trader } = this.props.detail;
     const { pageStatus, setStatus } = this.props;
     const { chatMsgList = [] } = card;
-
-    console.log(66, this.state.textValue);
 
     let steps = null;
     steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
@@ -232,13 +219,39 @@ export default class Appeal extends Component {
                       <div className={styles.addPic}>
                         <span className={styles.addTitle}>上传图片:</span>
                         <div className={styles.addBox}>
-                          <UploadComponent picNum={10} changeAppealPic={this.changeAppealPic} />
+                          <Upload
+                            name="file"
+                            accept="image/*"
+                            listType="picture-card"
+                            fileList={this.state.fileList}
+                            onPreview={this.handlePreview}
+                            action={upload.domain}
+                            onChange={this.uploadHandler}
+                            data={{ token: upload.token }}
+                          >
+                            {this.state.fileList.length < 10 ? (
+                              <div>
+                                <Icon type="plus" />
+                                <div className="ant-upload-text">上传</div>
+                              </div>
+                            ) : null}
+                          </Upload>
+                          <Modal
+                            visible={this.state.previewVisible}
+                            footer={null}
+                            onCancel={this.handleCancel}
+                          >
+                            <img
+                              alt="example"
+                              style={{ width: '100%' }}
+                              src={this.state.previewImage}
+                            />
+                          </Modal>
                         </div>
                       </div>
                     </div>
                     <FormItem label="" {...formItemLayout}>
                       {getFieldDecorator('content', {
-                        initialValue: this.state.textValue,
                         rules: [
                           {
                             required: true,
@@ -249,12 +262,6 @@ export default class Appeal extends Component {
                         <TextArea
                           style={{ minHeight: 32 }}
                           placeholder="您的建议会督促我做得更好~"
-                          value={this.state.textValue}
-                          onChange={e => {
-                            this.setState({
-                              textValue: e.target.value,
-                            });
-                          }}
                           rows={4}
                         />
                       )}
@@ -285,7 +292,7 @@ const AppealInfo = props => {
       <ul className={styles.tabTwoTab}>
         {map(data, d => {
           return (
-            <li key={d} className={styles.appealItem}>
+            <li key={d.id} className={styles.appealItem}>
               <div className={styles.leftAvatar}>
                 <span className={styles.avaTop}>
                   <Avatar
@@ -296,24 +303,20 @@ const AppealInfo = props => {
                 </span>
                 <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
                 <br />
-                <span className={styles.avaName}>
-                  {
-                    d.sender && d.sender.buyer === 1 &&
-                    <span>买家</span>
-                  }
-                  {
-                    d.sender && d.sender.buyer !== 1 && d.sender.type === 'user' &&
-                    <span>卖家</span>
-                  }
-                  {
-                    d.sender && d.sender.type === 'admin' &&
-                    <span>客服</span>
-                  }
+                <span>
+                  {d.sender &&
+                    d.sender.buyer === 1 && <span className={styles.avaIdentify}>买家</span>}
+                  {d.sender &&
+                    d.sender.buyer !== 1 &&
+                    d.sender.type === 'user' && <span className={styles.avaIdentify}>卖家</span>}
+                  {d.sender &&
+                    d.sender.type === 'admin' && <span className={styles.avaAdmin}>客服</span>}
                 </span>
               </div>
               <div className={styles.chatItem}>
                 <div className={styles.chatText}>
                   <div
+                    className={styles.chatBox}
                     dangerouslySetInnerHTML={{
                       __html: d.content && d.content.content,
                     }}
@@ -329,4 +332,4 @@ const AppealInfo = props => {
       </ul>
     </div>
   );
-}
+};
