@@ -64,6 +64,7 @@ export function dvaSocket(url, option) {
         push_system_message: (data, dispatch, getState) => {
           const { data: msg } = JSON.parse(data);
           const { oldNotices } = getState().global;
+          const currURL = window.location.href;
 
           oldNotices.unshift(msg);
           const rs = { data: { items: oldNotices } };
@@ -71,6 +72,17 @@ export function dvaSocket(url, option) {
             type: 'global/saveNotices',
             payload: rs,
           });
+
+          if(currURL.indexOf('/card/deal-line/')) {
+            const current_id = currURL.substring(currURL.lastIndexOf("/") + 1);
+            
+            if (msg.content && ((msg.content.order_id + '') === current_id)) {
+              dispatch({
+                type: 'card/fetchOrderDetail',
+                payload: { id: msg.content.order_id },
+              });
+            }
+          }
           playAudio();
         },
         disconnection: (data, dispatch, getState) => {
@@ -116,12 +128,11 @@ export function dvaSocket(url, option) {
             });
             // playAudio();
           } else {
-            console.log({ id: msg.content && msg.content.order_id });
-            console.log('{id: msg.content && msg.content.order_id}');
+            /* console.log({ id: msg.content && msg.content.order_id });
             dispatch({
               type: 'card/fetchOrderDetail',
               payload: { id: msg.content && msg.content.order_id },
-            });
+            }); */
           }
 
           user && user.id !== msg.sender.id ? playAudio() : null;

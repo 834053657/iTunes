@@ -203,9 +203,9 @@ class BasicLayout extends React.Component {
     let type = 'global/readNotices';
     let payload = { all: false, id: item.id };
 
-    if (item.msg_type === 104) {
-      type = 'global/readOrderNotices';
-      payload = { all: false, id: item.id, order_id: item.content && item.content.order_id };
+    if (item.msg_type === 104 || item.msg_type === 108) {
+      type = 'global/readNotices';
+      payload = { all: false, order_id: item.content.order_id };
     }
     this.props.dispatch({
       type,
@@ -222,17 +222,17 @@ class BasicLayout extends React.Component {
             content: getMessageContent(item),
             onOk: () => {},
           }); */
-          this.props.dispatch(routerRedux.push(`/user-center/index`));
+          this.props.dispatch(routerRedux.replace(`/user-center/index`));
         } else if ([31, 32, 33, 34].indexOf(item.msg_type) >= 0) {
-          this.props.dispatch(routerRedux.push(`/wallet?activeKey=3`));
+          this.props.dispatch(routerRedux.replace(`/wallet?activeKey=3`));
         } else if ([41, 42].indexOf(item.msg_type) >= 0) {
-          this.props.dispatch(routerRedux.push(`/ad/terms`));
-        } else if ([101, 102, 103, 104, 105, 106, 107].indexOf(item.msg_type) >= 0) {
+          this.props.dispatch(routerRedux.replace(`/ad/terms`));
+        } else if ([101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111].indexOf(item.msg_type) >= 0) {
           //todo redict to order detail
           if (item.content && item.content.goods_type === 1)
-            this.props.dispatch(routerRedux.push(`/itunes/order/${item.content.order_id}`));
+            this.props.dispatch(routerRedux.replace(`/itunes/order/${item.content.order_id}`));
           else if (item.content && item.content.goods_type === 2) {
-            this.props.dispatch(routerRedux.push(`/card/deal-line/${item.content.order_id}`));
+            this.props.dispatch(routerRedux.replace(`/card/deal-line/${item.content.order_id}`));
           }
         } else {
           // todo
