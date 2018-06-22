@@ -26,13 +26,20 @@ export default class SaleCard extends Component {
     super();
     this.state = {
       condition: [],
-      deadline: '',
-      defaultCardTypeName: '',
+      deadline: CONFIG.deadline ? CONFIG.deadline[0] : '',
+      defaultCardTypeName: CONFIG.card_type ? CONFIG.card_type[0].name : '',
       condition_type: 1,
+      defaultGuaTime: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : '',
+      passwordType: 1,
     };
     this.items = [];
     this.data = {
       condition: [],
+      deadline: CONFIG.deadline ? CONFIG.deadline[0] : null,
+      guarantee_time: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : null,
+      card_type: 1,
+      condition_type: 1,
+      password_type: 1,
     };
 
     this.setVisible = (type, visible) => {
@@ -97,29 +104,31 @@ export default class SaleCard extends Component {
 
     this.changeMoney = (e, index) => {
       const a = this.state.condition;
-      a[index].money = e;
+      a[index].money = parseInt(e);
       this.setState({
         condition: a,
       });
-      this.data.condition = parseInt(a);
+      this.data.condition = a;
+      console.log(this.data);
+      console.log(a);
     };
 
     this.changeMinCount = (e, index) => {
       const a = this.state.condition;
-      a[index].min_count = e;
+      a[index].min_count = parseInt(e);
       this.setState({
         condition: a,
       });
-      this.data.condition = parseInt(a);
+      this.data.condition = a;
     };
 
     this.changeMaxCount = (e, index) => {
       const a = this.state.condition;
-      a[index].max_count = e;
+      a[index].max_count = parseInt(e);
       this.setState({
         condition: a,
       });
-      this.data.condition = parseInt(a);
+      this.data.condition = a;
     };
 
     this.addAdvertising = () => {
@@ -144,6 +153,7 @@ export default class SaleCard extends Component {
       });
       this.data.condition = +e === 1 ? [] : {};
       this.data.condition_type = +e;
+      console.log(this.data);
     };
 
     this.changeMinMoney = e => {
@@ -295,7 +305,7 @@ export default class SaleCard extends Component {
           {/*------------条件-----------*/}
           <li>
             <span className={styles.tableLeft}>条件：</span>
-            <Radio.Group onChange={e => this.selCondition(e.target.value)}>
+            <Radio.Group defaultValue="1" onChange={e => this.selCondition(e.target.value)}>
               <Radio.Button value="1">指定面额</Radio.Button>
               <Radio.Button value="2">交易限额</Radio.Button>
             </Radio.Group>

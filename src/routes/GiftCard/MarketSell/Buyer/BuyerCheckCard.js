@@ -31,9 +31,10 @@ export default class WaitBuyerCheck extends Component {
   }
 
   count = order => {
-    const a = 0;
+    let a = 0;
     order.order_detail.map(o => {
-      return a + o.count;
+      a += o.count;
+      return a;
     });
     return a;
   };
@@ -98,16 +99,16 @@ export default class WaitBuyerCheck extends Component {
             </li>
           </ul>
           <div className={styles.bottom}>
-            {order.status === 2 ? (
-              <Button type="primary" size="large" onClick={this.handlePostCheck}>
-                立即查收
-              </Button>
-            ) : (
+            {order.status === 1 ? (
               <h4>
                 对方剩余&nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;10分钟发卡
               </h4>
+            ) : (
+              <Button type="primary" size="large" onClick={this.handlePostCheck}>
+                立即查收
+              </Button>
             )}
           </div>
         </div>

@@ -42,7 +42,7 @@ export default class PreviewCard extends Component {
   render() {
     const { order, ad, cards, pageStatus, trader } = this.props.detail;
     const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
-
+    console.log(cards);
     return (
       <div className={styles.stepBox}>
         <StepModel steps={steps} current={1} />
