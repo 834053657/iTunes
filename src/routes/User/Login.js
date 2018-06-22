@@ -16,7 +16,6 @@ const { Tab, UserName, Password, Mobile, Captcha, ImgCaptcha, Submit } = Login;
 }))
 export default class LoginPage extends Component {
   state = {
-    type: 'account',
     image: '',
   };
 
@@ -24,16 +23,17 @@ export default class LoginPage extends Component {
     this.loadCaptcha();
   }
 
-  onTabChange = type => {
-    this.setState({ type });
-  };
-
   handleSubmit = async (err, values) => {
     if (!err) {
       this.props.dispatch({
         type: 'login/login',
         payload: {
           ...values,
+        },
+        callback: res => {
+          if (res.code !== 0 && res.code < 1000) {
+            this.loadCaptcha();
+          }
         },
       });
     }
@@ -85,12 +85,13 @@ export default class LoginPage extends Component {
 
   render() {
     const { login, submitting } = this.props;
-    const { type, image } = this.state;
+    const { image } = this.state;
+
     return (
       <div className={styles.main}>
         <h3>登录</h3>
-        <Login defaultActiveKey={type} onTabChange={this.onTabChange} onSubmit={this.handleSubmit}>
-          {login.status === 'error' && !login.submitting && this.renderMessage('账户或密码错误')}
+        <Login onSubmit={this.handleSubmit}>
+          {login.error && this.renderMessage(login.error)}
           <UserName name="account" placeholder="用户名或邮箱" />
           <Password name="password" placeholder="密码" />
           <ImgCaptcha

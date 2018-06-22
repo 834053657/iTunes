@@ -42,9 +42,7 @@ export default {
     *fetchFee({ payload, callback }, { call, put }) {
       const response = yield call(queryFee, payload) || {};
       if (response.code === 0) {
-        if (callback) {
-          yield call(callback, response.data);
-        }
+        yield callback && callback(response.data);
       } else {
         message.error(response.msg);
       }

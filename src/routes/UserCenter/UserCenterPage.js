@@ -324,6 +324,8 @@ export default class UserCenterPage extends Component {
     const { currentUser } = this.props;
     const { auth, user = {}, payments = [], upload = {}, trade = {} } = currentUser || {};
     const { real_name = {}, video = {} } = auth || {};
+    const real_name_status = real_name.status || 1;
+    const video_status = video.status || 1;
     const { first_trade_at } = trade || {};
 
     return (
@@ -357,18 +359,16 @@ export default class UserCenterPage extends Component {
                 </div>
                 <Divider />
                 <p>
-                  本帐号于<span>
-                    {' '}
+                  本帐号于{' '}
+                  <span>
                     {user.created_at
                       ? moment(user.created_at * 1000).format('YYYY-MM-DD hh:mm:ss')
-                      : '-'}{' '}
-                  </span>注册, <br />
-                  首次交易在<span>
-                    {' '}
-                    {first_trade_at
-                      ? moment(first_trade_at * 1000).format('YYYY-MM-DD hh:mm:ss')
-                      : '-'}{' '}
-                  </span>
+                      : '-'}
+                  </span>{' '}
+                  注册 <br />
+                  {first_trade_at
+                    ? `,首次交易于 ${moment(first_trade_at * 1000).format('YYYY-MM-DD hh:mm:ss')}`
+                    : null}
                 </p>
               </div>
             </div>
@@ -479,10 +479,8 @@ export default class UserCenterPage extends Component {
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>实名认证</h4>
                         <div className={styles.box_item_descript}>
-                          {real_name.status && CONFIG.auth_status[real_name.status]
-                            ? CONFIG.auth_status[real_name.status]
-                            : CONFIG.auth_status[1]}
-                          {real_name.status === 3 ? (
+                          {CONFIG.auth_status[real_name_status]}
+                          {real_name_status === 3 ? (
                             <Popover
                               placement="bottomRight"
                               title="审核反馈"
@@ -503,7 +501,7 @@ export default class UserCenterPage extends Component {
                     </div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        {!!~[1, 3].indexOf(real_name.status) && (
+                        {!!~[1, 3].indexOf(real_name_status) && (
                           <a onClick={this.showRealNameModal}>编辑</a>
                         )}
                       </li>
@@ -515,16 +513,26 @@ export default class UserCenterPage extends Component {
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>视频认证</h4>
                         <div className={styles.box_item_descript}>
-                          {video.status && CONFIG.auth_status[video.status]
-                            ? CONFIG.auth_status[video.status]
-                            : CONFIG.auth_status[1]}
+                          {CONFIG.auth_status[video_status]}
+                          {video_status === 3 ? (
+                            <Popover
+                              placement="bottomRight"
+                              title="审核反馈"
+                              content={video.reason}
+                              trigger="click"
+                            >
+                              <a> 原因 </a>
+                            </Popover>
+                          ) : null}
                         </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content} />
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a onClick={this.showVideoAuthModal}>编辑</a>
+                        {!!~[1, 3].indexOf(video_status) && (
+                          <a onClick={this.showVideoAuthModal}>编辑</a>
+                        )}
                       </li>
                     </ul>
                   </div>

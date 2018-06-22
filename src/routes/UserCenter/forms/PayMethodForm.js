@@ -82,9 +82,9 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.account': {
             lablel: '账号',
-            initialValue: payment_detail.account,
             component: <Input size="large" placeholder="账号" />,
             options: {
+              initialValue: payment_detail.account,
               rules: [
                 {
                   required: true,
@@ -190,7 +190,7 @@ export default class PayMethodForm extends Component {
         <Form onSubmit={this.handleSubmit}>
           <Form.Item {...formItemLayout} label="支付方式">
             {getFieldDecorator('payment_method', {
-              initialValue: initialValues.payment_method || 'wechat',
+              initialValue: initialValues.payment_method || 'alipay',
               rules: [{ required: true, message: '请选择支付方式' }],
             })(
               <Select size="large" placeholder="请选择支付方式">
