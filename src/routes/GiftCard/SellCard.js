@@ -31,11 +31,17 @@ export default class BuyCard extends Component {
     this.state = {
       cards: [],
       addDenoVisible: false,
-      defaultCardTypeName: '',
+      defaultCardTypeName: CONFIG.card_type ? CONFIG.card_type[0].name : '选择',
+      defaultGuaTime: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : '选择',
+      passwordType: 1,
     };
     this.cards = [];
     this.items = [];
-    this.data = {};
+    this.data = {
+      password_type: 1,
+      card_type: 1,
+      guarantee_time: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : '',
+    };
 
     this.setVisible = (type, visible) => {
       this.setState({
@@ -200,10 +206,6 @@ export default class BuyCard extends Component {
     });
   }
 
-  componentDidMount() {}
-
-  componentWillUnmount() {}
-
   render() {
     if (!CONFIG.card_type) {
       return false;
@@ -295,7 +297,7 @@ export default class BuyCard extends Component {
               <span className={styles.tableLeft}>类型：</span>
               <Dropdown overlay={cardTypeMenu} trigger={['click']}>
                 <Button>
-                  {this.state.defaultCardTypeName ? this.state.defaultCardTypeName : '选择'}
+                  {this.state.defaultCardTypeName}
                   <Icon type="down" />
                 </Button>
               </Dropdown>
@@ -308,7 +310,8 @@ export default class BuyCard extends Component {
               <span className={styles.tableLeft}>保障时间：</span>
               <Dropdown overlay={guaranteeTimeMenu} trigger={['click']}>
                 <Button>
-                  {this.state.defaultGuaTime ? this.state.defaultGuaTime : '选择'}
+                  {this.state.defaultGuaTime}
+                  &nbsp;
                   <Icon type="down" />
                 </Button>
               </Dropdown>
