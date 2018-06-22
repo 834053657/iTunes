@@ -22,15 +22,14 @@ export default class OrderDetail extends Component {
   constructor(props) {
     super();
     this.state = {
-      pageStatus: null,
       orderId: props.match.params.id,
     };
   }
 
-  getPageState = () => {};
-
-  componentWillMount() {
-    console.log(this.props.match);
+  componentDidMount() {
+    const { params: { id } } = this.props.match || {};
+    this.fetchData(id);
+    this.enterRoom(id);
   }
 
   componentWillUnmount() {
@@ -41,8 +40,18 @@ export default class OrderDetail extends Component {
     });
   }
 
-  fetchData = () => {
+  componentWillReceiveProps(nextProps) {
     const { params: { id } } = this.props.match || {};
+    const { params: { id: nextid } } = nextProps.match || {};
+    console.log(id, nextid);
+    if (nextid !== id) {
+      this.fetchData(nextid);
+      this.leaveRoom(id);
+      this.enterRoom(nextid);
+    }
+  }
+
+  fetchData = id => {
     const { order } = this.props.detail;
     this.setState({
       orderId: id,
@@ -69,12 +78,6 @@ export default class OrderDetail extends Component {
       payload: { order_id },
     });
   };
-
-  componentDidMount() {
-    const { params: { id } } = this.props.match || {};
-    this.fetchData();
-    this.enterRoom(id);
-  }
 
   // componentWillUpdate(nextProps, nextState) {
   //   console.log(nextProps, nextState);

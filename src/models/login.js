@@ -51,14 +51,17 @@ export default {
         yield callback(response);
       }
     },
-    *logout(_, { put, select }) {
+    *logout({ payload }, { put, select }) {
+      const { isRedirect } = payload || {};
       try {
-        // get location pathname
-        const urlParams = new URL(window.location.href);
-        const pathname = yield select(state => state.routing.location.pathname);
-        // add the parameters in the url
-        urlParams.searchParams.set('redirect', pathname);
-        window.history.replaceState(null, 'login', urlParams.href);
+        if (isRedirect) {
+          // get location pathname
+          const urlParams = new URL(window.location.href);
+          const pathname = yield select(state => state.routing.location.pathname);
+          // add the parameters in the url
+          urlParams.searchParams.set('redirect', pathname);
+          window.history.replaceState(null, 'login', urlParams.href);
+        }
       } finally {
         yield put({
           type: 'changeLoginStatus',

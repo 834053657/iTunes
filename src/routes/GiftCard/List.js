@@ -138,7 +138,6 @@ export default class List extends Component {
   };
 
   initColumns = (type, denominFilterValue) => {
-    console.log(this.props.user);
     const cardTypes = map(CONFIG.card_type, item => {
       return { text: item.name, value: item.type };
     });
@@ -261,11 +260,13 @@ export default class List extends Component {
       {
         title: '操作',
         dataIndex: 'operation_',
-        render: (text, record) => {
+        render: (text, record = {}) => {
+          const { user = {} } = this.props;
+          const { owner = {} } = record || {};
           return (
             <Button
               type="primary"
-              disabled={record.owner.id === this.props.user.id}
+              disabled={owner.id === user.id}
               onClick={() => {
                 this.props.history.push({
                   pathname: `/card/deal-detail/${record.id}`,

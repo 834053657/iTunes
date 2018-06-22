@@ -27,6 +27,23 @@ export default class DealDeatil extends Component {
     };
   }
 
+  componentDidMount() {
+    const { params: { id } } = this.props.match || {};
+    this.fetch(id);
+  }
+
+  fetch = param => {
+    this.props.dispatch({
+      type: 'card/fetchAdDetail',
+      payload: param,
+      callback: res => {
+        if (res.ad_type === 2) {
+          this.postData.order_type = 1;
+        }
+      },
+    });
+  };
+
   ensureOrder = () => {
     console.log(this.postData);
 
@@ -142,24 +159,6 @@ export default class DealDeatil extends Component {
       orderData,
     });
   };
-
-  componentDidMount() {
-    const { params: { id } } = this.props.match || {};
-    this.props.dispatch({
-      type: 'card/fetchAdDetail',
-      payload: { id },
-      callback: res => {
-        // if (res.ad_type === 1) {
-        //   this.postData.order_type = 2;
-        // } else if (res.ad_type === 2) {
-        //   this.postData.order_type = 1;
-        // }
-        if (res.ad_type === 2) {
-          this.postData.order_type = 1;
-        }
-      },
-    });
-  }
 
   calcuMaxCountBuy = item => {
     const { detail } = this.props;
@@ -444,7 +443,7 @@ export default class DealDeatil extends Component {
     console.log(term);
     return (
       <div className={styles.detailBox}>
-        <h1>{ad_type === 1 ? '主动出售视图 ad_type = 1' : '主动购买视图 ad_type = 2'}</h1>
+        {/*<h1>{ad_type === 1 ? '主动出售视图 ad_type = 1' : '主动购买视图 ad_type = 2'}</h1>*/}
         {ad_type === 1 ? this.renderSellContent(detail) : this.renderBuyerContent(detail)}
         <div className={styles.right}>
           <div className={styles.userInfo}>
@@ -453,11 +452,7 @@ export default class DealDeatil extends Component {
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>
-                <Badge
-                  status={userInfo.online ? 'success' : 'default'}
-                  offset={[11, 10]}
-                  dot
-                >
+                <Badge status={userInfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
                   <span className={styles.name}>{userInfo.nickname}</span>
                 </Badge>
               </div>

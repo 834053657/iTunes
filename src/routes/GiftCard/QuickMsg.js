@@ -14,9 +14,7 @@ const Option = Select.Option;
 export default class QuickMsg extends Component {
   constructor(props) {
     super();
-    this.state = {
-      term: '快捷短语',
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -48,43 +46,46 @@ export default class QuickMsg extends Component {
     });
   };
 
-  sendQuickMsg = e => {
+  sendQuickMsg = v => {
     const { order = {} } = this.props.detail;
-    if (e) {
+    if (v) {
+      const term = CONFIG.term.find(item => item.id === v);
+
       this.props.dispatch({
         type: 'send_message',
         payload: {
           order_id: order.id,
-          quick_msg_id: e.id,
-          content: e.content,
+          quick_msg_id: term.id,
+          content: term.content,
         },
       });
     }
   };
 
   render() {
-    const { setStatus, card: { quickMsgList = [] } } = this.props;
-    const { ad, cards, order, trader } = this.props.detail;
-
-    const userInfo = ad.owner;
+    const { setStatus, card: { quickMsgList = [] }, detail } = this.props;
+    const { ad, cards, order, trader } = detail || {};
+    const { userInfo: owner } = ad || {};
 
     return (
       <div className={styles.chatInfo}>
-        <Select defaultValue={this.state.term} style={{ width: 260 }} onSelect={this.sendQuickMsg}>
-          {CONFIG.term
-            ? CONFIG.term.map(t => {
-                return (
-                  <Option key={t.id} value={t}>
-                    {t.content}
-                  </Option>
-                );
-              })
-            : null}
+        <Select
+          size="large"
+          style={{ width: '100%' }}
+          value={undefined}
+          onSelect={this.sendQuickMsg}
+          placeholder="发送快捷短语"
+        >
+          {map(CONFIG.term || {}, t => (
+            <Option key={t.id} value={t.id}>
+              {t.content}
+            </Option>
+          ))}
         </Select>
         <ul>
           {map(quickMsgList, d => {
             return (
-              <li>
+              <li key={d.id}>
                 <div className={styles.leftAvatar}>
                   <span className={styles.avaTop}>
                     <Avatar
