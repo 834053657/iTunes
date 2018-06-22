@@ -106,7 +106,7 @@ export default class List extends Component {
           });
         },
       });
-    } else if ([101, 102, 103, 104, 105, 106, 107].indexOf(row.msg_type) >= 0) {
+    } else if ([101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111].indexOf(row.msg_type) >= 0) {
       //todo redirect to order detail
       if (row.content && row.content.goods_type === 1)
         this.props.dispatch(routerRedux.push(`/itunes/order/${row.content.order_id}`));

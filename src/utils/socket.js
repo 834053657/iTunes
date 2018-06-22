@@ -71,6 +71,13 @@ export function dvaSocket(url, option) {
             type: 'global/saveNotices',
             payload: rs,
           });
+
+          if (msg.content && msg.content.order_id) {
+            dispatch({
+              type: 'card/fetchOrderDetail',
+              payload: { id: msg.content.order_id },
+            });
+          }
           playAudio();
         },
         disconnection: (data, dispatch, getState) => {
@@ -117,7 +124,6 @@ export function dvaSocket(url, option) {
             // playAudio();
           } else {
             console.log({ id: msg.content && msg.content.order_id });
-            console.log('{id: msg.content && msg.content.order_id}');
             dispatch({
               type: 'card/fetchOrderDetail',
               payload: { id: msg.content && msg.content.order_id },

@@ -195,32 +195,36 @@ export function getMessageContent(msgObj) {
     msgText = CONFIG[`message_type_${lang}`][msgObj.msg_type];
     if ([11, 12].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace(
-        '%auth_type%',
+        '{auth_type}',
         msgObj.content && msgObj.content.auth_type === 1 ? '实名认证' : '视频认证'
       );
     }
 
     if ([21, 22].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace(
-        '%payment_method%',
+        '{payment_method}',
         msgObj.content && msgObj.content.payment_method === 'bank' ? '银行账号' : '支付宝账号'
       );
       msgText = msgText.replace(
-        '%account%',
+        '{account}',
         msgObj.content && msgObj.content.account ? `${msgObj.content.account.substr(0, 3)}...` : ''
       );
     }
 
     if ([41, 42].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('%title%', msgObj.title);
+      msgText = msgText.replace('{title}', msgObj.title);
     }
 
-    if ([12, 22, 42, 108].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('%reason%', msgObj.content && msgObj.content.reason);
+    if ([101, 102, 106, 107, 111].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace('{dealer}', msgObj.sender && msgObj.sender.nickname || '');
     }
 
-    if ([101, 102, 103, 104, 105, 106, 107, 108].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('%order_no%', (msgObj.content && msgObj.content.order_no) || '');
+    if ([105, 109, 110, 111].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace('{order_no}', (msgObj.content && msgObj.content.order_no) || '');
+    }
+
+    if ([101, 102].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace('{goods_type}', (msgObj.content && msgObj.content.goods_type === 1 ? 'Itunes' : '礼品卡'));
     }
 
     return msgText;
