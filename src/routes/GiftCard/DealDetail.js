@@ -45,15 +45,12 @@ export default class DealDeatil extends Component {
   };
 
   ensureOrder = () => {
-    console.log(this.postData);
-
     this.props
       .dispatch({
         type: 'card/createBuyOrder',
         payload: this.postData,
       })
       .then(res => {
-        console.log(res);
         if (res) {
           this.setState({
             orderId: res.order_id,
@@ -70,7 +67,6 @@ export default class DealDeatil extends Component {
         payload: this.postData,
       })
       .then(res => {
-        console.log(res);
         if (res) {
           this.setState({
             orderId: res.order_id,
@@ -134,12 +130,9 @@ export default class DealDeatil extends Component {
   };
 
   calcuBuyTotal = () => {
-    console.log(this.postData.order_detail);
     const userBuySum = sumBy(this.postData.order_detail, row => {
       return row.money * row.count || 0;
     });
-    console.log(this.props.detail);
-    console.log(userBuySum);
     return userBuySum;
   };
 
@@ -167,10 +160,7 @@ export default class DealDeatil extends Component {
     const userBuySum = sumBy(this.state.orderData, row => {
       return row.money * row.count || 0;
     });
-
-    console.log(userBuySum);
     const result = (accountBalance - userBuySum) * 10000 / money / 10000;
-    console.log(result);
     return parseInt(result);
   };
 
@@ -190,7 +180,6 @@ export default class DealDeatil extends Component {
     const { condition_type, ad_type, money = [], stock = {} } = detail || {};
     let { condition } = detail || {};
     const accountBalance = detail.owner.amount;
-    console.log(accountBalance);
     let content = null;
     // 主动出售
     if (condition_type === 1) {
@@ -313,7 +302,7 @@ export default class DealDeatil extends Component {
           <li className={styles.item}>
             <span className={styles.title}>类型:</span>
             <div className={styles.content}>
-              {card_type && CONFIG.card_type[card_type - 1]
+              {card_type && CONFIG.card_type && CONFIG.card_type[card_type - 1]
                 ? CONFIG.card_type[card_type - 1].name
                 : '-'}
             </div>
@@ -322,7 +311,7 @@ export default class DealDeatil extends Component {
           <li className={styles.item}>
             <span className={styles.title}>要求:</span>
             <div className={styles.content}>
-              {password_type ? CONFIG.cardPwdType[password_type] : '-'}
+              {password_type && CONFIG.cardPwdType ? CONFIG.cardPwdType[password_type] : '-'}
             </div>
           </li>
 
@@ -367,14 +356,16 @@ export default class DealDeatil extends Component {
   renderBuyerContent = detail => {
     const { card_type, password_type, unit_price, guarantee_time = 0, money = [], stock = {} } =
       detail || {};
-
+    if (!detail) {
+      return false;
+    }
     return (
       <div className={styles.left}>
         <ul>
           <li className={styles.item}>
             <span className={styles.title}>类型:</span>
             <div className={styles.content}>
-              {card_type && CONFIG.cardTypeMap[card_type]
+              {card_type && CONFIG.cardTypeMap && CONFIG.cardTypeMap[card_type]
                 ? CONFIG.cardTypeMap[card_type].name
                 : '-'}
             </div>
@@ -382,7 +373,7 @@ export default class DealDeatil extends Component {
           <li className={styles.item}>
             <span className={styles.title}>包含:</span>
             <div className={styles.content}>
-              {password_type ? CONFIG.cardPwdType[password_type] : '-'}
+              {password_type && CONFIG.cardPwdType ? CONFIG.cardPwdType[password_type] : '-'}
             </div>
           </li>
           <li className={styles.item}>
@@ -440,7 +431,6 @@ export default class DealDeatil extends Component {
     const { detail } = this.props;
     const { owner = {}, ad_type, term } = detail || {};
     const userInfo = owner;
-    console.log(term);
     return (
       <div className={styles.detailBox}>
         {/*<h1>{ad_type === 1 ? '主动出售视图 ad_type = 1' : '主动购买视图 ad_type = 2'}</h1>*/}

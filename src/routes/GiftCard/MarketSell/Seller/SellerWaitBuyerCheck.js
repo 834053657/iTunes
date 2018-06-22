@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { Button, Icon, Steps, Avatar, Select, Badge } from 'antd';
+import CountDown from 'components/CountDown';
 import styles from '../../MarketBuy/StepTwo.less';
 import StepModel from '../../Step';
 import QuickMsg from '../../QuickMsg';
@@ -16,6 +17,9 @@ export default class SellerWaitBuyerCheck extends Component {
     super();
     this.state = {};
     console.log(props);
+
+    this.guaranteeTime = new Date().getTime() + props.detail.order.guarantee_at * 1000;
+    this.deadlineTime = new Date().getTime() + props.detail.order.deadline_at * 1000;
   }
 
   cancelOrder = () => {
@@ -66,11 +70,12 @@ export default class SellerWaitBuyerCheck extends Component {
 
   render() {
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
-    console.log('this.props');
-    console.log(this.props.detail);
-    const { detail, pageStatus } = this.props;
-    const { trader, order, ad } = this.props.detail;
+    const { detail } = this.props;
+    const { trader = {}, order = {}, ad = {} } = this.props.detail;
+    const { status } = order;
     const userInfo = ad.owner;
+    const guaranteeTime = new Date().getTime() + order.guarantee_at * 1000;
+    const deadlineTime = new Date().getTime() + order.deadline_at * 1000;
 
     return (
       <div className={styles.stepTwoBox}>
@@ -99,19 +104,21 @@ export default class SellerWaitBuyerCheck extends Component {
             </div>
 
             <div className={styles.guarantee}>
-              {pageStatus === 6 ? (
+              {status === 3 ? (
                 <h5>
                   保障时间剩余 &nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  {ad.guarantee_time}分钟
+                  <CountDown formatStr="mm" target={guaranteeTime} />
+                  分钟
                 </h5>
               ) : (
                 <h5>
                   买家查收卡密时间剩余 &nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  {'30'}分钟
+                  <CountDown formatStr="mm" target={deadlineTime} />
+                  分钟
                 </h5>
               )}
 
@@ -125,7 +132,7 @@ export default class SellerWaitBuyerCheck extends Component {
             </div>
 
             {/*快捷短语*/}
-            <QuickMsg detail={detail} />
+            {status === 3 ? <QuickMsg detail={detail} /> : null}
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
@@ -139,11 +146,7 @@ export default class SellerWaitBuyerCheck extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <Badge
-                      status={userInfo.online ? 'success' : 'default'}
-                      offset={[11, 10]}
-                      dot
-                    >
+                    <Badge status={userInfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
                       <span className={styles.name}>{userInfo.nickname}</span>
                     </Badge>
                   </div>

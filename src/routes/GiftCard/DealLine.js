@@ -186,41 +186,6 @@ export default class OrderDetail extends Component {
     //23 申诉           主动购买 卖家视图   申述中
   };
 
-  // //判断订单
-  // orderType = () => {
-  //   const {detail} = this.props;
-  //   if (detail.order.order_type === 1) {
-  //     //我要购买页面
-  //     return 1;
-  //   } else {
-  //     //我要出售页面
-  //     return 2;
-  //   }
-  // };
-  // //判断买家和卖家
-  // identify = () => {
-  //   const {detail} = this.props;
-  //   const {user} = this.props;
-  //   if (!Object.keys(detail.ad).length) {
-  //     return false;
-  //   }
-  //   console.log(detail.order.order_type);
-  //   console.log("detail.order.order_type");
-  //   if (detail.order.order_type === 1) {
-  //     if (user.id === detail.ad.owner.id) {
-  //       return '卖家';
-  //     } else {
-  //       return '买家';
-  //     }
-  //   } else {
-  //     if (user.id === detail.ad.owner.id) {
-  //       return '买家';
-  //     } else {
-  //       return '卖家';
-  //     }
-  //   }
-  // };
-
   render() {
     const { ad = {}, cards = {}, order = {}, pageStatus } = this.props.detail || {};
     const { detail } = this.props;

@@ -34,6 +34,8 @@ export default class BuyCard extends Component {
       defaultCardTypeName: CONFIG.card_type ? CONFIG.card_type[0].name : '选择',
       defaultGuaTime: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : '选择',
       passwordType: 1,
+      unit_price: 0,
+      totalMoney: 0,
     };
     this.cards = [];
     this.items = [];
@@ -42,160 +44,9 @@ export default class BuyCard extends Component {
       card_type: 1,
       guarantee_time: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : '',
     };
-
-    this.setVisible = (type, visible) => {
-      this.setState({
-        [type]: visible,
-      });
-    };
-
-    this.changePasswordType = e => {
-      this.data.password_type = e.target.value;
-      this.setState({
-        passwordType: e.target.value,
-        cards: [],
-      });
-    };
-
-    this.selectCardType = e => {
-      this.setState({
-        defaultCardTypeName: e.name,
-      });
-      this.data.card_type = e.type;
-    };
-
-    this.selectGuaTime = e => {
-      this.setState({
-        defaultGuaTime: e,
-      });
-      this.data.guarantee_time = e;
-    };
-
-    this.selectTermTitle = e => {
-      this.setState({
-        defaultTermTitle: e.title,
-      });
-      this.data.term_id = e.id;
-    };
-
-    this.unitPriceChange = e => {
-      this.data.unit_price = e;
-    };
-
-    this.ordersAmountChange = e => {
-      this.data.concurrency_order = e;
-    };
-
-    //添加面额种类
-    this.addDeno = () => {
-      if (isNaN(this.state.denoVaule)) {
-        return message.warning('请输入正确格式');
-      }
-      const a = this.state.cards;
-      const item = {
-        money: this.state.denoVaule,
-        items: [],
-      };
-      a.push(item);
-      this.state.cards = a;
-      this.setState({
-        cards: a,
-      });
-      console.log(this.state.cards);
-      this.setVisible('addDenoVisible', false);
-    };
-
-    //添加密码框
-    this.addCDKBox = m => {
-      const b = {
-        password: '',
-        picture: '',
-      };
-      const index = this.state.cards.findIndex(item => {
-        return item.money === m;
-      });
-      if (index >= 0) {
-        const c = this.state.cards;
-        c[index].items.push(b);
-        this.setState({
-          cards: c,
-        });
-      }
-    };
-
-    //删除密码框
-    this.delCDKBox = (m, i) => {
-      const index = this.state.cards.findIndex(item => {
-        return item.money === m;
-      });
-      if (index >= 0) {
-        const c = this.state.cards;
-        c[index].items.splice(i, 1);
-        this.setState({
-          cards: c,
-        });
-      }
-    };
-
-    //只有图片函数类
-    this.onlyPic = (info, item, index) => {
-      const c = this.state.cards;
-      c[index].items.push({
-        picture: info,
-      });
-      this.setState({
-        cards: c,
-      });
-      console.log(c);
-    };
-    this.remove = (info, index) => {
-      const c = this.state.cards;
-    };
-
-    //卡密数据获取
-    this.denoIptValueChange = (e, i, index) => {
-      const a = this.state.cards;
-      a[index].items[i].password = e.target.value;
-      this.setState({
-        cards: a,
-      });
-    };
-
-    //卡图获取
-    this.getUrl = (url, index, i) => {
-      const a = this.state.cards;
-      a[index].items[i].picture = url;
-      this.setState({
-        cards: a,
-      });
-    };
-    //凭证获取
-    this.getReceipt = (url, index) => {
-      const a = this.state.cards;
-      a[index].receipt = url;
-      this.setState({
-        cards: a,
-      });
-    };
-
-    this.addAdvertising = () => {
-      this.data.cards = this.state.cards;
-      this.props
-        .dispatch({
-          type: 'card/addSellAd',
-          payload: this.data,
-        })
-        .then(res => {
-          this.data = {};
-          this.props.history.push({ pathname: '/ad/my' });
-        })
-        .catch(err => {
-          console.log('发送失败，失败原因：' + err);
-        });
-    };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'card/fetchTerms',
@@ -205,6 +56,172 @@ export default class BuyCard extends Component {
       },
     });
   }
+
+  changePasswordType = e => {
+    this.data.password_type = e.target.value;
+    this.setState({
+      passwordType: e.target.value,
+      cards: [],
+    });
+  };
+
+  selectCardType = e => {
+    this.setState({
+      defaultCardTypeName: e.name,
+    });
+    this.data.card_type = e.type;
+  };
+
+  selectGuaTime = e => {
+    this.setState({
+      defaultGuaTime: e,
+    });
+    this.data.guarantee_time = e;
+  };
+
+  selectTermTitle = e => {
+    this.setState({
+      defaultTermTitle: e.title,
+    });
+    this.data.term_id = e.id;
+  };
+
+  unitPriceChange = e => {
+    this.data.unit_price = e;
+    this.setState({
+      unit_price: parseInt(e),
+    });
+  };
+
+  ordersAmountChange = e => {
+    this.data.concurrency_order = e;
+  };
+
+  //添加面额种类
+  addDeno = () => {
+    if (isNaN(this.state.denoVaule)) {
+      return message.warning('请输入正确格式');
+    }
+    const a = this.state.cards;
+    const item = {
+      money: this.state.denoVaule,
+      items: [],
+    };
+    a.push(item);
+    this.state.cards = a;
+    this.setState({
+      cards: a,
+    });
+    this.setVisible('addDenoVisible', false);
+  };
+
+  //添加密码框
+  addCDKBox = m => {
+    const b = {
+      password: '',
+      picture: '',
+    };
+    const index = this.state.cards.findIndex(item => {
+      return item.money === m;
+    });
+    if (index >= 0) {
+      const c = this.state.cards;
+      c[index].items.push(b);
+      this.setState({
+        cards: c,
+      });
+    }
+    this.calcuMoney();
+  };
+
+  //删除密码框
+  delCDKBox = (m, i) => {
+    const index = this.state.cards.findIndex(item => {
+      return item.money === m;
+    });
+    if (index >= 0) {
+      const c = this.state.cards;
+      c[index].items.splice(i, 1);
+      this.setState({
+        cards: c,
+      });
+    }
+    this.calcuMoney();
+  };
+
+  //只有图片函数类
+  onlyPic = (info, item, index) => {
+    const c = this.state.cards;
+    c[index].items.push({
+      picture: info,
+    });
+    this.setState({
+      cards: c,
+    });
+  };
+
+  remove = (info, index) => {
+    const c = this.state.cards;
+  };
+
+  //卡密数据获取
+  denoIptValueChange = (e, i, index) => {
+    const a = this.state.cards;
+    a[index].items[i].password = e.target.value;
+    this.setState({
+      cards: a,
+    });
+  };
+
+  //卡图获取
+  getUrl = (url, index, i) => {
+    const a = this.state.cards;
+    a[index].items[i].picture = url;
+    this.setState({
+      cards: a,
+    });
+  };
+  //凭证获取
+  getReceipt = (url, index) => {
+    const a = this.state.cards;
+    a[index].receipt = url;
+    this.setState({
+      cards: a,
+    });
+  };
+
+  addAdvertising = () => {
+    this.data.cards = this.state.cards;
+    this.props
+      .dispatch({
+        type: 'card/addSellAd',
+        payload: this.data,
+      })
+      .then(res => {
+        this.data = {};
+        this.props.history.push({ pathname: '/ad/my' });
+      })
+      .catch(err => {
+        console.log('发送失败，失败原因：' + err);
+      });
+  };
+
+  calcuMoney = () => {
+    let a = 0;
+    this.state.cards.map(card => {
+      a += card.money * card.items.length;
+      return null;
+    });
+    this.setState({
+      totalMoney: a,
+    });
+  };
+
+  setVisible = (type, visible) => {
+    this.setState({
+      [type]: visible,
+    });
+  };
 
   render() {
     if (!CONFIG.card_type) {
@@ -233,7 +250,6 @@ export default class BuyCard extends Component {
         })}
       </Menu>
     );
-    console.log(this.props.card.terms);
     const termsMenu = (
       <Menu>
         {this.props.card.terms &&
@@ -291,7 +307,7 @@ export default class BuyCard extends Component {
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
-          {/*<SellForm terms={terms} />*/}
+          <SellForm terms={terms} initialValues={{ card_type: 3 }} />
           <ul className={styles.submitTable}>
             <li>
               <span className={styles.tableLeft}>类型：</span>
@@ -391,7 +407,7 @@ export default class BuyCard extends Component {
                       <div className={styles.right}>
                         {item.items.map((card, i) => {
                           return (
-                            <div key={index + 'item'} className={styles.iptBox}>
+                            <div key={index + i} className={styles.iptBox}>
                               <div className={styles.input}>
                                 <Input
                                   type="text"
@@ -469,11 +485,11 @@ export default class BuyCard extends Component {
               <div className={styles.amount}>
                 <h4>
                   <span>总面额：</span>
-                  <span>150</span>
+                  <span>{this.state.totalMoney}</span>
                 </h4>
                 <h5>
                   <span>总价：</span>
-                  <span>120RMB</span>
+                  <span>{this.state.totalMoney * this.state.unit_price}RMB</span>
                 </h5>
               </div>
             </div>
