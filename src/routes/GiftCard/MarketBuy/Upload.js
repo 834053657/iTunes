@@ -73,6 +73,7 @@ export default class UploadComponent extends Component {
     this.setState({
       fileList: info.fileList,
     });
+    this.props.clearPic && this.setState({ fileList: [] });
   };
 
   beforeUpload = file => {
