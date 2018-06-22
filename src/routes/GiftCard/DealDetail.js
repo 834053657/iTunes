@@ -257,7 +257,7 @@ export default class DealDeatil extends Component {
                       <span className={styles.denoTitle}>{c.money}面额:</span>
                       <div className={styles.denoIpt}>
                         <InputNumber
-                          max={this.calcuMaxCountBuy(c)}
+                          //max={this.calcuMaxCountBuy(c)}
                           defaultValue={0}
                           onChange={e => this.changeRangeDataNum(e, index)}
                         />

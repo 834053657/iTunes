@@ -60,6 +60,9 @@ export default class Appeal extends Component {
           },
           // callback: () => {}, // todo re-load appeal details
         });
+        this.setState({
+          textValue: '',
+        });
       }
     });
   };
@@ -67,7 +70,7 @@ export default class Appeal extends Component {
   getMsgContent = text => {
     const { imageUrls = [] } = this.state;
     let content = `<p>${text}</p>`;
-    content += imageUrls.length > 0 ? `<ul className="picBox">` : '';
+    content += imageUrls.length > 0 ? `<ul className="${styles.picbox}">` : '';
     map(imageUrls, (d, i) => {
       content += `<li>
                   <img
@@ -124,13 +127,17 @@ export default class Appeal extends Component {
       if (!file.response) {
         return false;
       }
-      return arr.push({ picture: prefix + file.response.hash });
+      return arr.push(prefix + file.response.hash);
     });
     this.appealPictures = arr;
     console.log(this.appealPictures);
+    this.setState({
+      imageUrls: arr,
+    });
   };
 
   getUserType = sender => {
+    console.log(sender);
     return null;
   };
 
@@ -231,6 +238,12 @@ export default class Appeal extends Component {
                         <TextArea
                           style={{ minHeight: 32 }}
                           placeholder="您的建议会督促我做得更好~"
+                          value={this.state.textValue}
+                          onChange={e => {
+                            this.setState({
+                              textValue: e.target.value,
+                            });
+                          }}
                           rows={4}
                         />
                       )}
@@ -261,7 +274,7 @@ function AppealInfo(props) {
       <ul className={styles.tabTwoTab}>
         {map(data, d => {
           return (
-            <li className={styles.appealItem}>
+            <li key={d} className={styles.appealItem}>
               <div className={styles.leftAvatar}>
                 <span className={styles.avaTop}>
                   <Avatar
@@ -272,7 +285,7 @@ function AppealInfo(props) {
                 </span>
                 <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
                 <br />
-                <span className={styles.avaName}>{this.getUserType(d.sender)}</span>
+                <span className={styles.avaName}>{() => this.getUserType(d.sender)}</span>
               </div>
               <div className={styles.chatItem}>
                 <div className={styles.chatText}>
