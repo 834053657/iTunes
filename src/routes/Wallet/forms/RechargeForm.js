@@ -71,7 +71,6 @@ class RechargeForm extends Component {
   renderPaymentInfo = () => {
     const { form, sysPayments } = this.props;
     const id = form.getFieldValue('platform_payment_id');
-    console.log(id);
     if (!id) {
       return null;
     }
