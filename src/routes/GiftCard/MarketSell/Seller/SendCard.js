@@ -224,14 +224,14 @@ export default class Process extends Component {
                   <span>单价：</span>
                 </h4>
                 <h4>
-                  <span className={styles.title}>{order.money}RMB</span>
+                  <span className={styles.title}>{order.amount}RMB</span>
                   <span>总价：</span>
                 </h4>
               </div>
               <div className={styles.footer}>
                 <div>
                   请在&nbsp;
-                  <Icon type="delete" />
+                  <Icon type="clock-circle-o" />
                   &nbsp; {ad.deadline}分钟内发卡
                 </div>
                 <Button>取消</Button>

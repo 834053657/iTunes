@@ -84,7 +84,10 @@ export default class EnsureBuyInfo extends Component {
               <Button
                 type="danger"
                 onClick={() => {
-                  this.props.setStatus('pageStatus', 21);
+                  this.props.dispatch({
+                    type: 'card/appealOrder',
+                    payload: { order_id: order.id },
+                  });
                 }}
               >
                 申诉

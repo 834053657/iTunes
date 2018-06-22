@@ -31,9 +31,10 @@ export default class WaitBuyerCheck extends Component {
   }
 
   count = order => {
-    const a = 0;
+    let a = 0;
     order.order_detail.map(o => {
-      return a + o.count;
+      a += o.count;
+      return a;
     });
     return a;
   };

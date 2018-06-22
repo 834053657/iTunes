@@ -63,6 +63,18 @@ export default class DealDeatil extends Component {
       });
   };
 
+  blurNum = (e, d, stock) => {
+    // let totalPrice = 0;
+    // this.postData.order_detail.map(o => {
+    //   totalPrice = totalPrice + o.money * o.count
+    //   return totalPrice
+    // })
+    // console.log(totalPrice);
+    // this.setState({
+    //   totalPrice: this.state.num * d + totalPrice
+    // })
+  };
+
   changeNum = (e, d, stock) => {
     if (e > stock) {
       message.warning(d + '面额的库存仅为' + stock + ',数量将会调整为最大库存' + stock);
@@ -86,25 +98,6 @@ export default class DealDeatil extends Component {
     });
   };
 
-  calcuBuyTotal = () => {
-    let userBuySum = sumBy(this.state.buyData, row => {
-      return row.money * row.count || 0;
-    });
-    return userBuySum;
-  };
-
-  blurNum = (e, d, stock) => {
-    // let totalPrice = 0;
-    // this.postData.order_detail.map(o => {
-    //   totalPrice = totalPrice + o.money * o.count
-    //   return totalPrice
-    // })
-    // console.log(totalPrice);
-    // this.setState({
-    //   totalPrice: this.state.num * d + totalPrice
-    // })
-  };
-
   changeFixedNum = (e, c) => {
     const index = this.postData.order_detail.findIndex(t => {
       return +t.money === +c.money;
@@ -118,6 +111,19 @@ export default class DealDeatil extends Component {
         count: parseInt(e),
       });
     }
+    this.setState({
+      buyData: this.postData.order_detail,
+    });
+  };
+
+  calcuBuyTotal = () => {
+    console.log(this.postData.order_detail);
+    let userBuySum = sumBy(this.postData.order_detail, row => {
+      return row.money * row.count || 0;
+    });
+    console.log(this.props.detail);
+    console.log(userBuySum);
+    return userBuySum;
   };
 
   changeRangeDataNum = (e, index) => {
@@ -251,11 +257,10 @@ export default class DealDeatil extends Component {
                       <span className={styles.denoTitle}>{c.money}面额:</span>
                       <div className={styles.denoIpt}>
                         <InputNumber
-                          //max={c.count}
+                          max={this.calcuMaxCountBuy(c)}
                           defaultValue={0}
                           onChange={e => this.changeRangeDataNum(e, index)}
                         />
-                        {/*accountBalance/c.money)*/}
                         <span className={styles.last}>
                           最多可再出售{this.calcuMaxCountBuy(c)}个
                         </span>
@@ -335,7 +340,7 @@ export default class DealDeatil extends Component {
           <li className={styles.item}>{this.renderCondition(detail)}</li>
           <li className={styles.item}>
             <span className={styles.title}>总价:</span>
-            <div className={styles.content}>{this.calcuTotalCount()}</div>
+            <div className={styles.content}>{this.calcuBuyTotal()}</div>
           </li>
           <li className={styles.item}>
             <span className={styles.title}>发卡期限:</span>
