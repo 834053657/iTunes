@@ -87,6 +87,9 @@ export default {
     109: '客服已释放订单{order_no}',
     110: '客服已取消订单{order_no}',
     111: '{dealer}已释放订单{order_no}',
+    112: '订单{order_no}超出查收时间，已自动取',
+    113: '订单{order_no}超出发卡时间，已自动取消',
+    114: '{dealer}已查收，请耐心等待释放',
   },
   message_type_en_GB: {
     1: '系统资讯',
@@ -111,6 +114,9 @@ export default {
     109: '客服已释放订单{order_no}',
     110: '客服已取消订单{order_no}',
     111: '{dealer}已释放订单{order_no}',
+    112: '订单{order_no}超出查收时间，已自动取',
+    113: '订单{order_no}超出发卡时间，已自动取消',
+    114: '{dealer}已查收，请耐心等待释放',
   },
   cardPwdType: {
     // 1: '密码',

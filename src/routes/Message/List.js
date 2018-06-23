@@ -108,7 +108,7 @@ export default class List extends Component {
       this.props.dispatch(routerRedux.replace(`/wallet?activeKey=3`));
     } else if ([41, 42].indexOf(item.msg_type) >= 0) {
       this.props.dispatch(routerRedux.replace(`/ad/terms`));
-    } else if ([101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111].indexOf(item.msg_type) >= 0) {
+    } else if (item.msg_type >= 100 && item.msg_type <= 114) {
       //todo redict to order detail
       if (item.content && item.content.goods_type === 1)
         this.props.dispatch(routerRedux.replace(`/itunes/order/${item.content.order_id}`));

@@ -215,12 +215,13 @@ export function getMessageContent(msgObj) {
       msgText = msgText.replace('{title}', msgObj.title);
     }
 
-    if ([101, 102, 106, 107, 111].indexOf(msgObj.msg_type) >= 0) {
+    if ([101, 102, 106, 107, 111, 114].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace('{dealer}', msgObj.sender && msgObj.sender.nickname || '');
     }
 
-    if ([105, 109, 110, 111].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('{order_no}', (msgObj.content && msgObj.content.order_no) || '');
+    if ([105, 109, 110, 111, 112, 113].indexOf(msgObj.msg_type) >= 0) {
+      // msgText = msgText.replace('{order_no}', msgObj.content && msgObj.content.order_no ? `${msgObj.content.order_no.substr(0, 3)}...` : '');
+      msgText = msgText.replace('{order_no}', msgObj.content && msgObj.content.order_no || '');
     }
 
     if ([101, 102].indexOf(msgObj.msg_type) >= 0) {

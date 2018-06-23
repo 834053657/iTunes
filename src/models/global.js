@@ -165,7 +165,7 @@ export default {
       });
 
       newItems = orderBy(newItems, ['created_at'], ['desc']);
-      console.log(222, newItems);
+      // console.log(222, newItems);
       return {
         ...state,
         notices: newItems || [],

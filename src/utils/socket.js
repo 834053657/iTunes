@@ -83,7 +83,23 @@ export function dvaSocket(url, option) {
               });
             }
           }
+
+          /* if (msg.msg_type > 100) {
+            dispatch({
+              type: 'user/fetchCurrent',
+            });
+          } */
           playAudio();
+        },
+        userinfo: (data, dispatch, getState) => {
+          const { data: msg } = JSON.parse(data);
+          const { currentUser } = getState().user;
+          const { wallet } = currentUser;
+          
+          dispatch({
+            type: 'user/saveCurrentUser',
+            payload: {...currentUser, wallet: msg.wallet},
+          });
         },
         disconnection: (data, dispatch, getState) => {
           console.log('disconection', data);
@@ -101,9 +117,6 @@ export function dvaSocket(url, option) {
           const { currentUser: { user = {} } } = getState().user;
           console.log(getState().user);
           console.log(user);
-          /* if (msg.sender && user.id === msg.sender.id) {
-            msg.sender.avatar = user.avatar;
-          } */
 
           // console.log(data);
           console.log(msg);
