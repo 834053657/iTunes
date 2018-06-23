@@ -43,19 +43,24 @@ export default class DealFinish extends Component {
       content: contentT,
     };
     if (starT && contentT) {
-      this.props.dispatch({
-        type: 'card/ratingOrder',
-        payload: data,
-      });
+      this.props
+        .dispatch({
+          type: 'card/ratingOrder',
+          payload: data,
+        })
+        .then(() => {
+          message.success('评价提交成功!');
+        });
     } else {
       message.error('请输入完整评价信息');
     }
   };
 
-  previewCard = () => {
+  previewCard = steps => {
     this.props.dispatch({
       type: 'card/changePageStatus',
-      payload: 16,
+      payload: { page: 16, header: steps },
+      //payload: 16,
     });
   };
 
@@ -85,7 +90,7 @@ export default class DealFinish extends Component {
     } else if (pageStatus === 3) {
       steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     } else if (pageStatus === 4) {
-      steps = [{ title: '查收礼品卡' }, { title: '卖家已取消' }];
+      steps = [{ title: '打开交易' }, { title: '卖家已取消' }];
     }
 
     if (!userInfo) {
@@ -140,9 +145,16 @@ export default class DealFinish extends Component {
           </div>
 
           <div className={styles.right}>
-            <div className={styles.largeBtnBox}>
-              <Button onClick={this.previewCard}>查看礼品卡清单</Button>
-            </div>
+            {//2/13/17/3/9
+            pageStatus === 2 ||
+            pageStatus === 3 ||
+            pageStatus === 9 ||
+            pageStatus === 13 ||
+            pageStatus === 17 ? (
+              <div className={styles.largeBtnBox}>
+                <Button onClick={() => this.previewCard(steps)}>查看礼品卡清单</Button>
+              </div>
+            ) : null}
 
             <div className={styles.ownerInfo}>
               {/*
@@ -158,11 +170,7 @@ export default class DealFinish extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <Badge
-                      status={userInfo.online ? 'success' : 'default'}
-                      offset={[11, 10]}
-                      dot
-                    >
+                    <Badge status={userInfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
                       <span className={styles.name}>{userInfo.nickname}</span>
                     </Badge>
                   </div>

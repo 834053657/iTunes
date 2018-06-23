@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { sumBy } from 'lodash';
-import { Badge, Button, message, InputNumber, Avatar, Popover, Icon, Input } from 'antd';
+import { Badge, Button, message, InputNumber, Avatar, Popover, Icon, Input, Spin } from 'antd';
 import { postSellOrder } from '../../services/api';
 import styles from './DealDetail.less';
 
@@ -19,10 +19,11 @@ export default class DealDeatil extends Component {
       denoValue: '',
       orderData: [],
       totalPrice: 0,
+      loading: true,
     };
     this.postData = {
       // order_type: props.card.adDetail.ad_type, //1代表购买  2代表出售
-      ad_id: props.match.params.id, //广告ID
+      ad_id: +props.match.params.id, //广告ID
       order_detail: [], // 订单详情
     };
   }
@@ -37,6 +38,9 @@ export default class DealDeatil extends Component {
       type: 'card/fetchAdDetail',
       payload: param,
       callback: res => {
+        this.setState({
+          loading: false,
+        });
         if (res.ad_type === 2) {
           this.postData.order_type = 1;
         }
@@ -130,8 +134,9 @@ export default class DealDeatil extends Component {
   };
 
   calcuBuyTotal = () => {
+    console.log();
     const userBuySum = sumBy(this.postData.order_detail, row => {
-      return row.money * row.count || 0;
+      return row.money * row.count * this.props.detail.unit_price || 0;
     });
     return userBuySum;
   };
@@ -295,56 +300,58 @@ export default class DealDeatil extends Component {
   renderSellContent = detail => {
     const { card_type, password_type, unit_price, deadline = 0, multiple = 0, guarantee_time } =
       detail || {};
-
+    console.log(detail);
     return (
       <div className={styles.left}>
-        <ul>
-          <li className={styles.item}>
-            <span className={styles.title}>类型:</span>
-            <div className={styles.content}>
-              {card_type && CONFIG.card_type && CONFIG.card_type[card_type - 1]
-                ? CONFIG.card_type[card_type - 1].name
-                : '-'}
-            </div>
-          </li>
+        <Spin spinning={this.state.loading} delay={1500}>
+          <ul>
+            <li className={styles.item}>
+              <span className={styles.title}>类型:</span>
+              <div className={styles.content}>
+                {card_type && CONFIG.card_type && CONFIG.card_type[card_type - 1]
+                  ? CONFIG.card_type[card_type - 1].name
+                  : '-'}
+              </div>
+            </li>
 
-          <li className={styles.item}>
-            <span className={styles.title}>要求:</span>
-            <div className={styles.content}>
-              {password_type && CONFIG.cardPwdType ? CONFIG.cardPwdType[password_type] : '-'}
-            </div>
-          </li>
+            <li className={styles.item}>
+              <span className={styles.title}>要求:</span>
+              <div className={styles.content}>
+                {password_type && CONFIG.cardPwdType ? CONFIG.cardPwdType[password_type] : '-'}
+              </div>
+            </li>
 
-          <li className={styles.item}>
-            <span className={styles.title}>单价:</span>
-            <div className={styles.content}>{unit_price}RMB</div>
-          </li>
+            <li className={styles.item}>
+              <span className={styles.title}>单价:</span>
+              <div className={styles.content}>{unit_price}RMB</div>
+            </li>
 
-          <li className={styles.item}>
-            <span className={styles.title}>倍数:</span>
-            <div className={styles.content}>{multiple}</div>
-          </li>
+            <li className={styles.item}>
+              <span className={styles.title}>倍数:</span>
+              <div className={styles.content}>{multiple}</div>
+            </li>
 
-          <li className={styles.item}>{this.renderCondition(detail)}</li>
-          <li className={styles.item}>
-            <span className={styles.title}>总价:</span>
-            <div className={styles.content}>{this.calcuBuyTotal()}</div>
-          </li>
-          <li className={styles.item}>
-            <span className={styles.title}>发卡期限:</span>
-            <div className={styles.content}>{deadline}分钟</div>
-          </li>
-          <li className={styles.item}>
-            <span className={styles.title}>保障时间:</span>
-            <div className={styles.content}>{guarantee_time}分钟</div>
-          </li>
-        </ul>
-        <div className={styles.bottom}>
-          <Button>取消</Button>
-          <Button type="primary" onClick={this.handlerSell}>
-            确认出售
-          </Button>
-        </div>
+            <li className={styles.item}>{this.renderCondition(detail)}</li>
+            <li className={styles.item}>
+              <span className={styles.title}>总价:</span>
+              <div className={styles.content}>{this.calcuBuyTotal()}</div>
+            </li>
+            <li className={styles.item}>
+              <span className={styles.title}>发卡期限:</span>
+              <div className={styles.content}>{deadline}分钟</div>
+            </li>
+            <li className={styles.item}>
+              <span className={styles.title}>保障时间:</span>
+              <div className={styles.content}>{guarantee_time}分钟</div>
+            </li>
+          </ul>
+          <div className={styles.bottom}>
+            <Button>取消</Button>
+            <Button type="primary" onClick={this.handlerSell}>
+              确认出售
+            </Button>
+          </div>
+        </Spin>
       </div>
     );
   };
@@ -356,68 +363,67 @@ export default class DealDeatil extends Component {
   renderBuyerContent = detail => {
     const { card_type, password_type, unit_price, guarantee_time = 0, money = [], stock = {} } =
       detail || {};
-    if (!detail) {
-      return false;
-    }
     return (
       <div className={styles.left}>
-        <ul>
-          <li className={styles.item}>
-            <span className={styles.title}>类型:</span>
-            <div className={styles.content}>
-              {card_type && CONFIG.cardTypeMap && CONFIG.cardTypeMap[card_type]
-                ? CONFIG.cardTypeMap[card_type].name
-                : '-'}
-            </div>
-          </li>
-          <li className={styles.item}>
-            <span className={styles.title}>包含:</span>
-            <div className={styles.content}>
-              {password_type && CONFIG.cardPwdType ? CONFIG.cardPwdType[password_type] : '-'}
-            </div>
-          </li>
-          <li className={styles.item}>
-            <span className={styles.title}>单价:</span>
-            <div className={styles.content}>{unit_price}RMB</div>
-          </li>
-          <li className={styles.denoList}>
-            <ul>
-              {money.map(d => {
-                return (
-                  <li key={d}>
-                    <span className={styles.denoTitle}>{d}面额:</span>
-                    <div className={styles.denoIpt}>
-                      <InputNumber
-                        min={0}
-                        max={stock[d]}
-                        defaultValue={0}
-                        //onBlur={e => this.blurNum(e, d, stock[d])}
-                        onChange={e => this.changeNum(e, d, stock[d])}
-                      />
-                    </div>
-                    <span className={styles.last}>库存({stock[d] || 0})</span>
-                  </li>
-                );
-              })}
-            </ul>
-          </li>
+        <Spin spinning={this.state.loading} delay={1500}>
+          <ul>
+            <li className={styles.item}>
+              <span className={styles.title}>类型:</span>
+              <div className={styles.content}>
+                {card_type && CONFIG.cardTypeMap && CONFIG.cardTypeMap[card_type]
+                  ? CONFIG.cardTypeMap[card_type].name
+                  : '-'}
+              </div>
+            </li>
+            <li className={styles.item}>
+              <span className={styles.title}>包含:</span>
+              <div className={styles.content}>
+                {password_type && CONFIG.cardPwdType ? CONFIG.cardPwdType[password_type] : '-'}
+              </div>
+            </li>
+            <li className={styles.item}>
+              <span className={styles.title}>单价:</span>
+              <div className={styles.content}>{unit_price}RMB</div>
+            </li>
+            <li className={styles.denoList}>
+              <ul>
+                {money.map(d => {
+                  return (
+                    <li key={d}>
+                      <span className={styles.denoTitle}>{d}面额:</span>
+                      <div className={styles.denoIpt}>
+                        <InputNumber
+                          min={0}
+                          max={stock[d]}
+                          defaultValue={0}
+                          //onBlur={e => this.blurNum(e, d, stock[d])}
+                          onChange={e => this.changeNum(e, d, stock[d])}
+                        />
+                      </div>
+                      <span className={styles.last}>库存({stock[d] || 0})</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
 
-          <li className={styles.item}>
-            <span className={styles.title}>总价:</span>
-            <div className={styles.content}>{this.calcuBuyTotal()}</div>
-          </li>
+            <li className={styles.item}>
+              <span className={styles.title}>总价:</span>
+              <div className={styles.content}>{this.calcuBuyTotal()}</div>
+            </li>
 
-          <li className={styles.item}>
-            <span className={styles.title}>保障时间:</span>
-            <div className={styles.content}>{guarantee_time}分钟</div>
-          </li>
-        </ul>
-        <div className={styles.bottom}>
-          <Button>取消</Button>
-          <Button type="primary" onClick={this.ensureOrder}>
-            确认购买
-          </Button>
-        </div>
+            <li className={styles.item}>
+              <span className={styles.title}>保障时间:</span>
+              <div className={styles.content}>{guarantee_time}分钟</div>
+            </li>
+          </ul>
+          <div className={styles.bottom}>
+            <Button>取消</Button>
+            <Button type="primary" onClick={this.ensureOrder}>
+              确认购买
+            </Button>
+          </div>
+        </Spin>
       </div>
     );
   };
@@ -431,10 +437,14 @@ export default class DealDeatil extends Component {
     const { detail } = this.props;
     const { owner = {}, ad_type, term } = detail || {};
     const userInfo = owner;
+    if (!detail) {
+      return false;
+    }
     return (
       <div className={styles.detailBox}>
         {/*<h1>{ad_type === 1 ? '主动出售视图 ad_type = 1' : '主动购买视图 ad_type = 2'}</h1>*/}
         {ad_type === 1 ? this.renderSellContent(detail) : this.renderBuyerContent(detail)}
+
         <div className={styles.right}>
           <div className={styles.userInfo}>
             <div className={styles.avatar}>

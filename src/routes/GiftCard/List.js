@@ -35,6 +35,9 @@ export default class List extends Component {
     this.setState({
       type,
     });
+    // this.props.dispatch({
+    //   type:'card/GET_CARD_LIST'
+    // })
     this.fetchData({ type }, () => {
       this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
     });
@@ -93,9 +96,9 @@ export default class List extends Component {
         },
       })
       .then(() => {
-        // if (!this.interval) {
-        //   this.interval = setInterval(this.fetchData, 30 * 1000);
-        // }
+        if (!this.interval) {
+          this.interval = setInterval(this.fetchData, 30 * 1000);
+        }
         callback && callback();
       });
   };

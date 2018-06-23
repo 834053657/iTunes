@@ -463,11 +463,14 @@ export default {
       };
     },
     changePageStatus(state, { payload }) {
+      console.log(payload);
       return {
         ...state,
         odDetail: {
           ...state.odDetail,
-          pageStatus: payload,
+          // pageStatus: payload,
+          pageStatus: payload.page,
+          steps: payload.header,
           olderPageStatus: state.odDetail.pageStatus,
         },
       };

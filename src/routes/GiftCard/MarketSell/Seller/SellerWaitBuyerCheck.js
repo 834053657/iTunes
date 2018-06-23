@@ -30,10 +30,11 @@ export default class SellerWaitBuyerCheck extends Component {
     });
   };
 
-  preview = () => {
+  previewCard = steps => {
     this.props.dispatch({
       type: 'card/changePageStatus',
-      payload: 16,
+      payload: { page: 16, header: steps },
+      //payload: 16,
     });
   };
 
@@ -136,7 +137,7 @@ export default class SellerWaitBuyerCheck extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button onClick={this.preview}>查看礼品卡清单</Button>
+              <Button onClick={() => this.previewCard(steps)}>查看礼品卡清单</Button>
             </div>
 
             <div className={styles.ownerInfo}>

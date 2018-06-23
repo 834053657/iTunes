@@ -14,6 +14,8 @@ import {
   Popover,
 } from 'antd';
 import styles from './BuyCard.less';
+import BuyForm from './forms/BuyForm';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
@@ -273,50 +275,56 @@ export default class SaleCard extends Component {
       </Menu>
     );
 
+    const breadcrumbList = [
+      { title: '广告管理', href: '/ad/my' },
+      { title: '礼品卡', href: '/card/market' },
+      { title: '创建购买' },
+    ];
+
     return (
       <div className={styles.addSale}>
-        <header>
-          <span>广告管理 /</span>
-          <span>礼品卡 /</span>
-          <span className={styles.sale}>创建购买</span>
-        </header>
-
-        <ul className={styles.submitTable}>
-          <li>
-            <span className={styles.tableLeft}>类型：</span>
-            <Dropdown overlay={cardTypeMenu} trigger={['click']}>
-              <Button>
-                {this.state.defaultCardTypeName ? this.state.defaultCardTypeName : '选择'}
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </li>
-
-          <li>
-            <span className={styles.tableLeft}>单价：</span>
-            <InputNumber min={1} onChange={e => this.unitPriceChange(e)} /> RMB
-          </li>
-
-          <li>
-            <span className={styles.tableLeft}>倍数：</span>
-            <InputNumber min={1} onChange={e => this.multChange(e)} />
-          </li>
-
-          {/*------------条件-----------*/}
-          <li>
-            <span className={styles.tableLeft}>条件：</span>
-            <Radio.Group defaultValue="1" onChange={e => this.selCondition(e.target.value)}>
-              <Radio.Button value="1">指定面额</Radio.Button>
-              <Radio.Button value="2">交易限额</Radio.Button>
-            </Radio.Group>
-          </li>
-          {condition_type && condition.length && +condition_type === 1 ? (
+        <PageHeaderLayout breadcrumbList={breadcrumbList}>
+          <BuyForm />
+          {/*<header>
+            <span>广告管理 /</span>
+            <span>礼品卡 /</span>
+            <span className={styles.sale}>创建购买</span>
+          </header>
+          <ul className={styles.submitTable}>
             <li>
-              <span className={styles.tableLeft}>&nbsp;</span>
-              {
-                <ul className={styles.conditionFixed}>
-                  {condition && condition.length
-                    ? condition.map((c, index) => {
+              <span className={styles.tableLeft}>类型：</span>
+              <Dropdown overlay={cardTypeMenu} trigger={['click']}>
+                <Button>
+                  {this.state.defaultCardTypeName ? this.state.defaultCardTypeName : '选择'}
+                  <Icon type="down"/>
+                </Button>
+              </Dropdown>
+            </li>
+
+            <li>
+              <span className={styles.tableLeft}>单价：</span>
+              <InputNumber min={1} onChange={e => this.unitPriceChange(e)}/> RMB
+            </li>
+
+            <li>
+              <span className={styles.tableLeft}>倍数：</span>
+              <InputNumber min={1} onChange={e => this.multChange(e)}/>
+            </li>
+
+            <li>
+              <span className={styles.tableLeft}>条件：</span>
+              <Radio.Group defaultValue="1" onChange={e => this.selCondition(e.target.value)}>
+                <Radio.Button value="1">指定面额</Radio.Button>
+                <Radio.Button value="2">交易限额</Radio.Button>
+              </Radio.Group>
+            </li>
+            {condition_type && condition.length && +condition_type === 1 ? (
+              <li>
+                <span className={styles.tableLeft}>&nbsp;</span>
+                {
+                  <ul className={styles.conditionFixed}>
+                    {condition && condition.length
+                      ? condition.map((c, index) => {
                         return (
                           <li key={index}>
                             <Input
@@ -355,96 +363,98 @@ export default class SaleCard extends Component {
                           </li>
                         );
                       })
-                    : null}
-                </ul>
-              }
-            </li>
-          ) : null}
-          {+condition_type === 2 ? (
+                      : null}
+                  </ul>
+                }
+              </li>
+            ) : null}
+            {+condition_type === 2 ? (
+              <li>
+                <span className={styles.tableLeft}>&nbsp;</span>
+                <div>
+                  <Input
+                    className={styles.conIpt}
+                    type="text"
+                    onChange={e => this.changeMinMoney(e)}
+                  />
+                  &nbsp;&nbsp;---&nbsp;&nbsp;
+                  <Input
+                    className={styles.conIpt}
+                    type="text"
+                    onChange={e => this.changeMaxMoney(e)}
+                  />
+                </div>
+              </li>
+            ) : null}
+            {+condition_type === 1 ? (
+              <li>
+                <span className={styles.tableLeft}>&nbsp;</span>
+                <Button style={{width: '260px', borderStyle: 'dashed'}} onClick={this.addDeno}>
+                  + 添加面额
+                </Button>
+              </li>
+            ) : null}
+
             <li>
-              <span className={styles.tableLeft}>&nbsp;</span>
-              <div>
-                <Input
-                  className={styles.conIpt}
-                  type="text"
-                  onChange={e => this.changeMinMoney(e)}
-                />
-                &nbsp;&nbsp;---&nbsp;&nbsp;
-                <Input
-                  className={styles.conIpt}
-                  type="text"
-                  onChange={e => this.changeMaxMoney(e)}
-                />
-              </div>
+              <span className={styles.tableLeft}>要求：</span>
+              <RadioGroup onChange={e => this.changePasswordType(e)} value={this.state.passwordType}>
+                <Radio value={1}>有卡密</Radio>
+                <Radio value={2}>有图</Radio>
+                <Radio value={3}>有图有卡密</Radio>
+              </RadioGroup>
             </li>
-          ) : null}
-          {+condition_type === 1 ? (
+
             <li>
-              <span className={styles.tableLeft}>&nbsp;</span>
-              <Button style={{ width: '260px', borderStyle: 'dashed' }} onClick={this.addDeno}>
-                + 添加面额
-              </Button>
+              <span className={styles.tableLeft}>发卡期限：</span>
+              <Dropdown overlay={deadlineMenu} trigger={['click']}>
+                <Button>
+                  {this.state.deadline ? this.state.deadline : '选择'}
+                  &nbsp;<Icon type="down"/>
+                </Button>
+              </Dropdown>
             </li>
-          ) : null}
 
-          <li>
-            <span className={styles.tableLeft}>要求：</span>
-            <RadioGroup onChange={e => this.changePasswordType(e)} value={this.state.passwordType}>
-              <Radio value={1}>有卡密</Radio>
-              <Radio value={2}>有图</Radio>
-              <Radio value={3}>有图有卡密</Radio>
-            </RadioGroup>
-          </li>
+            <li>
+              <span className={styles.tableLeft}>保障时间：</span>
+              <Dropdown overlay={guaranteeTimeMenu} trigger={['click']}>
+                <Button>
+                  {this.state.defaultGuaTime ? this.state.defaultGuaTime : '选择'}
+                  &nbsp;<Icon type="down"/>
+                </Button>
+              </Dropdown>
+            </li>
 
-          <li>
-            <span className={styles.tableLeft}>发卡期限：</span>
-            <Dropdown overlay={deadlineMenu} trigger={['click']}>
-              <Button>
-                {this.state.deadline ? this.state.deadline : '选择'}
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </li>
-
-          <li>
-            <span className={styles.tableLeft}>保障时间：</span>
-            <Dropdown overlay={guaranteeTimeMenu} trigger={['click']}>
-              <Button>
-                {this.state.defaultGuaTime ? this.state.defaultGuaTime : '选择'}
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </li>
-
-          <li>
+            <li>
             <span className={styles.tableLeft}>
               交易条款
               <i>(可选)</i>
               ：
             </span>
-            <Dropdown overlay={termsMenu} trigger={['click']}>
-              <Button>
-                {this.state.defaultTermTitle ? this.state.defaultTermTitle : '选择'}
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </li>
-          <li>
-            <span className={styles.tableLeft}>同时处理订单数：</span>
-            <InputNumber onChange={e => this.ordersAmountChange(e)} />
-          </li>
-        </ul>
-        <div className={styles.footerBox}>
-          <Button>取消</Button>
-          <Button
-            type="primary"
-            onClick={() => {
-              this.addBuyAd();
-            }}
-          >
-            发布
-          </Button>
-        </div>
+              <Dropdown overlay={termsMenu} trigger={['click']}>
+                <Button>
+                  {this.state.defaultTermTitle ? this.state.defaultTermTitle : '选择'}
+                  <Icon type="down"/>
+                </Button>
+              </Dropdown>
+            </li>
+            <li>
+              <span className={styles.tableLeft}>同时处理订单数：</span>
+              <InputNumber onChange={e => this.ordersAmountChange(e)}/>
+            </li>
+          </ul>
+          <div className={styles.footerBox}>
+            <Button>取消</Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                this.addBuyAd();
+              }}
+            >
+              发布
+            </Button>
+          </div>
+          */}
+        </PageHeaderLayout>
       </div>
     );
   }

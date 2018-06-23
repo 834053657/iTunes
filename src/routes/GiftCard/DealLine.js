@@ -200,11 +200,9 @@ export default class OrderDetail extends Component {
     return (
       <div className={styles.dealLine}>
         {//我要出售列表 买家视角 订单状态：等待买家查收
-        //this.orderType() === 1 && this.Identify() === '卖家' && order.status === 2
         pageStatus === 1 ? <BuyerCheckCard {...this.props} /> : null}
 
-        {//我要出售列表 买家视角 订单状态：买家确认
-        //this.orderType() === 1 && this.Identify() === '卖家' && order.status === 2
+        {//我要出售列表 买家视角 订单状态：买家确认 一定有查看按钮
         pageStatus === 2 ? (
           <EnsureBuyInfo
             setStatus={this.setStatus}
@@ -224,7 +222,7 @@ export default class OrderDetail extends Component {
           />
         ) : null}
 
-        {//我要出售列表 卖家视角 订单状态：等待买家查收/保障中
+        {//我要出售列表 卖家视角 订单状态：等待买家查收/保障中    一定有查看按钮
         pageStatus === 6 || pageStatus === 7 ? (
           <SellerWaitBuyerCheck
             detail={detail}
@@ -244,6 +242,7 @@ export default class OrderDetail extends Component {
         pageStatus === 13 || //主动购买 取消订单  卖家
         pageStatus === 15 || //主动购买  已取消  买家
         pageStatus === 17 ? ( //主动购买  已完成  买家
+          // 12/13/17/3/9 有按钮
           <DealFinish
             pageStatus={pageStatus}
             setStatus={this.setStatus}
@@ -253,7 +252,7 @@ export default class OrderDetail extends Component {
           />
         ) : null}
 
-        {//我要购买列表 订单状态：确认信息 卖家/买家
+        {//我要购买列表 订单状态：确认信息 卖家/买家   一定有查看按钮
         pageStatus === 11 || pageStatus === 14 ? (
           <SellerEnsure
             setStatus={this.setStatus}

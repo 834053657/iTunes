@@ -13,25 +13,27 @@ const TabPane = Tabs.TabPane;
 export default class PreviewCard extends Component {
   constructor(props) {
     super();
-    this.state = {};
+    this.state = {
+      detail: props.detail,
+    };
   }
-
-  selectPage = page => {
-    this.props.dispatch({
-      type: 'card/changePageStatus',
-      payload: page,
-    });
-  };
 
   changeTab = val => {
     const { odDetail } = this.props.card || {};
     const { olderPageStatus } = odDetail || {};
-
     if (val === '1') {
       this.props.dispatch({
         type: 'card/changePageStatus',
-        payload: olderPageStatus,
+        payload: { page: olderPageStatus },
       });
+    }
+  };
+
+  status = status => {
+    if (status === 5) {
+      return 2;
+    } else {
+      return 1;
     }
   };
 
@@ -40,12 +42,32 @@ export default class PreviewCard extends Component {
   }
 
   render() {
-    const { order, ad, cards, pageStatus, trader } = this.props.detail;
-    const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
-    console.log(cards);
+    const { order, ad, cards, pageStatus, trader, olderPageStatus, steps } = this.state.detail;
+    const { status } = order;
+    console.log(olderPageStatus);
+    console.log(pageStatus);
+
+    // let steps;
+    // if (pageStatus === 12 || pageStatus === 17) {
+    //   steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
+    // } else if (pageStatus === 13) {
+    //   //13 卖家已取消       卖家视图
+    //   steps = [{ title: '打开交易' }, { title: '您已取消' }];
+    // } else if (pageStatus === 15) {
+    //   //13 卖家已取消       买家视图
+    //   steps = [{ title: '打开交易' }, { title: '卖家已取消' }];
+    // } else if (pageStatus === 8) {
+    //   steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
+    // } else if (pageStatus === 9) {
+    //   steps = [{ title: '发送礼品卡' }, { title: '您已取消' }];
+    // } else if (pageStatus === 3) {
+    //   steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
+    // } else if (pageStatus === 4) {
+    //   steps = [{ title: '查收礼品卡' }, { title: '卖家已取消' }];
+    // }
     return (
       <div className={styles.stepBox}>
-        <StepModel steps={steps} current={1} />
+        <StepModel steps={steps} current={this.status(status)} />
         <div className={styles.orderInfo}>
           <h5>
             <span>订单：</span>

@@ -19,10 +19,10 @@ export default class EnsureBuyInfo extends Component {
     };
   }
 
-  previewCardinEnsure = () => {
+  previewCard = steps => {
     this.props.dispatch({
       type: 'card/changePageStatus',
-      payload: 16,
+      payload: { page: 16, header: steps },
     });
   };
 
@@ -110,7 +110,7 @@ export default class EnsureBuyInfo extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button onClick={this.previewCardinEnsure}>查看礼品卡清单</Button>
+              <Button onClick={() => this.previewCard(steps)}>查看礼品卡清单</Button>
             </div>
 
             <div className={styles.ownerInfo}>
@@ -120,11 +120,7 @@ export default class EnsureBuyInfo extends Component {
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
-                    <Badge
-                      status={userInfo.online ? 'success' : 'default'}
-                      offset={[11, 10]}
-                      dot
-                    >
+                    <Badge status={userInfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
                       <span className={styles.name}>{userInfo.nickname}</span>
                     </Badge>
                   </div>
