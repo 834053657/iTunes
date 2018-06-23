@@ -32,11 +32,11 @@ export default class List extends Component {
     if (this.interval) {
       clearInterval(this.interval);
     }
+    this.setState({
+      type,
+    });
     this.fetchData({ type }, () => {
       this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
-      this.setState({
-        type,
-      });
     });
   };
 
@@ -93,9 +93,9 @@ export default class List extends Component {
         },
       })
       .then(() => {
-        if (!this.interval) {
-          this.interval = setInterval(this.fetchData, 30 * 1000);
-        }
+        // if (!this.interval) {
+        //   this.interval = setInterval(this.fetchData, 30 * 1000);
+        // }
         callback && callback();
       });
   };

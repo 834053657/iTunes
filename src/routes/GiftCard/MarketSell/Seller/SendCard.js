@@ -253,7 +253,16 @@ export default class Process extends Component {
                   <CountDown formatStr="mm" target={this.targetTime} />
                   分钟内发卡
                 </div>
-                <Button>取消</Button>
+                <Button
+                  onClick={() => {
+                    this.props.dispatch({
+                      type: 'card/cacelOrder',
+                      payload: { order_id: order.id },
+                    });
+                  }}
+                >
+                  取消订单
+                </Button>
                 <Button
                   type="primary"
                   onClick={() => {
