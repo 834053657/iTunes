@@ -29,7 +29,7 @@ export default class DealDeatil extends Component {
 
   componentDidMount() {
     const { params: { id } } = this.props.match || {};
-    this.fetch(id);
+    this.fetch({ id });
   }
 
   fetch = param => {
