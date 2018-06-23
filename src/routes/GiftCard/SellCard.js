@@ -307,7 +307,7 @@ export default class BuyCard extends Component {
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
-          <SellForm terms={terms} initialValues={{ card_type: 3 }} />
+          {/*<SellForm terms={terms} initialValues={{ card_type: 3 }} />*/}
           <ul className={styles.submitTable}>
             <li>
               <span className={styles.tableLeft}>类型：</span>
