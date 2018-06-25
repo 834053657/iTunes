@@ -90,8 +90,8 @@ export default class TermsModal extends Component {
           <Form.Item label="标题" {...formItemLayout}>
             {getFieldDecorator('title', {
               initialValue: action === '_NEW' ? null : terms && terms.title,
-              rules: [{ required: true, message: '请输入标题' }],
-            })(<Input placeholder="标题" maxLength={100} disabled={action === '_OPEN'} />)}
+              rules: [{ required: true, message: '请输入标题(1-20字符)' }],
+            })(<Input placeholder="标题" maxLength={20} disabled={action === '_OPEN'} />)}
           </Form.Item>
           <FormItem label="交易条款" {...formItemLayout}>
             {getFieldDecorator('content', {
@@ -99,13 +99,14 @@ export default class TermsModal extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请输入交易条款',
+                  message: '请输入交易条款(5-300字符)',
                 },
               ],
             })(
               <TextArea
                 style={{ minHeight: 32 }}
                 placeholder="交易条款"
+                maxLength={300}
                 disabled={action === '_OPEN'}
                 rows={4}
               />

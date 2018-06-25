@@ -7,7 +7,7 @@ const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-let dataItem = {
+const dataItem = {
   money: null,
   min_count: null,
   max_count: null,

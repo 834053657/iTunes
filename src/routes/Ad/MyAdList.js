@@ -84,9 +84,10 @@ export default class List extends Component {
 
   columns = [
     {
-      title: '广告标号',
+      title: '广告编号',
       dataIndex: 'ad_no',
       width: '15%',
+      className: styles.ad_no,
     },
     {
       title: '产品类型',
@@ -142,13 +143,13 @@ export default class List extends Component {
               <a onClick={() => this.updateAd(r, 1)}>恢复</a>
             </span>
           )}
-          {r.status === 2 && (
+          {[1, 2].indexOf(r.status) > -1 && (
             <span>
               <Divider type="vertical" />
               <a onClick={() => this.viewAd(r, '_EDIT')}>编辑</a>
             </span>
           )}
-          {r.status === 4 && (
+          {[1, 2, 4].indexOf(r.status) > -1 && (
             <span>
               <Divider type="vertical" />
               <Popconfirm
