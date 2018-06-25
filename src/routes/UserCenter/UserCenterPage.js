@@ -607,11 +607,13 @@ export default class UserCenterPage extends Component {
                     );
                   })}
                 </div>
-                <div className={styles.box_footer}>
-                  <a onClick={this.showPayMethodModal}>
-                    <Icon type="plus" /> 添加新的支付方式
-                  </a>
-                </div>
+                {payments.length < 10 && (
+                  <div className={styles.box_footer}>
+                    <a onClick={this.showPayMethodModal}>
+                      <Icon type="plus" /> 添加新的支付方式
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 
