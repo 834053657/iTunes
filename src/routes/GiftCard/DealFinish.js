@@ -71,6 +71,7 @@ export default class DealFinish extends Component {
     const { pageStatus } = this.props;
     let steps = null;
     let userInfo = null;
+
     if (pageStatus === 12 || pageStatus === 13 || pageStatus === 3 || pageStatus === 4) {
       userInfo = trader;
     } else if (pageStatus === 15 || pageStatus === 17 || pageStatus === 8 || pageStatus === 9) {
@@ -81,25 +82,24 @@ export default class DealFinish extends Component {
       steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
     } else if (pageStatus === 13) {
       //13 卖家已取消       卖家视图
-      steps = [{ title: '打开交易' }, { title: '您已取消' }];
+      steps = [{ title: '打开交易' }, { title: '订单已取消' }]; //您已取消
     } else if (pageStatus === 15) {
       //13 卖家已取消       买家视图
-      steps = [{ title: '打开交易' }, { title: '卖家已取消' }];
+      steps = [{ title: '打开交易' }, { title: '订单已取消' }]; //卖家已取消
     } else if (pageStatus === 8) {
       steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     } else if (pageStatus === 9) {
-      steps = [{ title: '发送礼品卡' }, { title: '您已取消' }];
+      steps = [{ title: '发送礼品卡' }, { title: '订单已取消' }]; //您已取消
     } else if (pageStatus === 3) {
       steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     } else if (pageStatus === 4) {
-      steps = [{ title: '打开交易' }, { title: '卖家已取消' }];
+      steps = [{ title: '打开交易' }, { title: '订单已取消' }]; //卖家已取消
     }
 
     if (!userInfo) {
       return false;
     }
 
-    console.log(order);
     return (
       <div className={styles.buyFinish}>
         <StepModel steps={steps} current={steps.length - 1} />
@@ -139,7 +139,7 @@ export default class DealFinish extends Component {
               </div>
               <div>
                 <span>总价：</span>
-                <span>{order.money}</span>RMB
+                <span>{order.amount}</span>RMB
               </div>
             </div>
             <div className={styles.term}>

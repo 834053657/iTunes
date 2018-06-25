@@ -24,8 +24,10 @@ export default class DealDeatil extends Component {
     this.postData = {
       // order_type: props.card.adDetail.ad_type, //1代表购买  2代表出售
       ad_id: +props.match.params.id, //广告ID
+      updated_at: props.detail.updated_at,
       order_detail: [], // 订单详情
     };
+    console.log(props.detail);
   }
 
   componentDidMount() {
@@ -41,9 +43,6 @@ export default class DealDeatil extends Component {
         this.setState({
           loading: false,
         });
-        if (res.ad_type === 2) {
-          this.postData.order_type = 1;
-        }
       },
     });
   };
@@ -55,11 +54,17 @@ export default class DealDeatil extends Component {
         payload: this.postData,
       })
       .then(res => {
-        if (res) {
+        if (res.code === 0) {
           this.setState({
             orderId: res.order_id,
           });
           this.props.dispatch(routerRedux.push(`/card/deal-line/${res.order_id}`));
+        } else if (res.msg === '广告数据已变化') {
+          const { params: { id } } = this.props.match || {};
+          this.fetch({ id });
+          message.error(res.msg + '，请重新填写订单数据');
+        } else {
+          message.error(res.msg);
         }
       });
   };

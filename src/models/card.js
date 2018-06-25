@@ -192,11 +192,12 @@ export default {
     //发送确认订单请求
     *createBuyOrder({ payload }, { call, put }) {
       const res = yield call(createBuyOrder, payload);
-      if (res.code === 0) {
-        return res.data;
-      } else {
-        message.error(res.msg);
-      }
+      // if (res.code === 0) {
+      //   return res.data;
+      // } else {
+      //   message.error(res.msg);
+      // }
+      return res;
     },
     *createSellOrder({ payload }, { call, put }) {
       const res = yield call(createSellOrder, payload);

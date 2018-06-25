@@ -1,7 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 
-import { Form, Tabs, Button, Icon, Input, Steps, Avatar, Upload, Modal, message } from 'antd';
+import {
+  Form,
+  Tabs,
+  Button,
+  Icon,
+  Input,
+  Steps,
+  Avatar,
+  Upload,
+  Modal,
+  message,
+  Badge,
+} from 'antd';
 import { map } from 'lodash';
 import moment from 'moment';
 import styles from './appeal.less';
@@ -78,8 +90,6 @@ export default class Appeal extends Component {
     return content;
   };
 
-  handleChange = ({ fileList }) => this.setState({ fileList });
-
   componentDidMount() {
     const { dispatch, detail: { order = {} } } = this.props;
     dispatch({
@@ -91,6 +101,17 @@ export default class Appeal extends Component {
       },
     });
   }
+
+  handleChange = ({ fileList }) => this.setState({ fileList });
+
+  count = order => {
+    let a = 0;
+    order.order_detail.map(o => {
+      a += o.count;
+      return a;
+    });
+    return a;
+  };
 
   changeAppealPic = (info, prefix) => {
     const arr = [];
@@ -137,6 +158,14 @@ export default class Appeal extends Component {
     });
   };
 
+  previewCard = steps => {
+    this.props.dispatch({
+      type: 'card/changePageStatus',
+      payload: { page: 16, header: steps },
+      //payload: 16,
+    });
+  };
+
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
     const { card, appealInfo } = this.props;
@@ -167,6 +196,10 @@ export default class Appeal extends Component {
         sm: { span: 24 },
       },
     };
+
+    console.log(ad);
+    const userInfo = ad.owner;
+
     return (
       <div className={styles.appeal}>
         <StepModel steps={steps} current={1} />
@@ -210,7 +243,75 @@ export default class Appeal extends Component {
               defaultActiveKey="2"
             >
               <TabPane tab="订单详情" key="1">
-                d
+                <ul className={styles.orderDetail}>
+                  <li className={styles.item}>
+                    <span className={styles.title}>类型：</span>
+                    <div className={styles.content}>
+                      {order.order_type ? CONFIG.card_type[order.order_type - 1].name || '-' : '-'}
+                    </div>
+                  </li>
+                  <li className={styles.item}>
+                    <span className={styles.title}>单价：</span>
+                    <div className={styles.content}>{ad.unit_price || '-'}</div>
+                  </li>
+                  <li className={styles.item}>
+                    <span className={styles.title}>数量：</span>
+                    <div className={styles.content}>{this.count(order) || '-'}</div>
+                  </li>
+                  <li className={styles.item}>
+                    <span className={styles.title}>总面额：</span>
+                    <div className={styles.content}>{order.money || '-'}</div>
+                  </li>
+                  <li className={styles.item}>
+                    <span className={styles.title}>总价：</span>
+                    <div className={styles.content}>
+                      {order.amount ? order.amount + 'RMB' : '-'}
+                    </div>
+                  </li>
+                  <li className={styles.item}>
+                    <span className={styles.title}>发卡时间：</span>
+                    <div className={styles.content}>{ad.deadline ? ad.deadline + '分钟' : '-'}</div>
+                  </li>
+                  <li className={styles.item}>
+                    <span className={styles.title}>保障时间：</span>
+                    <div className={styles.content}>
+                      {ad.guarantee_time ? ad.guarantee_time + '分钟' : '-'}
+                    </div>
+                  </li>
+                </ul>
+
+                <div className={styles.stepBottomRight}>
+                  <div className={styles.largeBtnBox}>
+                    <Button onClick={() => this.previewCard(steps)}>查看礼品卡清单</Button>
+                  </div>
+
+                  <div className={styles.ownerInfo}>
+                    <div className={styles.userInfo}>
+                      <div className={styles.avatar}>
+                        <Avatar size="large" src={userInfo.avatar} />
+                      </div>
+                      <div className={styles.avatarRight}>
+                        <div className={styles.top}>
+                          <Badge
+                            status={userInfo.online ? 'success' : 'default'}
+                            offset={[11, 10]}
+                            dot
+                          >
+                            <span className={styles.name}>{userInfo.nickname}</span>
+                          </Badge>
+                        </div>
+                        <div className={styles.infoBottom}>
+                          <span className={styles.dealTit}>30日成单：</span>
+                          <span className={styles.dealNum}>{userInfo.month_volume || '-'}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className={styles.term}>
+                      <h3>交易条款：</h3>
+                      <p>{order.term}</p>
+                    </div>
+                  </div>
+                </div>
               </TabPane>
               <TabPane tab="申诉中" key="2">
                 <AppealInfo data={chatMsgList} />
