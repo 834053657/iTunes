@@ -284,12 +284,12 @@ export default class SaleCard extends Component {
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
-          {/*<BuyForm />*/}
+          {/*<BuyForm />
           <header>
             <span>广告管理 /</span>
             <span>礼品卡 /</span>
             <span className={styles.sale}>创建购买</span>
-          </header>
+          </header>*/}
           <ul className={styles.submitTable}>
             <li>
               <span className={styles.tableLeft}>类型：</span>
