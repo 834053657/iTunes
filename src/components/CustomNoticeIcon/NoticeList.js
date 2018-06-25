@@ -71,7 +71,7 @@ export default function CustomNoticeList({
       </List>
       <div className={styles.action}>
         <div className={styles.clear} onClick={onClear}>
-          <a>清除全部</a>
+          <a>一键已读</a>
         </div>
         <div className={styles.view_more} onClick={onView}>
           <a>查看更多</a>
