@@ -17,9 +17,16 @@ export default function CustomNoticeList({
 }) {
   if (data.length === 0) {
     return (
-      <div className={styles.notFound}>
-        {emptyImage ? <img src={emptyImage} alt="not found" /> : null}
-        <div>{emptyText || locale.emptyText}</div>
+      <div>
+        <div className={styles.notFound}>
+          {emptyImage ? <img src={emptyImage} alt="not found" /> : null}
+          <div>{emptyText || locale.emptyText}</div>
+        </div>
+        <div className={styles.action}>
+          <div className={styles.view_more} style={{width: '100%'}} onClick={onView}>
+            <a>查看更多</a>
+          </div>
+        </div>
       </div>
     );
   }
@@ -64,7 +71,7 @@ export default function CustomNoticeList({
       </List>
       <div className={styles.action}>
         <div className={styles.clear} onClick={onClear}>
-          <a>清除全部</a>
+          <a>一键已读</a>
         </div>
         <div className={styles.view_more} onClick={onView}>
           <a>查看更多</a>
