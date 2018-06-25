@@ -24,7 +24,6 @@ export default class DealDeatil extends Component {
     this.postData = {
       // order_type: props.card.adDetail.ad_type, //1代表购买  2代表出售
       ad_id: +props.match.params.id, //广告ID
-      updated_at: props.detail.updated_at,
       order_detail: [], // 订单详情
     };
     console.log(props.detail);
@@ -48,6 +47,7 @@ export default class DealDeatil extends Component {
   };
 
   ensureOrder = () => {
+    this.postData.updated_at = this.props.detail.updated_at;
     this.props
       .dispatch({
         type: 'card/createBuyOrder',
@@ -56,10 +56,11 @@ export default class DealDeatil extends Component {
       .then(res => {
         if (res.code === 0) {
           this.setState({
-            orderId: res.order_id,
+            orderId: res.data.order_id,
           });
-          this.props.dispatch(routerRedux.push(`/card/deal-line/${res.order_id}`));
+          this.props.dispatch(routerRedux.push(`/card/deal-line/${res.data.order_id}`));
         } else if (res.msg === '广告数据已变化') {
+          console.log(id);
           const { params: { id } } = this.props.match || {};
           this.fetch({ id });
           message.error(res.msg + '，请重新填写订单数据');
@@ -191,6 +192,7 @@ export default class DealDeatil extends Component {
     let { condition } = detail || {};
     const accountBalance = detail.owner.amount;
     let content = null;
+    console.log(detail);
     // 主动出售
     if (condition_type === 1) {
       // 指定面额
@@ -424,7 +426,7 @@ export default class DealDeatil extends Component {
           </ul>
           <div className={styles.bottom}>
             <Button>取消</Button>
-            <Button type="primary" onClick={this.ensureOrder}>
+            <Button disabled={this.calcuBuyTotal() === 0} type="primary" onClick={this.ensureOrder}>
               确认购买
             </Button>
           </div>
