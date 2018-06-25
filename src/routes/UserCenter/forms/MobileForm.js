@@ -115,6 +115,10 @@ class MobileForm extends Component {
                       required: true,
                       message: '请输入手机号码！',
                     },
+                    {
+                      pattern: /^[1-9]\d*$/,
+                      message: '请输入正确的手机号码',
+                    },
                   ],
                 })(
                   <Input

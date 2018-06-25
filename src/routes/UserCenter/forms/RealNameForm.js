@@ -62,6 +62,14 @@ export default class RealNameForm extends Component {
     }
   };
 
+  beforeUpload = file => {
+    const isLt2M = file.size / 1024 / 1024 < 5;
+    if (!isLt2M) {
+      message.error('头像必须小于5M!');
+    }
+    return isLt2M;
+  };
+
   renderDragger = type => {
     const loadingKey = type === 'back_image' ? 'uploadLoadingB' : 'uploadLoadingF';
     const { upload = {} } = this.props.currentUser || {};
@@ -91,6 +99,7 @@ export default class RealNameForm extends Component {
         multiple={false}
         action={upload.domain}
         onChange={this.uploadHandler.bind(this, type)}
+        beforeUpload={this.beforeUpload}
         data={{ token: upload.token }}
       >
         {imageUrl ? (
@@ -135,7 +144,7 @@ export default class RealNameForm extends Component {
                   message: '请输入真实姓名！',
                 },
               ],
-            })(<Input size="large" placeholder="真实姓名" />)}
+            })(<Input size="large" maxLength={20} placeholder="真实姓名" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="身份证号">
             {getFieldDecorator('cardno', {
@@ -146,7 +155,7 @@ export default class RealNameForm extends Component {
                   message: '请输入身份证号！',
                 },
               ],
-            })(<Input size="large" placeholder="身份证号" />)}
+            })(<Input size="large" maxLength={30} placeholder="身份证号" />)}
           </FormItem>
           <h3>上传证件</h3>
 

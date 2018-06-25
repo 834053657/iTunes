@@ -41,7 +41,7 @@ export default class PayMethodForm extends Component {
         wechat: {
           'payment_detail.name': {
             lablel: '姓名',
-            component: <Input size="large" placeholder="姓名" />,
+            component: <Input size="large" maxLength={20} placeholder="姓名" />,
             options: {
               initialValue: payment_detail.name,
               rules: [
@@ -54,13 +54,17 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.account': {
             lablel: '账号',
-            component: <Input size="large" placeholder="账号" />,
+            component: <Input size="large" maxLength={30} placeholder="账号" />,
             options: {
               initialValue: payment_detail.account,
               rules: [
                 {
                   required: true,
                   message: '请输入账号！',
+                },
+                {
+                  pattern: /^[0-9]{4,30}$/,
+                  message: '请输入4~30位的数字',
                 },
               ],
             },
@@ -69,7 +73,7 @@ export default class PayMethodForm extends Component {
         alipay: {
           'payment_detail.name': {
             lablel: '姓名',
-            component: <Input size="large" placeholder="姓名" />,
+            component: <Input size="large" maxLength={20} placeholder="姓名" />,
             options: {
               initialValue: payment_detail.name,
               rules: [
@@ -82,13 +86,17 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.account': {
             lablel: '账号',
-            component: <Input size="large" placeholder="账号" />,
+            component: <Input size="large" maxLength={30} placeholder="账号" />,
             options: {
               initialValue: payment_detail.account,
               rules: [
                 {
                   required: true,
                   message: '请输入账号！',
+                },
+                {
+                  pattern: /^[0-9]{4,30}$/,
+                  message: '请输入4~30位的数字',
                 },
               ],
             },
@@ -97,7 +105,7 @@ export default class PayMethodForm extends Component {
         bank: {
           'payment_detail.name': {
             lablel: '姓名',
-            component: <Input size="large" placeholder="姓名" />,
+            component: <Input size="large" maxLength={20} placeholder="姓名" />,
             options: {
               initialValue: payment_detail.name,
               rules: [
@@ -110,7 +118,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.bank_name': {
             lablel: '开户行',
-            component: <Input size="large" placeholder="开户行" />,
+            component: <Input size="large" maxLength={20} placeholder="开户行" />,
             options: {
               initialValue: payment_detail.bank_name,
               rules: [
@@ -123,13 +131,17 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.bank_account': {
             lablel: '银行卡号',
-            component: <Input size="large" placeholder="银行卡号" />,
+            component: <Input size="large" maxLength={30} placeholder="银行卡号" />,
             options: {
               initialValue: payment_detail.bank_account,
               rules: [
                 {
                   required: true,
                   message: '请输入银行卡号！',
+                },
+                {
+                  pattern: /^[0-9]{4,30}$/,
+                  message: '请输入4~30位的数字',
                 },
               ],
             },
