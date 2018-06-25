@@ -234,7 +234,7 @@ export default class UserCenterPage extends Component {
     if (user.email) {
       level = <span className={styles.low}>低</span>;
     }
-    if (user.email && user.telephone) {
+    if (user.email && (user.g2fa_on || user.telephone)) {
       level = <span className={styles.middle}>中</span>;
     }
     if (user.email && user.telephone && user.g2fa_on) {
@@ -262,7 +262,7 @@ export default class UserCenterPage extends Component {
         content = (
           <div className={styles.box_item_content}>
             <div className={styles.mb4}>{payment_detail.name}</div>
-            <div>{payment_detail.bank_name}</div>
+            {/*<div>{payment_detail.bank_name}</div>*/}
             <div>{payment_detail.bank_account}</div>
           </div>
         );
@@ -307,7 +307,7 @@ export default class UserCenterPage extends Component {
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error('头像必须小于2!');
+      message.error('头像必须小于2M!');
     }
     return isLt2M;
   };
@@ -344,7 +344,7 @@ export default class UserCenterPage extends Component {
                 <div>
                   <Upload
                     name="file"
-                    accept="image/*"
+                    accept="image/gif, image/png, image/jpg, image/jpeg, image/bmp"
                     beforeUpload={this.beforeUpload}
                     // fileList={false} // 请勿添加此属性 否则 onchange status 不改变
                     showUploadList={false}
@@ -362,12 +362,12 @@ export default class UserCenterPage extends Component {
                   本帐号于{' '}
                   <span>
                     {user.created_at
-                      ? moment(user.created_at * 1000).format('YYYY-MM-DD hh:mm:ss')
+                      ? moment(user.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')
                       : '-'}
                   </span>{' '}
                   注册 <br />
                   {first_trade_at
-                    ? `,首次交易于 ${moment(first_trade_at * 1000).format('YYYY-MM-DD hh:mm:ss')}`
+                    ? `首次交易于 ${moment(first_trade_at * 1000).format('YYYY-MM-DD HH:mm:ss')}`
                     : null}
                 </p>
               </div>

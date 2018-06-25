@@ -41,7 +41,7 @@ export default class TransferList extends Component {
       title: '交易时间',
       dataIndex: 'created_at',
       render: (v, row) => {
-        return <span>{v ? moment(v * 1000).format('YYYY-MM-DD hh:mm:ss') : '-'}</span>;
+        return <span>{v ? moment(v * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>;
       },
     },
     {
@@ -166,7 +166,7 @@ export default class TransferList extends Component {
           <Yuan>{fee}</Yuan>
         </Description>
         <Description term="交易时间">
-          {created_at ? moment(created_at * 1000).format('YYYY-MM-DD hh:mm:ss') : '-'}
+          {created_at ? moment(created_at * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}
         </Description>
       </DescriptionList>
     );
