@@ -129,7 +129,7 @@ export default class Register extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请至少输入 6 个字符。请不要使用容易被猜到的密码。
+                    请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。
                   </div>
                 </div>
               }
@@ -142,8 +142,19 @@ export default class Register extends Component {
                   {
                     validator: this.checkPassword,
                   },
+                  {
+                    min: 6,
+                    message: '请输入至少6位字符！',
+                  },
                 ],
-              })(<Input size="large" type="password" placeholder="至少6位密码，区分大小写" />)}
+              })(
+                <Input
+                  size="large"
+                  type="password"
+                  maxLength={16}
+                  placeholder="至少6位密码，区分大小写"
+                />
+              )}
             </Popover>
           </FormItem>
           <FormItem>

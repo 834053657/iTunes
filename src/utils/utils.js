@@ -169,8 +169,8 @@ export function getSystemUrl(env) {
   let web_name = '凯歌交易平台';
 
   if (env === 'dev') {
-    // base_url = 'http://47.106.111.213:3000/mock/19';
-    base_url = 'http://47.106.111.213:9001';
+    base_url = 'http://47.106.111.213:3000/mock/19';
+    // base_url = 'http://47.106.111.213:9001';
     web_name += '(DEV)';
     // socket_url = 'http://localhost:3000/socket/push';
     socket_url = 'http://47.106.111.213:9000/socket.io';
@@ -216,16 +216,19 @@ export function getMessageContent(msgObj) {
     }
 
     if ([101, 102, 106, 107, 111, 114].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('{dealer}', msgObj.sender && msgObj.sender.nickname || '');
+      msgText = msgText.replace('{dealer}', (msgObj.sender && msgObj.sender.nickname) || '');
     }
 
     if ([105, 109, 110, 111, 112, 113].indexOf(msgObj.msg_type) >= 0) {
       // msgText = msgText.replace('{order_no}', msgObj.content && msgObj.content.order_no ? `${msgObj.content.order_no.substr(0, 3)}...` : '');
-      msgText = msgText.replace('{order_no}', msgObj.content && msgObj.content.order_no || '');
+      msgText = msgText.replace('{order_no}', (msgObj.content && msgObj.content.order_no) || '');
     }
 
     if ([101, 102].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('{goods_type}', (msgObj.content && msgObj.content.goods_type === 1 ? 'Itunes' : '礼品卡'));
+      msgText = msgText.replace(
+        '{goods_type}',
+        msgObj.content && msgObj.content.goods_type === 1 ? 'Itunes' : '礼品卡'
+      );
     }
 
     return msgText;

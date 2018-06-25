@@ -112,6 +112,8 @@ export default class TermsList extends Component {
       title: '交易条款',
       dataIndex: 'content',
       width: '35%',
+      className: styles.term_title
+      
     },
     {
       title: '审核状态',
@@ -140,17 +142,22 @@ export default class TermsList extends Component {
       render: r => (
         <Fragment>
           <a onClick={() => this.viewTerm(r)}>查看</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.editTerm(r)}>编辑</a>
-          <Divider type="vertical" />
-          <Popconfirm
-            title="您确认要删除此交易条款?"
-            onConfirm={() => this.deleteTerm(r)}
-            okText="确认"
-            cancelText="取消"
-          >
-            <a>删除</a>
-          </Popconfirm>
+          {
+            [1, 3].indexOf(r.status) > -1 && (
+            <span>
+              <Divider type="vertical" />
+              <a onClick={() => this.editTerm(r)}>编辑</a>
+              <Divider type="vertical" />
+              <Popconfirm
+                title="您确认要删除此交易条款?"
+                onConfirm={() => this.deleteTerm(r)}
+                okText="确认"
+                cancelText="取消"
+              >
+                <a>删除</a>
+              </Popconfirm>
+            </span>
+          )}
         </Fragment>
       ),
     },

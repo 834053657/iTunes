@@ -235,8 +235,20 @@ export default class Register extends Component {
                   required: true,
                   message: '请输入用户名！',
                 },
+                // {
+                //   min: 2,
+                //   message: '请输入至少2位字符！',
+                // },
+                // {
+                //   max: 20,
+                //   message: '请输入最多20位字符！',
+                // },
+                {
+                  pattern: /^[a-zA-Z0-9_-]{2,20}$/,
+                  message: '用户名只能包含 2~20位的字母，数字，下划线，减号',
+                },
               ],
-            })(<Input size="large" placeholder="用户名" />)}
+            })(<Input size="large" placeholder="用户名 2-20位" />)}
           </FormItem>
           <FormItem help={this.state.help}>
             <Popover
@@ -245,7 +257,7 @@ export default class Register extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请至少输入 6 个字符。请不要使用容易被猜到的密码。
+                    请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。
                   </div>
                 </div>
               }
@@ -258,8 +270,19 @@ export default class Register extends Component {
                   {
                     validator: this.checkPassword,
                   },
+                  {
+                    min: 6,
+                    message: '请输入至少6位字符！',
+                  },
                 ],
-              })(<Input size="large" type="password" placeholder="至少6位密码，区分大小写" />)}
+              })(
+                <Input
+                  size="large"
+                  type="password"
+                  maxLength={16}
+                  placeholder="6~16位密码，区分大小写"
+                />
+              )}
             </Popover>
           </FormItem>
           <FormItem>

@@ -67,7 +67,10 @@ export default {
           type: 'changeLoginStatus',
           payload: {},
         });
-        reloadAuthorized();
+        yield put({
+          type: 'user/saveCurrentUser',
+          payload: {},
+        });
         yield put({
           type: 'SOCKET/CLOSE',
         });
