@@ -68,10 +68,10 @@ export function dvaSocket(url, option) {
             payload: rs,
           });
 
-          if(currURL.indexOf('/card/deal-line/')) {
-            const current_id = currURL.substring(currURL.lastIndexOf("/") + 1);
-            
-            if (msg.content && ((msg.content.order_id + '') === current_id)) {
+          if (currURL.indexOf('/card/deal-line/')) {
+            const current_id = currURL.substring(currURL.lastIndexOf('/') + 1);
+
+            if (msg.content && msg.content.order_id && msg.content.order_id + '' === current_id) {
               dispatch({
                 type: 'card/fetchOrderDetail',
                 payload: { id: msg.content.order_id },
@@ -90,10 +90,10 @@ export function dvaSocket(url, option) {
           const { data: msg } = JSON.parse(data);
           const { currentUser } = getState().user;
           const { wallet } = currentUser;
-          
+
           dispatch({
             type: 'user/saveCurrentUser',
-            payload: {...currentUser, wallet: msg.wallet},
+            payload: { ...currentUser, wallet: msg.wallet },
           });
         },
         disconnection: (data, dispatch, getState) => {
