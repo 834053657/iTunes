@@ -30,9 +30,11 @@ export default class DealFinish extends Component {
   constructor(props) {
     super();
     this.state = {
-      starT: null,
-      contentT: null,
+      // starT:5,
+      starT: props.detail.rate ? props.detail.rate.star : null,
+      contentT: props.detail.rate ? props.detail.rate.content : null,
     };
+    console.log(props.detail);
   }
 
   ratingOrder = () => {
@@ -96,6 +98,8 @@ export default class DealFinish extends Component {
     if (!userInfo) {
       return false;
     }
+
+    console.log(order);
     return (
       <div className={styles.buyFinish}>
         <StepModel steps={steps} current={steps.length - 1} />
@@ -186,6 +190,7 @@ export default class DealFinish extends Component {
                 <div className={styles.rate}>
                   <Rate
                     allowHalf
+                    value={this.state.starT}
                     onChange={e => {
                       this.setState({
                         starT: e,
@@ -199,12 +204,15 @@ export default class DealFinish extends Component {
                 </div>
               </div>
               <div className={styles.editor}>
-                <TextArea
-                  placeholder="您的建议会督促我做得更好~"
-                  rows={4}
-                  value={this.state.contentT}
-                  onChange={e => this.setState({ contentT: e.target.value })}
-                />
+                {
+                  <TextArea
+                    placeholder="您的建议会督促我做得更好~"
+                    defaultValue={this.state.contentT ? this.state.contentT : ''}
+                    rows={4}
+                    value={this.state.contentT}
+                    onChange={e => this.setState({ contentT: e.target.value })}
+                  />
+                }
               </div>
               <div className={styles.ratingBox}>
                 <Button onClick={this.ratingOrder} type="primary">

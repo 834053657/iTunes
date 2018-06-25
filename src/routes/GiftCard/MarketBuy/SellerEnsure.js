@@ -93,7 +93,6 @@ export default class SellerEnsure extends Component {
                   <Button
                     type="danger"
                     onClick={() => {
-                      console.log('appeal');
                       this.props.dispatch({
                         type: 'card/appealOrder',
                         payload: { order_id: order.id },

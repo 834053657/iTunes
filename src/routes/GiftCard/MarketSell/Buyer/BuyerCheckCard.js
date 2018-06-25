@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
+import CountDown from 'components/CountDown';
 
 import {
   Table,
@@ -54,7 +55,7 @@ export default class WaitBuyerCheck extends Component {
     const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
 
     const userInfo = trader;
-
+    const deadline = new Date().getTime() + order.deadline_at * 1000;
     return (
       <div className={styles.receiveCard}>
         <StepModel steps={steps} current={0} />
@@ -99,7 +100,9 @@ export default class WaitBuyerCheck extends Component {
               <h4>
                 对方剩余&nbsp;
                 <Icon type="clock-circle-o" />
-                &nbsp;10分钟发卡
+                &nbsp;
+                <CountDown formatStr="mm" target={this.deadline} />
+                分钟发卡
               </h4>
             ) : (
               <Button type="primary" size="large" onClick={this.handlePostCheck}>

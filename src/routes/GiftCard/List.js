@@ -3,7 +3,19 @@ import { parse } from 'url';
 import { connect } from 'dva';
 import { stringify } from 'qs';
 import { map, filter } from 'lodash';
-import { Table, Tabs, Button, Icon, Pagination, Input, message, Popover, Form } from 'antd';
+import {
+  Table,
+  Tabs,
+  Button,
+  Icon,
+  Pagination,
+  Input,
+  message,
+  Popover,
+  Form,
+  Avatar,
+  Badge,
+} from 'antd';
 import { routerRedux } from 'dva/router';
 import FilterDemoinForm from './forms/FilterDemoinForm';
 import { getQueryString } from '../../utils/utils';
@@ -164,7 +176,21 @@ export default class List extends Component {
     let columns = [
       {
         title: '用户名',
+        width: '200px',
         dataIndex: 'owner.nickname',
+        render: (text, record) => {
+          const userinfo = record.owner;
+          return (
+            <div className={styles.userInfo}>
+              <Avatar size="large" src={userinfo.avatar} />
+              <Badge status={userinfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
+                <span style={{ paddingLeft: '10px' }} className={styles.name}>
+                  {userinfo.nickname}
+                </span>
+              </Badge>
+            </div>
+          );
+        },
       },
       {
         title: '类型',
@@ -184,7 +210,7 @@ export default class List extends Component {
       {
         title: type === '2' ? '包含' : '要求',
         dataIndex: 'password_type',
-        width: '200px',
+        width: '150px',
         filters: cardPwdType,
         filterMultiple: false,
         render: (v, row) => {
@@ -194,6 +220,7 @@ export default class List extends Component {
       {
         title: '面额',
         dataIndex: 'denomination',
+        width: '200px',
         onFilterDropdownVisibleChange: e => {
           this.setState({
             denoVisible: e,

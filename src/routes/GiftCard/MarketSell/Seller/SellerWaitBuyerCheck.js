@@ -77,6 +77,7 @@ export default class SellerWaitBuyerCheck extends Component {
     const userInfo = ad.owner;
     const guaranteeTime = new Date().getTime() + order.guarantee_at * 1000;
     const deadlineTime = new Date().getTime() + order.deadline_at * 1000;
+    const checkTime = new Date().getTime() + order.check_at * 1000;
 
     return (
       <div className={styles.stepTwoBox}>
@@ -118,7 +119,7 @@ export default class SellerWaitBuyerCheck extends Component {
                   买家查收卡密时间剩余 &nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  <CountDown formatStr="mm" target={deadlineTime} />
+                  <CountDown formatStr="mm" target={checkTime} />
                   分钟
                 </h5>
               )}

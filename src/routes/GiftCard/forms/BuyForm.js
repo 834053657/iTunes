@@ -7,7 +7,11 @@ const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-let uuid = 0;
+let dataItem = {
+  money: null,
+  min_count: null,
+  max_count: null,
+};
 
 @Form.create()
 export default class BuyForm extends Component {
@@ -62,13 +66,15 @@ export default class BuyForm extends Component {
   add = () => {
     const { form } = this.props;
     // can use data-binding to get
-    const keys = form.getFieldValue('keys');
-    const nextKeys = keys.concat(uuid);
-    uuid++;
+    console.log(form);
+    const condition = form.getFieldProps('condition');
+    console.log(condition);
+    console.log(dataItem);
+    const nextCondition = condition.push(dataItem);
     // can use data-binding to set
     // important! notify form to detect changes
     form.setFieldsValue({
-      keys: nextKeys,
+      condition: nextCondition,
     });
   };
 
@@ -90,37 +96,70 @@ export default class BuyForm extends Component {
 
     const formItemLayoutDeno = {
       wrapperCol: {
+        xs: { span: 4, offset: 0 },
+        sm: { span: 5, offset: 4 },
+      },
+    };
+
+    const formItemLayoutBtn = {
+      wrapperCol: {
         xs: { span: 24, offset: 0 },
         sm: { span: 20, offset: 4 },
       },
     };
 
-    getFieldDecorator('keys', { initialValue: [] });
-    const keys = getFieldValue('keys');
-    const formItems = keys.map((k, index) => {
-      return (
-        <FormItem {...formItemLayoutDeno} required={false} key={k}>
-          {getFieldDecorator(`names[${k}]`, {
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "Please input passenger's name or delete this field.",
-              },
-            ],
-          })(<Input placeholder="passenger name" style={{ width: '60%', marginRight: 8 }} />)}
-          {keys.length > 1 ? (
-            <Icon
-              className="dynamic-delete-button"
-              type="minus-circle-o"
-              disabled={keys.length === 1}
-              onClick={() => this.remove(k)}
-            />
-          ) : null}
-        </FormItem>
-      );
-    });
+    getFieldDecorator('condition', { initialValue: [] });
+    const condition = getFieldValue('condition');
+    console.log(condition);
+
+    const formItems =
+      condition.length &&
+      condition.map((k, index) => {
+        return (
+          <FormItem {...formItemLayoutDeno} required={false} key={k}>
+            {getFieldDecorator(`condition[${k}].money`, {
+              validateTrigger: ['onChange', 'onBlur'],
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: '请输入面额',
+                },
+              ],
+            })(<Input placeholder="面额" style={{ width: '60%', marginRight: 8 }} />)}
+            ---
+            {getFieldDecorator(`condition[${k}].min_count`, {
+              validateTrigger: ['onChange', 'onBlur'],
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: '请输入最小数量',
+                },
+              ],
+            })(<Input placeholder="最小数量" style={{ width: '60%', marginRight: 8 }} />)}
+            ---
+            {getFieldDecorator(`condition[${k}].max_count`, {
+              validateTrigger: ['onChange', 'onBlur'],
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: '请输入最大数量',
+                },
+              ],
+            })(<Input placeholder="最大数量" style={{ width: '60%', marginRight: 8 }} />)}
+            {condition.length > 1 ? (
+              <Icon
+                className="dynamic-delete-button"
+                type="minus-circle-o"
+                disabled={condition.length === 1}
+                onClick={() => this.remove(k)}
+              />
+            ) : null}
+          </FormItem>
+        );
+      });
 
     return (
       <Form className={styles.form} onSubmit={this.handleSubmit}>
@@ -187,7 +226,7 @@ export default class BuyForm extends Component {
         </FormItem>
 
         {formItems}
-        <FormItem {...formItemLayoutDeno}>
+        <FormItem {...formItemLayoutBtn}>
           <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
             <Icon type="plus" /> Add field
           </Button>

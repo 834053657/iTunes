@@ -194,6 +194,7 @@ export default class OrderDetail extends Component {
     // const {pageStatus} = this.state;
     //console.log(this.state.status)
     // pageStatus = 14;
+    console.log(detail);
     if (!Object.keys(ad).length) {
       return false;
     }

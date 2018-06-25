@@ -284,8 +284,8 @@ export default class SaleCard extends Component {
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
-          <BuyForm />
-          {/*<header>
+          {/*<BuyForm />*/}
+          <header>
             <span>广告管理 /</span>
             <span>礼品卡 /</span>
             <span className={styles.sale}>创建购买</span>
@@ -296,19 +296,19 @@ export default class SaleCard extends Component {
               <Dropdown overlay={cardTypeMenu} trigger={['click']}>
                 <Button>
                   {this.state.defaultCardTypeName ? this.state.defaultCardTypeName : '选择'}
-                  <Icon type="down"/>
+                  <Icon type="down" />
                 </Button>
               </Dropdown>
             </li>
 
             <li>
               <span className={styles.tableLeft}>单价：</span>
-              <InputNumber min={1} onChange={e => this.unitPriceChange(e)}/> RMB
+              <InputNumber min={1} onChange={e => this.unitPriceChange(e)} /> RMB
             </li>
 
             <li>
               <span className={styles.tableLeft}>倍数：</span>
-              <InputNumber min={1} onChange={e => this.multChange(e)}/>
+              <InputNumber min={1} onChange={e => this.multChange(e)} />
             </li>
 
             <li>
@@ -325,44 +325,44 @@ export default class SaleCard extends Component {
                   <ul className={styles.conditionFixed}>
                     {condition && condition.length
                       ? condition.map((c, index) => {
-                        return (
-                          <li key={index}>
-                            <Input
-                              className={styles.contIpt}
-                              placeholder="面额"
-                              value={c.money}
-                              onChange={e => {
-                                this.changeMoney(e.target.value, index);
-                              }}
-                            />
-                            &nbsp;--&nbsp;
-                            <Input
-                              className={styles.contIpt}
-                              placeholder="最小数量"
-                              value={c.min_count}
-                              onChange={e => {
-                                this.changeMinCount(e.target.value, index);
-                              }}
-                            />
-                            &nbsp;--&nbsp;
-                            <Input
-                              className={styles.contIpt}
-                              placeholder="最大数量"
-                              value={c.max_count}
-                              onChange={e => {
-                                this.changeMaxCount(e.target.value, index);
-                              }}
-                            />
-                            <Icon
-                              className={styles.delIcon}
-                              type="minus-circle-o"
-                              onClick={() => {
-                                this.delDeno(c, index);
-                              }}
-                            />
-                          </li>
-                        );
-                      })
+                          return (
+                            <li key={index}>
+                              <Input
+                                className={styles.contIpt}
+                                placeholder="面额"
+                                value={c.money}
+                                onChange={e => {
+                                  this.changeMoney(e.target.value, index);
+                                }}
+                              />
+                              &nbsp;--&nbsp;
+                              <Input
+                                className={styles.contIpt}
+                                placeholder="最小数量"
+                                value={c.min_count}
+                                onChange={e => {
+                                  this.changeMinCount(e.target.value, index);
+                                }}
+                              />
+                              &nbsp;--&nbsp;
+                              <Input
+                                className={styles.contIpt}
+                                placeholder="最大数量"
+                                value={c.max_count}
+                                onChange={e => {
+                                  this.changeMaxCount(e.target.value, index);
+                                }}
+                              />
+                              <Icon
+                                className={styles.delIcon}
+                                type="minus-circle-o"
+                                onClick={() => {
+                                  this.delDeno(c, index);
+                                }}
+                              />
+                            </li>
+                          );
+                        })
                       : null}
                   </ul>
                 }
@@ -389,7 +389,7 @@ export default class SaleCard extends Component {
             {+condition_type === 1 ? (
               <li>
                 <span className={styles.tableLeft}>&nbsp;</span>
-                <Button style={{width: '260px', borderStyle: 'dashed'}} onClick={this.addDeno}>
+                <Button style={{ width: '260px', borderStyle: 'dashed' }} onClick={this.addDeno}>
                   + 添加面额
                 </Button>
               </li>
@@ -397,7 +397,10 @@ export default class SaleCard extends Component {
 
             <li>
               <span className={styles.tableLeft}>要求：</span>
-              <RadioGroup onChange={e => this.changePasswordType(e)} value={this.state.passwordType}>
+              <RadioGroup
+                onChange={e => this.changePasswordType(e)}
+                value={this.state.passwordType}
+              >
                 <Radio value={1}>有卡密</Radio>
                 <Radio value={2}>有图</Radio>
                 <Radio value={3}>有图有卡密</Radio>
@@ -409,7 +412,7 @@ export default class SaleCard extends Component {
               <Dropdown overlay={deadlineMenu} trigger={['click']}>
                 <Button>
                   {this.state.deadline ? this.state.deadline : '选择'}
-                  &nbsp;<Icon type="down"/>
+                  &nbsp;<Icon type="down" />
                 </Button>
               </Dropdown>
             </li>
@@ -419,27 +422,27 @@ export default class SaleCard extends Component {
               <Dropdown overlay={guaranteeTimeMenu} trigger={['click']}>
                 <Button>
                   {this.state.defaultGuaTime ? this.state.defaultGuaTime : '选择'}
-                  &nbsp;<Icon type="down"/>
+                  &nbsp;<Icon type="down" />
                 </Button>
               </Dropdown>
             </li>
 
             <li>
-            <span className={styles.tableLeft}>
-              交易条款
-              <i>(可选)</i>
-              ：
-            </span>
+              <span className={styles.tableLeft}>
+                交易条款
+                <i>(可选)</i>
+                ：
+              </span>
               <Dropdown overlay={termsMenu} trigger={['click']}>
                 <Button>
                   {this.state.defaultTermTitle ? this.state.defaultTermTitle : '选择'}
-                  <Icon type="down"/>
+                  <Icon type="down" />
                 </Button>
               </Dropdown>
             </li>
             <li>
               <span className={styles.tableLeft}>同时处理订单数：</span>
-              <InputNumber onChange={e => this.ordersAmountChange(e)}/>
+              <InputNumber onChange={e => this.ordersAmountChange(e)} />
             </li>
           </ul>
           <div className={styles.footerBox}>
@@ -453,7 +456,6 @@ export default class SaleCard extends Component {
               发布
             </Button>
           </div>
-          */}
         </PageHeaderLayout>
       </div>
     );

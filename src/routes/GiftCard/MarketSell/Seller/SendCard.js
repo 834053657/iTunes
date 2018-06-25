@@ -51,8 +51,8 @@ export default class Process extends Component {
   };
 
   writePassword = (e, item, index, i) => {
-    this.cardsData[index].cards[i].password = +e.target.value;
-    console.log(this.cardsData);
+    this.cardsData[index].cards[i].password = e.target.value;
+    console.log(e.target.value);
   };
 
   //只有图片 上传图片
@@ -68,9 +68,6 @@ export default class Process extends Component {
 
   changePTPass = (e, i, index) => {
     this.cardsData[index].cards[i].password = e.target.value;
-    console.log(e);
-    console.log(i);
-    console.log(index);
     console.log(this.cardsData);
   };
 
