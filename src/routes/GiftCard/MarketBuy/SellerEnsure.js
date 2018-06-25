@@ -67,7 +67,7 @@ export default class SellerEnsure extends Component {
               </div>
               <div>
                 <span>总价：</span>
-                <span>{order.money}</span>RMB
+                <span>{order.amount}</span>RMB
               </div>
             </div>
             <div className={styles.guarantee}>

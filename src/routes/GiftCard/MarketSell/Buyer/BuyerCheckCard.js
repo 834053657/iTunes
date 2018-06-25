@@ -22,7 +22,7 @@ import StepModel from '../../Step';
 
 const Step = Steps.Step;
 
-export default class WaitBuyerCheck extends Component {
+export default class BuyerCheckCard extends Component {
   constructor(props) {
     super();
   }
@@ -56,6 +56,7 @@ export default class WaitBuyerCheck extends Component {
 
     const userInfo = trader;
     const deadline = new Date().getTime() + order.deadline_at * 1000;
+    const checkAt = new Date().getTime() + order.check_at * 1000;
     return (
       <div className={styles.receiveCard}>
         <StepModel steps={steps} current={0} />
@@ -101,13 +102,22 @@ export default class WaitBuyerCheck extends Component {
                 对方剩余&nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                <CountDown formatStr="mm" target={this.deadline} />
+                <CountDown formatStr="mm" target={deadline} />
                 分钟发卡
               </h4>
             ) : (
-              <Button type="primary" size="large" onClick={this.handlePostCheck}>
-                立即查收
-              </Button>
+              <div>
+                <h4>
+                  查收时间剩余&nbsp;
+                  <Icon type="clock-circle-o" />
+                  &nbsp;
+                  <CountDown formatStr="mm" target={checkAt} />
+                  分钟
+                </h4>
+                <Button type="primary" size="large" onClick={this.handlePostCheck}>
+                  立即查收
+                </Button>
+              </div>
             )}
           </div>
         </div>
