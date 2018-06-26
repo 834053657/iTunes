@@ -23,7 +23,7 @@ export default function CustomNoticeList({
           <div>{emptyText || locale.emptyText}</div>
         </div>
         <div className={styles.action}>
-          <div className={styles.view_more} style={{width: '100%'}} onClick={onView}>
+          <div className={styles.view_more} style={{ width: '100%' }} onClick={onView}>
             <a>查看更多</a>
           </div>
         </div>
