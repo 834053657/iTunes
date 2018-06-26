@@ -71,6 +71,7 @@ export default class DealDeatil extends Component {
   };
 
   handlerSell = async () => {
+    this.postData.updated_at = this.props.detail.updated_at;
     this.props
       .dispatch({
         type: 'card/createSellOrder',
