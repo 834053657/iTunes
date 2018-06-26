@@ -26,16 +26,27 @@ export default class RealNameForm extends Component {
     uploadLoadingB: false,
   };
 
+  getImgUrl = (obj = {}) => {
+    const { upload = {} } = this.props.currentUser || {};
+    let url = '';
+
+    if (obj.status === 'done' && obj.url) {
+      url = obj.url;
+    } else if (obj.status === 'done' && obj.response) {
+      url = obj.response.hash;
+    }
+    return upload.prefix + url;
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, value) => {
       if (!err) {
-        const { upload = {} } = this.props.currentUser || {};
         const info = {
           name: value.name,
           cardno: value.cardno,
-          front_image: upload.prefix + value.front_image[0].response.hash,
-          back_image: upload.prefix + value.back_image[0].response.hash,
+          front_image: this.getImgUrl(value.front_image[0]),
+          back_image: this.getImgUrl(value.back_image[0]),
         };
         this.props.onSubmit(info);
       }
@@ -94,7 +105,7 @@ export default class RealNameForm extends Component {
     const uploadBtn = (
       <Dragger
         name="file"
-        accept="image/*"
+        accept="image/gif, image/png, image/jpg, image/jpeg, image/bmp"
         showUploadList={false}
         multiple={false}
         action={upload.domain}
