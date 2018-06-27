@@ -44,7 +44,7 @@ export default class Analysis extends Component {
       //autoplaySpeed: 5000,
       slidesToShow: 1,
       slidesToScroll: 1,
-      autoplay: false,
+      autoplay: true,
     },
   };
 
