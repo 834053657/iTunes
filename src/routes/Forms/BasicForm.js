@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import { map, filter } from 'lodash';
 import {
   Form,
   Input,
@@ -20,25 +21,241 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
+class Item1 extends PureComponent {
+  handleAdd = () => {
+    const { getFieldValue, setFieldsValue } = this.props.form;
+
+    const items = getFieldValue('items') || [];
+    items.push({
+      money: 2,
+      max: 1,
+      min: 2,
+    });
+
+    setFieldsValue({
+      items,
+    });
+  };
+
+  render() {
+    const { data = {} } = this.props;
+    const { getFieldDecorator, getFieldValue } = this.props.form;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+        md: { span: 10 },
+      },
+    };
+
+    getFieldDecorator('items', {
+      initialValue: data.items,
+    });
+
+    return (
+      <div>
+        <FormItem {...formItemLayout} label="money">
+          {getFieldDecorator(`money`, {
+            initialValue: data.money,
+            rules: [{ required: true, message: 'money is required!' }],
+          })(<Input />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="min">
+          {getFieldDecorator(`min`, {
+            initialValue: data.min,
+            rules: [{ required: true, message: 'money is required!' }],
+          })(<Input />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="max">
+          {getFieldDecorator(`max`, {
+            initialValue: data.max,
+            rules: [{ required: true, message: 'money is required!' }],
+          })(<Input />)}
+        </FormItem>
+        <a onClick={this.props.onDelete}>del</a>
+      </div>
+    );
+  }
+}
+const ItemForm = Form.create({
+  onFieldsChange(props, changedFields) {
+    // console.log(changedFields);
+    // props.onChange(changedFields);
+  },
+  onValuesChange(props, values) {
+    // console.log(props, values);
+    props.onChange(values);
+  },
+})(Item1);
+
+class Item extends PureComponent {
+  handleAdd = () => {
+    const { getFieldValue, setFieldsValue } = this.props.form;
+
+    const items = getFieldValue('items') || [];
+    items.push({
+      money: 2,
+      max: 1,
+      min: 2,
+    });
+
+    setFieldsValue({
+      items,
+    });
+  };
+
+  handleDel = index => {
+    const { getFieldValue, setFieldsValue } = this.props.form;
+
+    let items = getFieldValue('items') || [];
+    delete items[index];
+    items = filter(items, (i, j) => j !== index);
+
+    setFieldsValue({
+      items,
+    });
+  };
+
+  handleFormChange = (index, changedFields) => {
+    const { getFieldValue, setFieldsValue } = this.props.form;
+
+    const items = getFieldValue('items') || [];
+    items[index] = { ...items[index], ...changedFields };
+
+    setFieldsValue({
+      items,
+    });
+  };
+
+  render() {
+    const { data = {} } = this.props;
+    const { getFieldDecorator, getFieldValue } = this.props.form;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+        md: { span: 10 },
+      },
+    };
+
+    getFieldDecorator('items', {
+      initialValue: data.items,
+    });
+
+    return (
+      <div>
+        <FormItem {...formItemLayout} label="Username">
+          {getFieldDecorator('name', {
+            initialValue: data.name,
+            rules: [{ required: true, message: 'Username is required!' }],
+          })(<Input />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="id">
+          {getFieldDecorator('id', {
+            initialValue: data.id,
+            rules: [{ required: true, message: 'Username is required!' }],
+          })(<Input />)}
+        </FormItem>
+
+        <FormItem {...formItemLayout} label=" ">
+          {map(getFieldValue('items'), (item, index) => {
+            return (
+              <ItemForm
+                key={index}
+                data={item}
+                onChange={this.handleFormChange.bind(this, index)}
+                onDelete={this.handleDel.bind(this, index)}
+              />
+            );
+          })}
+        </FormItem>
+        <Button onClick={this.handleAdd}>add</Button>
+      </div>
+    );
+  }
+}
+
+const CustomizedForm = Form.create({
+  onFieldsChange(props, changedFields) {
+    // console.log(changedFields);
+    // props.onChange(changedFields);
+  },
+  onValuesChange(props, values) {
+    // console.log(props, values);
+    props.onChange(values);
+  },
+})(Item);
+
 @connect(({ loading }) => ({
   submitting: loading.effects['form/submitRegularForm'],
 }))
 @Form.create()
 export default class BasicForms extends PureComponent {
+  state = {};
+
+  handleFormChange = (index, changedFields) => {
+    console.log(changedFields);
+    const { getFieldValue, setFieldsValue } = this.props.form;
+
+    const cards = getFieldValue('cards') || [];
+    cards[index] = { ...cards[index], ...changedFields };
+
+    setFieldsValue({
+      cards,
+    });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        this.props.dispatch({
-          type: 'form/submitRegularForm',
-          payload: values,
-        });
-      }
+      console.log(values);
+      // if (!err) {
+      //   this.props.dispatch({
+      //     type: 'form/submitRegularForm',
+      //     payload: values,
+      //   });
+      // }
+    });
+  };
+
+  handleAdd = () => {
+    const { getFieldValue, setFieldsValue } = this.props.form;
+
+    const cards = getFieldValue('cards') || [];
+    cards.push({
+      id: 1,
+      name: 'xxxx',
+      items: [
+        {
+          money: 1,
+          max: 1,
+          min: 2,
+        },
+        {
+          money: 12,
+          max: 12,
+          min: 22,
+        },
+      ],
+    });
+
+    setFieldsValue({
+      cards,
     });
   };
   render() {
     const { submitting } = this.props;
-    const { getFieldDecorator, getFieldValue } = this.props.form;
+    const { getFieldDecorator, getFieldValue, getFieldProps } = this.props.form;
 
     const formItemLayout = {
       labelCol: {
@@ -59,6 +276,25 @@ export default class BasicForms extends PureComponent {
       },
     };
 
+    getFieldDecorator('cards', {
+      initialValue: [
+        {
+          id: 0,
+          name: 'fff',
+          items: [
+            {
+              money: 1,
+              max: 1,
+              min: 2,
+            },
+          ],
+        },
+      ],
+    });
+    const cards = getFieldValue('cards') || [];
+
+    console.log(cards);
+
     return (
       <PageHeaderLayout
         title="基础表单"
@@ -66,122 +302,16 @@ export default class BasicForms extends PureComponent {
       >
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem {...formItemLayout} label="标题">
-              {getFieldDecorator('title', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入标题',
-                  },
-                ],
-              })(<Input placeholder="给目标起个名字" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="起止日期">
-              {getFieldDecorator('date', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请选择起止日期',
-                  },
-                ],
-              })(<RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="目标描述">
-              {getFieldDecorator('goal', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入目标描述',
-                  },
-                ],
-              })(
-                <TextArea
-                  style={{ minHeight: 32 }}
-                  placeholder="请输入你的阶段性工作目标"
-                  rows={4}
+            {map(cards, (item, index) => {
+              return (
+                <CustomizedForm
+                  key={index}
+                  data={item}
+                  onChange={this.handleFormChange.bind(this, index)}
                 />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="衡量标准">
-              {getFieldDecorator('standard', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入衡量标准',
-                  },
-                ],
-              })(<TextArea style={{ minHeight: 32 }} placeholder="请输入衡量标准" rows={4} />)}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={
-                <span>
-                  客户
-                  <em className={styles.optional}>
-                    （选填）
-                    <Tooltip title="目标的服务对象">
-                      <Icon type="info-circle-o" style={{ marginRight: 4 }} />
-                    </Tooltip>
-                  </em>
-                </span>
-              }
-            >
-              {getFieldDecorator('client')(
-                <Input placeholder="请描述你服务的客户，内部客户直接 @姓名／工号" />
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={
-                <span>
-                  邀评人<em className={styles.optional}>（选填）</em>
-                </span>
-              }
-            >
-              {getFieldDecorator('invites')(
-                <Input placeholder="请直接 @姓名／工号，最多可邀请 5 人" />
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={
-                <span>
-                  权重<em className={styles.optional}>（选填）</em>
-                </span>
-              }
-            >
-              {getFieldDecorator('weight')(<InputNumber placeholder="请输入" min={0} max={100} />)}
-              <span className="ant-form-text">%</span>
-            </FormItem>
-            <FormItem {...formItemLayout} label="目标公开" help="客户、邀评人默认被分享">
-              <div>
-                {getFieldDecorator('public', {
-                  initialValue: '1',
-                })(
-                  <Radio.Group>
-                    <Radio value="1">公开</Radio>
-                    <Radio value="2">部分公开</Radio>
-                    <Radio value="3">不公开</Radio>
-                  </Radio.Group>
-                )}
-                <FormItem style={{ marginBottom: 0 }}>
-                  {getFieldDecorator('publicUsers')(
-                    <Select
-                      mode="multiple"
-                      placeholder="公开给"
-                      style={{
-                        margin: '8px 0',
-                        display: getFieldValue('public') === '2' ? 'block' : 'none',
-                      }}
-                    >
-                      <Option value="1">同事甲</Option>
-                      <Option value="2">同事乙</Option>
-                      <Option value="3">同事丙</Option>
-                    </Select>
-                  )}
-                </FormItem>
-              </div>
-            </FormItem>
+              );
+            })}
+            <Button onClick={this.handleAdd}>add</Button>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 提交
@@ -189,6 +319,7 @@ export default class BasicForms extends PureComponent {
               <Button style={{ marginLeft: 8 }}>保存</Button>
             </FormItem>
           </Form>
+          {JSON.stringify(cards, null, 2)}
         </Card>
       </PageHeaderLayout>
     );
