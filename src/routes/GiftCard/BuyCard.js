@@ -52,14 +52,12 @@ export default class SaleCard extends Component {
 
     this.changePasswordType = e => {
       this.data.password_type = e.target.value;
-      console.log(e.target.value);
       this.setState({
         passwordType: e.target.value,
       });
     };
 
     this.selectCardType = e => {
-      console.log(e);
       this.setState({
         defaultCardTypeName: e.name,
       });
@@ -85,13 +83,10 @@ export default class SaleCard extends Component {
         defaultTermTitle: e.title,
       });
       this.data.term_id = e.id;
-      console.log('term id');
-      console.log(e);
     };
 
     //单价修改
     this.unitPriceChange = e => {
-      console.log(e);
       this.data.unit_price = e;
     };
 
@@ -111,8 +106,6 @@ export default class SaleCard extends Component {
         condition: a,
       });
       this.data.condition = a;
-      console.log(this.data);
-      console.log(a);
     };
 
     this.changeMinCount = (e, index) => {
@@ -284,12 +277,10 @@ export default class SaleCard extends Component {
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
-          {/*<BuyForm />
-          <header>
-            <span>广告管理 /</span>
-            <span>礼品卡 /</span>
-            <span className={styles.sale}>创建购买</span>
-          </header>*/}
+          {/*
+          <BuyForm/>
+          */}
+
           <ul className={styles.submitTable}>
             <li>
               <span className={styles.tableLeft}>类型：</span>
@@ -442,7 +433,7 @@ export default class SaleCard extends Component {
             </li>
             <li>
               <span className={styles.tableLeft}>同时处理订单数：</span>
-              <InputNumber onChange={e => this.ordersAmountChange(e)} />
+              <InputNumber min={0} onChange={e => this.ordersAmountChange(e)} />
             </li>
           </ul>
           <div className={styles.footerBox}>

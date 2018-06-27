@@ -1,36 +1,44 @@
 import React, { Component, Fragment } from 'react';
 import { Select, Button, Icon, Input, message, Form, InputNumber, Radio, Modal } from 'antd';
-import { map } from 'lodash';
+import { map, mapKeys, cloneDeep, filter } from 'lodash';
 import styles from './SellForm.less';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const dataItem = {
+let dataItem = {
   money: null,
   min_count: null,
   max_count: null,
 };
 
+let uuid = 0;
 @Form.create()
 export default class BuyForm extends Component {
   state = {
     termModalInfo: false,
+    formNumber: [],
+    conditionType: 2,
   };
-
+  postData = [];
   handleCancel = () => {
     this.props.form.resetFields();
     this.props.onCancel && this.props.onCancel();
   };
 
   handleSubmit = e => {
+    const { form } = this.props;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(err, values);
-      // if (!err) {
-      //   this.props.onSubmit(values);
-      // }
+      let condition = map(filter(values.condition, item => !Array.isArray(item)), item => {
+        let { money, min_count, max_count } = item;
+        return { money: +money, min_count: +min_count, max_count: +max_count };
+      });
+      console.log({ ...values, condition, password_type: +values.password_type });
+      if (!err) {
+        this.props.onSubmit({ ...values, condition, password_type: +values.password_type });
+      }
     });
   };
 
@@ -51,30 +59,79 @@ export default class BuyForm extends Component {
   remove = k => {
     const { form } = this.props;
     // can use data-binding to get
-    const keys = form.getFieldValue('keys');
+    const keys = form.getFieldValue('condition');
     // We need at least one passenger
-    if (keys.length === 1) {
-      return;
-    }
-
-    // can use data-binding to set
-    form.setFieldsValue({
-      keys: keys.filter(key => key !== k),
+    console.log(keys);
+    console.log(k);
+    // if (keys.length === 1) {
+    //   return;
+    // }
+    //
+    // // can use data-binding to set
+    // form.setFieldsValue({
+    //   keys: keys.filter(key => key !== k),
+    // });
+    // if (this.state.formNumber.length === 1) {
+    //   return;
+    // }
+    this.setState({
+      formNumber: this.state.formNumber.splice(1, 1),
     });
   };
 
   add = () => {
     const { form } = this.props;
     // can use data-binding to get
-    console.log(form);
-    const condition = form.getFieldProps('condition');
-    console.log(condition);
-    console.log(dataItem);
-    const nextCondition = condition.push(dataItem);
+    // console.log(form);
+    // const condition = form.getFieldProps('condition');
+    // console.log(condition);
+    // console.log(dataItem);
+    //const nextCondition = condition.push(dataItem);
     // can use data-binding to set
     // important! notify form to detect changes
+    this.postData.push(dataItem);
+    console.log(this.postData);
+
     form.setFieldsValue({
-      condition: nextCondition,
+      condition: this.postData,
+    });
+    const condition = form.getFieldValue('condition');
+    console.log(condition);
+  };
+
+  addTest = () => {
+    const formDataObj = {
+      money: 0,
+      min_count: 0,
+      max_count: 0,
+    };
+    // formDataObj[uuid] = dataItem;
+    // console.log(formDataObj);
+    // this.state.formNumber.push(formDataObj);
+    // uuid++;
+    // this.setState({
+    //   formNumber: this.state.formNumber,
+    // });
+    let condition = this.props.form.getFieldValue('condition[]');
+    condition.push(formDataObj);
+    console.log(condition);
+
+    this.props.form.setFieldsValue({
+      'condition[]': condition,
+    });
+  };
+
+  handleFormChange = changedFields => {
+    this.setState(({ fields }) => ({
+      fields: { ...fields, ...changedFields },
+    }));
+    console.log(changedFields);
+  };
+
+  changeConditionType = e => {
+    console.log();
+    this.setState({
+      conditionType: e.target.value,
     });
   };
 
@@ -85,6 +142,9 @@ export default class BuyForm extends Component {
       form: { getFieldDecorator, getFieldValue, resetForm },
       initialValues = {},
     } = this.props;
+
+    const cardList = mapKeys(CONFIG.card_type || [], item => item.type);
+
     const formItemLayout = {
       labelCol: {
         sm: { span: 4 },
@@ -93,14 +153,12 @@ export default class BuyForm extends Component {
         sm: { span: 16 },
       },
     };
-
     const formItemLayoutDeno = {
       wrapperCol: {
         xs: { span: 4, offset: 0 },
         sm: { span: 5, offset: 4 },
       },
     };
-
     const formItemLayoutBtn = {
       wrapperCol: {
         xs: { span: 24, offset: 0 },
@@ -108,64 +166,99 @@ export default class BuyForm extends Component {
       },
     };
 
-    getFieldDecorator('condition', { initialValue: [] });
-    const condition = getFieldValue('condition');
+    getFieldDecorator('condition[]', {
+      initialValue: [
+        {
+          money: 0,
+          min_count: 0,
+          max_count: 0,
+        },
+      ],
+    });
+    const condition = getFieldValue('condition[]');
     console.log(condition);
+    // console.log(this.state.formNumber);
 
-    const formItems =
-      condition.length &&
-      condition.map((k, index) => {
-        return (
-          <FormItem {...formItemLayoutDeno} required={false} key={k}>
-            {getFieldDecorator(`condition[${k}].money`, {
-              validateTrigger: ['onChange', 'onBlur'],
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: '请输入面额',
-                },
-              ],
-            })(<Input placeholder="面额" style={{ width: '60%', marginRight: 8 }} />)}
-            ---
-            {getFieldDecorator(`condition[${k}].min_count`, {
-              validateTrigger: ['onChange', 'onBlur'],
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: '请输入最小数量',
-                },
-              ],
-            })(<Input placeholder="最小数量" style={{ width: '60%', marginRight: 8 }} />)}
-            ---
-            {getFieldDecorator(`condition[${k}].max_count`, {
-              validateTrigger: ['onChange', 'onBlur'],
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: '请输入最大数量',
-                },
-              ],
-            })(<Input placeholder="最大数量" style={{ width: '60%', marginRight: 8 }} />)}
-            {condition.length > 1 ? (
-              <Icon
-                className="dynamic-delete-button"
-                type="minus-circle-o"
-                disabled={condition.length === 1}
-                onClick={() => this.remove(k)}
-              />
-            ) : null}
-          </FormItem>
-        );
-      });
+    const formItems = condition.map((k, index) => {
+      return (
+        <FormItem {...formItemLayoutDeno} required={false} key={index}>
+          {getFieldDecorator(`condition[${index}].money`, {
+            validateTrigger: ['onChange', 'onBlur'],
+            rules: [
+              {
+                required: true,
+                whitespace: true,
+                message: '请输入面额',
+              },
+            ],
+          })(<InputNumber placeholder="面额" min={1} style={{ width: '60%', marginRight: 8 }} />)}
+          ---
+          {getFieldDecorator(`condition[${index}].min_count`, {
+            validateTrigger: ['onChange', 'onBlur'],
+            rules: [
+              {
+                required: true,
+                whitespace: true,
+                message: '请输入最小数量',
+              },
+            ],
+          })(
+            <InputNumber placeholder="最小数量" min={1} style={{ width: '60%', marginRight: 8 }} />
+          )}
+          ---
+          {getFieldDecorator(`condition[${index}].max_count`, {
+            validateTrigger: ['onChange', 'onBlur'],
+            onChange: e => console.log(typeof e, e),
+            rules: [
+              {
+                required: true,
+                whitespace: true,
+                message: '请输入最大数量',
+              },
+            ],
+          })(
+            <InputNumber placeholder="最大数量" min={0} style={{ width: '60%', marginRight: 8 }} />
+          )}
+          <Icon
+            className="dynamic-delete-button"
+            type="minus-circle-o"
+            disabled={condition.length === 1}
+            onClick={() => this.remove(k)}
+          />
+        </FormItem>
+      );
+    });
+
+    const conditionItemTwo = (
+      <FormItem {...formItemLayout}>
+        {getFieldDecorator(`condition.min_money`, {
+          validateTrigger: ['onChange', 'onBlur'],
+          rules: [
+            {
+              required: true,
+              whitespace: true,
+              message: '请输入最小数量',
+            },
+          ],
+        })(<InputNumber placeholder="最小数量" min={1} style={{ width: '60%', marginRight: 8 }} />)}
+        {getFieldDecorator(`condition.max_money`, {
+          validateTrigger: ['onChange', 'onBlur'],
+          rules: [
+            {
+              required: true,
+              whitespace: true,
+              message: '请输入最大数量',
+            },
+          ],
+        })(<InputNumber placeholder="最大数量" min={1} style={{ width: '60%', marginRight: 8 }} />)}
+      </FormItem>
+    );
 
     return (
       <Form className={styles.form} onSubmit={this.handleSubmit}>
         <FormItem {...formItemLayout} label="类型">
           {getFieldDecorator('card_type', {
-            initialValue: initialValues.card_type,
+            initialValue: initialValues.card_type || 1,
             rules: [
               {
                 required: true,
@@ -185,7 +278,7 @@ export default class BuyForm extends Component {
 
         <FormItem {...formItemLayout} label="单价">
           {getFieldDecorator('unit_price', {
-            initialValue: initialValues.unit_price,
+            initialValue: 1,
             rules: [
               {
                 required: true,
@@ -198,7 +291,7 @@ export default class BuyForm extends Component {
         {/*倍数*/}
         <FormItem {...formItemLayout} label="倍数">
           {getFieldDecorator('multiple', {
-            initialValue: initialValues.multiple,
+            initialValue: 1,
             rules: [
               {
                 required: true,
@@ -210,7 +303,7 @@ export default class BuyForm extends Component {
 
         <FormItem {...formItemLayout} label="条件">
           {getFieldDecorator('condition_type', {
-            initialValue: initialValues.condition_type,
+            initialValue: 1,
             rules: [
               {
                 required: true,
@@ -218,30 +311,27 @@ export default class BuyForm extends Component {
               },
             ],
           })(
-            <Radio.Group>
+            <Radio.Group onChange={this.changeConditionType}>
               <Radio.Button value={1}>指定面额</Radio.Button>
-              <Radio.Button value={2}>交易限额</Radio.Button>
+              <Radio.Button value={2}>面额区间</Radio.Button>
             </Radio.Group>
           )}
         </FormItem>
 
-        {formItems}
-        <FormItem {...formItemLayoutBtn}>
-          <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
-            <Icon type="plus" /> Add field
-          </Button>
-        </FormItem>
-        <FormItem {...formItemLayoutDeno}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </FormItem>
+        {this.state.conditionType === 1 && formItems}
+        {this.state.conditionType === 1 && (
+          <FormItem {...formItemLayoutBtn}>
+            <Button type="dashed" onClick={this.addTest} style={{ width: '60%' }}>
+              <Icon type="plus" /> Add field
+            </Button>
+          </FormItem>
+        )}
 
-        <p>{getFieldValue('condition_type')}</p>
+        {this.state.conditionType === 2 && conditionItemTwo}
 
         <FormItem {...formItemLayout} label="要求">
           {getFieldDecorator('password_type', {
-            initialValue: initialValues.password_type,
+            initialValue: 1,
             rules: [
               {
                 required: true,
@@ -250,14 +340,18 @@ export default class BuyForm extends Component {
             ],
           })(
             <RadioGroup>
-              {map(CONFIG.cardPwdType, (text, value) => <Radio value={value}>{text}</Radio>)}
+              {map(CONFIG.cardPwdType, (text, value) => (
+                <Radio key={value} value={value}>
+                  {text}
+                </Radio>
+              ))}
             </RadioGroup>
           )}
         </FormItem>
 
         <FormItem {...formItemLayout} label="发卡期限">
           {getFieldDecorator('deadline', {
-            initialValue: initialValues.deadline,
+            initialValue: CONFIG.deadline ? CONFIG.deadline[0] : null,
             rules: [
               {
                 required: true,
@@ -277,7 +371,7 @@ export default class BuyForm extends Component {
 
         <FormItem {...formItemLayout} label="保障时间">
           {getFieldDecorator('guarantee_time', {
-            initialValue: initialValues.guarantee_time,
+            initialValue: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : null,
             rules: [
               {
                 required: true,
@@ -322,7 +416,7 @@ export default class BuyForm extends Component {
 
         <FormItem {...formItemLayout} label="同时处理订单数">
           {getFieldDecorator('concurrency_order', {
-            initialValue: initialValues.concurrency_order,
+            initialValue: 0,
             rules: [
               {
                 required: true,

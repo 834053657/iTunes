@@ -34,7 +34,7 @@ export default class OnlyPicture extends Component {
           <div className={styles.left}>
             <span>卡图：</span>
           </div>
-          <div className={styles.center}>
+          <div className={styles.picsbox}>
             <div className={styles.uploadBoxInSendPic}>
               <UploadComponent
                 picNum={1000}

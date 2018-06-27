@@ -131,4 +131,5 @@ export default {
     2: '充值',
     3: '提现',
   },
+  card_type: [],
 };

@@ -56,6 +56,7 @@ export default class OrderDetail extends Component {
     this.setState({
       orderId: id,
     });
+    console.log(id);
     this.props.dispatch({
       type: 'card/fetchOrderDetail',
       payload: { id },

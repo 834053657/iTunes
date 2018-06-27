@@ -53,6 +53,7 @@ export default class Appeal extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+
         dispatch({
           type: 'send_message',
           payload: {
@@ -210,7 +211,7 @@ export default class Appeal extends Component {
               <span>{order.order_no || '-'}</span>
             </h5>
             <div className={styles.orderDescribe}>
-              {pageStatus === 20
+              {pageStatus === 20 && order.order_type - 1 && CONFIG.card_type
                 ? `${trader.nickname}向您出售总面额${order.money}的${
                     CONFIG.card_type[order.order_type - 1].name
                   }`
@@ -247,7 +248,9 @@ export default class Appeal extends Component {
                   <li className={styles.item}>
                     <span className={styles.title}>类型：</span>
                     <div className={styles.content}>
-                      {order.order_type ? CONFIG.card_type[order.order_type - 1].name || '-' : '-'}
+                      {order.order_type - 1 && CONFIG.card_type
+                        ? CONFIG.card_type[order.order_type - 1].name || '-'
+                        : '-'}
                     </div>
                   </li>
                   <li className={styles.item}>
@@ -356,7 +359,7 @@ export default class Appeal extends Component {
                       {getFieldDecorator('content', {
                         rules: [
                           {
-                            required: true,
+                            required: false,
                             message: '请输入您要提交的内容',
                           },
                         ],

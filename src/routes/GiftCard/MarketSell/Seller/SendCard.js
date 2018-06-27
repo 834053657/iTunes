@@ -169,9 +169,9 @@ export default class Process extends Component {
                       <header>
                         <span>{item.money}</span>
                         面额 ({item.count})
-                        <div>
+                        {/*<div>
                           <Button>导入</Button>
-                        </div>
+                        </div>*/}
                       </header>
                       <section className={styles.iptSection}>
                         <div className={styles.left}>
@@ -266,7 +266,7 @@ export default class Process extends Component {
                     this.sendCDK();
                   }}
                 >
-                  发布
+                  发卡
                 </Button>
               </div>
             </div>

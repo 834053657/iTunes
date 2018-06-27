@@ -13,6 +13,7 @@ import {
   Row,
   Col,
   Divider,
+  message,
   Badge,
   Tooltip,
   Popconfirm,
@@ -20,6 +21,7 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getMessageContent } from '../../utils/utils';
 import styles from './List.less';
+//import message from "../../models/message";
 
 const statusMap = ['warning', 'processing', 'error', 'default'];
 
@@ -55,15 +57,17 @@ export default class List extends Component {
   };
 
   viewAd = (r, action) => {
+    message.warning('跳转页面开发中');
+    return null;
     // todo
-    if (r.goods_type !== 1) {
-      //?id=${r.id}&ad_type=${r.ad_type}&action=${action}`
-      this.props.dispatch(routerRedux.push(`/card/a_detail`));
-    } else {
-      this.props.dispatch(
-        routerRedux.push(`/ad/itunes/detail?id=${r.id}&ad_type=${r.ad_type}&action=${action}`)
-      );
-    }
+    // if (r.goods_type !== 1) {
+    //   //?id=${r.id}&ad_type=${r.ad_type}&action=${action}`
+    //   this.props.dispatch(routerRedux.push(`/card/a_detail`));
+    // } else {
+    //   this.props.dispatch(
+    //     routerRedux.push(`/ad/itunes/detail?id=${r.id}&ad_type=${r.ad_type}&action=${action}`)
+    //   );
+    // }
   };
 
   deleteAd = r => {

@@ -1,7 +1,22 @@
 import React, { Component, Fragment } from 'react';
-import { Select, Button, Icon, Input, message, Form, InputNumber, Radio, Modal } from 'antd';
-import { map } from 'lodash';
+import {
+  Select,
+  Button,
+  Icon,
+  Input,
+  message,
+  Form,
+  InputNumber,
+  Radio,
+  Modal,
+  Popover,
+  Card,
+} from 'antd';
+import { map, last } from 'lodash';
 import styles from './SellForm.less';
+import OnlyPassWord from './OnlyPassWord';
+import OnlyPicture from './OnlyPicture';
+import PicWithPass from './PicWithPass';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -11,6 +26,7 @@ const Option = Select.Option;
 export default class SellForm extends Component {
   state = {
     termModalInfo: false,
+    addDenoVisible: false,
   };
 
   handleCancel = () => {
@@ -42,11 +58,101 @@ export default class SellForm extends Component {
     });
   };
 
+  add = () => {};
+
+  //添加面额种类
+  addDeno = () => {
+    const { form } = this.props;
+    const formDataObj = {
+      money: this.state.denoVaule,
+      receipt: '', // 凭证
+      items: [
+        {
+          id: 0,
+          password: '', // 卡密
+          picture: '', // 图片
+        },
+      ],
+    };
+    const cards = form.getFieldValue('cards[]') || [];
+    console.log(cards);
+    cards.push(formDataObj);
+
+    this.props.form.setFieldsValue({
+      'cards[]': cards,
+    });
+
+    console.log(cards);
+    // if (isNaN(this.state.denoVaule)) {
+    //   return message.warning('请输入正确格式');
+    // }
+    // const a = this.state.cards;
+    // const item = {
+    //   money: this.state.denoVaule,
+    //   items: [],
+    // };
+    // a.push(item);
+    // this.state.cards = a;
+    // this.setState({
+    //   cards: a,
+    // });
+    // this.setState({addDenoVisible: false});
+  };
+
+  //添加面额输入框
+  removeIpt = (id, index) => {
+    const { form } = this.props;
+    let cards = form.getFieldValue('cards[]') || [];
+    const newItems = cards[index].items.filter(i => i.id !== id);
+    cards[index].items = newItems;
+    this.props.form.setFieldsValue({
+      'cards[]': cards,
+    });
+  };
+
+  //添加面额输入框
+  addDenoIpt = index => {
+    const { form } = this.props;
+    const cards = form.getFieldValue('cards[]') || [];
+    let lastId = last(cards[index].items, {}).id + 1;
+    console.log(lastId);
+    cards[index].items.push({
+      id: lastId,
+      password: '', // 卡密
+      picture: '', // 图片
+    });
+    console.log(cards);
+    this.props.form.setFieldsValue({
+      'cards[]': cards,
+    });
+    // this.setState({
+    //   date: new Date()
+    // })
+  };
+
+  changeData = (i, item, index) => {
+    const { form } = this.props;
+
+    const { value } = item.password || {};
+    const cards = form.getFieldValue('cards[]') || [];
+    cards[index].items[i].password = value;
+    console.log(cards);
+  };
+
+  handleCard = (index, items) => {
+    const { form } = this.props;
+    const cards = form.getFieldValue('cards[]') || [];
+    cards[index].items = items;
+    form.setFieldsValue({
+      'cards[]': cards,
+    });
+  };
+
   render() {
     const { termModalInfo } = this.state;
     const {
       terms = [],
-      form: { getFieldDecorator, getFieldValue, resetForm },
+      form: { getFieldDecorator, getFieldValue, resetForm, onFieldsChange },
       initialValues = {},
     } = this.props;
     const formItemLayout = {
@@ -58,6 +164,46 @@ export default class SellForm extends Component {
       },
     };
 
+    const addDenoBox = (
+      <div>
+        <span className={styles.left}>面额:</span>
+        <div className={styles.right}>
+          <Input
+            placeholder="请输入面额"
+            defaultValue=""
+            onChange={e => {
+              this.setState({ denoVaule: e.target.value });
+            }}
+            onPressEnter={() => this.addDeno()}
+          />
+        </div>
+        <div className={styles.btnBox}>
+          <Button
+            onClick={() => {
+              this.setState({ addDenoVisible: false });
+            }}
+          >
+            取消
+          </Button>
+          <Button
+            onClick={() => {
+              this.setState({ addDenoVisible: false });
+              this.addDeno();
+            }}
+            type="primary"
+          >
+            确定
+          </Button>
+        </div>
+      </div>
+    );
+
+    getFieldDecorator('cards[]', {
+      // initialValue: []
+    });
+
+    const cards = getFieldValue('cards[]') || [];
+    console.log(cards);
     return (
       <Form className={styles.form} onSubmit={this.handleSubmit}>
         <FormItem {...formItemLayout} label="类型">
@@ -151,7 +297,7 @@ export default class SellForm extends Component {
 
         <FormItem {...formItemLayout} label="包含">
           {getFieldDecorator('password_type', {
-            initialValue: initialValues.password_type,
+            initialValue: '1',
             rules: [
               {
                 required: true,
@@ -160,12 +306,50 @@ export default class SellForm extends Component {
             ],
           })(
             <RadioGroup>
-              {map(CONFIG.cardPwdType, (text, value) => <Radio value={value}>{text}</Radio>)}
+              {map(CONFIG.cardPwdType, (text, value) => (
+                <Radio key={value} value={value}>
+                  {text}
+                </Radio>
+              ))}
             </RadioGroup>
           )}
         </FormItem>
 
+        <FormItem {...formItemLayout}>
+          <Popover
+            key={this.state.date}
+            placement="topRight"
+            content={addDenoBox}
+            title="添加面额"
+            trigger="click"
+            visible={this.state.addDenoVisible}
+            onVisibleChange={() => {
+              this.setState({ addDenoVisible: !this.state.addDenoVisible });
+            }}
+          >
+            <Button type="dashed" style={{ width: '60%' }}>
+              <Icon type="plus" /> 添加面额
+            </Button>
+          </Popover>
+        </FormItem>
         <p>{getFieldValue('password_type')}</p>
+        {getFieldValue('password_type') === '1'
+          ? cards.map((item, index) => {
+              return (
+                <OnlyPassWord
+                  key={index}
+                  filedName={`cards[${index}]`}
+                  data={item}
+                  onChange={this.handleCard.bind(this, index)}
+                  addDenoIpt={() => this.addDenoIpt(index)}
+                  removeIpt={id => this.removeIpt(id, index)}
+                  changeData={(i, changeItem) => this.changeData(i, changeItem, index)}
+                />
+              );
+            })
+          : null}
+        {getFieldValue('password_type') === '2' && <OnlyPicture />}
+        {getFieldValue('password_type') === '3' && <OnlyPassWord />}
 
         <FormItem className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>

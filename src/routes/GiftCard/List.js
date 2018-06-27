@@ -91,15 +91,16 @@ export default class List extends Component {
     const params = { ...params_ };
     const { type, card_type, order_by, password_type, denominFilterValue } = this.state;
     params.type = params.type || type;
-    params.card_type = params.card_type || card_type;
+    //params.card_type = params.card_type ? params.card_type : undefined;
     params.order_by = params.order_by || order_by;
-    params.password_type = params.password_type || password_type;
+    //params.password_type = params.password_type || password_type;
     params.denominFilterValue = params.denominFilterValue || denominFilterValue;
     if (params.denominFilterValue) {
       params.min_money = params.denominFilterValue.min;
       params.max_money = params.denominFilterValue.max;
       delete params.denominFilterValue;
     }
+
     this.props
       .dispatch({
         type: 'card/fetchCardList_',
@@ -120,13 +121,11 @@ export default class List extends Component {
       Object.keys(obj)
         .map(key => obj[key])
         .join(',');
-
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
       newObj[key] = getValue(filtersArg[key]);
       return newObj;
     }, {});
-
     const params1 = {
       page: pagination.current,
       page_size: pagination.pageSize,
@@ -134,17 +133,20 @@ export default class List extends Component {
       password_type: filters.password_type,
     };
     if (sorter.field) {
-      params1.order_by = sorter.field; //`${sorter.field}_${sorter.order}`;
+      params1.order_by = sorter.order === 'descend' ? 1 : 2; //`${sorter.field}_${sorter.order}`;
     }
-    // console.log(params);
+    if (filtersArg.type && filtersArg.type.length === 0) {
+      delete params1.card_type;
+    }
+    if (filtersArg.password_type && filtersArg.password_type.length === 0) {
+      delete params1.password_type;
+    }
     this.setState({
       ...params1,
     });
-
     if (this.interval) {
       clearInterval(this.interval);
     }
-
     this.fetchData(params1);
   };
 
@@ -153,6 +155,8 @@ export default class List extends Component {
       denominFilterValue: undefined,
       denoVisible: false,
     });
+    this.state.denominFilterValue = undefined;
+    this.state.denoVisible = false;
     this.fetchData();
   };
 
@@ -195,6 +199,7 @@ export default class List extends Component {
       {
         title: '类型',
         dataIndex: 'type',
+        width: '10%',
         filterMultiple: false,
         filters: cardTypes,
         render: (text, record) => {
@@ -220,7 +225,7 @@ export default class List extends Component {
       {
         title: '面额',
         dataIndex: 'denomination',
-        width: '200px',
+        width: '15%',
         onFilterDropdownVisibleChange: e => {
           this.setState({
             denoVisible: e,
@@ -283,6 +288,7 @@ export default class List extends Component {
       },
       {
         title: '总面额',
+        width: '10%',
         dataIndex: 'total_denomination',
         render: (text, record) => {
           return <span>{record.total_money}</span>;
@@ -290,15 +296,18 @@ export default class List extends Component {
       },
       {
         title: '发卡期限',
+        width: '10%',
         dataIndex: 'deadline',
       },
       {
         title: '单价',
+        width: '10%',
         dataIndex: 'unit_price',
         sorter: (a, b) => a.unitPrice - b.unitPrice,
       },
       {
         title: '保障时间',
+        width: '10%',
         dataIndex: 'guarantee_time',
       },
       {

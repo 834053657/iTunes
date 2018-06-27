@@ -14,6 +14,7 @@ module.exports = {
     radix: [0],
     'default-case': [0],
     'no-plusplus': [1],
+    'no-param-reassign': [1],
     'react/no-unused-state': [1],
     'react/jsx-tag-spacing': [1],
     'prefer-const': [1],

@@ -225,16 +225,18 @@ export default class DealDeatil extends Component {
       // condition = condition || {}
       const addDenoNode = (
         <div className={styles.addDenoNode}>
-          <Input
+          <InputNumber
             onChange={e => {
-              this.setState({ denoValue: e.target.value });
+              this.setState({ denoValue: e });
             }}
             value={this.state.denoValue}
+            min={condition.min_money}
+            max={condition.max_money}
           />
           <h5>
             可添加面额：{condition.min_money}-{condition.max_money}
           </h5>
-          <div>
+          <div className={styles.btnBox}>
             <Button onClick={() => this.setState({ addDenoVisible: false })}>取消</Button>
             <Button
               onClick={() => {

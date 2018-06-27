@@ -307,7 +307,10 @@ export default class BuyCard extends Component {
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
-          {/*<SellForm terms={terms} initialValues={{ card_type: 3 }} />*/}
+          {/*
+          <SellForm terms={terms} initialValues={{card_type: 3}}/>
+           */}
+
           <ul className={styles.submitTable}>
             <li>
               <span className={styles.tableLeft}>类型：</span>
@@ -320,7 +323,7 @@ export default class BuyCard extends Component {
             </li>
             <li>
               <span className={styles.tableLeft}>单价：</span>
-              <InputNumber onChange={e => this.unitPriceChange(e)} />
+              <InputNumber min={1} onChange={e => this.unitPriceChange(e)} />
             </li>
             <li>
               <span className={styles.tableLeft}>保障时间：</span>
@@ -347,7 +350,7 @@ export default class BuyCard extends Component {
             </li>
             <li>
               <span className={styles.tableLeft}>同时处理订单数：</span>
-              <InputNumber onChange={e => this.ordersAmountChange(e)} />
+              <InputNumber min={0} onChange={e => this.ordersAmountChange(e)} />
             </li>
 
             <li>
@@ -396,7 +399,7 @@ export default class BuyCard extends Component {
                       <span>{item.money}</span>
                       面额 （{item.items.length}）
                       <div>
-                        <Button>导入</Button>
+                        {/*<Button>导入</Button>*/}
                         <Button>删除</Button>
                       </div>
                     </header>
