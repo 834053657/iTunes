@@ -55,9 +55,8 @@ export default class Appeal extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        if ((!values.content || (values.content.trim() === '')) && imageUrls.length === 0) {
+        if ((!values.content || values.content.trim() === '') && imageUrls.length === 0) {
           message.error('请输入您要提交的内容或者图片!');
-          
         } else {
           dispatch({
             type: 'send_message',
@@ -99,7 +98,7 @@ export default class Appeal extends Component {
 
   componentDidMount() {
     const { dispatch, detail: { order = {} } } = this.props;
-    
+
     this.fetchData(order.id);
   }
 
@@ -122,7 +121,7 @@ export default class Appeal extends Component {
         goods_type: 2, // 1: 'itunes', 2: '礼品卡'
       },
     });
-  }
+  };
 
   handleChange = ({ fileList }) => this.setState({ fileList });
 
