@@ -100,48 +100,59 @@ export default class DealDeatil extends Component {
   };
 
   changeNum = (e, d, stock) => {
-    if (e > stock) {
-      message.warning(d + '面额的库存仅为' + stock + ',数量将会调整为最大库存' + stock);
-    }
-    const index = this.postData.order_detail.findIndex(t => {
-      return t.money === d;
-    });
-    if (index >= 0) {
-      this.postData.order_detail[index].count = e;
+    const re = /^[1-9]+[0-9]*]*$/;
+    if (re.test(e)) {
+      if (e > stock) {
+        message.warning(d + '面额的库存仅为' + stock + ',数量将会调整为最大库存' + stock);
+      }
+      const index = this.postData.order_detail.findIndex(t => {
+        return t.money === d;
+      });
+      if (index >= 0) {
+        this.postData.order_detail[index].count = e;
+        this.setState({
+          num: e,
+        });
+      } else {
+        this.postData.order_detail.push({
+          money: d,
+          count: e,
+        });
+      }
       this.setState({
-        num: e,
+        buyData: this.postData.order_detail,
       });
     } else {
-      this.postData.order_detail.push({
-        money: d,
-        count: e,
-      });
+      message.warning('请输入数字格式');
     }
-    this.setState({
-      buyData: this.postData.order_detail,
-    });
   };
 
   changeFixedNum = (e, c) => {
-    const index = this.postData.order_detail.findIndex(t => {
-      return +t.money === +c.money;
-    });
-
-    if (index >= 0) {
-      this.postData.order_detail[index].count = +e;
-    } else {
-      this.postData.order_detail.push({
-        money: parseInt(c.money),
-        count: parseInt(e),
+    const re = /^[1-9]+[0-9]*]*$/;
+    if (re.test(e)) {
+      if (e > c.max_count) {
+        message.warning('最高出售数量为' + c.max_count);
+      }
+      const index = this.postData.order_detail.findIndex(t => {
+        return +t.money === +c.money;
       });
+      if (index >= 0) {
+        this.postData.order_detail[index].count = +e;
+      } else {
+        this.postData.order_detail.push({
+          money: parseInt(c.money),
+          count: parseInt(e),
+        });
+      }
+      this.setState({
+        buyData: this.postData.order_detail,
+      });
+    } else {
+      message.warning('请输入数字格式');
     }
-    this.setState({
-      buyData: this.postData.order_detail,
-    });
   };
 
   calcuBuyTotal = () => {
-    console.log();
     const userBuySum = sumBy(this.postData.order_detail, row => {
       return row.money * row.count * this.props.detail.unit_price || 0;
     });
@@ -226,8 +237,18 @@ export default class DealDeatil extends Component {
       const addDenoNode = (
         <div className={styles.addDenoNode}>
           <InputNumber
+            autoFocus={true}
             onChange={e => {
-              this.setState({ denoValue: e });
+              const re = /^[1-9]+[0-9]*]*$/;
+
+              if (re.test(e)) {
+                if (e > condition.max_money) {
+                  message.warning('最大可出售数量' + condition.max_money);
+                }
+                this.setState({ denoValue: e });
+              } else {
+                message.warning('请输入数字格式');
+              }
             }}
             value={this.state.denoValue}
             min={condition.min_money}

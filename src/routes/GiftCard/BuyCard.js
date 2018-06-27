@@ -100,30 +100,45 @@ export default class SaleCard extends Component {
     };
 
     this.changeMoney = (e, index) => {
-      const a = this.state.condition;
-      a[index].money = parseInt(e);
-      this.setState({
-        condition: a,
-      });
-      this.data.condition = a;
+      const re = /^[1-9]+[0-9]*]*$/;
+      if (re.test(e)) {
+        const a = this.state.condition;
+        a[index].money = parseInt(e);
+        this.setState({
+          condition: a,
+        });
+        this.data.condition = a;
+      } else {
+        message.warning('请输入数字格式');
+      }
     };
 
     this.changeMinCount = (e, index) => {
-      const a = this.state.condition;
-      a[index].min_count = parseInt(e);
-      this.setState({
-        condition: a,
-      });
-      this.data.condition = a;
+      const re = /^[1-9]+[0-9]*]*$/;
+      if (re.test(e)) {
+        const a = this.state.condition;
+        a[index].min_count = parseInt(e);
+        this.setState({
+          condition: a,
+        });
+        this.data.condition = a;
+      } else {
+        message.warning('请输入数字格式');
+      }
     };
 
     this.changeMaxCount = (e, index) => {
-      const a = this.state.condition;
-      a[index].max_count = parseInt(e);
-      this.setState({
-        condition: a,
-      });
-      this.data.condition = a;
+      const re = /^[1-9]+[0-9]*]*$/;
+      if (re.test(e)) {
+        const a = this.state.condition;
+        a[index].max_count = parseInt(e);
+        this.setState({
+          condition: a,
+        });
+        this.data.condition = a;
+      } else {
+        message.warning('请输入数字格式');
+      }
     };
 
     this.addAdvertising = () => {
@@ -152,15 +167,29 @@ export default class SaleCard extends Component {
     };
 
     this.changeMinMoney = e => {
-      console.log(this.data);
-      this.data.condition.min_money = +e.target.value;
+      const re = /^[1-9]+[0-9]*]*$/;
+      if (re.test(e)) {
+        this.setState({
+          rangeMinCount: e,
+        });
+        this.data.condition.min_money = +e;
+      } else {
+        message.warning('请输入数字格式');
+      }
     };
     this.changeMaxMoney = e => {
-      this.data.condition.max_money = +e.target.value;
+      const re = /^[1-9]+[0-9]*]*$/;
+      if (re.test(e)) {
+        this.setState({
+          rangeMaxCount: e,
+        });
+        this.data.condition.max_money = +e;
+      } else {
+        message.warning('请输入数字格式');
+      }
     };
 
     this.addBuyAd = () => {
-      console.log(this.data);
       this.props
         .dispatch({
           type: 'card/addBuyAd',
@@ -319,7 +348,7 @@ export default class SaleCard extends Component {
                           return (
                             <li key={index}>
                               <Input
-                                className={styles.contIpt}
+                                className={styles.conFixIpt}
                                 placeholder="面额"
                                 value={c.money}
                                 onChange={e => {
@@ -328,7 +357,7 @@ export default class SaleCard extends Component {
                               />
                               &nbsp;--&nbsp;
                               <Input
-                                className={styles.contIpt}
+                                className={styles.conFixIpt}
                                 placeholder="最小数量"
                                 value={c.min_count}
                                 onChange={e => {
@@ -337,7 +366,7 @@ export default class SaleCard extends Component {
                               />
                               &nbsp;--&nbsp;
                               <Input
-                                className={styles.contIpt}
+                                className={styles.conFixIpt}
                                 placeholder="最大数量"
                                 value={c.max_count}
                                 onChange={e => {
@@ -363,15 +392,18 @@ export default class SaleCard extends Component {
               <li>
                 <span className={styles.tableLeft}>&nbsp;</span>
                 <div>
-                  <Input
+                  <InputNumber
                     className={styles.conIpt}
                     type="text"
+                    value={this.state.rangeMinCount}
                     onChange={e => this.changeMinMoney(e)}
                   />
                   &nbsp;&nbsp;---&nbsp;&nbsp;
-                  <Input
+                  <InputNumber
                     className={styles.conIpt}
                     type="text"
+                    width="40px"
+                    value={this.state.rangeMaxCount}
                     onChange={e => this.changeMaxMoney(e)}
                   />
                 </div>
