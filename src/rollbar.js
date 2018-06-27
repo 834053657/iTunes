@@ -1,13 +1,13 @@
 import Rollbar from 'rollbar';
 
 // Track error by rollbar.com
-if (location.host === 'preview.pro.ant.design') {
+if (location.host === '47.106.111.213:9060') {
   Rollbar.init({
-    accessToken: '033ca6d7c0eb4cc1831cf470c2649971',
+    accessToken: 'cecdbce666034b4fa14ec98fb1b69d60',
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
-      environment: 'production',
+      environment: 'test',
     },
   });
 }

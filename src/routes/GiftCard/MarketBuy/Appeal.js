@@ -49,33 +49,38 @@ export default class Appeal extends Component {
 
   handleSubmit = e => {
     const { dispatch, detail: { order = {} } } = this.props;
+    const { imageUrls = [] } = this.state;
+
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-
-        dispatch({
-          type: 'send_message',
-          payload: {
-            order_id: order.id,
-            content: this.getMsgContent(values.content),
-          },
-          callback: () => {
-            this.props.form.resetFields();
-            this.setState({
-              fileList: [],
-              imageUrls: [],
-            });
-            message.success('发送成功');
-          },
-        });
+        if ((!values.content || values.content.trim() === '') && imageUrls.length === 0) {
+          message.error('请输入您要提交的内容或者图片!');
+        } else {
+          dispatch({
+            type: 'send_message',
+            payload: {
+              order_id: order.id,
+              content: this.getMsgContent(values.content),
+            },
+            callback: () => {
+              this.props.form.resetFields();
+              this.setState({
+                fileList: [],
+                imageUrls: [],
+              });
+              message.success('发送成功');
+            },
+          });
+        }
       }
     });
   };
 
   getMsgContent = text => {
     const { imageUrls = [] } = this.state;
-    let content = `<p>${text}</p>`;
+    let content = `<p>${text || ''}</p>`;
     content += imageUrls.length > 0 ? `<ul className="${styles.picbox}">` : '';
     map(imageUrls, (d, i) => {
       content += `<li class="{{float:left}}">
@@ -93,15 +98,30 @@ export default class Appeal extends Component {
 
   componentDidMount() {
     const { dispatch, detail: { order = {} } } = this.props;
+
+    this.fetchData(order.id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { detail: { order = {} } } = this.props;
+    const { orderId: nextOrderId } = nextProps;
+
+    if (nextOrderId && parseInt(nextOrderId) !== order.id) {
+      this.fetchData(nextOrderId);
+    }
+  }
+
+  fetchData = order_id => {
+    const { dispatch, detail: { order = {} } } = this.props;
     dispatch({
       type: 'card/fetchChatMsgList',
       payload: {
-        order_id: order.id,
+        order_id,
         order_msg_type: 2, // 1快捷短语  2 申诉
         goods_type: 2, // 1: 'itunes', 2: '礼品卡'
       },
     });
-  }
+  };
 
   handleChange = ({ fileList }) => this.setState({ fileList });
 
