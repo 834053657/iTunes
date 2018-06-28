@@ -86,6 +86,11 @@ export default class DealFinish extends Component {
       userInfo = ad.owner;
     }
 
+    let card_name =
+      order.card_type && CONFIG.cardTypeMap[order.card_type]
+        ? CONFIG.cardTypeMap[order.card_type].name
+        : '-';
+
     if (pageStatus === 12 || pageStatus === 17) {
       steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
     } else if (pageStatus === 13) {
@@ -120,24 +125,16 @@ export default class DealFinish extends Component {
               </h5>
               <div className={styles.orderDescribe}>
                 {pageStatus === 12 || pageStatus === 13
-                  ? `${trader.nickname}向您购买总面额${order.money}的${
-                      CONFIG.cardTypeMap[order.card_type].name
-                    }`
+                  ? `${trader.nickname}向您购买总面额${order.money}的${card_name}`
                   : null}
                 {pageStatus === 15 || pageStatus === 17
-                  ? `您向${ad.owner.nickname}购买总面额${order.money}的${
-                      CONFIG.cardTypeMap[order.card_type].name
-                    }`
+                  ? `您向${ad.owner.nickname}购买总面额${order.money}的${card_name}`
                   : null}
                 {pageStatus === 3 || pageStatus === 4
-                  ? `${trader.nickname}向您出售总面额${order.money}的${
-                      CONFIG.cardTypeMap[order.card_type].name
-                    }`
+                  ? `${trader.nickname}向您出售总面额${order.money}的${card_name}`
                   : null}
                 {pageStatus === 8 || pageStatus === 9
-                  ? `您向${ad.owner.nickname}出售总面额${order.money}的${
-                      CONFIG.cardTypeMap[order.card_type].name
-                    }`
+                  ? `您向${ad.owner.nickname}出售总面额${order.money}的${card_name}`
                   : null}
               </div>
               <div className={styles.price}>
