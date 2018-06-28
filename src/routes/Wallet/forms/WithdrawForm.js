@@ -47,7 +47,7 @@ class WithdrawForm extends Component {
           payload: values,
           callback: res => {
             if (res.code === 0) {
-              message.success('提现成功');
+              message.success('已提交提现申请，请等待平台处理');
               this.setState({
                 fee: 0,
                 oldAmount: 0,
