@@ -28,7 +28,6 @@ export default class DealDeatil extends Component {
       ad_id: +props.match.params.id, //广告ID
       order_detail: [], // 订单详情
     };
-    console.log(props.detail);
   }
 
   componentDidMount() {
@@ -192,9 +191,7 @@ export default class DealDeatil extends Component {
 
   addDenoInRange = condition => {
     const { orderData, denoValue } = this.state;
-    console.log(condition);
-    console.log(denoValue);
-    if (denoValue <= condition.min_money || denoValue >= condition.max_money) {
+    if (denoValue >= condition.min_money && denoValue <= condition.max_money) {
       orderData.push({
         money: +denoValue,
       });
@@ -269,19 +266,13 @@ export default class DealDeatil extends Component {
             autoFocus
             onChange={e => {
               const re = /^[1-9]+[0-9]*]*$/;
-
               if (re.test(e)) {
-                if (e > condition.max_money) {
-                  message.warning('最大可出售数量' + condition.max_money);
-                }
                 this.setState({ denoValue: e });
               } else {
                 message.warning('请输入数字格式');
               }
             }}
             value={this.state.denoValue}
-            min={condition.min_money}
-            max={condition.max_money}
           />
           <h5>
             可添加面额：{condition.min_money}-{condition.max_money}
