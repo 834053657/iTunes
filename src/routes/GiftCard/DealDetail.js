@@ -215,6 +215,10 @@ export default class DealDeatil extends Component {
     return userBuySum;
   };
 
+  handleBack = () => {
+    this.props.dispatch(routerRedux.goBack());
+  };
+
   /**
    * ad_type = 1 是主动出售视图
    * ad_type = 2 是主动购买视图
@@ -397,7 +401,7 @@ export default class DealDeatil extends Component {
             </li>
           </ul>
           <div className={styles.bottom}>
-            <Button>取消</Button>
+            <Button onClick={this.handleBack}>取消</Button>
             <Button
               type="primary"
               disabled={!this.postData.order_detail.length > 0}
@@ -472,7 +476,7 @@ export default class DealDeatil extends Component {
             </li>
           </ul>
           <div className={styles.bottom}>
-            <Button>取消</Button>
+            <Button onClick={this.handleBack}>取消</Button>
             <Button disabled={this.calcuBuyTotal() === 0} type="primary" onClick={this.ensureOrder}>
               确认购买
             </Button>
