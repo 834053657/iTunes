@@ -8,8 +8,10 @@ import QuickMsg from '../../QuickMsg';
 const Step = Steps.Step;
 const Option = Select.Option;
 
-@connect(({ card }) => ({
+@connect(({ card, loading }) => ({
   card,
+  releaseOrderBtn: loading.effects['card/releaseOrder'],
+  appealBtn: loading.effects['card/appealOrder'],
 }))
 export default class EnsureBuyInfo extends Component {
   constructor(props) {
@@ -84,6 +86,7 @@ export default class EnsureBuyInfo extends Component {
               </h5>
               <Button
                 type="danger"
+                loading={this.props.appealBtn}
                 onClick={() => {
                   this.props.dispatch({
                     type: 'card/appealOrder',
@@ -101,6 +104,7 @@ export default class EnsureBuyInfo extends Component {
                   });
                 }}
                 type="primary"
+                loading={this.props.releaseOrderBtn}
               >
                 确认释放
               </Button>

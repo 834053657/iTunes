@@ -6,9 +6,11 @@ import { Badge, Button, message, InputNumber, Avatar, Popover, Icon, Input, Spin
 import { postSellOrder } from '../../services/api';
 import styles from './DealDetail.less';
 
-@connect(({ card }) => ({
+@connect(({ card, loading }) => ({
   card,
   detail: card.adDetail,
+  toBuyOrder: loading.effects['card/createBuyOrder'],
+  toSellOrder: loading.effects['card/createSellOrder'],
 }))
 export default class DealDeatil extends Component {
   constructor(props) {
@@ -183,9 +185,11 @@ export default class DealDeatil extends Component {
     return userBuySum;
   };
 
-  addDenoInRange = () => {
+  addDenoInRange = condition => {
     const { orderData, denoValue } = this.state;
-    if (denoValue > 100) {
+    console.log(condition);
+    console.log(denoValue);
+    if (denoValue <= condition.min_money || denoValue >= condition.max_money) {
       orderData.push({
         money: +denoValue,
       });
@@ -285,7 +289,7 @@ export default class DealDeatil extends Component {
             <Button onClick={() => this.setState({ addDenoVisible: false })}>取消</Button>
             <Button
               onClick={() => {
-                this.addDenoInRange();
+                this.addDenoInRange(condition);
                 this.setState({ addDenoVisible: false });
               }}
               type="primary"
@@ -406,6 +410,7 @@ export default class DealDeatil extends Component {
               type="primary"
               disabled={!this.postData.order_detail.length > 0}
               onClick={this.handlerSell}
+              loading={this.props.toSellOrder}
             >
               确认出售
             </Button>
@@ -477,7 +482,12 @@ export default class DealDeatil extends Component {
           </ul>
           <div className={styles.bottom}>
             <Button onClick={this.handleBack}>取消</Button>
-            <Button disabled={this.calcuBuyTotal() === 0} type="primary" onClick={this.ensureOrder}>
+            <Button
+              disabled={this.calcuBuyTotal() === 0}
+              type="primary"
+              onClick={this.ensureOrder}
+              loading={this.props.toBuyOrder}
+            >
               确认购买
             </Button>
           </div>

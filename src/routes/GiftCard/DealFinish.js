@@ -23,8 +23,9 @@ const Step = Steps.Step;
 const Option = Select.Option;
 const { TextArea } = Input;
 
-@connect(({ card }) => ({
+@connect(({ loading, card }) => ({
   card,
+  submit: loading.effects['card/ratingOrder'],
 }))
 export default class DealFinish extends Component {
   constructor(props) {
@@ -34,16 +35,15 @@ export default class DealFinish extends Component {
       starT: props.detail.rate ? props.detail.rate.star : null,
       contentT: props.detail.rate ? props.detail.rate.content : null,
     };
-    console.log(props.detail);
   }
 
   ratingOrder = () => {
     const { starT, contentT } = this.state;
-    if (contentT.length < 5) {
+    if (contentT && contentT.length < 5) {
       message.warning('评价内容不能小于5个字');
       return false;
     }
-    if (contentT.length > 500) {
+    if (contentT && contentT.length > 500) {
       message.warning('评价内容不能超出500个字,目前字数' + contentT.length);
       return false;
     }
@@ -225,7 +225,7 @@ export default class DealFinish extends Component {
                 }
               </div>
               <div className={styles.ratingBox}>
-                <Button onClick={this.ratingOrder} type="primary">
+                <Button loading={this.props.submit} onClick={this.ratingOrder} type="primary">
                   {this.props.detail.rate ? '更新' : '提交'}
                 </Button>
               </div>

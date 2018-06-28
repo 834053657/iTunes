@@ -10,8 +10,10 @@ import SetInterval from '../SetInterval';
 
 const Option = Select.Option;
 
-@connect(({ card }) => ({
+@connect(({ card, loading }) => ({
   card,
+  releaseOrderBtn: loading.effects['card/releaseOrder'],
+  appealBtn: loading.effects['card/appealOrder'],
 }))
 export default class SellerEnsure extends Component {
   constructor(props) {
@@ -93,6 +95,7 @@ export default class SellerEnsure extends Component {
                 <div>
                   <Button
                     type="danger"
+                    loading={this.props.appealBtn}
                     onClick={() => {
                       this.props.dispatch({
                         type: 'card/appealOrder',
@@ -110,6 +113,7 @@ export default class SellerEnsure extends Component {
                       });
                     }}
                     type="primary"
+                    loading={this.props.releaseOrderBtn}
                   >
                     确认释放
                   </Button>
