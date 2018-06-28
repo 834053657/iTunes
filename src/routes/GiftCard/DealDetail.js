@@ -237,7 +237,7 @@ export default class DealDeatil extends Component {
       const addDenoNode = (
         <div className={styles.addDenoNode}>
           <InputNumber
-            autoFocus={true}
+            autoFocus
             onChange={e => {
               const re = /^[1-9]+[0-9]*]*$/;
 

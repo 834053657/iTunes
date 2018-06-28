@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, InputNumber, message } from 'antd';
-import { map } from 'lodash';
+import { map, filter } from 'lodash';
 import classNames from 'classnames';
 import numeral from 'numeral';
 import styles from './RechargeForm.less';
@@ -53,6 +53,7 @@ class WithdrawForm extends Component {
                 oldAmount: 0,
               });
               this.props.form.resetFields();
+              this.props.onSubmit && this.props.onSubmit();
             } else {
               message.success(res.msg);
             }
@@ -110,7 +111,7 @@ class WithdrawForm extends Component {
               ],
             })(
               <Select size="large" placeholder="请选择您的提现账号">
-                {map(userPayments, item => (
+                {map(filter(userPayments, i => i.status === 4), item => (
                   <Option key={item.id} value={item.id}>
                     <span>
                       {item.payment_method && CONFIG.payments[item.payment_method]

@@ -69,7 +69,7 @@ export default class OnlyPassWord extends Component {
   };
 
   handleDelete = id => {
-    let items = this.props.form.getFieldValue('items[]');
+    const items = this.props.form.getFieldValue('items[]');
     const newItems = filter(items, i => i.id !== id);
     console.log(newItems, items);
     this.props.form.setFieldsValue({
@@ -78,8 +78,8 @@ export default class OnlyPassWord extends Component {
   };
 
   handleAdd = () => {
-    let items = this.props.form.getFieldValue('items[]');
-    let lastId = last(items, {}).id || 0;
+    const items = this.props.form.getFieldValue('items[]');
+    const lastId = last(items, {}).id || 0;
     items.push({
       id: lastId + 1,
       password: '',

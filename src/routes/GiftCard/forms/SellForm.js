@@ -102,7 +102,7 @@ export default class SellForm extends Component {
   //添加面额输入框
   removeIpt = (id, index) => {
     const { form } = this.props;
-    let cards = form.getFieldValue('cards[]') || [];
+    const cards = form.getFieldValue('cards[]') || [];
     const newItems = cards[index].items.filter(i => i.id !== id);
     cards[index].items = newItems;
     this.props.form.setFieldsValue({
@@ -114,7 +114,7 @@ export default class SellForm extends Component {
   addDenoIpt = index => {
     const { form } = this.props;
     const cards = form.getFieldValue('cards[]') || [];
-    let lastId = last(cards[index].items, {}).id + 1;
+    const lastId = last(cards[index].items, {}).id + 1;
     console.log(lastId);
     cards[index].items.push({
       id: lastId,

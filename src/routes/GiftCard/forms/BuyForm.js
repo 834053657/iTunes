@@ -7,13 +7,13 @@ const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-let dataItem = {
+const dataItem = {
   money: null,
   min_count: null,
   max_count: null,
 };
 
-let uuid = 0;
+const uuid = 0;
 @Form.create()
 export default class BuyForm extends Component {
   state = {
@@ -31,8 +31,8 @@ export default class BuyForm extends Component {
     const { form } = this.props;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      let condition = map(filter(values.condition, item => !Array.isArray(item)), item => {
-        let { money, min_count, max_count } = item;
+      const condition = map(filter(values.condition, item => !Array.isArray(item)), item => {
+        const { money, min_count, max_count } = item;
         return { money: +money, min_count: +min_count, max_count: +max_count };
       });
       console.log({ ...values, condition, password_type: +values.password_type });
@@ -112,7 +112,7 @@ export default class BuyForm extends Component {
     // this.setState({
     //   formNumber: this.state.formNumber,
     // });
-    let condition = this.props.form.getFieldValue('condition[]');
+    const condition = this.props.form.getFieldValue('condition[]');
     condition.push(formDataObj);
     console.log(condition);
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { routerRedux } from 'dva/router';
 import {
   Form,
   Input,
@@ -13,7 +14,7 @@ import {
   InputNumber,
   message,
 } from 'antd';
-import { map } from 'lodash';
+import { map, filter } from 'lodash';
 import classNames from 'classnames';
 import styles from './RechargeForm.less';
 
@@ -59,6 +60,7 @@ class RechargeForm extends Component {
             if (res.code === 0) {
               message.success('充值成功');
               this.props.form.resetFields();
+              this.props.onSubmit && this.props.onSubmit();
             } else {
               message.success(res.msg);
             }
@@ -111,8 +113,12 @@ class RechargeForm extends Component {
 
   render() {
     const { className, form, rechargSubmitting, sysPayments = [], currentUser } = this.props;
-    const { getFieldDecorator } = form;
+    const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
     const { payments: userPayments } = currentUser || {};
+    const ppid = getFieldValue('platform_payment_id');
+    const platform_payments = ppid && sysPayments[ppid] ? sysPayments[ppid].payment_method : null;
+
+    console.log(userPayments, filter(userPayments, i => i.payment_method === platform_payments));
 
     return (
       <div className={classNames(className, styles.form)}>
@@ -125,8 +131,13 @@ class RechargeForm extends Component {
                   message: '请选择充值方式！',
                 },
               ],
+              onChange: () => {
+                setFieldsValue({
+                  user_payment_id: null,
+                });
+              },
             })(
-              <Select size="large" placeholder="选择充值方式">
+              <Select size="large">
                 {map(sysPayments, ({ id, payment_method }) => (
                   <Option key={id} value={id}>
                     {payment_method && CONFIG.payments[payment_method]
@@ -147,18 +158,24 @@ class RechargeForm extends Component {
                 },
               ],
             })(
-              <Select size="large" placeholder="请选择您的充值账号">
-                {map(userPayments, item => (
-                  <Option key={item.id} value={item.id}>
-                    <span>
-                      {item.payment_method && CONFIG.payments[item.payment_method]
-                        ? CONFIG.payments[item.payment_method]
-                        : item.payment_method}
-                      <span> - </span>
-                      {this.getUserAccount(item)}
-                    </span>
-                  </Option>
-                ))}
+              <Select size="large" disabled={!platform_payments}>
+                {map(
+                  filter(
+                    userPayments,
+                    i => i.payment_method === platform_payments && i.status === 4
+                  ),
+                  item => (
+                    <Option key={item.id} value={item.id}>
+                      <span>
+                        {item.payment_method && CONFIG.payments[item.payment_method]
+                          ? CONFIG.payments[item.payment_method]
+                          : item.payment_method}
+                        <span> - </span>
+                        {this.getUserAccount(item)}
+                      </span>
+                    </Option>
+                  )
+                )}
               </Select>
             )}
           </FormItem>
@@ -170,14 +187,7 @@ class RechargeForm extends Component {
                   message: '请输入充值金额！',
                 },
               ],
-            })(
-              <InputNumber
-                precision={2}
-                style={{ width: '100%' }}
-                size="large"
-                placeholder="充值金额"
-              />
-            )}
+            })(<InputNumber precision={2} style={{ width: '100%' }} size="large" />)}
           </FormItem>
           <FormItem className={styles.buttonBox}>
             <Button
