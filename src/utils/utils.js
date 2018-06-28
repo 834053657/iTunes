@@ -166,7 +166,7 @@ export function isUrl(path) {
 export function getSystemUrl(env) {
   let base_url = 'http://47.106.111.213:3000/mock/19';
   let socket_url = 'http://47.106.111.213:9000/socket.io';
-  let web_name = '凯歌交易平台';
+  let web_name = '乌托交易服务平台';
 
   if (env === 'dev') {
     base_url = 'http://47.106.111.213:3000/mock/19';

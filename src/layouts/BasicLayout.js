@@ -139,7 +139,7 @@ class BasicLayout extends React.Component {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = CONFIG.web_name;
     let currRouterData = null;
     // match params path
     Object.keys(routerData).forEach(key => {
@@ -148,7 +148,7 @@ class BasicLayout extends React.Component {
       }
     });
     if (currRouterData && currRouterData.name) {
-      title = `${currRouterData.name} - Ant Design Pro`;
+      title = `${currRouterData.name} - ${title}`;
     }
     return title;
   }
