@@ -58,7 +58,7 @@ class RechargeForm extends Component {
           payload: values,
           callback: res => {
             if (res.code === 0) {
-              message.success('充值成功');
+              message.success('已提交充值申请，请等待平台处理');
               this.props.form.resetFields();
               this.props.onSubmit && this.props.onSubmit();
             } else {
