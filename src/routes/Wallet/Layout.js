@@ -93,12 +93,22 @@ export default class Layout extends Component {
             <Tabs onChange={this.handleTabsChange} type="card" activeKey={activeKey}>
               <TabPane tab="充值" key="1">
                 {hadEnabledPayment
-                  ? activeKey === '1' && <RechargeForm {...this.props} />
+                  ? activeKey === '1' && (
+                      <RechargeForm
+                        {...this.props}
+                        onSubmit={this.handleTabsChange.bind(this, '3')}
+                      />
+                    )
                   : Warning}
               </TabPane>
               <TabPane tab="提现" key="2">
                 {hadEnabledPayment
-                  ? activeKey === '2' && <WithdrawForm {...this.props} />
+                  ? activeKey === '2' && (
+                      <WithdrawForm
+                        {...this.props}
+                        onSubmit={this.handleTabsChange.bind(this, '3')}
+                      />
+                    )
                   : Warning}
               </TabPane>
               <TabPane tab="交易记录" key="3">
