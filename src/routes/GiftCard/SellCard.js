@@ -19,6 +19,7 @@ import PicWithText from './SellPicWithText';
 import SellForm from './forms/SellForm';
 import styles from './SellCard.less';
 
+const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
 
@@ -41,7 +42,7 @@ export default class BuyCard extends Component {
     this.items = [];
     this.data = {
       password_type: 1,
-      card_type: 1,
+      card_type: CONFIG.card_type ? CONFIG.card_type[0].type : '',
       guarantee_time: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : '',
     };
   }
@@ -66,24 +67,20 @@ export default class BuyCard extends Component {
   };
 
   selectCardType = e => {
-    this.setState({
-      defaultCardTypeName: e.name,
-    });
-    this.data.card_type = e.type;
+    this.data.card_type = +e;
   };
 
   selectGuaTime = e => {
     this.setState({
-      defaultGuaTime: e,
+      defaultGuaTime: +e,
     });
-    this.data.guarantee_time = e;
+    this.data.guarantee_time = +e;
   };
 
   selectTermTitle = e => {
-    this.setState({
-      defaultTermTitle: e.title,
-    });
-    this.data.term_id = e.id;
+    if (e !== 'noTerm') {
+      this.data.term_id = +e;
+    }
   };
 
   unitPriceChange = e => {
@@ -227,17 +224,7 @@ export default class BuyCard extends Component {
     if (!CONFIG.card_type) {
       return false;
     }
-    const cardTypeMenu = (
-      <Menu>
-        {CONFIG.card_type.map(t => {
-          return (
-            <Menu.Item key={t.type} onClick={() => this.selectCardType(t)}>
-              {t.name}
-            </Menu.Item>
-          );
-        })}
-      </Menu>
-    );
+    const items = this.props.card.terms;
 
     const guaranteeTimeMenu = (
       <Menu>
@@ -314,12 +301,19 @@ export default class BuyCard extends Component {
           <ul className={styles.submitTable}>
             <li>
               <span className={styles.tableLeft}>类型：</span>
-              <Dropdown overlay={cardTypeMenu} trigger={['click']}>
-                <Button>
-                  {this.state.defaultCardTypeName}
-                  <Icon type="down" />
-                </Button>
-              </Dropdown>
+              <Select
+                style={{ width: 90 }}
+                defaultValue={CONFIG.card_type[0].name}
+                onChange={this.selectCardType}
+              >
+                {CONFIG.card_type.filter(c => c.valid).map(t => {
+                  return (
+                    <Option key={t.type} value={t.type}>
+                      {t.name}
+                    </Option>
+                  );
+                })}
+              </Select>
             </li>
             <li>
               <span className={styles.tableLeft}>单价：</span>
@@ -327,13 +321,15 @@ export default class BuyCard extends Component {
             </li>
             <li>
               <span className={styles.tableLeft}>保障时间：</span>
-              <Dropdown overlay={guaranteeTimeMenu} trigger={['click']}>
-                <Button>
-                  {this.state.defaultGuaTime}
-                  &nbsp;
-                  <Icon type="down" />
-                </Button>
-              </Dropdown>
+              <Select
+                style={{ width: 90 }}
+                defaultValue={CONFIG.guarantee_time[0]}
+                onChange={this.selectGuaTime}
+              >
+                {CONFIG.guarantee_time.map(t => {
+                  return <Option key={t}>{t}</Option>;
+                })}
+              </Select>
             </li>
             <li>
               <span className={styles.tableLeft}>
@@ -341,16 +337,45 @@ export default class BuyCard extends Component {
                 <i>(可选)</i>
                 ：
               </span>
-              <Dropdown overlay={termsMenu} trigger={['click']}>
-                <Button>
-                  {this.state.defaultTermTitle ? this.state.defaultTermTitle : '选择'}
-                  <Icon type="down" />
-                </Button>
-              </Dropdown>
+
+              <Select defaultValue="无" style={{ width: 90 }} onChange={this.selectTermTitle}>
+                <Option key="noTerm">无</Option>
+                {items ? (
+                  items.filter(i => i.status === 3) ? (
+                    items.filter(i => i.status === 3).map(t => {
+                      return (
+                        <Option value={t.id} key={t.id}>
+                          {t.title}
+                        </Option>
+                      );
+                    })
+                  ) : (
+                    <Menu.Item>请等待条款审核</Menu.Item>
+                  )
+                ) : (
+                  <Menu.Item>请在我的订单里新建条款</Menu.Item>
+                )}
+              </Select>
             </li>
             <li>
               <span className={styles.tableLeft}>同时处理订单数：</span>
-              <InputNumber min={0} onChange={e => this.ordersAmountChange(e)} />
+              <InputNumber
+                onFocus={() => {
+                  this.setState({
+                    ordersNum: true,
+                  });
+                }}
+                onBlur={() => {
+                  this.setState({
+                    ordersNum: false,
+                  });
+                }}
+                defaultValue={0}
+                min={0}
+                onChange={e => this.ordersAmountChange(e)}
+              />
+              &nbsp;
+              {this.state.ordersNum ? '   0代表不限制订单并发数量' : null}
             </li>
 
             <li>

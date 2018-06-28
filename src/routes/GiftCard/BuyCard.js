@@ -17,6 +17,7 @@ import styles from './BuyCard.less';
 import BuyForm from './forms/BuyForm';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
+const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
 
@@ -28,10 +29,7 @@ export default class SaleCard extends Component {
     super();
     this.state = {
       condition: [],
-      deadline: CONFIG.deadline ? CONFIG.deadline[0] : '',
-      defaultCardTypeName: CONFIG.card_type ? CONFIG.card_type[0].name : '',
       condition_type: 1,
-      defaultGuaTime: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : '',
       passwordType: 1,
     };
     this.items = [];
@@ -39,7 +37,7 @@ export default class SaleCard extends Component {
       condition: [],
       deadline: CONFIG.deadline ? CONFIG.deadline[0] : null,
       guarantee_time: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : null,
-      card_type: 1,
+      card_type: CONFIG.card_type ? CONFIG.card_type[0].type : '',
       condition_type: 1,
       password_type: 1,
     };
@@ -58,31 +56,28 @@ export default class SaleCard extends Component {
     };
 
     this.selectCardType = e => {
-      this.setState({
-        defaultCardTypeName: e.name,
-      });
-      this.data.card_type = e.type;
+      this.data.card_type = +e;
     };
 
     this.selectGuaTime = e => {
       this.setState({
-        defaultGuaTime: e,
+        defaultGuaTime: +e,
       });
-      this.data.guarantee_time = e;
+      this.data.guarantee_time = +e;
     };
 
     this.selectDeadline = e => {
+      console.log(e);
       this.setState({
-        deadline: e,
+        deadline: +e,
       });
-      this.data.deadline = e;
+      this.data.deadline = +e;
     };
 
     this.selectTermTitle = e => {
-      this.setState({
-        defaultTermTitle: e.title,
-      });
-      this.data.term_id = e.id;
+      if (e !== 'noTerm') {
+        this.data.term_id = +e;
+      }
     };
 
     //单价修改
@@ -124,6 +119,30 @@ export default class SaleCard extends Component {
         this.data.condition = a;
       } else {
         message.warning('请输入数字格式');
+      }
+    };
+
+    this.minBlur = (e, index) => {
+      const a = this.state.condition;
+      if (
+        a[index].min_count !== '' &&
+        a[index].max_count !== '' &&
+        a[index].min_count > a[index].max_count
+      ) {
+        message.warning('不得超过最大数量');
+        return false;
+      }
+    };
+
+    this.maxBlur = (e, index) => {
+      const a = this.state.condition;
+      const re = /^[1-9]+[0-9]*]*$/;
+      if (
+        a[index].min_count !== '' &&
+        a[index].max_count !== '' &&
+        a[index].min_count > a[index].max_count
+      ) {
+        message.warning('不得低于最小数量');
       }
     };
 
@@ -240,62 +259,7 @@ export default class SaleCard extends Component {
 
   render() {
     const { condition_type, condition } = this.state;
-    const cardTypeMenu = CONFIG.card_type ? (
-      <Menu>
-        {CONFIG.card_type.map(t => {
-          return (
-            <Menu.Item key={t.type} onClick={() => this.selectCardType(t)}>
-              {t.name}
-            </Menu.Item>
-          );
-        })}
-      </Menu>
-    ) : null;
-
-    const deadlineMenu = CONFIG.deadline ? (
-      <Menu>
-        {CONFIG.deadline.map(t => {
-          return (
-            <Menu.Item key={t} onClick={() => this.selectDeadline(t)}>
-              {t}
-            </Menu.Item>
-          );
-        })}
-      </Menu>
-    ) : null;
-
-    const guaranteeTimeMenu = CONFIG.guarantee_time ? (
-      <Menu>
-        {CONFIG.guarantee_time.map(t => {
-          return (
-            <Menu.Item key={t} onClick={() => this.selectGuaTime(t)}>
-              {t}
-            </Menu.Item>
-          );
-        })}
-      </Menu>
-    ) : null;
-
     const items = this.props.card.terms;
-    const termsMenu = (
-      <Menu>
-        {items ? (
-          items.filter(i => i.status === 3) ? (
-            items.filter(i => i.status === 3).map(t => {
-              return (
-                <Menu.Item key={t.id} onClick={() => this.selectTermTitle(t)}>
-                  {t.title}
-                </Menu.Item>
-              );
-            })
-          ) : (
-            <Menu.Item>请等待条款审核</Menu.Item>
-          )
-        ) : (
-          <Menu.Item>请在我的订单里新建条款</Menu.Item>
-        )}
-      </Menu>
-    );
 
     const breadcrumbList = [
       { title: '广告管理', href: '/ad/my' },
@@ -313,12 +277,19 @@ export default class SaleCard extends Component {
           <ul className={styles.submitTable}>
             <li>
               <span className={styles.tableLeft}>类型：</span>
-              <Dropdown overlay={cardTypeMenu} trigger={['click']}>
-                <Button>
-                  {this.state.defaultCardTypeName ? this.state.defaultCardTypeName : '选择'}
-                  <Icon type="down" />
-                </Button>
-              </Dropdown>
+              <Select
+                style={{ width: 120 }}
+                defaultValue={CONFIG.card_type[0].name}
+                onChange={this.selectCardType}
+              >
+                {CONFIG.card_type.filter(c => c.valid).map(t => {
+                  return (
+                    <Option key={t.type} value={t.type}>
+                      {t.name}
+                    </Option>
+                  );
+                })}
+              </Select>
             </li>
 
             <li>
@@ -360,6 +331,7 @@ export default class SaleCard extends Component {
                                 className={styles.conFixIpt}
                                 placeholder="最小数量"
                                 value={c.min_count}
+                                onBlur={e => this.minBlur(e, index)}
                                 onChange={e => {
                                   this.changeMinCount(e.target.value, index);
                                 }}
@@ -369,6 +341,7 @@ export default class SaleCard extends Component {
                                 className={styles.conFixIpt}
                                 placeholder="最大数量"
                                 value={c.max_count}
+                                onBlur={e => this.maxBlur(e, index)}
                                 onChange={e => {
                                   this.changeMaxCount(e.target.value, index);
                                 }}
@@ -432,22 +405,20 @@ export default class SaleCard extends Component {
 
             <li>
               <span className={styles.tableLeft}>发卡期限：</span>
-              <Dropdown overlay={deadlineMenu} trigger={['click']}>
-                <Button>
-                  {this.state.deadline ? this.state.deadline : '选择'}
-                  &nbsp;<Icon type="down" />
-                </Button>
-              </Dropdown>
+              <Select defaultValue={CONFIG.deadline[0]} onChange={this.selectDeadline}>
+                {CONFIG.deadline.map(t => {
+                  return <Option key={t}>{t}</Option>;
+                })}
+              </Select>
             </li>
 
             <li>
               <span className={styles.tableLeft}>保障时间：</span>
-              <Dropdown overlay={guaranteeTimeMenu} trigger={['click']}>
-                <Button>
-                  {this.state.defaultGuaTime ? this.state.defaultGuaTime : '选择'}
-                  &nbsp;<Icon type="down" />
-                </Button>
-              </Dropdown>
+              <Select defaultValue={CONFIG.guarantee_time[0]} onChange={this.selectGuaTime}>
+                {CONFIG.guarantee_time.map(t => {
+                  return <Option key={t}>{t}</Option>;
+                })}
+              </Select>
             </li>
 
             <li>
@@ -456,16 +427,44 @@ export default class SaleCard extends Component {
                 <i>(可选)</i>
                 ：
               </span>
-              <Dropdown overlay={termsMenu} trigger={['click']}>
-                <Button>
-                  {this.state.defaultTermTitle ? this.state.defaultTermTitle : '选择'}
-                  <Icon type="down" />
-                </Button>
-              </Dropdown>
+              <Select defaultValue="无" style={{ width: 120 }} onChange={this.selectTermTitle}>
+                <Option key="noTerm">无</Option>
+                {items ? (
+                  items.filter(i => i.status === 3) ? (
+                    items.filter(i => i.status === 3).map(t => {
+                      return (
+                        <Option value={t.id} key={t.id}>
+                          {t.title}
+                        </Option>
+                      );
+                    })
+                  ) : (
+                    <Menu.Item>请等待条款审核</Menu.Item>
+                  )
+                ) : (
+                  <Menu.Item>请在我的订单里新建条款</Menu.Item>
+                )}
+              </Select>
             </li>
             <li>
               <span className={styles.tableLeft}>同时处理订单数：</span>
-              <InputNumber min={0} onChange={e => this.ordersAmountChange(e)} />
+              <InputNumber
+                onFocus={() => {
+                  this.setState({
+                    ordersNum: true,
+                  });
+                }}
+                onBlur={() => {
+                  this.setState({
+                    ordersNum: false,
+                  });
+                }}
+                defaultValue={0}
+                min={0}
+                onChange={e => this.ordersAmountChange(e)}
+              />
+              &nbsp;
+              {this.state.ordersNum ? '   0代表不限制订单并发数量' : null}
             </li>
           </ul>
           <div className={styles.footerBox}>

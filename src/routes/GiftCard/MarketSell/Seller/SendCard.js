@@ -108,9 +108,6 @@ export default class Process extends Component {
     const { ad = {}, cards = {}, order = {} } = detail;
 
     const userInfo = ad.owner;
-    console.log(this.props.detail.ad.deadline);
-    console.log(this.targetTime);
-    console.log(detail);
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
     return (
       <div className={styles.sendBox}>
@@ -120,8 +117,8 @@ export default class Process extends Component {
             <div className={styles.price}>
               <span>类型：</span>
               <p>
-                {CONFIG.card_type && order.order_type
-                  ? CONFIG.card_type[ad.card_type - 1].name || '-'
+                {CONFIG.cardTypeMap && order.card_type
+                  ? CONFIG.cardTypeMap[ad.card_type].name || '-'
                   : '-'}
               </p>
             </div>

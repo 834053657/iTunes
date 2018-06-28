@@ -46,7 +46,11 @@ export default class List extends Component {
     }
     this.setState({
       type,
+      password_type: undefined,
+      card_type: undefined,
+      denominFilterValue: undefined,
     });
+    console.log(type);
     // this.props.dispatch({
     //   type:'card/GET_CARD_LIST'
     // })
@@ -89,17 +93,19 @@ export default class List extends Component {
 
   fetchData = (params_, callback) => {
     const params = { ...params_ };
+    console.log(params);
     const { type, card_type, order_by, password_type, denominFilterValue } = this.state;
     params.type = params.type || type;
-    //params.card_type = params.card_type ? params.card_type : undefined;
+    params.card_type = params.card_type ? params.card_type : undefined;
     params.order_by = params.order_by || order_by;
-    //params.password_type = params.password_type || password_type;
+    params.password_type = params.password_type ? params.password_type : undefined;
     params.denominFilterValue = params.denominFilterValue || denominFilterValue;
     if (params.denominFilterValue) {
       params.min_money = params.denominFilterValue.min;
       params.max_money = params.denominFilterValue.max;
       delete params.denominFilterValue;
     }
+    console.log(params);
 
     this.props
       .dispatch({
@@ -117,6 +123,7 @@ export default class List extends Component {
   };
 
   handleTableChange = (pagination, filtersArg, sorter) => {
+    console.log(filtersArg);
     const getValue = obj =>
       Object.keys(obj)
         .map(key => obj[key])
@@ -205,8 +212,8 @@ export default class List extends Component {
         render: (text, record) => {
           return (
             <span>
-              {CONFIG.card_type[record.card_type - 1]
-                ? CONFIG.card_type[record.card_type - 1].name
+              {CONFIG.cardTypeMap[record.card_type]
+                ? CONFIG.cardTypeMap[record.card_type].name
                 : '-'}
             </span>
           );

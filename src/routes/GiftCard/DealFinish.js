@@ -39,6 +39,14 @@ export default class DealFinish extends Component {
 
   ratingOrder = () => {
     const { starT, contentT } = this.state;
+    if (contentT.length < 5) {
+      message.warning('评价内容不能小于5个字');
+      return false;
+    }
+    if (contentT.length > 500) {
+      message.warning('评价内容不能超出500个字,目前字数' + contentT.length);
+      return false;
+    }
     const data = {
       order_id: this.props.detail.order.id,
       star: starT,
@@ -99,7 +107,6 @@ export default class DealFinish extends Component {
     if (!userInfo) {
       return false;
     }
-
     return (
       <div className={styles.buyFinish}>
         <StepModel steps={steps} current={steps.length - 1} />
@@ -114,22 +121,22 @@ export default class DealFinish extends Component {
               <div className={styles.orderDescribe}>
                 {pageStatus === 12 || pageStatus === 13
                   ? `${trader.nickname}向您购买总面额${order.money}的${
-                      CONFIG.card_type[order.order_type - 1].name
+                      CONFIG.cardTypeMap[order.card_type].name
                     }`
                   : null}
                 {pageStatus === 15 || pageStatus === 17
                   ? `您向${ad.owner.nickname}购买总面额${order.money}的${
-                      CONFIG.card_type[order.order_type - 1].name
+                      CONFIG.cardTypeMap[order.card_type].name
                     }`
                   : null}
                 {pageStatus === 3 || pageStatus === 4
                   ? `${trader.nickname}向您出售总面额${order.money}的${
-                      CONFIG.card_type[order.order_type - 1].name
+                      CONFIG.cardTypeMap[order.card_type].name
                     }`
                   : null}
                 {pageStatus === 8 || pageStatus === 9
                   ? `您向${ad.owner.nickname}出售总面额${order.money}的${
-                      CONFIG.card_type[order.order_type - 1].name
+                      CONFIG.cardTypeMap[order.card_type].name
                     }`
                   : null}
               </div>
@@ -210,13 +217,16 @@ export default class DealFinish extends Component {
                     defaultValue={this.state.contentT ? this.state.contentT : ''}
                     rows={4}
                     value={this.state.contentT}
-                    onChange={e => this.setState({ contentT: e.target.value })}
+                    onChange={e => {
+                      console.log(e.target.value.length);
+                      this.setState({ contentT: e.target.value });
+                    }}
                   />
                 }
               </div>
               <div className={styles.ratingBox}>
                 <Button onClick={this.ratingOrder} type="primary">
-                  提交
+                  {this.props.detail.rate ? '更新' : '提交'}
                 </Button>
               </div>
             </div>

@@ -90,9 +90,9 @@ export default class SellerWaitBuyerCheck extends Component {
                 <span className={styles.text}>{order.order_no || '-'}</span>
               </h5>
               <div className={styles.orderDescribe}>
-                {CONFIG.card_type
+                {CONFIG.cardTypeMap
                   ? `您向${ad.owner.nickname}出售总面额${order.money}的
-                  ${CONFIG.card_type[order.order_type - 1].name}`
+                  ${CONFIG.cardTypeMap[order.card_type].name}`
                   : null}
               </div>
               <div className={styles.price}>

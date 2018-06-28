@@ -300,8 +300,8 @@ export default class CardMarkets extends Component {
             console.log('record');
             return (
               <span>
-                {record.card_type && CONFIG.card_type[record.card_type]
-                  ? CONFIG.card_type[record.card_type].name
+                {record.card_type && CONFIG.cardTypeMap[record.card_type]
+                  ? CONFIG.cardTypeMap[record.card_type].name
                   : '-'}
               </span>
             );
@@ -441,8 +441,8 @@ export default class CardMarkets extends Component {
           render: (text, record) => {
             return (
               <span>
-                {record.card_type && CONFIG.card_type[record.card_type]
-                  ? CONFIG.card_type[record.card_type].name
+                {record.card_type && CONFIG.cardTypeMap[record.card_type]
+                  ? CONFIG.cardTypeMap[record.card_type].name
                   : '-'}
               </span>
             );
