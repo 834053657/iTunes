@@ -186,12 +186,10 @@ export default class List extends Component {
           const userinfo = record.owner;
           return (
             <div className={styles.userInfo}>
-              <Avatar size="large" src={userinfo.avatar} />
-              <Badge status={userinfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
-                <span style={{ paddingLeft: '10px' }} className={styles.name}>
-                  {userinfo.nickname}
-                </span>
+              <Badge status={userinfo.online ? 'success' : 'default'} offset={[35, -5]} dot>
+                <Avatar size="large" src={userinfo.avatar} />
               </Badge>
+              <span className={styles.name}>{userinfo.nickname}</span>
             </div>
           );
         },

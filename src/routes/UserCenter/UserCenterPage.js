@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
+import cx from 'classnames';
 import { Link } from 'dva/router';
 import {
   Row,
@@ -42,9 +43,9 @@ export default class UserCenterPage extends Component {
   };
 
   componentDidMount() {
-    // this.props.dispatch({
-    //   type: 'global/fetchBanners',
-    // });
+    this.props.dispatch({
+      type: 'user/fetchCurrent',
+    });
   }
 
   componentWillUnmount() {}
@@ -337,7 +338,7 @@ export default class UserCenterPage extends Component {
                 <div className={styles.user_info}>
                   <Avatar size="lager" className={styles.avatar} src={user.avatar} />
                   <div className={styles.info}>
-                    <div className={styles.name}>{user.nickname}</div>
+                    <div className={cx('name', styles.name)}>{user.nickname}</div>
                     <div className={styles.uid}>UID: {user.id}</div>
                   </div>
                 </div>

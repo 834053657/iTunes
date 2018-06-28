@@ -1,4 +1,5 @@
 @import '~antd/lib/style/themes/default.less';
+@import '../../utils/utils.less';
 
 .header {
   height: 64px;
@@ -84,6 +85,12 @@ i.trigger {
       color: @primary-color;
       background: rgba(255, 255, 255, 0.85);
       vertical-align: middle;
+    }
+    .name {
+      vertical-align: middle;
+      max-width: 6em;
+      display: inline-block;
+      .textOverflow();
     }
   }
 }

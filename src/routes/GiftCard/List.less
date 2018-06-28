@@ -1,4 +1,5 @@
 @import '~antd/lib/style/themes/default.less';
+@import '../../utils/utils.less';
 
 .page {
   background: #fff;
@@ -13,6 +14,18 @@
     width: 2rem;
     padding: 0 15px;
     box-sizing: content-box;
+  }
+}
+
+.userInfo {
+  .name {
+    vertical-align: middle;
+    margin-left: 8px;
+    max-width: 6em;
+    display: inline-block;
+    line-height: 24px;
+    height: 24px;
+    .textOverflow();
   }
 }
 
