@@ -53,7 +53,8 @@ export default class BuyerCheckCard extends Component {
     const { setStatus, pageStatus } = this.props;
     const { ad, cards, order, trader } = detail;
     const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
-
+    console.log(detail);
+    const orderDetail = order.order_detail;
     const userInfo = trader;
     const deadline = new Date().getTime() + order.deadline_at * 1000;
     const checkAt = new Date().getTime() + order.check_at * 1000;
@@ -68,7 +69,7 @@ export default class BuyerCheckCard extends Component {
             </h5>
             <div className={styles.orderDescribe}>
               {`${trader.nickname}向您出售总面额${order.money}的${
-                CONFIG.card_type[order.order_type - 1].name
+                CONFIG.cardTypeMap[order.card_type].name
               }`}
             </div>
           </div>
@@ -76,7 +77,7 @@ export default class BuyerCheckCard extends Component {
             <li className={styles.item}>
               <span className={styles.title}>类型：</span>
               <div className={styles.content}>
-                {order.order_type ? CONFIG.card_type[order.order_type - 1].name || '-' : '-'}
+                {order.card_type ? CONFIG.cardTypeMap[order.card_type].name || '-' : '-'}
               </div>
             </li>
             <li className={styles.item}>
@@ -87,10 +88,19 @@ export default class BuyerCheckCard extends Component {
               <span className={styles.title}>数量：</span>
               <div className={styles.content}>{this.count(order)}</div>
             </li>
-            <li className={styles.item}>
+            {/*<li className={styles.item}>
               <span className={styles.title}>总面额：</span>
               <div className={styles.content}>{order.money}</div>
             </li>
+            */}
+            {orderDetail.map(d => {
+              return (
+                <li className={styles.item}>
+                  <span className={styles.title}>{d.money}面额：</span>
+                  <div className={styles.content}>{d.count}</div>
+                </li>
+              );
+            })}
             <li className={styles.item}>
               <span className={styles.title}>总价：</span>
               <div className={styles.content}>{order.amount}RMB</div>

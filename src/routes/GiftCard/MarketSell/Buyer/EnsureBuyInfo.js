@@ -62,7 +62,7 @@ export default class EnsureBuyInfo extends Component {
               </h5>
               <div className={styles.orderDescribe}>
                 {`${trader.nickname}向您出售总面额${order.money}的${
-                  CONFIG.card_type[order.order_type - 1].name
+                  CONFIG.cardTypeMap[order.card_type].name
                 }`}
               </div>
               <div className={styles.price}>

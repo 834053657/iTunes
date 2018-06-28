@@ -54,12 +54,15 @@ export default class DealDeatil extends Component {
         payload: this.postData,
       })
       .then(res => {
-        if (res.code === 0) {
+        if (!res) {
+          return false;
+        }
+        if (res && res.code === 0) {
           this.setState({
             orderId: res.data.order_id,
           });
           this.props.dispatch(routerRedux.push(`/card/deal-line/${res.data.order_id}`));
-        } else if (res.msg === '广告数据已变化') {
+        } else if (res && res.msg === '广告数据已变化') {
           console.log(id);
           const { params: { id } } = this.props.match || {};
           this.fetch({ id });
@@ -71,6 +74,10 @@ export default class DealDeatil extends Component {
   };
 
   handlerSell = async () => {
+    this.postData.order_detail = this.postData.order_detail.filter(i => i.count > 0);
+    if (this.postData.order_detail.length === 0) {
+      return false;
+    }
     this.postData.updated_at = this.props.detail.updated_at;
     this.props
       .dispatch({
@@ -87,18 +94,6 @@ export default class DealDeatil extends Component {
       });
   };
 
-  blurNum = (e, d, stock) => {
-    // let totalPrice = 0;
-    // this.postData.order_detail.map(o => {
-    //   totalPrice = totalPrice + o.money * o.count
-    //   return totalPrice
-    // })
-    // console.log(totalPrice);
-    // this.setState({
-    //   totalPrice: this.state.num * d + totalPrice
-    // })
-  };
-
   changeNum = (e, d, stock) => {
     const re = /^[1-9]+[0-9]*]*$/;
     if (re.test(e)) {
@@ -110,9 +105,6 @@ export default class DealDeatil extends Component {
       });
       if (index >= 0) {
         this.postData.order_detail[index].count = e;
-        this.setState({
-          num: e,
-        });
       } else {
         this.postData.order_detail.push({
           money: d,
@@ -122,12 +114,24 @@ export default class DealDeatil extends Component {
       this.setState({
         buyData: this.postData.order_detail,
       });
-    } else {
+    } else if (e === '') {
+      const index = this.postData.order_detail.findIndex(t => {
+        return t.money === d;
+      });
+      if (index >= 0) {
+        this.postData.order_detail.splice(index, 1);
+      }
+      this.setState({
+        buyData: this.postData.order_detail,
+      });
+    } else if (!re.test(e) && !e === '') {
       message.warning('请输入数字格式');
     }
   };
 
   changeFixedNum = (e, c) => {
+    console.log(e);
+    e = parseInt(e);
     const re = /^[1-9]+[0-9]*]*$/;
     if (re.test(e)) {
       if (e > c.max_count) {
@@ -147,16 +151,22 @@ export default class DealDeatil extends Component {
       this.setState({
         buyData: this.postData.order_detail,
       });
-    } else {
+    } else if (e === '') {
+      const index = this.postData.order_detail.findIndex(t => {
+        return +t.money === +c.money;
+      });
+      if (index >= 0) {
+        this.postData.order_detail.splice(index, 1);
+        this.setState({
+          num: 0,
+        });
+      }
+      this.setState({
+        buyData: this.postData.order_detail,
+      });
+    } else if (!re.test(e) && !e === '') {
       message.warning('请输入数字格式');
     }
-  };
-
-  calcuBuyTotal = () => {
-    const userBuySum = sumBy(this.postData.order_detail, row => {
-      return row.money * row.count * this.props.detail.unit_price || 0;
-    });
-    return userBuySum;
   };
 
   changeRangeDataNum = (e, index) => {
@@ -166,14 +176,25 @@ export default class DealDeatil extends Component {
     this.setState({ orderData });
   };
 
+  calcuBuyTotal = () => {
+    const userBuySum = sumBy(this.postData.order_detail, row => {
+      return row.money * row.count * this.props.detail.unit_price || 0;
+    });
+    return userBuySum;
+  };
+
   addDenoInRange = () => {
     const { orderData, denoValue } = this.state;
-    orderData.push({
-      money: +denoValue,
-    });
-    this.setState({
-      orderData,
-    });
+    if (denoValue > 100) {
+      orderData.push({
+        money: +denoValue,
+      });
+      this.setState({
+        orderData,
+      });
+    } else {
+      message.warning('面额数未符合要求');
+    }
   };
 
   calcuMaxCountBuy = item => {
@@ -204,7 +225,6 @@ export default class DealDeatil extends Component {
     let { condition } = detail || {};
     const accountBalance = detail.owner.amount;
     let content = null;
-    console.log(detail);
     // 主动出售
     if (condition_type === 1) {
       // 指定面额
@@ -217,7 +237,7 @@ export default class DealDeatil extends Component {
                 <span className={styles.denoTitle}>{c.money}面额:</span>
                 <div className={styles.denoIpt}>
                   <InputNumber
-                    min={+c.min_count}
+                    min={0}
                     max={+c.max_count}
                     defaultValue={0}
                     onChange={e => this.changeFixedNum(e, c)}
@@ -282,6 +302,7 @@ export default class DealDeatil extends Component {
                       <div className={styles.denoIpt}>
                         <InputNumber
                           //max={this.calcuMaxCountBuy(c)}
+                          min={0}
                           defaultValue={0}
                           onChange={e => this.changeRangeDataNum(e, index)}
                         />
@@ -331,7 +352,6 @@ export default class DealDeatil extends Component {
   renderSellContent = detail => {
     const { card_type, password_type, unit_price, deadline = 0, multiple = 0, guarantee_time } =
       detail || {};
-    console.log(detail);
     return (
       <div className={styles.left}>
         <Spin spinning={this.state.loading} delay={1500}>
@@ -339,8 +359,8 @@ export default class DealDeatil extends Component {
             <li className={styles.item}>
               <span className={styles.title}>类型:</span>
               <div className={styles.content}>
-                {card_type && CONFIG.card_type && CONFIG.card_type[card_type - 1]
-                  ? CONFIG.card_type[card_type - 1].name
+                {card_type && CONFIG.cardTypeMap && CONFIG.cardTypeMap[card_type]
+                  ? CONFIG.cardTypeMap[card_type].name
                   : '-'}
               </div>
             </li>
@@ -378,7 +398,11 @@ export default class DealDeatil extends Component {
           </ul>
           <div className={styles.bottom}>
             <Button>取消</Button>
-            <Button type="primary" onClick={this.handlerSell}>
+            <Button
+              type="primary"
+              disabled={!this.postData.order_detail.length > 0}
+              onClick={this.handlerSell}
+            >
               确认出售
             </Button>
           </div>
@@ -427,7 +451,6 @@ export default class DealDeatil extends Component {
                           min={0}
                           max={stock[d]}
                           defaultValue={0}
-                          //onBlur={e => this.blurNum(e, d, stock[d])}
                           onChange={e => this.changeNum(e, d, stock[d])}
                         />
                       </div>

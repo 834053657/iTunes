@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Button, Icon, Avatar, Select, Badge } from 'antd';
+import CountDown from 'components/CountDown';
 import styles from './OrderDetail.less';
 import StepModel from '../Step';
 import QuickMsg from '../QuickMsg';
@@ -41,7 +42,7 @@ export default class SellerEnsure extends Component {
     } else if (pageStatus === 14) {
       userInfo = ad.owner;
     }
-
+    const guaranteeTime = new Date().getTime() + order.guarantee_at * 1000;
     return (
       <div className={styles.stepTwoBox}>
         <StepModel steps={steps} current={1} />
@@ -53,12 +54,12 @@ export default class SellerEnsure extends Component {
                 <span className={styles.text}>{order.order_no || '-'}</span>
               </h5>
               <div className={styles.orderDescribe}>
-                {pageStatus === 11 && CONFIG.card_type
+                {pageStatus === 11 && CONFIG.cardTypeMap
                   ? `${trader.nickname}向您购买总面额${order.money}的${
-                      CONFIG.card_type[order.order_type - 1].name
+                      CONFIG.cardTypeMap[order.card_type].name
                     }`
                   : `您向${ad.owner.nickname}购买总面额${order.money}的${
-                      CONFIG.card_type[order.order_type - 1].name
+                      CONFIG.cardTypeMap[order.card_type].name
                     }`}
               </div>
               <div className={styles.price}>
@@ -75,7 +76,7 @@ export default class SellerEnsure extends Component {
                 保障时间剩余 &nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                <SetInterval time={order.guarantee_at} />
+                <CountDown formatStr="mm" target={guaranteeTime} />
                 分钟
               </h5>
               {pageStatus === 11 ? (

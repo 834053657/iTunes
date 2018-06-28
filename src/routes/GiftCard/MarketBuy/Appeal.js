@@ -231,24 +231,24 @@ export default class Appeal extends Component {
               <span>{order.order_no || '-'}</span>
             </h5>
             <div className={styles.orderDescribe}>
-              {pageStatus === 20 && order.order_type - 1 && CONFIG.card_type
+              {pageStatus === 20 && order.card_type && CONFIG.cardTypeMap
                 ? `${trader.nickname}向您出售总面额${order.money}的${
-                    CONFIG.card_type[order.order_type - 1].name
+                    CONFIG.cardTypeMap[order.card_type].name
                   }`
                 : null}
               {pageStatus === 21
                 ? `您向${ad.owner.nickname}出售总面额${order.money}的${
-                    CONFIG.card_type[order.order_type - 1].name
+                    CONFIG.cardTypeMap[order.card_type].name
                   }`
                 : null}
               {pageStatus === 22
                 ? `您向${ad.owner.nickname}购买总面额${order.money}的${
-                    CONFIG.card_type[order.order_type - 1].name
+                    CONFIG.cardTypeMap[order.card_type].name
                   }`
                 : null}
               {pageStatus === 23
                 ? `${trader.nickname}向您购买总面额${order.money}的${
-                    CONFIG.card_type[order.order_type - 1].name
+                    CONFIG.cardTypeMap[order.card_type].name
                   }`
                 : null}
             </div>
@@ -268,8 +268,8 @@ export default class Appeal extends Component {
                   <li className={styles.item}>
                     <span className={styles.title}>类型：</span>
                     <div className={styles.content}>
-                      {order.order_type - 1 && CONFIG.card_type
-                        ? CONFIG.card_type[order.order_type - 1].name || '-'
+                      {order.card_type && CONFIG.cardTypeMap
+                        ? CONFIG.cardTypeMap[order.card_type].name || '-'
                         : '-'}
                     </div>
                   </li>
@@ -290,10 +290,6 @@ export default class Appeal extends Component {
                     <div className={styles.content}>
                       {order.amount ? order.amount + 'RMB' : '-'}
                     </div>
-                  </li>
-                  <li className={styles.item}>
-                    <span className={styles.title}>发卡时间：</span>
-                    <div className={styles.content}>{ad.deadline ? ad.deadline + '分钟' : '-'}</div>
                   </li>
                   <li className={styles.item}>
                     <span className={styles.title}>保障时间：</span>
@@ -430,10 +426,10 @@ const AppealInfo = props => {
                 <br />
                 <span>
                   {d.sender &&
-                    d.sender.buyer === 1 && <span className={styles.avaIdentify}>买家</span>}
+                    d.sender.buyer === 1 && <span className={styles.avaIdentify}>卖家</span>}
                   {d.sender &&
                     d.sender.buyer !== 1 &&
-                    d.sender.type === 'user' && <span className={styles.avaIdentify}>卖家</span>}
+                    d.sender.type === 'user' && <span className={styles.avaIdentify}>买家</span>}
                   {d.sender &&
                     d.sender.type === 'admin' && <span className={styles.avaAdmin}>客服</span>}
                 </span>
