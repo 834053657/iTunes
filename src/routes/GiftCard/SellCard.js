@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
+import { filter } from 'lodash';
 import {
   Button,
   Menu,
@@ -29,21 +30,24 @@ const InputGroup = Input.Group;
 export default class BuyCard extends Component {
   constructor(props) {
     super();
+    const cardList = filter(CONFIG.card_type, c => c.valid, []);
     this.state = {
       cards: [],
       addDenoVisible: false,
-      defaultCardTypeName: CONFIG.card_type ? CONFIG.card_type[0].name : '选择',
-      defaultGuaTime: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : '选择',
       passwordType: 1,
       unit_price: 0,
       totalMoney: 0,
+      cardType: cardList,
+      defaultCard: cardList[0] || {},
     };
     this.cards = [];
     this.items = [];
     this.data = {
       password_type: 1,
-      card_type: CONFIG.card_type ? CONFIG.card_type[0].type : '',
+      card_type: cardList[0] && cardList[0].type,
       guarantee_time: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : '',
+      concurrency_order: 0,
+      unit_price: 1,
     };
   }
 
@@ -168,6 +172,7 @@ export default class BuyCard extends Component {
     this.setState({
       cards: a,
     });
+    console.log(a);
   };
 
   //卡图获取
@@ -189,6 +194,10 @@ export default class BuyCard extends Component {
 
   addAdvertising = () => {
     this.data.cards = this.state.cards;
+    if (this.data.cards.length === 0) {
+      message.warning('请输入礼品卡信息');
+      return false;
+    }
     this.props
       .dispatch({
         type: 'card/addSellAd',
@@ -225,30 +234,6 @@ export default class BuyCard extends Component {
       return false;
     }
     const items = this.props.card.terms;
-
-    const guaranteeTimeMenu = (
-      <Menu>
-        {CONFIG.guarantee_time.map(t => {
-          return (
-            <Menu.Item key={t} onClick={() => this.selectGuaTime(t)}>
-              {t}
-            </Menu.Item>
-          );
-        })}
-      </Menu>
-    );
-    const termsMenu = (
-      <Menu>
-        {this.props.card.terms &&
-          this.props.card.terms.map(t => {
-            return (
-              <Menu.Item key={t.id} onClick={() => this.selectTermTitle(t)}>
-                {t.title}
-              </Menu.Item>
-            );
-          })}
-      </Menu>
-    );
 
     const addDenoBox = (
       <div className={styles.denoBox}>
@@ -317,7 +302,7 @@ export default class BuyCard extends Component {
             </li>
             <li>
               <span className={styles.tableLeft}>单价：</span>
-              <InputNumber min={1} onChange={e => this.unitPriceChange(e)} />
+              <InputNumber defaultValue={1} min={1} onChange={e => this.unitPriceChange(e)} />
             </li>
             <li>
               <span className={styles.tableLeft}>保障时间：</span>
@@ -517,7 +502,7 @@ export default class BuyCard extends Component {
                 </h4>
                 <h5>
                   <span>总价：</span>
-                  <span>{this.state.totalMoney * this.state.unit_price}RMB</span>
+                  <span>{this.state.totalMoney * this.data.unit_price}RMB</span>
                 </h5>
               </div>
             </div>

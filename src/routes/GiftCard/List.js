@@ -51,10 +51,6 @@ export default class List extends Component {
       card_type: undefined,
       denominFilterValue: undefined,
     });
-    console.log(type);
-    // this.props.dispatch({
-    //   type:'card/GET_CARD_LIST'
-    // })
     this.fetchData({ type }, () => {
       this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
     });
@@ -100,7 +96,7 @@ export default class List extends Component {
     params.card_type = params.card_type ? params.card_type : undefined;
     params.order_by = params.order_by || order_by;
     params.password_type = params.password_type ? params.password_type : undefined;
-    params.denominFilterValue = params.denominFilterValue || denominFilterValue;
+    params.denominFilterValue = params.denominFilterValue ? params.denominFilterValue : undefined;
     if (params.denominFilterValue) {
       params.min_money = params.denominFilterValue.min;
       params.max_money = params.denominFilterValue.max;

@@ -28,7 +28,7 @@ const InputGroup = Input.Group;
 export default class SaleCard extends Component {
   constructor(props) {
     super();
-    let cardList = filter(CONFIG.card_type, c => c.valid, []);
+    const cardList = filter(CONFIG.card_type, c => c.valid, []);
     this.state = {
       condition: [],
       condition_type: 1,
@@ -45,6 +45,9 @@ export default class SaleCard extends Component {
       card_type: cardList[0] && cardList[0].type,
       condition_type: 1,
       password_type: 1,
+      unit_price: 1,
+      multiple: 1,
+      concurrency_order: 0,
     };
 
     this.setVisible = (type, visible) => {
@@ -72,7 +75,6 @@ export default class SaleCard extends Component {
     };
 
     this.selectDeadline = e => {
-      console.log(e);
       this.setState({
         deadline: +e,
       });
@@ -187,20 +189,31 @@ export default class SaleCard extends Component {
       });
       this.data.condition = +e === 1 ? [] : {};
       this.data.condition_type = +e;
-      console.log(this.data);
     };
 
     this.changeMinMoney = e => {
       const re = /^[1-9]+[0-9]*]*$/;
       if (re.test(e)) {
-        this.setState({
-          rangeMinCount: e,
-        });
         this.data.condition.min_money = +e;
       } else {
         message.warning('请输入数字格式');
       }
     };
+
+    this.changeRangeMin = e => {
+      this.setState({
+        rangeMinCount: e,
+      });
+      this.data.condition.min_money = +e;
+    };
+
+    this.changeRangeMax = e => {
+      this.setState({
+        rangeMaxCount: e,
+      });
+      this.data.condition.max_money = +e;
+    };
+
     this.changeMaxMoney = e => {
       const re = /^[1-9]+[0-9]*]*$/;
       if (re.test(e)) {
@@ -214,6 +227,18 @@ export default class SaleCard extends Component {
     };
 
     this.addBuyAd = () => {
+      if (Array.isArray(this.data.condition)) {
+        if (this.data.condition.length === 0) {
+          message.warning('面额信息不完整');
+          return false;
+        }
+      } else if (
+        !Array.isArray(this.data.condition) &&
+        (!this.data.condition.min_money || !this.data.condition.max_money)
+      ) {
+        message.warning('面额信息不完整');
+        return false;
+      }
       this.props
         .dispatch({
           type: 'card/addBuyAd',
@@ -374,7 +399,7 @@ export default class SaleCard extends Component {
                     className={styles.conIpt}
                     type="text"
                     value={this.state.rangeMinCount}
-                    onChange={e => this.changeMinMoney(e)}
+                    onChange={e => this.changeRangeMin(e)}
                   />
                   &nbsp;&nbsp;---&nbsp;&nbsp;
                   <InputNumber
@@ -382,7 +407,7 @@ export default class SaleCard extends Component {
                     type="text"
                     width="40px"
                     value={this.state.rangeMaxCount}
-                    onChange={e => this.changeMaxMoney(e)}
+                    onChange={e => this.changeRangeMax(e)}
                   />
                 </div>
               </li>

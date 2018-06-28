@@ -64,7 +64,10 @@ export default class DealDeatil extends Component {
           });
           this.props.dispatch(routerRedux.push(`/card/deal-line/${res.data.order_id}`));
         } else if (res && res.msg === '广告数据已变化') {
-          console.log(id);
+          this.postData = {
+            ad_id: +this.props.match.params.id, //广告ID
+            order_detail: [], // 订单详情
+          };
           const { params: { id } } = this.props.match || {};
           this.fetch({ id });
           message.error(res.msg + '，请重新填写订单数据');

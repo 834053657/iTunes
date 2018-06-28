@@ -86,7 +86,7 @@ export default class DealFinish extends Component {
       userInfo = ad.owner;
     }
 
-    let card_name =
+    const card_name =
       order.card_type && CONFIG.cardTypeMap[order.card_type]
         ? CONFIG.cardTypeMap[order.card_type].name
         : '-';
