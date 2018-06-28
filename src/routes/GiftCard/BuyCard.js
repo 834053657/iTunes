@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
+import { filter } from 'lodash';
 import {
   Button,
   Menu,
@@ -27,17 +28,21 @@ const InputGroup = Input.Group;
 export default class SaleCard extends Component {
   constructor(props) {
     super();
+    let cardList = filter(CONFIG.card_type, c => c.valid, []);
     this.state = {
       condition: [],
       condition_type: 1,
       passwordType: 1,
+      cardType: cardList,
+      defaultCard: cardList[0] || {},
     };
     this.items = [];
+
     this.data = {
       condition: [],
       deadline: CONFIG.deadline ? CONFIG.deadline[0] : null,
       guarantee_time: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : null,
-      card_type: CONFIG.card_type ? CONFIG.card_type[0].type : '',
+      card_type: cardList[0] && cardList[0].type,
       condition_type: 1,
       password_type: 1,
     };
@@ -258,7 +263,7 @@ export default class SaleCard extends Component {
   componentWillUnmount() {}
 
   render() {
-    const { condition_type, condition } = this.state;
+    const { condition_type, condition, defaultCard = {}, cardType = [] } = this.state;
     const items = this.props.card.terms;
 
     const breadcrumbList = [
@@ -279,10 +284,10 @@ export default class SaleCard extends Component {
               <span className={styles.tableLeft}>类型：</span>
               <Select
                 style={{ width: 120 }}
-                defaultValue={CONFIG.card_type.filter(c => c.valid)[0].name}
+                defaultValue={defaultCard.name}
                 onChange={this.selectCardType}
               >
-                {CONFIG.card_type.filter(c => c.valid).map(t => {
+                {cardType.map(t => {
                   return (
                     <Option key={t.type} value={t.type}>
                       {t.name}
@@ -294,19 +299,19 @@ export default class SaleCard extends Component {
 
             <li>
               <span className={styles.tableLeft}>单价：</span>
-              <InputNumber min={1} onChange={e => this.unitPriceChange(e)} /> RMB
+              <InputNumber defaultValue={1} min={1} onChange={e => this.unitPriceChange(e)} /> RMB
             </li>
 
             <li>
               <span className={styles.tableLeft}>倍数：</span>
-              <InputNumber min={1} onChange={e => this.multChange(e)} />
+              <InputNumber defaultValue={1} min={1} onChange={e => this.multChange(e)} />
             </li>
 
             <li>
               <span className={styles.tableLeft}>条件：</span>
               <Radio.Group defaultValue="1" onChange={e => this.selCondition(e.target.value)}>
                 <Radio.Button value="1">指定面额</Radio.Button>
-                <Radio.Button value="2">交易限额</Radio.Button>
+                <Radio.Button value="2">面额区间</Radio.Button>
               </Radio.Group>
             </li>
             {condition_type && condition.length && +condition_type === 1 ? (
@@ -405,19 +410,29 @@ export default class SaleCard extends Component {
 
             <li>
               <span className={styles.tableLeft}>发卡期限：</span>
-              <Select defaultValue={CONFIG.deadline[0]} onChange={this.selectDeadline}>
-                {CONFIG.deadline.map(t => {
-                  return <Option key={t}>{t}</Option>;
-                })}
+              <Select
+                defaultValue={CONFIG.deadline && CONFIG.deadline[0]}
+                onChange={this.selectDeadline}
+                style={{ width: 100 }}
+              >
+                {CONFIG.deadline &&
+                  CONFIG.deadline.map(t => {
+                    return <Option key={t}>{t}</Option>;
+                  })}
               </Select>
             </li>
 
             <li>
               <span className={styles.tableLeft}>保障时间：</span>
-              <Select defaultValue={CONFIG.guarantee_time[0]} onChange={this.selectGuaTime}>
-                {CONFIG.guarantee_time.map(t => {
-                  return <Option key={t}>{t}</Option>;
-                })}
+              <Select
+                defaultValue={CONFIG.guarantee_time && CONFIG.guarantee_time[0]}
+                onChange={this.selectGuaTime}
+                style={{ width: 100 }}
+              >
+                {CONFIG.guarantee_time &&
+                  CONFIG.guarantee_time.map(t => {
+                    return <Option key={t}>{t}</Option>;
+                  })}
               </Select>
             </li>
 

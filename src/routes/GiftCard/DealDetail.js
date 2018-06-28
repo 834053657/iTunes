@@ -194,7 +194,7 @@ export default class DealDeatil extends Component {
         orderData,
       });
     } else {
-      message.warning('面额数未符合要求');
+      message.warning('面额未符合要求');
     }
   };
 

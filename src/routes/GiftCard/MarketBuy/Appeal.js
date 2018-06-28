@@ -218,8 +218,12 @@ export default class Appeal extends Component {
       },
     };
 
-    console.log(ad);
-    const userInfo = ad.owner;
+    let userInfo;
+    if (pageStatus === 21 || pageStatus === 23) {
+      userInfo = trader;
+    } else if (pageStatus === 20 || pageStatus === 22) {
+      userInfo = ad.owner;
+    }
 
     return (
       <div className={styles.appeal}>
