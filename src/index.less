@@ -1,4 +1,5 @@
 @import '~antd/lib/style/color/colors.less';
+@import './utils/utils.less';
 
 html,
 body,
@@ -58,6 +59,16 @@ body {
     &:active {
       color: @cyan-7;
     }
+  }
+
+  .name {
+    vertical-align: middle;
+    margin-left: 8px;
+    max-width: 6em;
+    display: inline-block;
+    line-height: 24px;
+    height: 24px;
+    .textOverflow();
   }
   .ant-spin-container {
     overflow: visible !important;

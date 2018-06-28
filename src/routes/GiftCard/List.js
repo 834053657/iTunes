@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { parse } from 'url';
+import numeral from 'numeral';
 import { connect } from 'dva';
 import { stringify } from 'qs';
 import { map, filter } from 'lodash';
@@ -187,18 +188,16 @@ export default class List extends Component {
     let columns = [
       {
         title: '用户名',
-        width: '200px',
-        dataIndex: 'owner.nickname',
+        width: '150',
+        dataIndex: 'nickname_',
         render: (text, record) => {
           const userinfo = record.owner;
           return (
             <div className={styles.userInfo}>
-              <Avatar size="large" src={userinfo.avatar} />
-              <Badge status={userinfo.online ? 'success' : 'default'} offset={[11, 10]} dot>
-                <span style={{ paddingLeft: '10px' }} className={styles.name}>
-                  {userinfo.nickname}
-                </span>
+              <Badge status={userinfo.online ? 'success' : 'default'} offset={[35, -5]} dot>
+                <Avatar size="large" src={userinfo.avatar} />
               </Badge>
+              <span className={styles.name}>{userinfo.nickname}</span>
             </div>
           );
         },
@@ -206,7 +205,7 @@ export default class List extends Component {
       {
         title: '类型',
         dataIndex: 'type',
-        width: '10%',
+        width: '100',
         filterMultiple: false,
         filters: cardTypes,
         render: (text, record) => {
@@ -222,7 +221,7 @@ export default class List extends Component {
       {
         title: type === '2' ? '包含' : '要求',
         dataIndex: 'password_type',
-        width: '150px',
+        width: '200',
         filters: cardPwdType,
         filterMultiple: false,
         render: (v, row) => {
@@ -232,7 +231,7 @@ export default class List extends Component {
       {
         title: '面额',
         dataIndex: 'denomination',
-        width: '15%',
+        width: '100',
         onFilterDropdownVisibleChange: e => {
           this.setState({
             denoVisible: e,
@@ -295,27 +294,28 @@ export default class List extends Component {
       },
       {
         title: '总面额',
-        width: '10%',
+        width: '100',
         dataIndex: 'total_denomination',
-        render: (text, record) => {
-          return <span>{record.total_money}</span>;
-        },
+        render: (text, record) => <span>{numeral(record.total_money).format('0,0.00')} RMB</span>,
       },
       {
         title: '发卡期限',
-        width: '10%',
+        width: '100',
         dataIndex: 'deadline',
+        render: v => <span>{v} 分钟</span>,
       },
       {
         title: '单价',
-        width: '10%',
+        width: '100',
         dataIndex: 'unit_price',
+        render: v => <span>{numeral(v).format('0,0.00')} RMB</span>,
         sorter: (a, b) => a.unitPrice - b.unitPrice,
       },
       {
         title: '保障时间',
-        width: '10%',
+        width: '100',
         dataIndex: 'guarantee_time',
+        render: v => <span>{v} 分钟</span>,
       },
       {
         title: '操作',
