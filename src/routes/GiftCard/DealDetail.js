@@ -74,11 +74,6 @@ export default class DealDeatil extends Component {
       });
   };
 
-  cancelOrder = () => {
-    const { ad_type } = this.props.detail;
-    this.props.dispatch(routerRedux.push(`/card/market?type=${ad_type}`));
-  };
-
   handlerSell = async () => {
     this.postData.order_detail = this.postData.order_detail.filter(i => i.count > 0);
     if (this.postData.order_detail.length === 0) {
@@ -219,6 +214,10 @@ export default class DealDeatil extends Component {
       return row.money * row.count || 0;
     });
     return userBuySum;
+  };
+
+  handleBack = () => {
+    this.props.dispatch(routerRedux.goBack());
   };
 
   /**
@@ -397,7 +396,7 @@ export default class DealDeatil extends Component {
             </li>
           </ul>
           <div className={styles.bottom}>
-            <Button onClick={this.cancelOrder}>返回</Button>
+            <Button onClick={this.handleBack}>取消</Button>
             <Button
               type="primary"
               disabled={!this.postData.order_detail.length > 0}
@@ -473,7 +472,7 @@ export default class DealDeatil extends Component {
             </li>
           </ul>
           <div className={styles.bottom}>
-            <Button onClick={this.cancelOrder}>返回</Button>
+            <Button onClick={this.handleBack}>取消</Button>
             <Button
               disabled={this.calcuBuyTotal() === 0}
               type="primary"
