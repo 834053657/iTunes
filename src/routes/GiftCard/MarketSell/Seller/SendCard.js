@@ -9,8 +9,9 @@ import { sendCDK } from '../../../../services/api';
 import SendOnlyPicture from './OnlyPic';
 import SendPicWithText from './PicWithText';
 
-@connect(({ card }) => ({
+@connect(({ loading, card }) => ({
   card,
+  submitting: loading.effects['card/sendCDK'],
 }))
 export default class Process extends Component {
   constructor(props) {
@@ -52,13 +53,11 @@ export default class Process extends Component {
 
   writePassword = (e, item, index, i) => {
     this.cardsData[index].cards[i].password = e.target.value;
-    console.log(e.target.value);
   };
 
   //只有图片 上传图片
   sendPic = (info, url, i, index) => {
     this.cardsData[index].cards[i].picture = url;
-    console.log(this.cardsData);
   };
 
   //只有图片 上传密码
@@ -68,22 +67,18 @@ export default class Process extends Component {
 
   changePTPass = (e, i, index) => {
     this.cardsData[index].cards[i].password = e.target.value;
-    console.log(this.cardsData);
   };
 
   sendPicWithText = (info, url, i, index) => {
     this.cardsData[index].cards[i].picture = url;
-    console.log(this.cardsData);
   };
 
   sendRecWithText = (info, url, index) => {
     this.cardsData[index].receipt = url;
-    console.log(this.cardsData);
   };
 
   sendCDK = () => {
     this.data.cards = this.cardsData;
-    console.log(this.data);
     this.props.dispatch({
       type: 'card/sendCDK',
       payload: this.data,
@@ -103,8 +98,7 @@ export default class Process extends Component {
   };
 
   render() {
-    const { user, detail } = this.props;
-    const { setStatus } = this.props;
+    const { user, detail, submitting, setStatus } = this.props;
     const { ad = {}, cards = {}, order = {} } = detail;
 
     const userInfo = ad.owner;
@@ -262,6 +256,7 @@ export default class Process extends Component {
                   onClick={() => {
                     this.sendCDK();
                   }}
+                  loading={submitting}
                 >
                   发卡
                 </Button>

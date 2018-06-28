@@ -279,7 +279,7 @@ export default class SaleCard extends Component {
               <span className={styles.tableLeft}>类型：</span>
               <Select
                 style={{ width: 120 }}
-                defaultValue={CONFIG.card_type[0].name}
+                defaultValue={CONFIG.card_type.filter(c => c.valid)[0].name}
                 onChange={this.selectCardType}
               >
                 {CONFIG.card_type.filter(c => c.valid).map(t => {

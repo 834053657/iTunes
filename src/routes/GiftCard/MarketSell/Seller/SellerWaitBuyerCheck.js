@@ -9,8 +9,9 @@ import QuickMsg from '../../QuickMsg';
 const Step = Steps.Step;
 const Option = Select.Option;
 
-@connect(({ card }) => ({
+@connect(({ loading, card }) => ({
   card,
+  cancel: loading.effects['card/cacelOrder'],
 }))
 export default class SellerWaitBuyerCheck extends Component {
   constructor(props) {
@@ -128,6 +129,7 @@ export default class SellerWaitBuyerCheck extends Component {
                 onClick={this.cancelOrder}
                 style={{ borderColor: 'red', backgroundColor: '#fff', color: 'red' }}
                 type="danger"
+                loading={this.props.cancel}
               >
                 取消订单
               </Button>

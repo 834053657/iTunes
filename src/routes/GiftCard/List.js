@@ -178,7 +178,7 @@ export default class List extends Component {
   };
 
   initColumns = (type, denominFilterValue) => {
-    const cardTypes = map(CONFIG.card_type, item => {
+    const cardTypes = map(CONFIG.card_type.filter(t => t.valid), item => {
       return { text: item.name, value: item.type };
     });
     const cardPwdType = map(CONFIG.cardPwdType, (text, value) => {
