@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Icon, Input, Avatar, Badge } from 'antd';
+import { Button, Icon, Input, Avatar, Badge, Modal } from 'antd';
 import CountDown from 'components/CountDown';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
@@ -20,6 +20,7 @@ export default class Process extends Component {
       detail: props.detail,
       user: props.user,
       time: props.detail.ad.deadline,
+      termView: false,
     };
     this.cardsData = [];
     this.data = {
@@ -146,7 +147,23 @@ export default class Process extends Component {
               </div>
               <div className={styles.term}>
                 <h3>交易条款：</h3>
-                <p>{order.term}</p>
+                <Button
+                  onClick={() => {
+                    this.setState({
+                      termView: true,
+                    });
+                  }}
+                >
+                  查看交易条款
+                </Button>
+                <Modal
+                  title="交易条款"
+                  visible={this.state.termView}
+                  onCancel={() => this.setState({ termView: false })}
+                  footer={null}
+                >
+                  <p>{order.term}</p>
+                </Modal>
               </div>
             </div>
           </div>

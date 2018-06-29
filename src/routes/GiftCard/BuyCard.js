@@ -244,13 +244,13 @@ export default class SaleCard extends Component {
           type: 'card/addBuyAd',
           payload: this.data,
         })
-        .then(r => {
-          console.log(r);
-          this.data = {};
-          this.props.history.push({ pathname: '/ad/my' });
-        })
-        .catch(err => {
-          console.log('发送失败，错误原因' + err);
+        .then(res => {
+          if (res.code === 0) {
+            this.data = {};
+            this.props.history.push({ pathname: '/ad/my' });
+          } else {
+            message.error('发送失败，失败原因：' + res.msg);
+          }
         });
     };
   }

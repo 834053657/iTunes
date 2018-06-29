@@ -43,7 +43,6 @@ export default class OrderDetail extends Component {
   componentWillReceiveProps(nextProps) {
     const { params: { id } } = this.props.match || {};
     const { params: { id: nextid } } = nextProps.match || {};
-    console.log(id, nextid);
     if (nextid !== id) {
       this.fetchData(nextid);
       this.leaveRoom(id);
@@ -56,7 +55,6 @@ export default class OrderDetail extends Component {
     this.setState({
       orderId: id,
     });
-    console.log(id);
     this.props.dispatch({
       type: 'card/fetchOrderDetail',
       payload: { id },
@@ -79,64 +77,6 @@ export default class OrderDetail extends Component {
       payload: { order_id },
     });
   };
-
-  // componentWillUpdate(nextProps, nextState) {
-  //   console.log(nextProps, nextState);
-  //   // if (nextState.pageStatus === 6) {
-  //   //   this.fetchData()
-  //   // }
-  //   return true;
-  //   // const {params: {id}} = this.props.match || {};
-  //   // const {order} = this.props.detail;
-  //   // console.log(id)
-  //   // this.props
-  //   //   .dispatch({
-  //   //     type: 'card/fetchOrderDetail',
-  //   //     payload: {"id": id},
-  //   //   })
-  //   //   .then(() => {
-  //   //     this.initStatue(order);
-  //   //   });
-  // }
-
-  // initStatue = () => {
-  //   const s = this.props.detail.order.status;
-  //   //主动出售
-  //   //5 发送CDK      卖家视图   打开        1
-  //   //1 等待买家查收  买家视图   等待查收      2
-  //
-  //   //主动购买
-  //   //11 买家确认         卖家视图    等待查收    2
-  //   //14 买家确认          买家视图   等待查收    2
-  //
-  //   console.log(s)
-  //   console.log(this.identify())
-  //   if (s === 1) {
-  //     this.setState({pageStatus: 5});
-  //     console.log(5);
-  //   }
-  //   if (s === 2) {
-  //     if (this.orderType() === 1) {
-  //       this.setState({pageStatus: 1});
-  //       console.log(1);
-  //     }
-  //   }
-  //   if (s === 3) {
-  //     if (this.orderType() === 1) {
-  //       if (this.identify() === '买家') {
-  //         this.setState({pageStatus: 14});
-  //         console.log(14);
-  //       }
-  //       if (this.identify() === '卖家') {
-  //         this.setState({pageStatus: 11});
-  //         console.log(11);
-  //       }
-  //     }
-  //   }
-  //
-  //   //主动购买  买家打开
-  //
-  // };
 
   orderTitle = (ad, cards, order, user) => {
     if (order.order_type === 1) {
@@ -193,9 +133,7 @@ export default class OrderDetail extends Component {
     const { user } = this.props;
     const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
     // const {pageStatus} = this.state;
-    //console.log(this.state.status)
     // pageStatus = 14;
-    console.log(detail);
     if (!Object.keys(ad).length) {
       return false;
     }

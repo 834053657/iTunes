@@ -24,7 +24,6 @@ export default class DealDeatil extends Component {
       loading: true,
     };
     this.postData = {
-      // order_type: props.card.adDetail.ad_type, //1代表购买  2代表出售
       ad_id: +props.match.params.id, //广告ID
       order_detail: [], // 订单详情
     };
@@ -134,7 +133,6 @@ export default class DealDeatil extends Component {
   };
 
   changeFixedNum = (e, c) => {
-    console.log(e);
     e = parseInt(e);
     const re = /^[1-9]+[0-9]*]*$/;
     if (re.test(e)) {

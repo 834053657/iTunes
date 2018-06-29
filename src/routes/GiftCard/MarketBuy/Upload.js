@@ -23,7 +23,6 @@ export default class UploadComponent extends Component {
   fileChange = info => {
     const { currentUser } = this.props.user || {};
     const { user = {}, upload = {} } = currentUser || {};
-    console.log(upload);
     this.previewUrl = 'http://images.91jianke.com/';
     const file = info.file;
     const id = file.response.hash;
@@ -92,6 +91,7 @@ export default class UploadComponent extends Component {
               action={upload.domain}
               onChange={this.uploadHandler}
               data={{ token: upload.token }}
+              multiple={this.props.multiple ? this.props.multiple : false}
             >
               {this.state.fileList.length < picNum ? (
                 <div>

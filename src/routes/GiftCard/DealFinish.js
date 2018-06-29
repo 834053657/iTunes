@@ -215,7 +215,6 @@ export default class DealFinish extends Component {
                     rows={4}
                     value={this.state.contentT}
                     onChange={e => {
-                      console.log(e.target.value.length);
                       this.setState({ contentT: e.target.value });
                     }}
                   />
