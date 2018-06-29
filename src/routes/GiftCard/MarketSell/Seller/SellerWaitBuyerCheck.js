@@ -17,14 +17,11 @@ export default class SellerWaitBuyerCheck extends Component {
   constructor(props) {
     super();
     this.state = {};
-    console.log(props);
-
     this.guaranteeTime = new Date().getTime() + props.detail.order.guarantee_at * 1000;
     this.deadlineTime = new Date().getTime() + props.detail.order.deadline_at * 1000;
   }
 
   cancelOrder = () => {
-    console.log(this.props);
     this.props.dispatch({
       type: 'card/cacelOrder',
       payload: { order_id: this.props.detail.order.id },

@@ -51,6 +51,9 @@ export default class List extends Component {
       card_type: undefined,
       denominFilterValue: undefined,
     });
+    this.state.card_type = undefined;
+    this.state.password_type = undefined;
+    this.state.denominFilterValue = undefined;
     this.fetchData({ type }, () => {
       this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
     });
@@ -71,7 +74,6 @@ export default class List extends Component {
   };
 
   denoBuyList = r => {
-    // console.log(r)
     const a = [];
     if (r.money instanceof Array) {
       return r.money;
@@ -90,19 +92,19 @@ export default class List extends Component {
 
   fetchData = (params_, callback) => {
     const params = { ...params_ };
-    console.log(params);
-    const { type, card_type, order_by, password_type, denominFilterValue } = this.state;
+    const { type, card_type, order_by, password_type, denominFilterValue, filters } = this.state;
     params.type = params.type || type;
-    params.card_type = params.card_type ? params.card_type : undefined;
+    params.card_type = params.card_type || card_type;
+    // params.card_type = params.card_type ? params.card_type : undefined;
     params.order_by = params.order_by || order_by;
-    params.password_type = params.password_type ? params.password_type : undefined;
+    params.password_type = params.password_type || password_type;
+    // params.password_type = params.password_type ? params.password_type : undefined;
     params.denominFilterValue = params.denominFilterValue ? params.denominFilterValue : undefined;
     if (params.denominFilterValue) {
       params.min_money = params.denominFilterValue.min;
       params.max_money = params.denominFilterValue.max;
       delete params.denominFilterValue;
     }
-    console.log(params);
 
     this.props
       .dispatch({
@@ -120,7 +122,6 @@ export default class List extends Component {
   };
 
   handleTableChange = (pagination, filtersArg, sorter) => {
-    console.log(filtersArg);
     const getValue = obj =>
       Object.keys(obj)
         .map(key => obj[key])
@@ -147,6 +148,7 @@ export default class List extends Component {
     }
     this.setState({
       ...params1,
+      tableFilter: filters,
     });
     if (this.interval) {
       clearInterval(this.interval);

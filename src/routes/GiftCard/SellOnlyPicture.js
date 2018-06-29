@@ -3,6 +3,13 @@ import { Modal, Input, Button, Icon, Upload, message, Popover } from 'antd';
 import UploadComponent from './MarketBuy/Upload';
 
 export default class OnlyPicture extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      fileList: [],
+    };
+  }
+
   renderItem = (item, key) => {
     const { styles, getToken } = this.props;
     const imgContent = (
@@ -21,9 +28,17 @@ export default class OnlyPicture extends Component {
     );
   };
 
+  changeAppealPic = (info, prefix) => {
+    this.props.changeAppealPic(info, prefix);
+    // console.log(info);
+    // this.setState({
+    //   fileList: info.fileList
+    // })
+  };
+
   render() {
     const { item, styles, index, changeFileData } = this.props;
-    console.log(item);
+    const { fileList = [] } = this.state;
     return (
       <div className={styles.denomination}>
         <header>
@@ -38,7 +53,9 @@ export default class OnlyPicture extends Component {
             <div className={styles.uploadBoxInSendPic}>
               <UploadComponent
                 picNum={1000}
-                onlyPic={info => this.props.onlyPic(info)}
+                multiple
+                changeAppealPic={this.changeAppealPic}
+                //onlyPic={info => this.props.onlyPic(info)}
                 remove={info => this.props.remove(info)}
               />
             </div>

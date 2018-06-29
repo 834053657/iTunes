@@ -161,7 +161,26 @@ export default class BuyCard extends Component {
     });
   };
 
-  remove = (info, index) => {
+  changeAppealPic = (info, prefix, index) => {
+    const c = this.state.cards;
+    c[index].items = [];
+    info.fileList.map(file => {
+      if (!file.response) {
+        return false;
+      }
+      c[index].items.push({
+        picture: `${prefix}${file.response.hash}`,
+      });
+      return null;
+    });
+
+    this.setState({
+      cards: c,
+    });
+    this.calcuMoney();
+  };
+
+  remove = (info, index, item) => {
     const c = this.state.cards;
   };
 
@@ -172,7 +191,6 @@ export default class BuyCard extends Component {
     this.setState({
       cards: a,
     });
-    console.log(a);
   };
 
   //卡图获取
@@ -204,11 +222,12 @@ export default class BuyCard extends Component {
         payload: this.data,
       })
       .then(res => {
-        this.data = {};
-        this.props.history.push({ pathname: '/ad/my' });
-      })
-      .catch(err => {
-        console.log('发送失败，失败原因：' + err);
+        if (res.code === 0) {
+          this.data = {};
+          this.props.history.push({ pathname: '/ad/my' });
+        } else {
+          message.error('发送失败，失败原因：' + res.msg);
+        }
       });
   };
 
@@ -221,6 +240,7 @@ export default class BuyCard extends Component {
     this.setState({
       totalMoney: a,
     });
+    console.log(a);
   };
 
   setVisible = (type, visible) => {
@@ -233,6 +253,7 @@ export default class BuyCard extends Component {
     if (!CONFIG.card_type) {
       return false;
     }
+    const { cardType } = this.state;
     const items = this.props.card.terms;
 
     const addDenoBox = (
@@ -288,7 +309,7 @@ export default class BuyCard extends Component {
               <span className={styles.tableLeft}>类型：</span>
               <Select
                 style={{ width: 90 }}
-                defaultValue={CONFIG.card_type.filter(c => c.valid)[0].name}
+                defaultValue={cardType[0].name}
                 onChange={this.selectCardType}
               >
                 {CONFIG.card_type.filter(c => c.valid).map(t => {
@@ -467,8 +488,9 @@ export default class BuyCard extends Component {
                     item={item}
                     styles={styles}
                     index={index}
-                    onlyPic={info => this.onlyPic(info, item, index)}
-                    remove={info => this.remove(info, index)}
+                    changeAppealPic={(info, prefix) => this.changeAppealPic(info, prefix, index)}
+                    //onlyPic={info => this.onlyPic(info, item, index)}
+                    remove={info => this.remove(info, index, item)}
                     getReceipt={url => this.getReceipt(url, index)}
                   />
                 );
@@ -514,6 +536,7 @@ export default class BuyCard extends Component {
               onClick={() => {
                 this.addAdvertising();
               }}
+              loading={this.props.addSelleCard}
             >
               发布
             </Button>
