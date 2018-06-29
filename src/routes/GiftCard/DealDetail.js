@@ -278,7 +278,14 @@ export default class DealDeatil extends Component {
             可添加面额：{condition.min_money}-{condition.max_money}
           </h5>
           <div className={styles.btnBox}>
-            <Button onClick={() => this.setState({ addDenoVisible: false })}>取消</Button>
+            <Button
+              onClick={() => {
+                this.handleBack;
+                this.setState({ addDenoVisible: false });
+              }}
+            >
+              取消
+            </Button>
             <Button
               onClick={() => {
                 this.addDenoInRange(condition);
