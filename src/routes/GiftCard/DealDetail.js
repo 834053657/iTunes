@@ -280,7 +280,6 @@ export default class DealDeatil extends Component {
           <div className={styles.btnBox}>
             <Button
               onClick={() => {
-                this.handleBack;
                 this.setState({ addDenoVisible: false });
               }}
             >

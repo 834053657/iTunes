@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { filter } from 'lodash';
+import { routerRedux } from 'dva/router';
 import {
   Button,
   Menu,
@@ -530,7 +531,7 @@ export default class BuyCard extends Component {
             </div>
           ) : null}
           <div className={styles.footer}>
-            <Button>取消</Button>
+            <Button onClick={() => this.props.dispatch(routerRedux.goBack())}>取消</Button>
             <Button
               type="primary"
               onClick={() => {
