@@ -51,7 +51,6 @@ export default class EnsureBuyInfo extends Component {
     const userInfo = trader;
 
     const steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
-    console.log(order.amount);
     return (
       <div className={styles.stepTwoBox}>
         <StepModel steps={steps} current={1} />

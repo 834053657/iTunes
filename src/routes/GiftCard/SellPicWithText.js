@@ -22,7 +22,7 @@ export default class PicWithText extends Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-
+    console.log(item);
     return (
       <div className={styles.denomination}>
         <header>
@@ -32,7 +32,6 @@ export default class PicWithText extends Component {
         <section className={styles.onlyPic}>
           <div className={styles.left}>
             <ul>
-              {console.log(item)}
               {item.items && item.items.length
                 ? item.items.map((d, i) => {
                     return (
