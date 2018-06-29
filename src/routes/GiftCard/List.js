@@ -292,7 +292,7 @@ export default class List extends Component {
         title: '总面额',
         width: '100',
         dataIndex: 'total_denomination',
-        render: (text, record) => <span>{numeral(record.total_money).format('0,0.00')} RMB</span>,
+        render: (text, record) => <span>{numeral(record.total_money).format('0,0.00')}</span>,
       },
       {
         title: '发卡期限',

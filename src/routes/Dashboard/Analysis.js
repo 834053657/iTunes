@@ -259,7 +259,7 @@ export default class Analysis extends Component {
                 </Tooltip>
               }
               total={() => <Yuan>126560</Yuan>}
-              footer={<Field label="日均销售额" value={`￥${numeral(12423).format('0,0')}`} />}
+              footer={<Field label="日均销售额" value={`￥${numeral(12423).format('0,0.00')}`} />}
               contentHeight={46}
             >
               <Trend flag="up" style={{ marginRight: 16 }}>
