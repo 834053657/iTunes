@@ -278,6 +278,7 @@ export default class List extends Component {
                   ) : null
                 ) : (
                   <span>
+                    r
                     {record.condition.min_money}
                     {' - '}
                     {record.condition.max_money}

@@ -21,7 +21,7 @@ export default {
         yield put({
           type: 'changeLoginStatus',
           payload: {
-            user: response.data,
+            loginInfo: response.data,
           },
         });
         reloadAuthorized();
