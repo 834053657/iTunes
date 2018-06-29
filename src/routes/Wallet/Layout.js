@@ -75,13 +75,13 @@ export default class Layout extends Component {
                 总资产折合：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.amount || 0).format('0,0')}￥`,
+                    __html: `${numeral(wallet.amount || 0).format('0,0.00')}￥`,
                   }}
                 />{' '}
                 CNY | 冻结：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.frozen || 0).format('0,0')}￥`,
+                    __html: `${numeral(wallet.frozen || 0).format('0,0.00')}￥`,
                   }}
                 />{' '}
                 CNY

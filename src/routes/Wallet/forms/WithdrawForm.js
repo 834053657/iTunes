@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, InputNumber, message } from 'antd';
 import { map, filter } from 'lodash';
 import classNames from 'classnames';
-import numeral from 'numeral';
 import styles from './RechargeForm.less';
 
 const FormItem = Form.Item;
@@ -17,8 +16,6 @@ const formItemLayout = {
     sm: { span: 20 },
   },
 };
-
-const yuan = val => `¥ ${numeral(val).format('0,0')}`;
 
 class WithdrawForm extends Component {
   state = {

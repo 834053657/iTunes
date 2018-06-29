@@ -127,7 +127,7 @@ export default class GlobalHeader extends PureComponent {
                 <Icon type="wallet" style={{ fontSize: '16px', marginRight: '6px' }} />{' '}
                 <span
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.amount || 0).format('0,0')}￥`,
+                    __html: `${numeral(wallet.amount || 0).format('0,0.00')}￥`,
                   }}
                 />
               </Link>

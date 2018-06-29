@@ -3,12 +3,12 @@ import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal, Badge, Tooltip } from 'antd';
-import { yuan } from 'components/Charts';
+import numeral from 'numeral';
+
 import DescriptionList from 'components/DescriptionList';
 import styles from './TransferList.less';
 
 const { Description } = DescriptionList;
-const Yuan = ({ children }) => <span dangerouslySetInnerHTML={{ __html: yuan(children) }} />;
 
 const statusMap = ['default', 'processing', 'error', 'success'];
 
@@ -69,14 +69,18 @@ export default class TransferList extends Component {
       title: '金额',
       dataIndex: 'amount',
       render: (v, row) => {
-        return <Yuan>{v}</Yuan>;
+        return (
+          <span className={row.type === 1 ? 'text-green' : 'text-red'}>
+            <b>{row.type === 1 ? '+' : '-'}</b> {numeral(v).format('0,0.00')}
+          </span>
+        );
       },
     },
     {
       title: '手续费',
       dataIndex: 'fee',
       render: (v, row) => {
-        return <Yuan>{v}</Yuan>;
+        return <span>{`￥${numeral(v).format('0,0.00')}`}</span>;
       },
     },
     {
@@ -149,7 +153,7 @@ export default class TransferList extends Component {
   };
 
   renderDetail = modalInfo => {
-    const { created_at, amount, fee, goods_type, trade_type, payment } = modalInfo || {};
+    const { created_at, amount, fee, goods_type, trade_type, payment, type } = modalInfo || {};
     return (
       <DescriptionList col={1} className={styles.detailBox}>
         <Description term="产品类型">
@@ -160,10 +164,10 @@ export default class TransferList extends Component {
         </Description>
         <Description term="账号">{this.getMethodContent(modalInfo)}</Description>
         <Description term="金额">
-          <Yuan>{amount}</Yuan>
+          <span>{`¥ ${type === 1 ? '+' : '-'}${numeral(amount).format('0,0.00')}`}</span>
         </Description>
         <Description term="手续费">
-          <Yuan>{fee}</Yuan>
+          <span>{`¥ ${numeral(fee).format('0,0.00')}`}</span>
         </Description>
         <Description term="交易时间">
           {created_at ? moment(created_at * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}

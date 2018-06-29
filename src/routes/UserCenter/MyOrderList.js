@@ -83,14 +83,14 @@ export default class List extends Component {
       title: '金额',
       dataIndex: 'amount',
       render: (v, row) => {
-        return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0')}` }} />;
+        return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
       },
     },
     {
       title: '手续费',
       dataIndex: 'fee',
       render: (v, row) => {
-        return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0')}` }} />;
+        return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
       },
     },
     {
