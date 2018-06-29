@@ -115,7 +115,7 @@ export default class List extends Component {
       else if (item.content && item.content.goods_type === 2) {
         this.props.dispatch(routerRedux.replace(`/card/deal-line/${item.content.order_id}`));
       }
-    } else if (item.msg_type === 131) {
+    } else if ([131, 132, 133].indexOf(item.msg_type) >= 0) {
       this.props.dispatch(routerRedux.replace(`/ad/my`));
     } else {
       // todo
