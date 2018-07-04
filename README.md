@@ -18,6 +18,13 @@ $ npm install
 $ npm start         # visit http://localhost:8000
 ```
 
+## 发布命令
+```bash
+$ npm run deploy:test1  # 发布测试环境 -- test1 (深圳测试专用)
+$ npm run deploy:test2  # 发布测试环境 -- test2 (山东业务测试专用)
+
+```
+
 ## 常见问题
 https://github.com/ant-design/ant-design-pro/issues/1520
 
