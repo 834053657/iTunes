@@ -25,6 +25,9 @@ $ npm run deploy:test2  # 发布测试环境 -- test2 (山东业务测试专用)
 
 ```
 
+[深圳测试专用 test1](http://47.106.111.213:9050)
+[山东业务测试专用 test2](http://47.106.111.213:9060)
+
 ## 常见问题
 https://github.com/ant-design/ant-design-pro/issues/1520
 
