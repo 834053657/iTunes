@@ -58,11 +58,12 @@ export default class Appeal extends Component {
         if ((!values.content || values.content.trim() === '') && imageUrls.length === 0) {
           message.error('请输入您要提交的内容或者图片!');
         } else {
+          const content = this.getMsgContent(values.content);
           dispatch({
             type: 'send_message',
             payload: {
               order_id: order.id,
-              content: this.getMsgContent(values.content),
+              ...content,
             },
             callback: () => {
               this.props.form.resetFields();
@@ -93,7 +94,7 @@ export default class Appeal extends Component {
     });
     content += imageUrls.length > 0 ? `</ul>` : '';
 
-    return content;
+    return { content, image_url: imageUrls };
   };
 
   componentDidMount() {
