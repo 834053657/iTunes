@@ -107,10 +107,10 @@ export default {
     *submitChangeEmail({ payload, callback }, { call, put }) {
       const response = yield call(updateEmail, payload);
       if (response.code === 0) {
+        yield callback && callback();
         yield put({
           type: 'fetchCurrent',
         });
-        callback && callback();
       } else {
         message.error(response.msg);
       }
@@ -118,11 +118,11 @@ export default {
     *submitChangeMobile({ payload, callback }, { call, put }) {
       const response = yield call(updateMobile, payload);
       if (response.code === 0) {
+        message.success('操作成功');
+        yield callback && callback();
         yield put({
           type: 'fetchCurrent',
         });
-        message.success('操作成功');
-        yield callback && callback();
       } else {
         message.error(response.msg);
       }

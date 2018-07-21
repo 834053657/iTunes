@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-
 import {
   Form,
   Tabs,
@@ -16,6 +15,7 @@ import {
 } from 'antd';
 import { map } from 'lodash';
 import moment from 'moment';
+import cx from 'classnames';
 import styles from './appeal.less';
 import StepModel from '../Step';
 import UploadComponent from './Upload';
@@ -426,7 +426,7 @@ const AppealInfo = props => {
                     src={d.sender && d.sender.avatar}
                   />
                 </span>
-                <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
+                <span className={cx('name', styles.avaName)}>{d.sender && d.sender.nickname}</span>
                 <br />
                 <span>
                   {d.sender &&
