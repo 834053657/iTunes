@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import { routerRedux } from 'dva/router';
 import { Server, SocketIO } from 'mock-socket';
 import createSocket from 'dva-socket.io';
@@ -8,7 +8,7 @@ import {
   leave_chat_room,
   receive_message,
 } from '../services/socket';
-import { playAudio } from './utils';
+import { playAudio, getMessageContent } from './utils';
 
 export function dvaSocket(url, option) {
   // 如需调试线上socket 请吧isDev 设置成false
@@ -67,6 +67,27 @@ export function dvaSocket(url, option) {
             type: 'global/saveNotices',
             payload: rs,
           });
+
+          if (msg && msg.msg_type === 51) { //封号
+            Modal.info({
+              title: '提示',
+              content: getMessageContent(msg),
+            });
+            // message.error(getMessageContent(msg));
+            dispatch({
+              type: 'login/changeLoginStatus',
+              payload: {},
+            });
+            dispatch({
+              type: 'user/saveCurrentUser',
+              payload: {},
+            });
+            dispatch({
+              type: 'SOCKET/CLOSE',
+              payload: {},
+            });
+            // playAudio();
+          }
 
           if (currURL.indexOf('/card/deal-line/')) {
             const current_id = currURL.substring(currURL.lastIndexOf('/') + 1);
