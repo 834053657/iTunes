@@ -3,6 +3,7 @@ import { connect } from 'dva/index';
 import { Button, Icon, Steps, Avatar, Select } from 'antd';
 import { map } from 'lodash';
 import moment from 'moment';
+import cx from 'classnames';
 import styles from './MarketBuy/StepTwo.less';
 
 const Step = Steps.Step;
@@ -110,7 +111,9 @@ export default class QuickMsg extends Component {
                       icon="user"
                     />
                   </span>
-                  <span className={styles.avaName}>{d.sender && d.sender.nickname}</span>
+                  <span className={cx('name', styles.avaName)}>
+                    {d.sender && d.sender.nickname}
+                  </span>
                 </div>
                 <div className={styles.chatItem}>
                   <p className={styles.chatText}>{d.content && d.content.content}</p>

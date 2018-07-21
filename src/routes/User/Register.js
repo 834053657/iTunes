@@ -245,7 +245,7 @@ export default class Register extends Component {
                 // },
                 {
                   pattern: /^[\u4E00-\u9FA5_a-zA-Z0-9/-]{2,20}$/,
-                  message: '用户名只能是2~20位字符的字母，数字，下划线，减号',
+                  message: '用户名只能是2~20位字符，数字，下划线，减号',
                 },
               ],
             })(<Input size="large" placeholder="用户名 2-20位" />)}

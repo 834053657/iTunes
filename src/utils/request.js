@@ -98,7 +98,7 @@ export default function request(postUrl, options, base_url) {
             isRedirect: true,
           },
         });
-        return {};
+        // return {};
       }
       if (status === 403) {
         dispatch(routerRedux.push('/exception/403'));

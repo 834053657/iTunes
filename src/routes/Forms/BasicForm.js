@@ -38,8 +38,9 @@ class Item1 extends PureComponent {
   };
 
   render() {
-    const { data = {} } = this.props;
+    const { data = {}, index } = this.props;
     const { getFieldDecorator, getFieldValue } = this.props.form;
+    console.log(this.props);
 
     const formItemLayout = {
       labelCol: {
@@ -59,7 +60,7 @@ class Item1 extends PureComponent {
 
     return (
       <div>
-        <FormItem {...formItemLayout} label="money">
+        <FormItem {...formItemLayout} label={'money' + index}>
           {getFieldDecorator(`money`, {
             initialValue: data.money,
             rules: [{ required: true, message: 'money is required!' }],
@@ -171,6 +172,7 @@ class Item extends PureComponent {
           {map(getFieldValue('items'), (item, index) => {
             return (
               <ItemForm
+                index={1 + index}
                 key={index}
                 data={item}
                 onChange={this.handleFormChange.bind(this, index)}
@@ -319,7 +321,7 @@ export default class BasicForms extends PureComponent {
               <Button style={{ marginLeft: 8 }}>保存</Button>
             </FormItem>
           </Form>
-          {JSON.stringify(cards, null, 2)}
+          <pre>{JSON.stringify(cards, null, 2)}</pre>
         </Card>
       </PageHeaderLayout>
     );
