@@ -232,6 +232,12 @@ class BasicLayout extends React.Component {
           this.props.dispatch(routerRedux.replace(`/wallet?activeKey=3`));
         } else if ([41, 42].indexOf(item.msg_type) >= 0) {
           this.props.dispatch(routerRedux.replace(`/ad/terms`));
+        } else if ([51, 52, 61, 62].indexOf(item.msg_type) >= 0) {
+          Modal.success({
+            title: '提示',
+            content: getMessageContent(item),
+            onOk: () => {},
+          });
         } else if (item.msg_type >= 100 && item.msg_type <= 114) {
           //todo redict to order detail
           if (item.content && item.content.goods_type === 1)
