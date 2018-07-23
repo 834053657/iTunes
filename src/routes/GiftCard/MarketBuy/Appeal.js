@@ -195,9 +195,13 @@ export default class Appeal extends Component {
     const { currentUser } = this.props.user || {};
     const { user = {}, upload = {} } = currentUser || {};
 
-    const { order, ad, cards, trader } = this.props.detail;
+    const { order = {}, ad, cards, trader } = this.props.detail || {};
     const { pageStatus, setStatus } = this.props;
     const { chatMsgList = [] } = card;
+    const catdType =
+      order.card_type && CONFIG.cardTypeMap[order.card_type]
+        ? CONFIG.cardTypeMap[order.card_type].name
+        : '-';
 
     let steps = null;
     steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
@@ -237,24 +241,16 @@ export default class Appeal extends Component {
             </h5>
             <div className={styles.orderDescribe}>
               {pageStatus === 20 && order.card_type && CONFIG.cardTypeMap
-                ? `${trader.nickname}向您出售总面额${order.money}的${
-                    CONFIG.cardTypeMap[order.card_type].name
-                  }`
+                ? `${trader.nickname}向您出售总面额${order.money}的${catdType}`
                 : null}
               {pageStatus === 21
-                ? `您向${ad.owner.nickname}出售总面额${order.money}的${
-                    CONFIG.cardTypeMap[order.card_type].name
-                  }`
+                ? `您向${ad.owner.nickname}出售总面额${order.money}的${catdType}`
                 : null}
               {pageStatus === 22
-                ? `您向${ad.owner.nickname}购买总面额${order.money}的${
-                    CONFIG.cardTypeMap[order.card_type].name
-                  }`
+                ? `您向${ad.owner.nickname}购买总面额${order.money}的${catdType}`
                 : null}
               {pageStatus === 23
-                ? `${trader.nickname}向您购买总面额${order.money}的${
-                    CONFIG.cardTypeMap[order.card_type].name
-                  }`
+                ? `${trader.nickname}向您购买总面额${order.money}的${catdType}`
                 : null}
             </div>
           </div>
@@ -273,9 +269,7 @@ export default class Appeal extends Component {
                   <li className={styles.item}>
                     <span className={styles.title}>类型：</span>
                     <div className={styles.content}>
-                      {order.card_type && CONFIG.cardTypeMap
-                        ? CONFIG.cardTypeMap[order.card_type].name || '-'
-                        : '-'}
+                      {order.card_type && CONFIG.cardTypeMap ? catdType || '-' : '-'}
                     </div>
                   </li>
                   <li className={styles.item}>
