@@ -125,11 +125,9 @@ export default class BuyForm extends Component {
     this.setState(({ fields }) => ({
       fields: { ...fields, ...changedFields },
     }));
-    console.log(changedFields);
   };
 
   changeConditionType = e => {
-    console.log();
     this.setState({
       conditionType: e.target.value,
     });
