@@ -219,6 +219,17 @@ export function getMessageContent(msgObj) {
       msgText = msgText.replace('{title}', msgObj.title);
     }
 
+    if ([51, 61].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace(
+        '{days}',
+        msgObj.content && msgObj.content.days ? msgObj.content.days: '-'
+      );
+      msgText = msgText.replace(
+        '{reason}',
+        msgObj.content && msgObj.content.reason ? msgObj.content.reason : '-'
+      );
+    }
+
     if ([101, 102, 106, 107, 111, 114].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace('{dealer}', (msgObj.sender && msgObj.sender.nickname) || '');
     }
