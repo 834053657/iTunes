@@ -78,47 +78,27 @@ export default class BuyForm extends Component {
     });
   };
 
-  remove = k => {
+  remove = i => {
     const { form } = this.props;
-    // can use data-binding to get
-    const keys = form.getFieldValue('condition');
-    // We need at least one passenger
-    console.log(keys);
-    console.log(k);
-    // if (keys.length === 1) {
-    //   return;
-    // }
-    //
-    // // can use data-binding to set
-    // form.setFieldsValue({
-    //   keys: keys.filter(key => key !== k),
-    // });
-    // if (this.state.formNumber.length === 1) {
-    //   return;
-    // }
+    const { condition } = this.state;
+    condition.splice(i, 1);
     this.setState({
-      formNumber: this.state.formNumber.splice(1, 1),
+      condition,
     });
+    this.state.condition = condition;
+    this.props.form.setFieldsValue({
+      'condition[]': condition,
+    });
+    console.log(condition);
   };
 
   add = () => {
     const { form } = this.props;
-    // can use data-binding to get
-    // console.log(form);
-    // const condition = form.getFieldProps('condition');
-    // console.log(condition);
-    // console.log(dataItem);
-    //const nextCondition = condition.push(dataItem);
-    // can use data-binding to set
-    // important! notify form to detect changes
     this.postData.push(dataItem);
-    console.log(this.postData);
-
     form.setFieldsValue({
       condition: this.postData,
     });
     const condition = form.getFieldValue('condition');
-    console.log(condition);
   };
 
   addTest = () => {
@@ -160,9 +140,6 @@ export default class BuyForm extends Component {
 
   changeFixedMoney = (e, index) => {
     const { condition } = this.state;
-
-    console.log(condition);
-    console.log(index);
     condition[index].money = e;
     this.setState({
       condition,
@@ -307,7 +284,7 @@ export default class BuyForm extends Component {
                 className="dynamic-delete-button"
                 type="minus-circle-o"
                 disabled={condition.length === 1}
-                onClick={() => this.remove(k)}
+                onClick={() => this.remove(index)}
               />
             </FormItem>
           </Col>
@@ -521,8 +498,6 @@ export default class BuyForm extends Component {
             ],
           })(<InputNumber />)}
         </FormItem>
-
-        <p>{getFieldValue('password_type')}</p>
 
         <FormItem className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>
