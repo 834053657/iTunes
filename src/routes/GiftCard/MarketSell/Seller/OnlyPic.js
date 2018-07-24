@@ -24,7 +24,6 @@ export default class SendOnlyPicture extends Component {
 
   render() {
     const { item, index, changeFileData } = this.props;
-    console.log(item);
     return (
       <div className={styles.denomination}>
         <header>
@@ -40,11 +39,13 @@ export default class SendOnlyPicture extends Component {
               {this.props.renderInput &&
                 this.props.renderInput.map((u, i) => {
                   return (
-                    <UploadComponent
-                      key={i}
-                      picNum={1}
-                      sendPic={(info, url) => this.props.sendPic(info, url, i)}
-                    />
+                    <div className={styles.uploadBox}>
+                      <UploadComponent
+                        key={i}
+                        picNum={1}
+                        sendPic={(info, url) => this.props.sendPic(info, url, i)}
+                      />
+                    </div>
                   );
                 })}
             </div>

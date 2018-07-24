@@ -245,7 +245,7 @@ class BasicLayout extends React.Component {
           else if (item.content && item.content.goods_type === 2) {
             this.props.dispatch(routerRedux.push(`/card/deal-line/${item.content.order_id}`));
           }
-        } else if ([131, 132, 133].indexOf(item.msg_type) >= 0) {
+        } else if ([131, 132, 133, 134].indexOf(item.msg_type) >= 0) {
           this.props.dispatch(routerRedux.push(`/ad/my`));
         } else {
           // todo
