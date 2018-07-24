@@ -227,6 +227,13 @@ export default class SaleCard extends Component {
       }
     };
 
+    this.addFormBuyAd = v => {
+      this.props.dispatch({
+        type: 'card/addBuyAd',
+        payload: v,
+      });
+    };
+
     this.addBuyAd = () => {
       if (Array.isArray(this.data.condition)) {
         if (this.data.condition.length === 0) {
@@ -301,9 +308,8 @@ export default class SaleCard extends Component {
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
+          <BuyForm onSubmit={this.addFormBuyAd} />
           {/*
-          <BuyForm/>
-          */}
 
           <ul className={styles.submitTable}>
             <li>
@@ -519,6 +525,7 @@ export default class SaleCard extends Component {
               发布
             </Button>
           </div>
+                    */}
         </PageHeaderLayout>
       </div>
     );

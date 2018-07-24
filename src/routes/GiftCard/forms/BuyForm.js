@@ -1,6 +1,18 @@
 import React, { Component, Fragment } from 'react';
-import { Select, Button, Icon, Input, message, Form, InputNumber, Radio, Modal } from 'antd';
-import { map, mapKeys, cloneDeep, filter } from 'lodash';
+import {
+  Select,
+  Button,
+  Icon,
+  Input,
+  message,
+  Form,
+  InputNumber,
+  Radio,
+  Modal,
+  Row,
+  Col,
+} from 'antd';
+import { map, mapKeys, cloneDeep, filter, head } from 'lodash';
 import styles from './SellForm.less';
 
 const RadioGroup = Radio.Group;
@@ -19,7 +31,14 @@ export default class BuyForm extends Component {
   state = {
     termModalInfo: false,
     formNumber: [],
-    conditionType: 2,
+    conditionType: 1,
+    condition: [
+      {
+        money: 0,
+        min_count: 0,
+        max_count: 0,
+      },
+    ],
   };
   postData = [];
   handleCancel = () => {
@@ -29,14 +48,17 @@ export default class BuyForm extends Component {
 
   handleSubmit = e => {
     const { form } = this.props;
+    const { condition } = this.state;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      const condition = map(filter(values.condition, item => !Array.isArray(item)), item => {
-        const { money, min_count, max_count } = item;
-        return { money: +money, min_count: +min_count, max_count: +max_count };
-      });
-      console.log({ ...values, condition, password_type: +values.password_type });
       if (!err) {
+        // console.log(values.condition);
+        // const condition = map(filter(values.condition, item => !Array.isArray(item)), item => {
+        //   const {money = null, min_count = null, max_count = null} = item || {};
+        //   return {money: +money, min_count: +min_count, max_count: +max_count};
+        // });
+        // console.log(condition);
+        // console.log(this.state.condition);
         this.props.onSubmit({ ...values, condition, password_type: +values.password_type });
       }
     });
@@ -116,6 +138,9 @@ export default class BuyForm extends Component {
     condition.push(formDataObj);
     console.log(condition);
 
+    this.setState({
+      condition,
+    });
     this.props.form.setFieldsValue({
       'condition[]': condition,
     });
@@ -130,6 +155,44 @@ export default class BuyForm extends Component {
   changeConditionType = e => {
     this.setState({
       conditionType: e.target.value,
+    });
+  };
+
+  changeFixedMoney = (e, index) => {
+    const { condition } = this.state;
+
+    console.log(condition);
+    console.log(index);
+    condition[index].money = e;
+    this.setState({
+      condition,
+    });
+    this.props.form.setFieldsValue({
+      'condition[]': condition,
+    });
+  };
+
+  changeFixMin = (e, index) => {
+    console.log(e);
+    const { condition } = this.state;
+    condition[index].min_count = e;
+    this.setState({
+      condition,
+    });
+    this.props.form.setFieldsValue({
+      'condition[]': condition,
+    });
+  };
+
+  changeFixMax = (e, index) => {
+    console.log(e);
+    const { condition } = this.state;
+    condition[index].max_count = e;
+    this.setState({
+      condition,
+    });
+    this.props.form.setFieldsValue({
+      'condition[]': condition,
     });
   };
 
@@ -153,8 +216,8 @@ export default class BuyForm extends Component {
     };
     const formItemLayoutDeno = {
       wrapperCol: {
-        xs: { span: 4, offset: 0 },
-        sm: { span: 5, offset: 4 },
+        xs: { span: 14, offset: 0 },
+        sm: { span: 14, offset: 4 },
       },
     };
     const formItemLayoutBtn = {
@@ -175,88 +238,120 @@ export default class BuyForm extends Component {
     });
     const condition = getFieldValue('condition[]');
     console.log(condition);
-    // console.log(this.state.formNumber);
 
     const formItems = condition.map((k, index) => {
       return (
-        <FormItem {...formItemLayoutDeno} required={false} key={index}>
-          {getFieldDecorator(`condition[${index}].money`, {
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: '请输入面额',
-              },
-            ],
-          })(<InputNumber placeholder="面额" min={1} style={{ width: '60%', marginRight: 8 }} />)}
-          ---
-          {getFieldDecorator(`condition[${index}].min_count`, {
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: '请输入最小数量',
-              },
-            ],
-          })(
-            <InputNumber placeholder="最小数量" min={1} style={{ width: '60%', marginRight: 8 }} />
-          )}
-          ---
-          {getFieldDecorator(`condition[${index}].max_count`, {
-            validateTrigger: ['onChange', 'onBlur'],
-            onChange: e => console.log(typeof e, e),
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: '请输入最大数量',
-              },
-            ],
-          })(
-            <InputNumber placeholder="最大数量" min={0} style={{ width: '60%', marginRight: 8 }} />
-          )}
-          <Icon
-            className="dynamic-delete-button"
-            type="minus-circle-o"
-            disabled={condition.length === 1}
-            onClick={() => this.remove(k)}
-          />
-        </FormItem>
+        <Row key={index} className={styles.fixed}>
+          <Col className={styles.fixedNum}>
+            <FormItem required={false}>
+              {getFieldDecorator(`condition[${index}].money`, {
+                validateTrigger: ['onChange', 'onBlur'],
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: '请输入面额',
+                  },
+                ],
+              })(
+                <InputNumber
+                  onChange={e => this.changeFixedMoney(e, index)}
+                  placeholder="面额"
+                  min={1}
+                />
+              )}
+              &nbsp;--
+            </FormItem>
+          </Col>
+          <Col className={styles.fixedMin}>
+            <FormItem required={false}>
+              {getFieldDecorator(`condition[${index}].min_count`, {
+                validateTrigger: ['onChange', 'onBlur'],
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: '请输入最小数量',
+                  },
+                ],
+              })(
+                <InputNumber
+                  onChange={e => this.changeFixMin(e, index)}
+                  placeholder="最小数量"
+                  min={1}
+                />
+              )}
+              &nbsp;--
+            </FormItem>
+          </Col>
+          <Col className={styles.fixedMax}>
+            <FormItem required={false}>
+              {getFieldDecorator(`condition[${index}].max_count`, {
+                validateTrigger: ['onChange', 'onBlur'],
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: '请输入最大数量',
+                  },
+                ],
+              })(
+                <InputNumber
+                  onChange={e => this.changeFixMax(e, index)}
+                  placeholder="最大数量"
+                  min={1}
+                />
+              )}
+              &nbsp;
+              <Icon
+                className="dynamic-delete-button"
+                type="minus-circle-o"
+                disabled={condition.length === 1}
+                onClick={() => this.remove(k)}
+              />
+            </FormItem>
+          </Col>
+        </Row>
       );
     });
 
     const conditionItemTwo = (
-      <FormItem {...formItemLayout}>
-        {getFieldDecorator(`condition.min_money`, {
-          validateTrigger: ['onChange', 'onBlur'],
-          rules: [
-            {
-              required: true,
-              whitespace: true,
-              message: '请输入最小数量',
-            },
-          ],
-        })(<InputNumber placeholder="最小数量" min={1} style={{ width: '60%', marginRight: 8 }} />)}
-        {getFieldDecorator(`condition.max_money`, {
-          validateTrigger: ['onChange', 'onBlur'],
-          rules: [
-            {
-              required: true,
-              whitespace: true,
-              message: '请输入最大数量',
-            },
-          ],
-        })(<InputNumber placeholder="最大数量" min={1} style={{ width: '60%', marginRight: 8 }} />)}
-      </FormItem>
+      <Row>
+        <FormItem className={styles.minNum}>
+          {getFieldDecorator(`condition.min_money`, {
+            validateTrigger: ['onChange', 'onBlur'],
+            rules: [
+              {
+                required: false,
+                whitespace: true,
+                message: '请输入最小数量',
+              },
+            ],
+          })(<InputNumber placeholder="最小数量" min={1} style={{ width: '100%' }} />)}
+        </FormItem>
+        <span className={styles.min_max}> &nbsp;&nbsp;--</span>
+        <FormItem className={styles.maxNum}>
+          {getFieldDecorator(`condition.max_money`, {
+            validateTrigger: ['onChange', 'onBlur'],
+            rules: [
+              {
+                required: false,
+                whitespace: true,
+                message: '请输入最大数量',
+              },
+            ],
+          })(<InputNumber placeholder="最大数量" min={1} style={{ width: '100%' }} />)}
+        </FormItem>
+      </Row>
     );
+
+    const defaultType = head(filter(CONFIG.cardTypeMap, card => card.valid)) || {};
 
     return (
       <Form className={styles.form} onSubmit={this.handleSubmit}>
         <FormItem {...formItemLayout} label="类型">
           {getFieldDecorator('card_type', {
-            initialValue: initialValues.card_type || 1,
+            initialValue: defaultType.type,
             rules: [
               {
                 required: true,
@@ -265,11 +360,15 @@ export default class BuyForm extends Component {
             ],
           })(
             <Select style={{ width: 200 }}>
-              {map(CONFIG.card_type, item => (
-                <Option key={item.type} value={item.type}>
-                  {item.name}
-                </Option>
-              ))}
+              {map(CONFIG.cardTypeMap, card => {
+                if (card.valid) {
+                  return (
+                    <Option key={card.type} value={card.type}>
+                      {card.name}
+                    </Option>
+                  );
+                }
+              })}
             </Select>
           )}
         </FormItem>
@@ -315,12 +414,11 @@ export default class BuyForm extends Component {
             </Radio.Group>
           )}
         </FormItem>
-
         {this.state.conditionType === 1 && formItems}
         {this.state.conditionType === 1 && (
           <FormItem {...formItemLayoutBtn}>
             <Button type="dashed" onClick={this.addTest} style={{ width: '60%' }}>
-              <Icon type="plus" /> Add field
+              <Icon type="plus" /> 添加面额
             </Button>
           </FormItem>
         )}
@@ -329,7 +427,6 @@ export default class BuyForm extends Component {
 
         <FormItem {...formItemLayout} label="要求">
           {getFieldDecorator('password_type', {
-            initialValue: 1,
             rules: [
               {
                 required: true,
@@ -341,6 +438,7 @@ export default class BuyForm extends Component {
               {map(CONFIG.cardPwdType, (text, value) => (
                 <Radio key={value} value={value}>
                   {text}
+                  {value}
                 </Radio>
               ))}
             </RadioGroup>

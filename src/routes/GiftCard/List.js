@@ -324,7 +324,7 @@ export default class List extends Component {
           return (
             <Button
               type="primary"
-              disabled={owner.id === user.id}
+              //disabled={owner.id === user.id}
               onClick={() => {
                 this.props.history.push({
                   pathname: `/card/deal-detail/${record.id}`,
