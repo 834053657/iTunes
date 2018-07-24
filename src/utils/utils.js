@@ -1,5 +1,6 @@
 // 请勿在此引用静态文件 因为会影响到mock 执行
 import moment from 'moment';
+import numeral from 'numeral';
 import { parse } from 'qs';
 // import audioMsg from '../../public/audio/msg.mp3'
 
@@ -219,15 +220,12 @@ export function getMessageContent(msgObj) {
       msgText = msgText.replace('{title}', msgObj.title);
     }
 
-    if ([51, 61].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace(
-        '{days}',
-        msgObj.content && msgObj.content.days ? msgObj.content.days: '-'
-      );
-      msgText = msgText.replace(
-        '{reason}',
-        msgObj.content && msgObj.content.reason ? msgObj.content.reason : '-'
-      );
+    if ([51, 61, 134].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace('{service_phone}', CONFIG.service_phone);
+    }
+
+    if ([52, 62].indexOf(msgObj.msg_type) >= 0) {
+      msgText = msgText.replace('{service_platform}', CONFIG.service_platform);
     }
 
     if ([101, 102, 106, 107, 111, 114].indexOf(msgObj.msg_type) >= 0) {
@@ -254,6 +252,10 @@ export function playAudio() {
   const audio = document.createElement('audio');
   audio.src = require('../../public/audio/msg.mp3');
   audio.play();
+}
+
+export function formatMoney(rmb) {
+  return numeral(rmb || 0).format('0,0.00');
 }
 
 /**

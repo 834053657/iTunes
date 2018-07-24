@@ -1,4 +1,6 @@
 import { message } from 'antd';
+import { routerRedux } from 'dva/router';
+
 import {
   getCardlist,
   queryTermsList,
@@ -202,7 +204,8 @@ export default {
     *createSellOrder({ payload }, { call, put }) {
       const res = yield call(createSellOrder, payload);
       if (!res) return null;
-      if (res.code === 0) {
+      if (res.code === 0 && res.data) {
+        yield put(routerRedux.push(`/card/deal-line/${res.data.order_id}`));
         return res.data;
       } else {
         message.error(res.msg);

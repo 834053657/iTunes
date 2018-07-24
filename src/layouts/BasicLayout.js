@@ -227,11 +227,11 @@ class BasicLayout extends React.Component {
             content: getMessageContent(item),
             onOk: () => {},
           }); */
-          this.props.dispatch(routerRedux.replace(`/user-center/index`));
+          this.props.dispatch(routerRedux.push(`/user-center/index`));
         } else if ([31, 32, 33, 34].indexOf(item.msg_type) >= 0) {
-          this.props.dispatch(routerRedux.replace(`/wallet?activeKey=3`));
+          this.props.dispatch(routerRedux.push(`/wallet?activeKey=3`));
         } else if ([41, 42].indexOf(item.msg_type) >= 0) {
-          this.props.dispatch(routerRedux.replace(`/ad/terms`));
+          this.props.dispatch(routerRedux.push(`/ad/terms`));
         } else if ([51, 52, 61, 62].indexOf(item.msg_type) >= 0) {
           Modal.success({
             title: '提示',
@@ -241,12 +241,12 @@ class BasicLayout extends React.Component {
         } else if (item.msg_type >= 100 && item.msg_type <= 114) {
           //todo redict to order detail
           if (item.content && item.content.goods_type === 1)
-            this.props.dispatch(routerRedux.replace(`/itunes/order/${item.content.order_id}`));
+            this.props.dispatch(routerRedux.push(`/itunes/order/${item.content.order_id}`));
           else if (item.content && item.content.goods_type === 2) {
-            this.props.dispatch(routerRedux.replace(`/card/deal-line/${item.content.order_id}`));
+            this.props.dispatch(routerRedux.push(`/card/deal-line/${item.content.order_id}`));
           }
-        } else if ([131, 132, 133].indexOf(item.msg_type) >= 0) {
-          this.props.dispatch(routerRedux.replace(`/ad/my`));
+        } else if ([131, 132, 133, 134].indexOf(item.msg_type) >= 0) {
+          this.props.dispatch(routerRedux.push(`/ad/my`));
         } else {
           // todo
           console.log(item.msg_type);
