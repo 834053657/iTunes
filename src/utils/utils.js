@@ -219,14 +219,17 @@ export function getMessageContent(msgObj) {
       msgText = msgText.replace('{title}', msgObj.title);
     }
 
-    if ([51, 61].indexOf(msgObj.msg_type) >= 0) {
+    if ([51, 61, 134].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace(
-        '{days}',
-        msgObj.content && msgObj.content.days ? msgObj.content.days: '-'
+        '{service_phone}',
+        CONFIG.service_phone
       );
+    }
+
+    if ([52, 62].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace(
-        '{reason}',
-        msgObj.content && msgObj.content.reason ? msgObj.content.reason : '-'
+        '{service_platform}',
+        CONFIG.service_platform
       );
     }
 
