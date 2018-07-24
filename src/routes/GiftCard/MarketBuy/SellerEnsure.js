@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Icon, Avatar, Select, Badge } from 'antd';
+import { Button, Icon, Avatar, Select, Badge, Popconfirm } from 'antd';
 import CountDown from 'components/CountDown';
 import styles from './OrderDetail.less';
 import StepModel from '../Step';
@@ -78,7 +78,7 @@ export default class SellerEnsure extends Component {
                 保障时间剩余 &nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                <CountDown formatStr="mm" target={guaranteeTime} />
+                <CountDown formatStr="mm:ss" target={guaranteeTime} />
                 分钟
               </h5>
               {pageStatus === 11 ? (
@@ -93,30 +93,37 @@ export default class SellerEnsure extends Component {
                 </div>
               ) : (
                 <div>
-                  <Button
-                    type="danger"
-                    loading={this.props.appealBtn}
-                    onClick={() => {
+                  <Popconfirm
+                    title="确认申诉吗?"
+                    onConfirm={() => {
                       this.props.dispatch({
                         type: 'card/appealOrder',
                         payload: { order_id: order.id },
                       });
                     }}
+                    okText="是"
+                    cancelText="取消"
                   >
-                    申诉
-                  </Button>
-                  <Button
-                    onClick={() => {
+                    <Button type="danger" loading={this.props.appealBtn}>
+                      申诉
+                    </Button>
+                  </Popconfirm>
+
+                  <Popconfirm
+                    title="确认释放吗?"
+                    onConfirm={() => {
                       this.props.dispatch({
                         type: 'card/releaseOrder',
                         payload: { order_id: order.id },
                       });
                     }}
-                    type="primary"
-                    loading={this.props.releaseOrderBtn}
+                    okText="是"
+                    cancelText="取消"
                   >
-                    确认释放
-                  </Button>
+                    <Button type="primary" loading={this.props.releaseOrderBtn}>
+                      确认释放
+                    </Button>
+                  </Popconfirm>
                 </div>
               )}
             </div>

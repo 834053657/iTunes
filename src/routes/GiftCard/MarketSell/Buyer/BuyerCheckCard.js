@@ -112,7 +112,7 @@ export default class BuyerCheckCard extends Component {
                 对方剩余&nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                <CountDown formatStr="mm" target={deadline} />
+                <CountDown formatStr="mm:ss" target={deadline} />
                 分钟发卡
               </h4>
             ) : (
@@ -121,7 +121,7 @@ export default class BuyerCheckCard extends Component {
                   查收时间剩余&nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  <CountDown formatStr="mm" target={checkAt} />
+                  <CountDown formatStr="mm:ss" target={checkAt} />
                   分钟
                 </h4>
                 <Button type="primary" size="large" onClick={this.handlePostCheck}>

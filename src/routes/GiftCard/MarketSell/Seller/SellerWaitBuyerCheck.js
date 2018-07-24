@@ -109,7 +109,7 @@ export default class SellerWaitBuyerCheck extends Component {
                   保障时间剩余 &nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  <CountDown formatStr="mm" target={guaranteeTime} />
+                  <CountDown formatStr="mm:ss" target={guaranteeTime} />
                   分钟
                 </h5>
               ) : (
@@ -117,7 +117,7 @@ export default class SellerWaitBuyerCheck extends Component {
                   买家查收卡密时间剩余 &nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  <CountDown formatStr="mm" target={checkTime} />
+                  <CountDown formatStr="mm:ss" target={checkTime} />
                   分钟
                 </h5>
               )}
