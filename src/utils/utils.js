@@ -1,5 +1,6 @@
 // 请勿在此引用静态文件 因为会影响到mock 执行
 import moment from 'moment';
+import numeral from 'numeral';
 import { parse } from 'qs';
 // import audioMsg from '../../public/audio/msg.mp3'
 
@@ -222,7 +223,7 @@ export function getMessageContent(msgObj) {
     if ([51, 61].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace(
         '{days}',
-        msgObj.content && msgObj.content.days ? msgObj.content.days: '-'
+        msgObj.content && msgObj.content.days ? msgObj.content.days : '-'
       );
       msgText = msgText.replace(
         '{reason}',
@@ -254,6 +255,10 @@ export function playAudio() {
   const audio = document.createElement('audio');
   audio.src = require('../../public/audio/msg.mp3');
   audio.play();
+}
+
+export function formatMoney(rmb) {
+  return numeral(rmb || 0).format('0,0.00');
 }
 
 /**
