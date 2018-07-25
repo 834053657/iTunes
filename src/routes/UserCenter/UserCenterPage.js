@@ -532,7 +532,7 @@ export default class UserCenterPage extends Component {
                     <ul className={styles.box_item_action}>
                       <li>
                         {!!~[1, 3].indexOf(video_status) && (
-                          <a onClick={this.showVideoAuthModal}>编辑</a>
+                          <a onClick={this.showVideoAuthModal}>认证</a>
                         )}
                       </li>
                     </ul>

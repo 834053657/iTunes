@@ -59,6 +59,7 @@ class ImageValidation extends Component {
 
     return (
       <Modal
+        destroyOnClose
         width={360}
         title={title}
         visible={visible}

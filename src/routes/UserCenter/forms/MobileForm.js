@@ -25,7 +25,7 @@ class MobileForm extends Component {
     count: 0,
   };
 
-  componentDidMount() {
+  componentWillUnmount() {
     clearInterval(this.interval);
   }
 
@@ -98,7 +98,7 @@ class MobileForm extends Component {
             })(
               <Select disabled={disabled}>
                 {CONFIG.country.map(item => (
-                  <Option key={item.code} value={item.nation_code}>
+                  <Option key={item.code} value={item.nation_code.toString()}>
                     {item.name}
                   </Option>
                 ))}
