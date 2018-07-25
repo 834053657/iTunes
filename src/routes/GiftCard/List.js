@@ -27,7 +27,6 @@ const FormItem = Form.Item;
 
 @connect(({ card, loading, user }) => ({
   list: card.list,
-  //loading: loading.effects['card/fetchCardList_'],
   user: user.currentUser.user,
 }))
 export default class List extends Component {
@@ -35,9 +34,14 @@ export default class List extends Component {
     super(props);
     const { type = '2' } = getQueryString(props.location.search);
     this.state = {
+      loading: false,
       type,
       denoVisible: false,
       denominFilterValue: undefined,
+      card_type: [],
+      password_type: [],
+      filter: {},
+      order_by: false,
     };
   }
 
@@ -45,17 +49,25 @@ export default class List extends Component {
     if (this.interval) {
       clearInterval(this.interval);
     }
-    this.setState({
+    const params = {
       type,
-      password_type: undefined,
-      card_type: undefined,
+      page: 1,
+      denoVisible: false,
       denominFilterValue: undefined,
+      card_type: [],
+      password_type: [],
+      filter: {},
+      order_by: false,
+    };
+    this.setState({
+      loading: true,
+      ...params,
     });
-    this.state.card_type = undefined;
-    this.state.password_type = undefined;
-    this.state.denominFilterValue = undefined;
-    this.fetchData({ type }, () => {
+    this.fetchData(params, () => {
       this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
+      this.setState({
+        loading: false,
+      });
     });
   };
 
@@ -91,19 +103,31 @@ export default class List extends Component {
   }
 
   fetchData = (params_, callback) => {
-    const params = { ...params_ };
+    let params = { ...params_ };
     const { type, card_type, order_by, password_type, denominFilterValue, filters } = this.state;
+
     params.type = params.type || type;
     params.card_type = params.card_type || card_type;
-    // params.card_type = params.card_type ? params.card_type : undefined;
     params.order_by = params.order_by || order_by;
     params.password_type = params.password_type || password_type;
-    // params.password_type = params.password_type ? params.password_type : undefined;
-    params.denominFilterValue = params.denominFilterValue ? params.denominFilterValue : undefined;
+    params.denominFilterValue = params.denominFilterValue || denominFilterValue;
+
     if (params.denominFilterValue) {
       params.min_money = params.denominFilterValue.min;
       params.max_money = params.denominFilterValue.max;
       delete params.denominFilterValue;
+    }
+
+    if (params.password_type) {
+      params.password_type = params.password_type.toString();
+    }
+
+    if (params.card_type) {
+      params.card_type = params.card_type.toString();
+    }
+
+    if (params.order_by) {
+      params.order_by = params.order_by === 'descend' ? 1 : 2;
     }
 
     this.props
@@ -114,23 +138,14 @@ export default class List extends Component {
         },
       })
       .then(() => {
-        if (!this.interval) {
-          this.interval = setInterval(this.fetchData, 30 * 1000);
-        }
+        // if (!this.interval) {
+        //   this.interval = setInterval(this.fetchData, 30 * 1000);
+        // }
         callback && callback();
       });
   };
 
-  handleTableChange = (pagination, filtersArg, sorter) => {
-    const getValue = obj =>
-      Object.keys(obj)
-        .map(key => obj[key])
-        .join(',');
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
+  handleTableChange = (pagination, filters, sorter) => {
     const params1 = {
       page: pagination.current,
       page_size: pagination.pageSize,
@@ -138,22 +153,20 @@ export default class List extends Component {
       password_type: filters.password_type,
     };
     if (sorter.field) {
-      params1.order_by = sorter.order === 'descend' ? 1 : 2; //`${sorter.field}_${sorter.order}`;
+      params1.order_by = sorter.order; // === 'descend' ? 1 : 2; //`${sorter.field}_${sorter.order}`;
     }
-    if (filtersArg.type && filtersArg.type.length === 0) {
-      delete params1.card_type;
-    }
-    if (filtersArg.password_type && filtersArg.password_type.length === 0) {
-      delete params1.password_type;
-    }
-    this.setState({
-      ...params1,
-      tableFilter: filters,
-    });
+
     if (this.interval) {
       clearInterval(this.interval);
     }
-    this.fetchData(params1);
+    this.setState(
+      {
+        ...params1,
+      },
+      () => {
+        this.fetchData(params1);
+      }
+    );
   };
 
   handleResetFilterDemoin = () => {
@@ -176,7 +189,8 @@ export default class List extends Component {
     });
   };
 
-  initColumns = (type, denominFilterValue) => {
+  initColumns = () => {
+    const { type, denominFilterValue } = this.state;
     const cardTypes = map(CONFIG.card_type.filter(t => t.valid), item => {
       return { text: item.name, value: item.type };
     });
@@ -205,6 +219,7 @@ export default class List extends Component {
         dataIndex: 'type',
         width: '100',
         filterMultiple: false,
+        filteredValue: this.state.card_type,
         filters: cardTypes,
         render: (text, record) => {
           return (
@@ -222,6 +237,7 @@ export default class List extends Component {
         width: '200',
         filters: cardPwdType,
         filterMultiple: false,
+        filteredValue: this.state.password_type,
         render: (v, row) => {
           return <span>{v ? CONFIG.cardPwdType[v] : '-'}</span>;
         },
@@ -307,7 +323,8 @@ export default class List extends Component {
         width: '100',
         dataIndex: 'unit_price',
         render: v => <span>{numeral(v).format('0,0.00')} RMB</span>,
-        sorter: (a, b) => a.unitPrice - b.unitPrice,
+        sorter: true,
+        sortOrder: this.state.order_by,
       },
       {
         title: '保障时间',
@@ -347,13 +364,13 @@ export default class List extends Component {
   };
 
   render() {
-    const { list, loading } = this.props;
-    const { type, denominFilterValue } = this.state;
+    const { list } = this.props;
+    const { type, denominFilterValue, loading } = this.state;
     const { items, pagination } = list || {};
     return (
       <div className={styles.page}>
         <h2>礼品卡大厅</h2>
-        <Tabs onChange={this.changeTab} defaultActiveKey="2" activeKey={type}>
+        <Tabs onChange={this.changeTab} activeKey={type}>
           {/*出售广告*/}
           <Tabs.TabPane tab="我要购买" key="2" />
           {/*购买广告*/}
@@ -362,11 +379,10 @@ export default class List extends Component {
         <Table
           rowKey={row => row.id}
           dataSource={items}
-          columns={this.initColumns(type, denominFilterValue)}
+          columns={this.initColumns()}
           onChange={this.handleTableChange}
           pagination={{
             ...pagination,
-            // showQuickJumper: true,
           }}
           loading={loading}
         />
