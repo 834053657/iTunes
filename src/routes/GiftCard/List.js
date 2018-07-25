@@ -3,7 +3,7 @@ import { parse } from 'url';
 import numeral from 'numeral';
 import { connect } from 'dva';
 import { stringify } from 'qs';
-import { map, filter } from 'lodash';
+import { map, omitBy, filter, isEmpty } from 'lodash';
 import {
   Table,
   Tabs,
@@ -130,6 +130,8 @@ export default class List extends Component {
       params.order_by = params.order_by === 'descend' ? 1 : 2;
     }
 
+    params = omitBy(params, isEmpty);
+
     this.props
       .dispatch({
         type: 'card/fetchCardList_',
@@ -138,9 +140,9 @@ export default class List extends Component {
         },
       })
       .then(() => {
-        // if (!this.interval) {
-        //   this.interval = setInterval(this.fetchData, 30 * 1000);
-        // }
+        if (!this.interval) {
+          this.interval = setInterval(this.fetchData, 30 * 1000);
+        }
         callback && callback();
       });
   };
