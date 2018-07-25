@@ -258,14 +258,24 @@ export default {
       });
     },
     //添加购买广告
-    *addBuyAd({ payload }, { call, put }) {
+    *addBuyAd({ payload, callback }, { call, put }) {
       const res = yield call(addBuyAd, payload);
-      return res;
+      console.log(res);
+      if (res.code === 0) {
+        yield callback && callback(res);
+      } else {
+        message.error(res.msg);
+      }
     },
     //添加出售广告
-    *addSellAd({ payload }, { call, put }) {
+    *addSellAd({ payload, callback }, { call, put }) {
       const res = yield call(addSellAd, payload);
-      return res;
+      if (res.code === 0) {
+        yield callback && callback(res);
+        return res;
+      } else {
+        message.error(res.msg);
+      }
     },
     //获取申诉详情
     *getAppealInfo({ payload }, { call, put }) {
