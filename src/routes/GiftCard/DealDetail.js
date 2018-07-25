@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { sumBy, map, get, findIndex } from 'lodash';
+import { sumBy, map, get, findIndex, filter } from 'lodash';
 import { Badge, Button, message, Avatar, Popover, Icon, Input, Spin, Form } from 'antd';
 import DescriptionList from 'components/DescriptionList';
 import InputNumber from 'components/InputNumber';
@@ -338,11 +338,8 @@ export default class DealDeatil extends Component {
                   extra={` 库存${stock[d] || 0}个`}
                 >
                   {getFieldDecorator(`order_detail[${index}].count`, {
+                    initialValue: 0,
                     rules: [
-                      {
-                        required: true,
-                        message: '请输入购买数量！',
-                      },
                       {
                         type: 'number',
                         min: 0,
@@ -373,6 +370,7 @@ export default class DealDeatil extends Component {
             <Button
               loading={this.props.submitting}
               style={{ marginLeft: 15 }}
+              disabled={this.calcuBuyTotal1(money) <= 0}
               type="primary"
               htmlType="submit"
             >
@@ -388,6 +386,7 @@ export default class DealDeatil extends Component {
     e.preventDefault();
     const { detail = {}, match: { params } } = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
+      values.order_detail = filter(values.order_detail, item => item.count > 0);
       if (!err) {
         this.props.dispatch({
           type: 'card/createSellOrder',
