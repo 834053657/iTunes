@@ -83,21 +83,29 @@ class RechargeForm extends Component {
       return (
         <div>
           <FormItem {...formItemLayout} label="平台账号">
-            <span>{payment_detail.bank}</span>
+            <span>{payment_detail.bank_account}</span>
           </FormItem>
           <FormItem {...formItemLayout} label="开户人">
             <span>{payment_detail.name}</span>
           </FormItem>
           <FormItem {...formItemLayout} label="开户行">
-            <span>{payment_detail.cardno}</span>
+            <span>{payment_detail.bank_name}</span>
           </FormItem>
         </div>
       );
     } else {
       return (
-        <FormItem {...formItemLayout} label="收款二维码">
-          <img className={styles.qrcode} src={payment_detail.qrcode} alt="收款二维码" />
-        </FormItem>
+        <div>
+          <FormItem {...formItemLayout} label="账号">
+            <span>{payment_detail.account}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="姓名">
+            <span>{payment_detail.name}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="收款二维码">
+            <img className={styles.qrcode} src={payment_detail.qrcode_url} alt="收款二维码" />
+          </FormItem>
+        </div>
       );
     }
   };
