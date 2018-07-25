@@ -53,7 +53,6 @@ export default class DealDeatil extends Component {
   };
 
   calcuBuyTotal = () => {
-    console.log('this.state.orderDetail', this.state.orderDetail);
     if (this.state.orderDetail.length <= 0) {
       return 0;
     }
@@ -393,7 +392,7 @@ export default class DealDeatil extends Component {
         this.props.dispatch({
           type: 'card/createSellOrder',
           payload: {
-            ad_id: params.id,
+            ad_id: +params.id,
             updated_at: detail.updated_at,
             ...values,
           },

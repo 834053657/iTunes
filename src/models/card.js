@@ -7,7 +7,7 @@ import {
   getToken,
   getAdDetail,
   getSellDetail,
-  createSellOrder,
+  createOrder,
   createBuyOrder,
   getAppealInfo,
   getOrderDetail,
@@ -202,7 +202,7 @@ export default {
       return res;
     },
     *createSellOrder({ payload }, { call, put }) {
-      const res = yield call(createSellOrder, payload);
+      const res = yield call(createOrder, payload);
       if (!res) return null;
       if (res.code === 0 && res.data) {
         yield put(routerRedux.push(`/card/deal-line/${res.data.order_id}`));
