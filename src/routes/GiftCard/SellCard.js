@@ -301,15 +301,13 @@ export default class BuyCard extends Component {
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
+          <SellForm terms={terms} initialValues={{ card_type: 3 }} />
           {/*
-          <SellForm terms={terms} initialValues={{card_type: 3}}/>
-           */}
-
           <ul className={styles.submitTable}>
             <li>
               <span className={styles.tableLeft}>类型：</span>
               <Select
-                style={{ width: 90 }}
+                style={{width: 90}}
                 defaultValue={cardType[0].name}
                 onChange={this.selectCardType}
               >
@@ -324,12 +322,12 @@ export default class BuyCard extends Component {
             </li>
             <li>
               <span className={styles.tableLeft}>单价：</span>
-              <InputNumber defaultValue={1} min={1} onChange={e => this.unitPriceChange(e)} />
+              <InputNumber defaultValue={1} min={1} onChange={e => this.unitPriceChange(e)}/>
             </li>
             <li>
               <span className={styles.tableLeft}>保障时间：</span>
               <Select
-                style={{ width: 90 }}
+                style={{width: 90}}
                 defaultValue={CONFIG.guarantee_time[0]}
                 onChange={this.selectGuaTime}
               >
@@ -345,7 +343,7 @@ export default class BuyCard extends Component {
                 ：
               </span>
 
-              <Select defaultValue="无" style={{ width: 90 }} onChange={this.selectTermTitle}>
+              <Select defaultValue="无" style={{width: 90}} onChange={this.selectTermTitle}>
                 <Option key="noTerm">无</Option>
                 {items ? (
                   items.filter(i => i.status === 3) ? (
@@ -410,7 +408,7 @@ export default class BuyCard extends Component {
                 }}
               >
                 <Button
-                  style={{ width: '260px', borderStyle: 'dashed' }}
+                  style={{width: '260px', borderStyle: 'dashed'}}
                   onClick={() => {
                     this.setState({
                       date: new Date(),
@@ -422,7 +420,8 @@ export default class BuyCard extends Component {
               </Popover>
             </li>
           </ul>
-
+          */}
+          {/*
           {this.state.passwordType === 1
             ? this.state.cards.map((item, index) => {
                 return (
@@ -431,7 +430,6 @@ export default class BuyCard extends Component {
                       <span>{item.money}</span>
                       面额 （{item.items.length}）
                       <div>
-                        {/*<Button>导入</Button>*/}
                         <Button>删除</Button>
                       </div>
                     </header>
@@ -542,6 +540,7 @@ export default class BuyCard extends Component {
               发布
             </Button>
           </div>
+          */}
         </PageHeaderLayout>
       </div>
     );

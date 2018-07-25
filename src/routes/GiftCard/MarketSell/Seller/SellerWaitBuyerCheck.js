@@ -118,7 +118,7 @@ export default class SellerWaitBuyerCheck extends Component {
                   <Icon type="clock-circle-o" />
                   &nbsp;
                   <CountDown formatStr="mm:ss" target={checkTime} />
-                  分钟
+                  秒
                 </h5>
               )}
 

@@ -260,7 +260,6 @@ export default {
     //添加购买广告
     *addBuyAd({ payload, callback }, { call, put }) {
       const res = yield call(addBuyAd, payload);
-      console.log(res);
       if (res.code === 0) {
         yield callback && callback(res);
       } else {

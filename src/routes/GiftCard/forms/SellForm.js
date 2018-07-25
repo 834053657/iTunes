@@ -11,6 +11,8 @@ import {
   Modal,
   Popover,
   Card,
+  Row,
+  Col,
 } from 'antd';
 import { map, last } from 'lodash';
 import styles from './SellForm.less';
@@ -27,6 +29,8 @@ export default class SellForm extends Component {
   state = {
     termModalInfo: false,
     addDenoVisible: false,
+    cards: [],
+    pswType: 1,
   };
 
   handleCancel = () => {
@@ -63,40 +67,24 @@ export default class SellForm extends Component {
   //添加面额种类
   addDeno = () => {
     const { form } = this.props;
+    const { cards } = this.state;
     const formDataObj = {
       money: this.state.denoVaule,
       receipt: '', // 凭证
       items: [
         {
-          id: 0,
           password: '', // 卡密
           picture: '', // 图片
         },
       ],
     };
-    const cards = form.getFieldValue('cards[]') || [];
-    console.log(cards);
     cards.push(formDataObj);
-
+    this.setState({
+      cards,
+    });
     this.props.form.setFieldsValue({
       'cards[]': cards,
     });
-
-    console.log(cards);
-    // if (isNaN(this.state.denoVaule)) {
-    //   return message.warning('请输入正确格式');
-    // }
-    // const a = this.state.cards;
-    // const item = {
-    //   money: this.state.denoVaule,
-    //   items: [],
-    // };
-    // a.push(item);
-    // this.state.cards = a;
-    // this.setState({
-    //   cards: a,
-    // });
-    // this.setState({addDenoVisible: false});
   };
 
   //添加面额输入框
@@ -148,6 +136,46 @@ export default class SellForm extends Component {
     });
   };
 
+  changePswType = e => {
+    console.log(e.target.value);
+    this.setState({ pswType: e.target.value });
+  };
+
+  addMoney = i => {
+    const { cards } = this.state;
+    cards[i].items.push({ password: '', picture: '' });
+    //this.bindForm('cards[]', cards)
+    this.props.form.setFieldsValue({
+      'cards[]': cards,
+    });
+    this.setState({ cards });
+  };
+
+  changePsw = (e, index, littleIndex) => {
+    const { cards } = this.state;
+    console.log(e.target.value);
+    cards[index].items[littleIndex].password = e.target.value;
+    this.props.form.setFieldsValue({
+      'cards[]': cards,
+    });
+    this.setState({ cards });
+  };
+
+  changePic = (e, index, littleIndex) => {
+    const { cards } = this.state;
+    cards[index].items[littleIndex].picture = e;
+    this.props.form.setFieldsValue({
+      'cards[]': cards,
+    });
+    this.setState({ cards });
+  };
+
+  bindForm = (a, b) => {
+    this.props.form.setFieldsValue({
+      a: b,
+    });
+  };
+
   render() {
     const { termModalInfo } = this.state;
     const {
@@ -166,18 +194,21 @@ export default class SellForm extends Component {
 
     const addDenoBox = (
       <div>
-        <span className={styles.left}>面额:</span>
-        <div className={styles.right}>
-          <Input
-            placeholder="请输入面额"
-            defaultValue=""
-            onChange={e => {
-              this.setState({ denoVaule: e.target.value });
-            }}
-            onPressEnter={() => this.addDeno()}
-          />
-        </div>
-        <div className={styles.btnBox}>
+        <Row>
+          <Col style={{ width: 80, float: 'left' }}>面额:</Col>
+          <Col style={{ width: 240, float: 'left' }}>
+            <InputNumber
+              placeholder="请输入面额"
+              defaultValue=""
+              onChange={e => {
+                this.setState({ denoVaule: e });
+              }}
+              onPressEnter={() => this.addDeno()}
+            />
+          </Col>
+        </Row>
+
+        <div style={{ marginTop: 20, float: 'right' }}>
           <Button
             onClick={() => {
               this.setState({ addDenoVisible: false });
@@ -203,173 +234,208 @@ export default class SellForm extends Component {
     });
 
     const cards = getFieldValue('cards[]') || [];
-    console.log(cards);
     return (
-      <Form className={styles.form} onSubmit={this.handleSubmit}>
-        <FormItem {...formItemLayout} label="类型">
-          {getFieldDecorator('card_type', {
-            initialValue: initialValues.card_type,
-            rules: [
-              {
-                required: true,
-                message: '请选择类型',
-              },
-            ],
-          })(
-            <Select style={{ width: 200 }}>
-              {map(CONFIG.card_type, item => (
-                <Option key={item.type} value={item.type}>
-                  {item.name}
-                </Option>
-              ))}
-            </Select>
-          )}
-        </FormItem>
-
-        <FormItem {...formItemLayout} label="单价">
-          {getFieldDecorator('unit_price', {
-            initialValue: initialValues.unit_price,
-            rules: [
-              {
-                required: true,
-                message: '请输入单价',
-              },
-            ],
-          })(<InputNumber />)}
-        </FormItem>
-
-        <FormItem {...formItemLayout} label="保障时间">
-          {getFieldDecorator('guarantee_time', {
-            initialValue: initialValues.guarantee_time,
-            rules: [
-              {
-                required: true,
-                message: '请选择保障时间',
-              },
-            ],
-          })(
-            <Select style={{ width: 200 }}>
-              {map(CONFIG.guarantee_time, (item, index) => (
-                <Option key={item} value={item}>
-                  {item}分钟
-                </Option>
-              ))}
-            </Select>
-          )}
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label={
-            <span>
-              交易条款<i>(可选)</i>
-            </span>
-          }
-        >
-          {getFieldDecorator('term_id', {
-            initialValue: initialValues.term_id,
-            rules: [],
-          })(
-            <div>
+      <div>
+        <Form className={styles.form} onSubmit={this.handleSubmit}>
+          <FormItem {...formItemLayout} label="类型">
+            {getFieldDecorator('card_type', {
+              initialValue: initialValues.card_type,
+              rules: [
+                {
+                  required: true,
+                  message: '请选择类型',
+                },
+              ],
+            })(
               <Select style={{ width: 200 }}>
-                {map(terms, (item, index) => (
-                  <Option key={item.id} value={item.id}>
-                    {item.title}
+                {map(CONFIG.card_type, item => (
+                  <Option key={item.type} value={item.type}>
+                    {item.name}
                   </Option>
                 ))}
               </Select>
-              {/*getFiedzfdsazzldValzzz`ue('term_id') >= 0 && <a onClick={this.handleShowTerm}>查看</a>*/}
-            </div>
-          )}
-        </FormItem>
+            )}
+          </FormItem>
 
-        <FormItem {...formItemLayout} label="同时处理订单数">
-          {getFieldDecorator('concurrency_order', {
-            initialValue: initialValues.concurrency_order,
-            rules: [
-              {
-                required: true,
-                message: '请输入同时处理订单数',
-              },
-            ],
-          })(<InputNumber />)}
-        </FormItem>
+          <FormItem {...formItemLayout} label="单价">
+            {getFieldDecorator('unit_price', {
+              initialValue: initialValues.unit_price,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入单价',
+                },
+              ],
+            })(<InputNumber />)}
+          </FormItem>
 
-        <FormItem {...formItemLayout} label="包含">
-          {getFieldDecorator('password_type', {
-            initialValue: '1',
-            rules: [
-              {
-                required: true,
-                message: '请输入选择密保卡类型',
-              },
-            ],
-          })(
-            <RadioGroup>
-              {map(CONFIG.cardPwdType, (text, value) => (
-                <Radio key={value} value={value}>
-                  {text}
-                </Radio>
-              ))}
-            </RadioGroup>
-          )}
-        </FormItem>
+          <FormItem {...formItemLayout} label="保障时间">
+            {getFieldDecorator('guarantee_time', {
+              initialValue: initialValues.guarantee_time,
+              rules: [
+                {
+                  required: true,
+                  message: '请选择保障时间',
+                },
+              ],
+            })(
+              <Select style={{ width: 200 }}>
+                {map(CONFIG.guarantee_time, (item, index) => (
+                  <Option key={item} value={item}>
+                    {item}分钟
+                  </Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
 
-        <FormItem {...formItemLayout}>
-          <Popover
-            key={this.state.date}
-            placement="topRight"
-            content={addDenoBox}
-            title="添加面额"
-            trigger="click"
-            visible={this.state.addDenoVisible}
-            onVisibleChange={() => {
-              this.setState({ addDenoVisible: !this.state.addDenoVisible });
-            }}
+          <FormItem
+            {...formItemLayout}
+            label={
+              <span>
+                交易条款<i>(可选)</i>
+              </span>
+            }
           >
-            <Button type="dashed" style={{ width: '60%' }}>
-              <Icon type="plus" /> 添加面额
+            {getFieldDecorator('term_id', {
+              initialValue: initialValues.term_id,
+              rules: [],
+            })(
+              <div>
+                <Select style={{ width: 200 }}>
+                  {map(terms, (item, index) => (
+                    <Option key={item.id} value={item.id}>
+                      {item.title}
+                    </Option>
+                  ))}
+                </Select>
+                {/*getFiedzfdsazzldValzzz`ue('term_id') >= 0 && <a onClick={this.handleShowTerm}>查看</a>*/}
+              </div>
+            )}
+          </FormItem>
+
+          <FormItem {...formItemLayout} label="同时处理订单数">
+            {getFieldDecorator('concurrency_order', {
+              initialValue: initialValues.concurrency_order,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入同时处理订单数',
+                },
+              ],
+            })(<InputNumber />)}
+          </FormItem>
+
+          <FormItem {...formItemLayout} label="包含">
+            {getFieldDecorator('password_type', {
+              initialValue: 1,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入选择密保卡类型',
+                },
+              ],
+            })(
+              <RadioGroup onChange={this.changePswType}>
+                {map(CONFIG.cardPwdType, (text, value) => (
+                  <Radio key={value} value={+value}>
+                    {text}
+                  </Radio>
+                ))}
+              </RadioGroup>
+            )}
+          </FormItem>
+
+          <FormItem {...formItemLayout}>
+            <Button
+              onClick={() => {
+                this.setState({ addDenoVisible: true });
+              }}
+              type="dashed"
+              style={{ width: '60%', marginLeft: '20%' }}
+            >
+              <Icon type="plus" />
+              添加面额
             </Button>
-          </Popover>
-        </FormItem>
-        <p>{getFieldValue('password_type')}</p>
+            <Modal
+              title="添加面额"
+              width={400}
+              destroyOnClose
+              maskClosable={false}
+              visible={this.state.addDenoVisible}
+              onOk={() => {
+                this.setState({ addDenoVisible: false });
+                this.addDeno();
+              }}
+              onCancel={() => {
+                this.setState({ addDenoVisible: false });
+              }}
+            >
+              <Row>
+                <Col style={{ width: 50, float: 'left', lineHeight: '30px' }}>面额:</Col>
+                <Col style={{ width: 150, float: 'left' }}>
+                  <InputNumber
+                    style={{ width: 150 }}
+                    placeholder="请输入面额"
+                    defaultValue=""
+                    onChange={e => {
+                      this.setState({ denoVaule: e });
+                    }}
+                    onPressEnter={() => this.addDeno()}
+                  />
+                </Col>
+              </Row>
+            </Modal>
+          </FormItem>
+
+          {/*
         {getFieldValue('password_type') === '1'
           ? cards.map((item, index) => {
               return (
-                <OnlyPassWord
-                  key={index}
-                  filedName={`cards[${index}]`}
-                  data={item}
-                  onChange={this.handleCard.bind(this, index)}
-                  addDenoIpt={() => this.addDenoIpt(index)}
-                  removeIpt={id => this.removeIpt(id, index)}
-                  changeData={(i, changeItem) => this.changeData(i, changeItem, index)}
-                />
+                <OnlyPassWord/>
+                  // key={index}
+                  // filedName={`cards[${index}]`}
+                  // data={item}
+                  // onChange={this.handleCard.bind(this, index)}
+                  // addDenoIpt={() => this.addDenoIpt(index)}
+                  // removeIpt={id => this.removeIpt(id, index)}
+                  // changeData={(i, changeItem) => this.changeData(i, changeItem, index)}
+
               );
             })
           : null}
         {getFieldValue('password_type') === '2' && <OnlyPicture />}
         {getFieldValue('password_type') === '3' && <OnlyPassWord />}
+        */}
 
-        <FormItem className={styles.buttonBox}>
-          <Button key="back" onClick={this.handleCancel}>
-            取消
-          </Button>
-          <Button className={styles.submit} type="primary" htmlType="submit">
-            发布
-          </Button>
-        </FormItem>
-        {termModalInfo && (
-          <Modal
-            title={termModalInfo.title}
-            visible={termModalInfo}
-            onOk={this.handleHideTermModal}
-            onCancel={this.handleHideTermModal}
-          >
-            <p>termModalInfo.content</p>
-          </Modal>
-        )}
-      </Form>
+          <FormItem className={styles.buttonBox}>
+            <Button key="back" onClick={this.handleCancel}>
+              取消
+            </Button>
+            <Button className={styles.submit} type="primary" htmlType="submit">
+              发布
+            </Button>
+          </FormItem>
+          {termModalInfo && (
+            <Modal
+              title={termModalInfo.title}
+              visible={termModalInfo}
+              onOk={this.handleHideTermModal}
+              onCancel={this.handleHideTermModal}
+            >
+              <p>termModalInfo.content</p>
+            </Modal>
+          )}
+        </Form>
+        <OnlyPassWord
+          defaultValue={this.state.cards}
+          addMoney={this.addMoney}
+          changePsw={this.changePsw}
+          changePic={this.changePic}
+          psw={this.state.pswType}
+        />
+        {/*<OnlyPicture />*/}
+      </div>
     );
   }
 }

@@ -67,55 +67,53 @@ export default class OnlyPicture extends Component {
 
     return (
       <Card title="筛选面额" className={styles.card}>
-        <Form className={styles.denoRange} onSubmit={this.handleSubmit}>
-          <InputGroup compact>
-            <FormItem>
-              {getFieldDecorator('min', {
-                initialValue: min,
-                rules: [
-                  {
-                    validator: this.checkMin,
-                  },
-                ],
-              })(
-                <InputNumber
-                  min={0}
-                  style={{ width: 80, textAlign: 'center', backgroundColor: '#fff' }}
-                />
-              )}
-            </FormItem>
-            <FormItem>
-              <Input
-                style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }}
-                placeholder="~"
-                disabled
+        <InputGroup compact>
+          <FormItem>
+            {getFieldDecorator('min', {
+              initialValue: min,
+              rules: [
+                {
+                  validator: this.checkMin,
+                },
+              ],
+            })(
+              <InputNumber
+                min={0}
+                style={{ width: 80, textAlign: 'center', backgroundColor: '#fff' }}
               />
-            </FormItem>
-            <FormItem>
-              {getFieldDecorator('max', {
-                initialValue: max,
-                rules: [
-                  {
-                    validator: this.checkMax,
-                  },
-                ],
-              })(
-                <InputNumber
-                  min={0}
-                  style={{ width: 80, textAlign: 'center', backgroundColor: '#fff' }}
-                />
-              )}
-            </FormItem>
-          </InputGroup>
-          <FormItem className={styles.buttonBox}>
-            <Button key="back" onClick={this.handleCancel}>
-              重置
-            </Button>
-            <Button className={styles.submit} type="primary" htmlType="submit">
-              确定
-            </Button>
+            )}
           </FormItem>
-        </Form>
+          <FormItem>
+            <Input
+              style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }}
+              placeholder="~"
+              disabled
+            />
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('max', {
+              initialValue: max,
+              rules: [
+                {
+                  validator: this.checkMax,
+                },
+              ],
+            })(
+              <InputNumber
+                min={0}
+                style={{ width: 80, textAlign: 'center', backgroundColor: '#fff' }}
+              />
+            )}
+          </FormItem>
+        </InputGroup>
+        <FormItem className={styles.buttonBox}>
+          <Button key="back" onClick={this.handleCancel}>
+            重置
+          </Button>
+          <Button className={styles.submit} type="primary" htmlType="submit">
+            确定
+          </Button>
+        </FormItem>
       </Card>
     );
   }
