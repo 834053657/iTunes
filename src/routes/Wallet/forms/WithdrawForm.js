@@ -52,7 +52,7 @@ class WithdrawForm extends Component {
               this.props.form.resetFields();
               this.props.onSubmit && this.props.onSubmit();
             } else {
-              message.success(res.msg);
+              message.error(res.msg);
             }
           },
         });

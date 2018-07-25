@@ -219,8 +219,8 @@ export async function getCardlist(params) {
 // }
 
 // 出售创建订单
-export async function createSellOrder(params) {
-  return request('/itunes/order/sell/create', {
+export async function createOrder(params) {
+  return request('/itunes/order/create', {
     method: 'POST',
     body: params,
   });

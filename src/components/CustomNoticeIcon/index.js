@@ -33,11 +33,11 @@ export default class NoticeIcon extends PureComponent {
   onItemClick = item => {
     const { onItemClick } = this.props;
     onItemClick(item);
-    if (item.msg_type === 1) {
-      this.setState({
-        visible: false,
-      });
-    }
+    // if (item.msg_type === 1) {
+    this.setState({
+      visible: false,
+    });
+    // }
   };
   onTabChange = tabType => {
     this.setState({ tabType });

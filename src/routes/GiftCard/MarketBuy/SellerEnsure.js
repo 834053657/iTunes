@@ -44,7 +44,7 @@ export default class SellerEnsure extends Component {
     } else if (pageStatus === 14) {
       userInfo = ad.owner;
     }
-    const guaranteeTime = new Date().getTime() + order.guarantee_at * 1000;
+    const guaranteeTime = order.guarantee_at;
     return (
       <div className={styles.stepTwoBox}>
         <StepModel steps={steps} current={1} />
@@ -117,8 +117,8 @@ export default class SellerEnsure extends Component {
                         payload: { order_id: order.id },
                       });
                     }}
-                    okText="是"
-                    cancelText="取消"
+                    // okText="是"
+                    // cancelText="取消"
                   >
                     <Button type="primary" loading={this.props.releaseOrderBtn}>
                       确认释放

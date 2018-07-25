@@ -68,20 +68,22 @@ export function dvaSocket(url, option) {
             payload: rs,
           });
 
-          if (msg && msg.msg_type === 51) { //封号
+          if (msg && msg.msg_type === 51) {
+            //封号
             Modal.info({
               title: '提示',
               content: getMessageContent(msg),
             });
+            // 封号后不需要自动跳转到登录页 用户访问接口 token失效会自动跳转到登录页 test1 环境token失效不会跳转 test2可以正常测试
             // message.error(getMessageContent(msg));
-            dispatch({
-              type: 'login/changeLoginStatus',
-              payload: {},
-            });
-            dispatch({
-              type: 'user/saveCurrentUser',
-              payload: {},
-            });
+            // dispatch({
+            //   type: 'login/changeLoginStatus',
+            //   payload: {},
+            // });
+            // dispatch({
+            //   type: 'user/saveCurrentUser',
+            //   payload: {},
+            // });
             dispatch({
               type: 'SOCKET/CLOSE',
               payload: {},
