@@ -190,6 +190,7 @@ export default class List extends Component {
   };
 
   initColumns = () => {
+    const { user } = this.props;
     const { type, denominFilterValue } = this.state;
     const cardTypes = map(CONFIG.card_type.filter(t => t.valid), item => {
       return { text: item.name, value: item.type };
@@ -206,7 +207,11 @@ export default class List extends Component {
           const userinfo = record.owner;
           return (
             <div className={styles.userInfo}>
-              <Badge status={userinfo.online ? 'success' : 'default'} offset={[35, -5]} dot>
+              <Badge
+                status={userinfo.online || userinfo.id === user.id ? 'success' : 'default'}
+                offset={[35, -5]}
+                dot
+              >
                 <Avatar size="large" src={userinfo.avatar} />
               </Badge>
               <span className={styles.name}>{userinfo.nickname}</span>
@@ -336,7 +341,6 @@ export default class List extends Component {
         title: '操作',
         dataIndex: 'operation_',
         render: (text, record = {}) => {
-          const { user = {} } = this.props;
           const { owner = {} } = record || {};
           return (
             <Button
