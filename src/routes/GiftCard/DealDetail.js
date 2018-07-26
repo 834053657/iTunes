@@ -160,6 +160,7 @@ export default class DealDeatil extends Component {
                 extra={`数量限额 ${c.min_count} - ${c.max_count}`}
               >
                 {getFieldDecorator(`order_detail[${index}].count`, {
+                  validateFirst: true,
                   rules: [
                     {
                       required: true,
@@ -206,6 +207,7 @@ export default class DealDeatil extends Component {
                 extra={` 最多可再出售${maxCount}个`}
               >
                 {getFieldDecorator(`order_detail[${index}].count`, {
+                  validateFirst: true,
                   rules: [
                     {
                       required: true,
@@ -339,7 +341,12 @@ export default class DealDeatil extends Component {
                 >
                   {getFieldDecorator(`order_detail[${index}].count`, {
                     initialValue: 0,
+                    validateFirst: true,
                     rules: [
+                      {
+                        type: 'number',
+                        message: '请输入正确的数量',
+                      },
                       {
                         type: 'number',
                         min: 0,

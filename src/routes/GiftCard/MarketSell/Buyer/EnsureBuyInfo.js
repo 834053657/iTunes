@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import { Button, Icon, Steps, Avatar, Select, Badge } from 'antd';
+import { Button, Icon, Steps, Avatar, Select, Badge, Popconfirm } from 'antd';
+import CountDown from 'components/CountDown';
 import styles from '../../MarketBuy/StepTwo.less';
 import StepModel from '../../Step';
 import QuickMsg from '../../QuickMsg';
@@ -81,32 +82,36 @@ export default class EnsureBuyInfo extends Component {
                 保障时间剩余 &nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                {'30'}分钟
+                <CountDown formatstr="mm:ss" target={order.guarantee_at} /> 分钟
               </h5>
-              <Button
-                type="danger"
-                loading={this.props.appealBtn}
-                onClick={() => {
+
+              <Popconfirm
+                title="确认申诉吗?"
+                onConfirm={() => {
                   this.props.dispatch({
                     type: 'card/appealOrder',
                     payload: { order_id: order.id },
                   });
                 }}
               >
-                申诉
-              </Button>
-              <Button
-                onClick={() => {
+                <Button type="danger" loading={this.props.appealBtn}>
+                  申诉
+                </Button>
+              </Popconfirm>
+
+              <Popconfirm
+                title="确认释放吗?"
+                onConfirm={() => {
                   this.props.dispatch({
                     type: 'card/releaseOrder',
                     payload: { order_id: order.id },
                   });
                 }}
-                type="primary"
-                loading={this.props.releaseOrderBtn}
               >
-                确认释放
-              </Button>
+                <Button type="primary" loading={this.props.releaseOrderBtn}>
+                  确认释放
+                </Button>
+              </Popconfirm>
             </div>
 
             {/*快捷短语*/}
