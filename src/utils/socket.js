@@ -91,6 +91,12 @@ export function dvaSocket(url, option) {
             // playAudio();
           }
 
+          if (msg && msg.msg_type === 134) {
+            dispatch({
+              type: 'ad/fetchMyAdList',
+            });
+          }
+
           if (currURL.indexOf('/card/deal-line/')) {
             const current_id = currURL.substring(currURL.lastIndexOf('/') + 1);
 
