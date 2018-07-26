@@ -230,6 +230,7 @@ export default class SaleCard extends Component {
 
     this.addFormBuyAd = v => {
       const value = v;
+      console.log(v);
       if (this.state.action) {
         value.id = this.props.adDetail.id;
       }
@@ -343,6 +344,7 @@ export default class SaleCard extends Component {
             action={action}
             terms={terms}
             onSubmit={this.addFormBuyAd}
+            onCancel={() => this.props.dispatch(routerRedux.push('/ad/my'))}
           />
         </PageHeaderLayout>
       </div>

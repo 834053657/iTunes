@@ -22,7 +22,6 @@ import PicUpload from '../../../components/UploadQiNiu/index';
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
 
-@Form.create()
 export default class OnlyPassWord extends Component {
   state = {};
 
@@ -85,13 +84,31 @@ export default class OnlyPassWord extends Component {
             <div>
               <span>{c.money}面额</span>
               <span>({c.items.length})</span>
+              {((psw === 1 && !action) || action === 'edit') && (
+                <Button onClick={() => this.props.intoData(index)} style={{ float: 'right' }}>
+                  导入
+                </Button>
+              )}
+              {psw === 2 &&
+                (!action || action === 'edit') && (
+                  <div style={{ float: 'right' }}>
+                    <Popconfirm
+                      title="确定删除吗？"
+                      onConfirm={() => this.props.deleteCard(index)}
+                      okText="是"
+                      cancelText="否"
+                    >
+                      <Icon className={styles.deleteIcon} type="minus-circle-o" />
+                    </Popconfirm>
+                  </div>
+                )}
             </div>
           }
           className={styles.card}
         >
           {c.items.map((card, littleIndex) => {
             return (
-              <div key={littleIndex} className={styles.itemLine}>
+              <div key={littleIndex + 'littleIndex'} className={styles.itemLine}>
                 {//密码
                 (psw === 1 || psw === 3) && (
                   <FormItem required={false}>
@@ -101,8 +118,11 @@ export default class OnlyPassWord extends Component {
                       rules: [
                         {
                           required: true,
-                          whitespace: true,
                           message: '请输入面额',
+                        },
+                        {
+                          max: 50,
+                          message: '最大长度不得超过50位',
                         },
                       ],
                     })(
@@ -112,22 +132,21 @@ export default class OnlyPassWord extends Component {
                           <Input
                             onChange={e => this.props.changePsw(e, index, littleIndex)}
                             defaultValue={action ? card.password : ''}
-                            placeholder="面额"
+                            placeholder="请输入卡密"
                             disabled={action && action !== 'edit'}
                             min={1}
                           />
                         </Col>
-                        {!action ||
-                          (action === 'edit' && (
-                            <Popconfirm
-                              title="确定删除吗？"
-                              onConfirm={() => this.props.confirm(index, littleIndex)}
-                              okText="是"
-                              cancelText="否"
-                            >
-                              <Icon className={styles.deleteIcon} type="minus-circle-o" />
-                            </Popconfirm>
-                          ))}
+                        {(!action || action === 'edit') && (
+                          <Popconfirm
+                            title="确定删除吗？"
+                            onConfirm={() => this.props.confirm(index, littleIndex)}
+                            okText="是"
+                            cancelText="否"
+                          >
+                            <Icon className={styles.deleteIcon} type="minus-circle-o" />
+                          </Popconfirm>
+                        )}
                       </Row>
                     )}
                   </FormItem>
@@ -138,11 +157,10 @@ export default class OnlyPassWord extends Component {
                   <FormItem required={false}>
                     {getFieldDecorator(`cards[${index}].items[${littleIndex}].picture`, {
                       initialValue: action ? card.picture : '',
-                      validateTrigger: ['onChange', 'onBlur'],
+                      //validateTrigger: ['onChange', 'onBlur'],
                       rules: [
                         {
                           required: true,
-                          whitespace: true,
                           message: '请上传卡图',
                         },
                       ],
@@ -156,8 +174,8 @@ export default class OnlyPassWord extends Component {
                             disabled={action && action !== 'edit'}
                           />
                         </Col>
-                        {(psw === 2 && !action) ||
-                          (action === 'edit' && (
+                        {psw === 2 &&
+                          (!action || action === 'edit') && (
                             <Popconfirm
                               title="确定删除吗？"
                               onConfirm={() => this.props.confirm(index, littleIndex)}
@@ -166,7 +184,7 @@ export default class OnlyPassWord extends Component {
                             >
                               <Icon className={styles.deleteIcon} type="minus-circle-o" />
                             </Popconfirm>
-                          ))}
+                          )}
                       </Row>
                     )}
                   </FormItem>
@@ -174,6 +192,33 @@ export default class OnlyPassWord extends Component {
               </div>
             );
           })}
+
+          {
+            //凭证
+            <FormItem required={false}>
+              {getFieldDecorator(`cards[${index}].receipt`, {
+                initialValue: action ? c.receipt : '',
+                //validateTrigger: ['onChange', 'onBlur'],
+                rules: [
+                  {
+                    required: false,
+                    message: '请上传凭证',
+                  },
+                ],
+              })(
+                <Row>
+                  <Col style={{ width: '6%', float: 'left' }}>凭证:</Col>
+                  <Col style={{ width: '85%', float: 'left' }}>
+                    <PicUpload
+                      onChange={e => this.props.changePZ(e, index)}
+                      value={c.receipt}
+                      disabled={action && action !== 'edit'}
+                    />
+                  </Col>
+                </Row>
+              )}
+            </FormItem>
+          }
 
           <FormItem {...formItemLayoutBtn}>
             <Button

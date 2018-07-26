@@ -51,7 +51,8 @@ export default class SellForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(err, values);
+      console.log(err);
+      console.log(values);
       delete values.cards;
       if (!err) {
         this.props.onSubmit({ ...values, cards: this.state.cards });
@@ -78,9 +79,13 @@ export default class SellForm extends Component {
   //添加面额种类
   addDeno = () => {
     const { form } = this.props;
-    const { cards } = this.state;
+    const { cards, denoVaule } = this.state;
+    const re = /^[1-9]+[0-9]*]*$/;
+    if (!re.test(denoVaule) || denoVaule <= 0) {
+      return message.warning('请输入正整数格式');
+    }
     const formDataObj = {
-      money: this.state.denoVaule,
+      money: denoVaule,
       receipt: '', // 凭证
       items: [
         {
@@ -96,6 +101,7 @@ export default class SellForm extends Component {
     this.props.form.setFieldsValue({
       'cards[]': cards,
     });
+    this.setState({ addDenoVisible: false });
   };
 
   //添加面额输入框
@@ -171,12 +177,7 @@ export default class SellForm extends Component {
   changePsw = (e, index, littleIndex) => {
     const { action, defaultValue } = this.props;
     const cards = action ? defaultValue.cards : this.state.cards;
-    console.log(e.target.value);
-    console.log(index);
-    console.log(littleIndex);
     cards[index].items[littleIndex].password = e.target.value;
-    console.log(cards);
-
     this.props.form.setFieldsValue({
       'cards[]': cards,
     });
@@ -184,8 +185,20 @@ export default class SellForm extends Component {
   };
 
   changePic = (e, index, littleIndex) => {
-    const { cards } = this.state;
+    const { action, defaultValue } = this.props;
+    const cards = action ? defaultValue.cards : this.state.cards;
+
     cards[index].items[littleIndex].picture = e;
+    this.props.form.setFieldsValue({
+      'cards[]': cards,
+    });
+    this.setState({ cards });
+  };
+
+  changePZ = (e, index) => {
+    const { action, defaultValue } = this.props;
+    const cards = action ? defaultValue.cards : this.state.cards;
+    cards[index].receipt = e;
     this.props.form.setFieldsValue({
       'cards[]': cards,
     });
@@ -195,11 +208,6 @@ export default class SellForm extends Component {
   confirm = (index, littleIndex) => {
     const { cards } = this.state;
     const { form, action, defaultValue } = this.props;
-    // let cardState = cards
-    //
-    // const newItems = cards[index].items.filter((i,key) => key !== littleIndex);
-    // cards[index].items = newItems;
-    //
     console.log(defaultValue);
     if (action) {
       //编辑、查看
@@ -216,15 +224,43 @@ export default class SellForm extends Component {
         'cards[]': cards,
       });
     }
-    // cards[index].items.splice(littleIndex, 1)
-    // this.setState({
-    //   cards
-    // });
-    // console.log(cards);
-    // form.setFieldsValue({
-    //   'cards[]': cards,
-    // });
-    // console.log(form.getFieldValue('cards[]'));
+  };
+
+  deleteCard = index => {
+    const { cards } = this.state;
+    const { form, action, defaultValue } = this.props;
+    console.log(defaultValue);
+    if (action) {
+      //编辑、查看
+      const editCards = defaultValue.cards;
+      editCards.splice(index, 1);
+      this.setState({ cards: editCards });
+      form.setFieldsValue({
+        'cards[]': editCards,
+      });
+    } else {
+      cards.splice(index, 1);
+      this.setState({ cards });
+      form.setFieldsValue({
+        'cards[]': cards,
+      });
+    }
+  };
+
+  intoData = i => {
+    const { cards } = this.state;
+    const { form } = this.props;
+
+    ['121', '141', '151', '161', '171', '181'].map(ina => {
+      cards[i].items.push({ password: ina, picture: '' });
+      return cards;
+    });
+    this.setState({
+      cards,
+    });
+    this.props.form.setFieldsValue({
+      'cards[]': cards,
+    });
   };
 
   bindForm = (a, b) => {
@@ -460,7 +496,6 @@ export default class SellForm extends Component {
               maskClosable={false}
               visible={this.state.addDenoVisible}
               onOk={() => {
-                this.setState({ addDenoVisible: false });
                 this.addDeno();
               }}
               onCancel={() => {
@@ -473,10 +508,10 @@ export default class SellForm extends Component {
                   <InputNumber
                     style={{ width: 150 }}
                     placeholder="请输入面额"
-                    defaultValue=""
                     onChange={e => {
                       this.setState({ denoVaule: e });
                     }}
+                    min={0}
                     onPressEnter={() => this.addDeno()}
                   />
                 </Col>
@@ -491,7 +526,11 @@ export default class SellForm extends Component {
             changePic={this.changePic}
             action={action}
             psw={action ? defaultValue.password_type : this.state.pswType}
+            form={this.props.form}
             confirm={this.confirm}
+            deleteCard={this.deleteCard}
+            intoData={this.intoData}
+            changePZ={this.changePZ}
           />
 
           <FormItem className={styles.buttonBox}>

@@ -12,7 +12,7 @@ import {
   Row,
   Col,
 } from 'antd';
-import { map, mapKeys, cloneDeep, filter, head } from 'lodash';
+import { map, mapKeys, cloneDeep, filter, head, mapValues } from 'lodash';
 import styles from './SellForm.less';
 
 const RadioGroup = Radio.Group;
@@ -31,14 +31,14 @@ export default class BuyForm extends Component {
   state = {
     termModalInfo: false,
     formNumber: [],
-    conditionType: 1,
-    condition: [
+    conditionFix: [
       {
         money: '',
         min_count: '',
         max_count: '',
       },
     ],
+    conditionRange: { min_money: '', max_money: '' },
   };
   postData = [];
   handleCancel = () => {
@@ -47,28 +47,48 @@ export default class BuyForm extends Component {
   };
 
   handleSubmit = e => {
-    const { form } = this.props;
-    const { condition } = this.state;
+    const { form, defaultValue } = this.props;
+    const { condition, conditionType, conditionFix, conditionRange } = this.state;
     e.preventDefault();
 
-    const a = form.getFieldValue('condition');
+    //const a = form.getFieldValue('condition');
+    const requireArr = [
+      'card_type',
+      'unit_price',
+      'multiple',
+      'condition_type',
+      'password_type',
+      'deadline',
+      'guarantee_time',
+      'term_id',
+      'concurrency_order',
+      'condition',
+    ];
+    let a = null;
+    if (conditionType === 1 || defaultValue.condition_type === 1) {
+      a = conditionFix;
+    }
+    if (conditionType === 2 || defaultValue.condition_type === 2) {
+      a = conditionRange;
+    }
 
-    console.log(a);
-    console.log(this.state.condition);
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
-      delete values.condition;
+    this.props.form.validateFieldsAndScroll(requireArr, (err, values) => {
+      if (Array.isArray(values.condition)) {
+        values.condition.map(c => {
+          c.money = +c.money;
+          c.min_count = +c.min_count;
+          c.max_count = +c.max_count;
+          return c;
+        });
+      } else {
+        values.condition.min_money = +values.condition.min_money;
+        values.condition.max_money = +values.condition.max_money;
+      }
+
       if (!err) {
-        // console.log(values.condition);
-        // const condition = map(filter(values.condition, item => !Array.isArray(item)), item => {
-        //   const {money = null, min_count = null, max_count = null} = item || {};
-        //   return {money: +money, min_count: +min_count, max_count: +max_count};
-        // });
-        // console.log(condition);
-        // console.log(this.state.condition);
         this.props.onSubmit({
           ...values,
-          condition: this.state.condition,
+          //condition: [{money: '1', min_count: '5', max_count: '33'}],
           password_type: +values.password_type,
         });
       }
@@ -91,16 +111,18 @@ export default class BuyForm extends Component {
 
   remove = i => {
     const { form } = this.props;
-    const { condition } = this.state;
-    condition.splice(i, 1);
+    const { conditionFix } = this.state;
+    const { action, defaultValue } = this.props;
+
+    const data = action ? defaultValue.condition : conditionFix;
+
+    data.splice(i, 1);
     this.setState({
-      condition,
+      conditionFix: data,
     });
-    this.state.condition = condition;
     this.props.form.setFieldsValue({
-      'condition[]': condition,
+      'condition[]': data,
     });
-    console.log(condition);
   };
 
   add = () => {
@@ -114,25 +136,15 @@ export default class BuyForm extends Component {
 
   addTest = () => {
     const { action, defaultValue } = this.props;
+    const { conditionFix } = this.state;
+
     const formDataObj = {
       money: 0,
       min_count: 0,
       max_count: 0,
     };
-    console.log(action);
-    console.log(defaultValue);
-    // formDataObj[uuid] = dataItem;
-    // console.log(formDataObj);
-    // this.state.formNumber.push(formDataObj);
-    // uuid++;
-    // this.setState({
-    //   formNumber: this.state.formNumber,
-    // });
-    const condition = action
-      ? defaultValue.condition
-      : this.props.form.getFieldValue('condition[]');
+    const condition = action ? defaultValue.condition : conditionFix;
     condition.push(formDataObj);
-    console.log(condition);
 
     this.setState({
       condition,
@@ -149,59 +161,124 @@ export default class BuyForm extends Component {
   };
 
   changeConditionType = e => {
+    const { condition } = this.state;
     this.setState({
       conditionType: e.target.value,
     });
   };
 
   changeFixedMoney = (e, index) => {
-    const { condition } = this.state;
-    condition[index].money = e;
+    const { action, defaultValue } = this.props;
+    const { conditionFix } = this.state;
+    const data = action ? defaultValue.condition : conditionFix;
+    console.log(typeof e);
+    data[index].money = e;
+
     this.setState({
-      condition,
+      conditionFix: data,
     });
     this.props.form.setFieldsValue({
-      'condition[]': condition,
+      'conditionFix[]': data,
     });
   };
 
   changeFixMin = (e, index) => {
-    console.log(e);
-    const { condition } = this.state;
-    condition[index].min_count = e;
+    const { action, defaultValue } = this.props;
+    const { conditionFix } = this.state;
+    const data = action ? defaultValue.condition : conditionFix;
+
+    data[index].min_count = +e;
     this.setState({
-      condition,
+      conditionFix: data,
     });
     this.props.form.setFieldsValue({
-      'condition[]': condition,
+      'conditionFix[]': data,
     });
   };
 
   changeFixMax = (e, index) => {
-    console.log(e);
-    const { condition } = this.state;
-    condition[index].max_count = e;
+    console.log('fixmax', e);
+    const { action, defaultValue } = this.props;
+    const { conditionFix } = this.state;
+    const data = action ? defaultValue.condition : conditionFix;
+
+    data[index].max_count = +e;
     this.setState({
-      condition,
+      conditionFix: data,
     });
     this.props.form.setFieldsValue({
-      'condition[]': condition,
+      'conditionFix[]': data,
+    });
+  };
+
+  rangeMax = (e, index) => {
+    const { action, defaultValue } = this.props;
+    const { conditionRange } = this.state;
+    const data = action ? defaultValue.condition : conditionRange;
+
+    data.max_money = e;
+    this.setState({
+      conditionRange: data,
+    });
+    this.props.form.setFieldsValue({
+      'conditionRange{}': data,
+    });
+  };
+
+  rangeMin = (e, index) => {
+    const { action, defaultValue } = this.props;
+    const { conditionRange } = this.state;
+    const data = action ? defaultValue.condition : conditionRange;
+
+    data.min_money = e;
+    this.setState({
+      conditionRange: data,
+    });
+    this.props.form.setFieldsValue({
+      'conditionRange{}': data,
     });
   };
 
   render() {
-    const { termModalInfo, condition } = this.state;
-    console.log(condition);
+    const { termModalInfo, conditionFix, conditionRange, conditionType } = this.state;
     const {
       defaultValue,
       action,
       terms = [],
       form: { getFieldDecorator, getFieldValue, resetForm },
     } = this.props;
+
+    const { condition: deCo = [] } = defaultValue;
+
+    const initialValues = {
+      card_type:
+        CONFIG.card_type &&
+        CONFIG.card_type.filter(c => c.valid)[0] &&
+        CONFIG.card_type.filter(c => c.valid)[0].type,
+      //card_type: CONFIG.card_type.filter(c => c.valid)[0].type,
+      unit_price: 10,
+      multiple: 1,
+      condition_type: 1,
+      condition: [],
+      password_type: 1,
+      deadline: CONFIG.deadline && head(CONFIG.deadline),
+      guarantee_time: CONFIG.guarantee_time && head(CONFIG.guarantee_time),
+      term_id: 0,
+      concurrency_order: 0, //并发订单数，传0代表不限制
+    };
+
+    const conditionTypeList = initialValues.condition_type === 1 ? conditionFix : conditionRange;
+
+    const conditionList = action ? deCo : conditionTypeList;
+
+    console.log(deCo);
+    console.log(conditionList);
+
     const cardList = mapKeys(CONFIG.card_type || [], item => item.type);
-    // if (action && !defaultValue.condition) {
-    //   return null
-    // }
+
+    getFieldDecorator('conditionFix[]', { initialValue: conditionList });
+    getFieldDecorator('conditionRange{}', { initialValue: conditionList });
+
     const formItemLayout = {
       labelCol: {
         sm: { span: 4 },
@@ -221,172 +298,6 @@ export default class BuyForm extends Component {
         xs: { span: 24, offset: 0 },
         sm: { span: 20, offset: 4 },
       },
-    };
-
-    const { condition: deCo = [] } = defaultValue;
-    const conditionList = action ? deCo : condition;
-
-    getFieldDecorator('condition[]', { initialValue: conditionList });
-    console.log(defaultValue);
-    console.log(conditionList);
-    console.log(action);
-    console.log(deCo);
-    console.log(condition);
-
-    const formItems = conditionList.map((k, index) => {
-      return (
-        <Row key={index} className={styles.fixed}>
-          <Col className={styles.fixedNum}>
-            <FormItem required={false}>
-              {getFieldDecorator(`condition[${index}].money`, {
-                initialValue: action ? k.money : '',
-                validateTrigger: ['onChange', 'onBlur'],
-                rules: [
-                  {
-                    required: true,
-                    whitespace: true,
-                    message: '请输入面额',
-                  },
-                ],
-              })(
-                <InputNumber
-                  disabled={action && action !== 'edit'}
-                  onChange={e => this.changeFixedMoney(e, index)}
-                  placeholder="面额"
-                />
-              )}
-              &nbsp;--
-            </FormItem>
-          </Col>
-          <Col className={styles.fixedMin}>
-            <FormItem required={false}>
-              {getFieldDecorator(`condition[${index}].min_count`, {
-                initialValue: action ? k.min_count : '',
-                validateTrigger: ['onChange', 'onBlur'],
-                rules: [
-                  {
-                    required: true,
-                    whitespace: true,
-                    message: '请输入最小数量',
-                  },
-                ],
-              })(
-                <InputNumber
-                  disabled={action && action !== 'edit'}
-                  onChange={e => this.changeFixMin(e, index)}
-                  placeholder="最小数量"
-                />
-              )}
-              &nbsp;--
-            </FormItem>
-          </Col>
-          <Col className={styles.fixedMax}>
-            <FormItem required={false}>
-              {getFieldDecorator(`condition[${index}].max_count`, {
-                initialValue: action ? k.max_count : '',
-                validateTrigger: ['onChange', 'onBlur'],
-                rules: [
-                  {
-                    required: true,
-                    whitespace: true,
-                    message: '请输入最大数量',
-                  },
-                ],
-              })(
-                <InputNumber
-                  disabled={action && action !== 'edit'}
-                  onChange={e => this.changeFixMax(e, index)}
-                  placeholder="最大数量"
-                />
-              )}
-              &nbsp;
-              {!action ||
-                (action === 'edit' && (
-                  <Icon
-                    className="dynamic-delete-button"
-                    type="minus-circle-o"
-                    disabled={condition.length === 1}
-                    onClick={() => this.remove(index)}
-                  />
-                ))}
-            </FormItem>
-          </Col>
-        </Row>
-      );
-    });
-
-    const conditionItemTwo = (
-      <Row>
-        <FormItem className={styles.minNum}>
-          {getFieldDecorator('condition.min_money', {
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                message: '请输入最小数量',
-              },
-              {
-                type: 'number',
-                min: 1,
-                message: '请输入大于0的数字',
-              },
-            ],
-          })(
-            <InputNumber
-              disabled={action && action !== 'edit'}
-              placeholder="最小数量"
-              min={1}
-              style={{ width: '100%' }}
-            />
-          )}
-        </FormItem>
-        <span className={styles.min_max}> &nbsp;&nbsp;--</span>
-        <FormItem className={styles.maxNum}>
-          {getFieldDecorator('condition.max_money', {
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                message: '请输入最大数量',
-              },
-              {
-                type: 'number',
-                min: 1,
-                message: '请输入大于0的数字',
-              },
-            ],
-          })(
-            <InputNumber
-              disabled={action && action !== 'edit'}
-              placeholder="最大数量"
-              min={1}
-              style={{ width: '100%' }}
-            />
-          )}
-        </FormItem>
-      </Row>
-    );
-
-    const defaultType = head(filter(CONFIG.cardTypeMap, card => card.valid)) || {};
-
-    const initialValues = {
-      card_type:
-        CONFIG.card_type &&
-        CONFIG.card_type.filter(c => c.valid)[0] &&
-        CONFIG.card_type.filter(c => c.valid)[0].type,
-      //card_type: CONFIG.card_type.filter(c => c.valid)[0].type,
-      unit_price: 10,
-      multiple: 1,
-      condition_type: 1,
-      condition: {
-        min_money: 10,
-        max_money: 200,
-      },
-      password_type: 1,
-      deadline: CONFIG.deadline && head(CONFIG.deadline),
-      guarantee_time: CONFIG.guarantee_time && head(CONFIG.guarantee_time),
-      term_id: 0,
-      concurrency_order: 0, //并发订单数，传0代表不限制
     };
 
     return (
@@ -442,7 +353,6 @@ export default class BuyForm extends Component {
 
         <FormItem {...formItemLayout} label="条件">
           {getFieldDecorator('condition_type', {
-            //initialValue: 1,
             initialValue: action ? defaultValue.condition_type : initialValues.condition_type,
             rules: [
               {
@@ -451,27 +361,158 @@ export default class BuyForm extends Component {
               },
             ],
           })(
-            <Radio.Group disabled={action && action !== 'edit'} onChange={this.changeConditionType}>
+            <Radio.Group onChange={this.changeConditionType} disabled={action}>
               <Radio.Button value={1}>指定面额</Radio.Button>
               <Radio.Button value={2}>面额区间</Radio.Button>
             </Radio.Group>
           )}
         </FormItem>
-        {this.state.conditionType === 1 && formItems}
-        {this.state.conditionType === 1 && (
-          <FormItem {...formItemLayoutBtn}>
-            <Button
-              disabled={action && action !== 'edit'}
-              type="dashed"
-              onClick={this.addTest}
-              style={{ width: '60%' }}
-            >
-              <Icon type="plus" /> 添加面额
-            </Button>
-          </FormItem>
-        )}
+        {//(defaultValue.condition_type === 1 || this.state.conditionType === 1 || initialValues.condition_type === 1) && this.state.conditionType !== 2 ?
+        (!action || (action && defaultValue.condition_type === 1)) && this.state.conditionType !== 2
+          ? conditionList.map((k, index) => {
+              return (
+                <Row key={index} className={styles.fixed}>
+                  <Col className={styles.fixedNum}>
+                    <FormItem required={false}>
+                      {getFieldDecorator(`condition[${index}].money`, {
+                        initialValue: action ? k.money : '',
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [
+                          {
+                            required: true,
+                            message: '请输入面额',
+                          },
+                        ],
+                      })(
+                        <InputNumber
+                          disabled={action && action !== 'edit'}
+                          onChange={e => this.changeFixedMoney(e, index)}
+                          placeholder="面额"
+                        />
+                      )}
+                      &nbsp;--
+                    </FormItem>
+                  </Col>
+                  <Col className={styles.fixedMin}>
+                    <FormItem required={false}>
+                      {getFieldDecorator(`condition[${index}].min_count`, {
+                        initialValue: action ? k.min_count : '',
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [
+                          {
+                            required: true,
+                            message: '请输入最小数量',
+                          },
+                        ],
+                      })(
+                        <InputNumber
+                          disabled={action && action !== 'edit'}
+                          onChange={e => this.changeFixMin(e, index)}
+                          placeholder="最小数量"
+                        />
+                      )}
+                      &nbsp;--
+                    </FormItem>
+                  </Col>
+                  <Col className={styles.fixedMax}>
+                    <FormItem required={false}>
+                      {getFieldDecorator(`condition[${index}].max_count`, {
+                        initialValue: action ? k.max_count : '',
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [
+                          {
+                            required: true,
+                            message: '请输入最大数量',
+                          },
+                        ],
+                      })(
+                        <InputNumber
+                          disabled={action && action !== 'edit'}
+                          onChange={e => this.changeFixMax(e, index)}
+                          placeholder="最大数量"
+                        />
+                      )}
+                      &nbsp;
+                      {!action ||
+                        (action === 'edit' && (
+                          <Icon
+                            className="dynamic-delete-button"
+                            type="minus-circle-o"
+                            disabled={conditionList.length === 1}
+                            onClick={() => this.remove(index)}
+                          />
+                        ))}
+                    </FormItem>
+                  </Col>
+                </Row>
+              );
+            })
+          : null}
 
-        {this.state.conditionType === 2 && conditionItemTwo}
+        {(!action || (action && defaultValue.condition_type === 1)) &&
+          this.state.conditionType !== 2 && (
+            <FormItem {...formItemLayoutBtn}>
+              <Button
+                disabled={action && action !== 'edit'}
+                type="dashed"
+                onClick={this.addTest}
+                style={{ width: '60%' }}
+              >
+                <Icon type="plus" /> 添加面额
+              </Button>
+            </FormItem>
+          )}
+        {(defaultValue.condition_type === 2 || this.state.conditionType === 2) &&
+        this.state.conditionType !== 1 ? (
+          <Row>
+            <FormItem className={styles.minNum}>
+              {getFieldDecorator('condition.min_money', {
+                initialValue: action
+                  ? defaultValue.condition.min_money
+                  : initialValues.condition.min_money,
+                validateTrigger: ['onChange', 'onBlur'],
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入最小数量',
+                  },
+                ],
+              })(
+                <InputNumber
+                  disabled={action && action !== 'edit'}
+                  placeholder="最小数量"
+                  onChange={this.rangeMin}
+                  min={1}
+                  style={{ width: '100%' }}
+                />
+              )}
+            </FormItem>
+            <span className={styles.min_max}> &nbsp;&nbsp;--</span>
+            <FormItem className={styles.maxNum}>
+              {getFieldDecorator('condition.max_money', {
+                initialValue: action
+                  ? defaultValue.condition.max_money
+                  : initialValues.condition.min_money,
+
+                validateTrigger: ['onChange', 'onBlur'],
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入最大数量',
+                  },
+                ],
+              })(
+                <InputNumber
+                  disabled={action && action !== 'edit'}
+                  placeholder="最大数量"
+                  onChange={this.rangeMax}
+                  min={1}
+                  style={{ width: '100%' }}
+                />
+              )}
+            </FormItem>
+          </Row>
+        ) : null}
 
         <FormItem {...formItemLayout} label="要求">
           {getFieldDecorator('password_type', {
@@ -578,7 +619,7 @@ export default class BuyForm extends Component {
 
         <FormItem className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>
-            取消
+            返回
           </Button>
           {action && action !== 'edit' ? (
             <Button
