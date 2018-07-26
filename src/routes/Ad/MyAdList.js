@@ -91,7 +91,7 @@ export default class List extends Component {
       title: '广告编号',
       dataIndex: 'ad_no',
       width: '15%',
-      className: styles.ad_no,
+      render: (v, r) => <a onClick={() => this.viewAd(r, '_OPEN')}>{v}</a>,
     },
     {
       title: '产品类型',
@@ -156,13 +156,8 @@ export default class List extends Component {
           {[1, 2, 4].indexOf(r.status) > -1 && (
             <span>
               <Divider type="vertical" />
-              <Popconfirm
-                title="您确认要删除此广告?"
-                onConfirm={() => this.updateAd(r, 5)}
-                okText="确认"
-                cancelText="取消"
-              >
-                <a>删除</a>
+              <Popconfirm title="您确认要删除此广告?" onConfirm={() => this.updateAd(r, 5)}>
+                <a className="text-red">删除</a>
               </Popconfirm>
             </span>
           )}
