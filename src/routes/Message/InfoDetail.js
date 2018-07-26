@@ -32,13 +32,27 @@ export default class InfoDetail extends PureComponent {
   state = {};
 
   componentDidMount() {
+    const { match: { params = {} } } = this.props;
+
+    this.fetch(params.id);
+  }
+
+  fetch(id) {
     const { dispatch } = this.props;
 
     dispatch({
       type: 'message/fetchInfoDetail',
-      payload: { id: this.props.match.params.id },
-      // callback: () => this.readMsg(this.props.match.params.id),
+      payload: { id },
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { match: { params = {} } } = this.props;
+    const { match: { params: nextParams = {} } } = nextProps;
+
+    if (nextParams.id !== params.id) {
+      this.fetch(nextParams.id);
+    }
   }
 
   readMsg = id => {
