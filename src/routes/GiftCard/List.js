@@ -102,27 +102,24 @@ export default class List extends Component {
     clearInterval(this.interval);
   }
 
-  fetchData = (params_, callback) => {
-    let params = { ...params_ };
+  fetchData = (params_ = {}, callback) => {
+    // debugger;
+    let params = {};
     const { type, card_type, order_by, password_type, denominFilterValue, filters } = this.state;
 
-    params.type = params.type || type;
-    params.card_type = params.card_type || card_type;
-    params.order_by = params.order_by || order_by;
-    params.password_type = params.password_type || password_type;
-    params.denominFilterValue = params.denominFilterValue || denominFilterValue;
-
-    if (params.denominFilterValue) {
-      params.min_money = params.denominFilterValue.min;
-      params.max_money = params.denominFilterValue.max;
-      delete params.denominFilterValue;
-    }
+    params.type = params_.type || type;
+    params.card_type = params_.card_type || card_type;
+    params.order_by = params_.order_by || order_by;
+    params.password_type = params_.password_type || password_type;
+    const { min, max } = params_.denominFilterValue || denominFilterValue || {};
+    params.min_money = min;
+    params.max_money = max;
 
     if (params.password_type) {
       params.password_type = params.password_type.toString();
     }
 
-    if (params.card_type) {
+    if (params_.card_type) {
       params.card_type = params.card_type.toString();
     }
 
@@ -130,7 +127,7 @@ export default class List extends Component {
       params.order_by = params.order_by === 'descend' ? 1 : 2;
     }
 
-    params = omitBy(params, isEmpty);
+    params = omitBy(params, item => !item);
 
     this.props
       .dispatch({
@@ -182,6 +179,7 @@ export default class List extends Component {
   };
 
   handleFilterDemoin = value => {
+    console.log('handleFilterDemoin', value);
     this.setState({
       denominFilterValue: value,
       denoVisible: false,
@@ -192,6 +190,7 @@ export default class List extends Component {
   };
 
   initColumns = () => {
+    const { user } = this.props;
     const { type, denominFilterValue } = this.state;
     const cardTypes = map(CONFIG.card_type.filter(t => t.valid), item => {
       return { text: item.name, value: item.type };
@@ -208,7 +207,11 @@ export default class List extends Component {
           const userinfo = record.owner;
           return (
             <div className={styles.userInfo}>
-              <Badge status={userinfo.online ? 'success' : 'default'} offset={[35, -5]} dot>
+              <Badge
+                status={userinfo.online || userinfo.id === user.id ? 'success' : 'default'}
+                offset={[35, -5]}
+                dot
+              >
                 <Avatar size="large" src={userinfo.avatar} />
               </Badge>
               <span className={styles.name}>{userinfo.nickname}</span>
@@ -338,12 +341,11 @@ export default class List extends Component {
         title: '操作',
         dataIndex: 'operation_',
         render: (text, record = {}) => {
-          const { user = {} } = this.props;
           const { owner = {} } = record || {};
           return (
             <Button
               type="primary"
-              //disabled={owner.id === user.id}
+              disabled={owner.id === user.id}
               onClick={() => {
                 this.props.history.push({
                   pathname: `/card/deal-detail/${record.id}`,

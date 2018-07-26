@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, InputNumber, message } from 'antd';
-import { map, filter } from 'lodash';
+import { map, filter, find } from 'lodash';
 import classNames from 'classnames';
 import styles from './RechargeForm.less';
 
@@ -20,7 +20,6 @@ const formItemLayout = {
 class WithdrawForm extends Component {
   state = {
     fee: 0,
-    oldAmount: 0,
   };
   static defaultProps = {
     className: '',
@@ -47,7 +46,6 @@ class WithdrawForm extends Component {
               message.success('已提交提现申请，请等待平台处理');
               this.setState({
                 fee: 0,
-                oldAmount: 0,
               });
               this.props.form.resetFields();
               this.props.onSubmit && this.props.onSubmit();
@@ -60,19 +58,24 @@ class WithdrawForm extends Component {
     });
   };
 
-  handleGetFee = e => {
-    e.preventDefault();
-    const { form } = this.props;
-    const { oldAmount } = this.state;
+  handleGetFee = () => {
+    console.log('abc');
+    const { form, currentUser } = this.props;
 
-    this.props.form.validateFields(['amount'], { force: true }, (err, value) => {
-      if (!err && oldAmount !== value.amount) {
+    this.props.form.validateFields(['amount', 'payment_id'], { force: true }, (err, value) => {
+      const { amount, payment_id } = value;
+      if (!err) {
+        const { payments } = currentUser || {};
+        const target = find(payments, item => item.id === payment_id);
+
         this.props.dispatch({
           type: 'wallet/fetchFee',
-          payload: value,
+          payload: {
+            payment_method: target.payment_method,
+            amount,
+          },
           callback: (data = {}) => {
             this.setState({
-              oldAmount: value.amount,
               fee: data.fee,
             });
           },
@@ -93,13 +96,14 @@ class WithdrawForm extends Component {
   render() {
     const { className, form, submitting, currentUser } = this.props;
     const { getFieldDecorator } = form;
-    const { payments: userPayments } = currentUser || {};
+    const { payments: userPayments, user = {} } = currentUser || {};
 
     return (
       <div className={classNames(className, styles.form)}>
         <Form onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout} label="提现账号">
             {getFieldDecorator('payment_id', {
+              onChange: this.handleGetFee,
               rules: [
                 {
                   required: true,
@@ -156,6 +160,18 @@ class WithdrawForm extends Component {
               ],
             })(<Input type="password" size="large" placeholder="请输入密码" />)}
           </FormItem>
+          {user.g2fa_on ? (
+            <FormItem {...formItemLayout} label="谷歌验证">
+              {getFieldDecorator('code', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入谷歌验证码！',
+                  },
+                ],
+              })(<Input style={{ width: '100%' }} size="large" placeholder="请输入谷歌验证码" />)}
+            </FormItem>
+          ) : null}
           <FormItem className={styles.buttonBox}>
             <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
               提交
