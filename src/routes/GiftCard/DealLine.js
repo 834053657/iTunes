@@ -42,12 +42,19 @@ export default class OrderDetail extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { params: { id } } = this.props.match || {};
+    const { pageStatus } = this.props.detail || {};
     const { params: { id: nextid } } = nextProps.match || {};
+    const { pageStatus: nextPageStatus } = nextProps.detail || {};
+
     if (nextid !== id) {
       this.fetchData(nextid);
       this.leaveRoom(id);
       this.enterRoom(nextid);
     }
+    // else if(pageStatus !== nextPageStatus) {
+    //   this.fetchData(id);
+    //   console.log(pageStatus, nextPageStatus)
+    // }
   }
 
   fetchData = id => {

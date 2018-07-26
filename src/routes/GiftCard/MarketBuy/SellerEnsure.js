@@ -78,18 +78,19 @@ export default class SellerEnsure extends Component {
                 保障时间剩余 &nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                <CountDown formatStr="mm:ss" target={guaranteeTime} />
+                <CountDown formatstr="mm:ss" target={guaranteeTime} />
                 分钟
               </h5>
               {pageStatus === 11 ? (
                 <div>
-                  <Button
-                    onClick={this.cancelOrder}
-                    style={{ borderColor: 'red', backgroundColor: '#fff', color: 'red' }}
-                    type="danger"
-                  >
-                    取消订单
-                  </Button>
+                  <Popconfirm title="确认取消订单吗?" onConfirm={this.cancelOrder}>
+                    <Button
+                      style={{ borderColor: 'red', backgroundColor: '#fff', color: 'red' }}
+                      type="danger"
+                    >
+                      取消订单
+                    </Button>
+                  </Popconfirm>
                 </div>
               ) : (
                 <div>
@@ -101,8 +102,6 @@ export default class SellerEnsure extends Component {
                         payload: { order_id: order.id },
                       });
                     }}
-                    okText="是"
-                    cancelText="取消"
                   >
                     <Button type="danger" loading={this.props.appealBtn}>
                       申诉
@@ -117,8 +116,6 @@ export default class SellerEnsure extends Component {
                         payload: { order_id: order.id },
                       });
                     }}
-                    // okText="是"
-                    // cancelText="取消"
                   >
                     <Button type="primary" loading={this.props.releaseOrderBtn}>
                       确认释放

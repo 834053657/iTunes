@@ -24,7 +24,7 @@ import {
 } from '../services/api';
 
 //判断买家和卖家
-function identify(detail, user) {
+function identify(detail = {}, user = {}) {
   if (!Object.keys(detail.ad).length) {
     return false;
   }

@@ -242,6 +242,9 @@ class BasicLayout extends React.Component {
             },
           });
         } else if ([41, 42].indexOf(item.msg_type) >= 0) {
+          dispatch({
+            type: 'ad/fetchTermsList',
+          });
           dispatch(routerRedux.push(`/ad/terms`));
         } else if ([51, 52, 61, 62].indexOf(item.msg_type) >= 0) {
           Modal.success({

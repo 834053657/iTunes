@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Icon, Input, Avatar, Badge, Modal } from 'antd';
+import { Button, Icon, Input, Avatar, Badge, Modal, Popconfirm } from 'antd';
 import CountDown from 'components/CountDown';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
@@ -255,28 +255,26 @@ export default class Process extends Component {
                   请在&nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  <CountDown formatStr="mm:ss" target={this.targetTime} />
+                  <CountDown formatstr="mm:ss" target={this.targetTime} />
                   秒内发卡
                 </div>
-                <Button
-                  onClick={() => {
+                <Popconfirm
+                  title="您确认要取消订单吗?"
+                  onConfirm={() =>
                     this.props.dispatch({
                       type: 'card/cacelOrder',
                       payload: { order_id: order.id },
-                    });
-                  }}
+                    })
+                  }
                 >
-                  取消订单
-                </Button>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    this.sendCDK();
-                  }}
-                  loading={submitting}
-                >
-                  发卡
-                </Button>
+                  <Button>取消订单</Button>
+                </Popconfirm>
+
+                <Popconfirm title="您确认要发卡吗?" onConfirm={this.sendCDK}>
+                  <Button type="primary" loading={submitting}>
+                    发卡
+                  </Button>
+                </Popconfirm>
               </div>
             </div>
           </div>

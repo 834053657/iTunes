@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
-import { Button, Icon, Steps, Avatar, Select, Badge } from 'antd';
+import { Button, Icon, Steps, Avatar, Select, Badge, Popconfirm } from 'antd';
 import CountDown from 'components/CountDown';
 import styles from '../../MarketBuy/StepTwo.less';
 import StepModel from '../../Step';
@@ -17,8 +17,8 @@ export default class SellerWaitBuyerCheck extends Component {
   constructor(props) {
     super();
     this.state = {};
-    this.guaranteeTime = new Date().getTime() + props.detail.order.guarantee_at * 1000;
-    this.deadlineTime = new Date().getTime() + props.detail.order.deadline_at * 1000;
+    // this.guaranteeTime = new Date().getTime() + props.detail.order.guarantee_at * 1000;
+    // this.deadlineTime = new Date().getTime() + props.detail.order.deadline_at * 1000;
   }
 
   cancelOrder = () => {
@@ -73,9 +73,9 @@ export default class SellerWaitBuyerCheck extends Component {
     const { trader = {}, order = {}, ad = {} } = this.props.detail;
     const { status } = order;
     const userInfo = ad.owner;
-    const guaranteeTime = new Date().getTime() + order.guarantee_at * 1000;
-    const deadlineTime = new Date().getTime() + order.deadline_at * 1000;
-    const checkTime = new Date().getTime() + order.check_at * 1000;
+    const guaranteeTime = order.guarantee_at; //new Date().getTime() + order.guarantee_at * 1000;
+    const deadlineTime = order.deadline_at; // new Date().getTime() + order.deadline_at * 1000;
+    const checkTime = order.check_at; //new Date().getTime() + order.check_at * 1000;
 
     return (
       <div className={styles.stepTwoBox}>
@@ -109,7 +109,7 @@ export default class SellerWaitBuyerCheck extends Component {
                   保障时间剩余 &nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  <CountDown formatStr="mm:ss" target={guaranteeTime} />
+                  <CountDown formatstr="mm:ss" target={guaranteeTime} />
                   分钟
                 </h5>
               ) : (
@@ -117,19 +117,20 @@ export default class SellerWaitBuyerCheck extends Component {
                   买家查收卡密时间剩余 &nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  <CountDown formatStr="mm:ss" target={checkTime} />
+                  <CountDown formatstr="mm:ss" target={checkTime} />
                   秒
                 </h5>
               )}
 
-              <Button
-                onClick={this.cancelOrder}
-                style={{ borderColor: 'red', backgroundColor: '#fff', color: 'red' }}
-                type="danger"
-                loading={this.props.cancel}
-              >
-                取消订单
-              </Button>
+              <Popconfirm title="您确认要取消订单吗?" onConfirm={this.cancelOrder}>
+                <Button
+                  style={{ borderColor: 'red', backgroundColor: '#fff', color: 'red' }}
+                  type="danger"
+                  loading={this.props.cancel}
+                >
+                  取消订单
+                </Button>
+              </Popconfirm>
             </div>
 
             {/*快捷短语*/}

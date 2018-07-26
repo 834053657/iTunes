@@ -239,8 +239,6 @@ export async function getOrderDetail(params) {
   if (!params) {
     return false;
   }
-  console.log('params');
-  console.log(params);
   return request(`/itunes/order/detail?${stringify(params)}`);
 }
 
