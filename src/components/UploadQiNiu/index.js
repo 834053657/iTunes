@@ -71,6 +71,7 @@ export default class UploadQiNiu extends Component {
           onChange={this.uploadHandler}
           beforeUpload={this.beforeUpload}
           data={{ token: upload.token }}
+          disabled={this.props.disabled}
         >
           {value ? (
             <img style={{ maxWidth: '100%', maxHeight: '150px' }} src={value} alt="qrcode" />

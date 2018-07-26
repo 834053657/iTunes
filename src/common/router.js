@@ -127,7 +127,15 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/SellCard')),
       authority: checkLogined,
     },
+    '/card/edit-sell-card/:id/:action': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/SellCard')),
+      authority: checkLogined,
+    },
     '/card/buy-card': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
+      authority: checkLogined,
+    },
+    '/card/edit-buy-card/:id/:action': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
       authority: checkLogined,
     },

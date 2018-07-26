@@ -25,6 +25,7 @@ const InputGroup = Input.Group;
 
 @connect(({ card }) => ({
   card,
+  adDetail: card.adDetail || {},
 }))
 export default class SaleCard extends Component {
   constructor(props) {
@@ -228,9 +229,16 @@ export default class SaleCard extends Component {
     };
 
     this.addFormBuyAd = v => {
+      const value = v;
+      if (this.state.action) {
+        value.id = this.props.adDetail.id;
+      }
       this.props.dispatch({
         type: 'card/addBuyAd',
-        payload: v,
+        payload: value,
+        callback: res => {
+          this.props.history.push({ pathname: '/ad/my' });
+        },
       });
     };
 
@@ -263,6 +271,32 @@ export default class SaleCard extends Component {
     };
   }
 
+  componentWillMount() {
+    const { params: { id, action } } = this.props.match || {};
+    const { location = {}, dispatch } = this.props;
+    const { query } = location;
+    if (id) {
+      dispatch({
+        type: 'card/fetchAdDetail',
+        payload: { id },
+      });
+      this.setState({
+        action,
+      });
+    }
+    dispatch({
+      type: 'card/fetchTerms',
+    });
+  }
+
+  changeEdit = () => {
+    const { params: { id, action } } = this.props.match || {};
+    this.props.dispatch(routerRedux.push(`/card/edit-buy-card/${id}/${'edit'}`));
+    this.setState({
+      action: 'edit',
+    });
+  };
+
   //添加面额种类
   addDeno = () => {
     // if (isNaN(this.state.denoVaule)) {
@@ -284,248 +318,32 @@ export default class SaleCard extends Component {
     });
   };
 
-  componentWillMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'card/fetchTerms',
-    });
-  }
-
   componentDidMount() {}
 
   componentWillUnmount() {}
 
   render() {
-    const { condition_type, condition, defaultCard = {}, cardType = [] } = this.state;
+    const { condition_type, condition, defaultCard = {}, cardType = [], action } = this.state;
     const items = this.props.card.terms;
+    const { adDetail = {} } = this.props;
 
     const breadcrumbList = [
       { title: '广告管理', href: '/ad/my' },
       { title: '礼品卡', href: '/card/market' },
       { title: '创建购买' },
     ];
-
+    const { terms } = this.props.card || {};
+    console.log(adDetail);
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
-          <BuyForm onSubmit={this.addFormBuyAd} />
-          {/*
-
-          <ul className={styles.submitTable}>
-            <li>
-              <span className={styles.tableLeft}>类型：</span>
-              <Select
-                style={{ width: 120 }}
-                defaultValue={defaultCard.name}
-                onChange={this.selectCardType}
-              >
-                {cardType.map(t => {
-                  return (
-                    <Option key={t.type} value={t.type}>
-                      {t.name}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </li>
-
-            <li>
-              <span className={styles.tableLeft}>单价：</span>
-              <InputNumber defaultValue={1} min={1} onChange={e => this.unitPriceChange(e)} /> RMB
-            </li>
-
-            <li>
-              <span className={styles.tableLeft}>倍数：</span>
-              <InputNumber defaultValue={1} min={1} onChange={e => this.multChange(e)} />
-            </li>
-
-            <li>
-              <span className={styles.tableLeft}>条件：</span>
-              <Radio.Group defaultValue="1" onChange={e => this.selCondition(e.target.value)}>
-                <Radio.Button value="1">指定面额</Radio.Button>
-                <Radio.Button value="2">面额区间</Radio.Button>
-              </Radio.Group>
-            </li>
-            {condition_type && condition.length && +condition_type === 1 ? (
-              <li>
-                <span className={styles.tableLeft}>&nbsp;</span>
-                {
-                  <ul className={styles.conditionFixed}>
-                    {condition && condition.length
-                      ? condition.map((c, index) => {
-                          return (
-                            <li key={index}>
-                              <Input
-                                className={styles.conFixIpt}
-                                placeholder="面额"
-                                value={c.money}
-                                onChange={e => {
-                                  this.changeMoney(e.target.value, index);
-                                }}
-                              />
-                              &nbsp;--&nbsp;
-                              <Input
-                                className={styles.conFixIpt}
-                                placeholder="最小数量"
-                                value={c.min_count}
-                                onBlur={e => this.minBlur(e, index)}
-                                onChange={e => {
-                                  this.changeMinCount(e.target.value, index);
-                                }}
-                              />
-                              &nbsp;--&nbsp;
-                              <Input
-                                className={styles.conFixIpt}
-                                placeholder="最大数量"
-                                value={c.max_count}
-                                onBlur={e => this.maxBlur(e, index)}
-                                onChange={e => {
-                                  this.changeMaxCount(e.target.value, index);
-                                }}
-                              />
-                              <Icon
-                                className={styles.delIcon}
-                                type="minus-circle-o"
-                                onClick={() => {
-                                  this.delDeno(c, index);
-                                }}
-                              />
-                            </li>
-                          );
-                        })
-                      : null}
-                  </ul>
-                }
-              </li>
-            ) : null}
-            {+condition_type === 2 ? (
-              <li>
-                <span className={styles.tableLeft}>&nbsp;</span>
-                <div>
-                  <InputNumber
-                    className={styles.conIpt}
-                    type="text"
-                    value={this.state.rangeMinCount}
-                    onChange={e => this.changeRangeMin(e)}
-                  />
-                  &nbsp;&nbsp;---&nbsp;&nbsp;
-                  <InputNumber
-                    className={styles.conIpt}
-                    type="text"
-                    width="40px"
-                    value={this.state.rangeMaxCount}
-                    onChange={e => this.changeRangeMax(e)}
-                  />
-                </div>
-              </li>
-            ) : null}
-            {+condition_type === 1 ? (
-              <li>
-                <span className={styles.tableLeft}>&nbsp;</span>
-                <Button style={{ width: '260px', borderStyle: 'dashed' }} onClick={this.addDeno}>
-                  + 添加面额
-                </Button>
-              </li>
-            ) : null}
-
-            <li>
-              <span className={styles.tableLeft}>要求：</span>
-              <RadioGroup
-                onChange={e => this.changePasswordType(e)}
-                value={this.state.passwordType}
-              >
-                <Radio value={1}>有卡密</Radio>
-                <Radio value={2}>有图</Radio>
-                <Radio value={3}>有图有卡密</Radio>
-              </RadioGroup>
-            </li>
-
-            <li>
-              <span className={styles.tableLeft}>发卡期限：</span>
-              <Select
-                defaultValue={CONFIG.deadline && CONFIG.deadline[0]}
-                onChange={this.selectDeadline}
-                style={{ width: 100 }}
-              >
-                {CONFIG.deadline &&
-                  CONFIG.deadline.map(t => {
-                    return <Option key={t}>{t}</Option>;
-                  })}
-              </Select>
-            </li>
-
-            <li>
-              <span className={styles.tableLeft}>保障时间：</span>
-              <Select
-                defaultValue={CONFIG.guarantee_time && CONFIG.guarantee_time[0]}
-                onChange={this.selectGuaTime}
-                style={{ width: 100 }}
-              >
-                {CONFIG.guarantee_time &&
-                  CONFIG.guarantee_time.map(t => {
-                    return <Option key={t}>{t}</Option>;
-                  })}
-              </Select>
-            </li>
-
-            <li>
-              <span className={styles.tableLeft}>
-                交易条款
-                <i>(可选)</i>
-                ：
-              </span>
-              <Select defaultValue="无" style={{ width: 120 }} onChange={this.selectTermTitle}>
-                <Option key="noTerm">无</Option>
-                {items ? (
-                  items.filter(i => i.status === 3) ? (
-                    items.filter(i => i.status === 3).map(t => {
-                      return (
-                        <Option value={t.id} key={t.id}>
-                          {t.title}
-                        </Option>
-                      );
-                    })
-                  ) : (
-                    <Menu.Item>请等待条款审核</Menu.Item>
-                  )
-                ) : (
-                  <Menu.Item>请在我的订单里新建条款</Menu.Item>
-                )}
-              </Select>
-            </li>
-            <li>
-              <span className={styles.tableLeft}>同时处理订单数：</span>
-              <InputNumber
-                onFocus={() => {
-                  this.setState({
-                    ordersNum: true,
-                  });
-                }}
-                onBlur={() => {
-                  this.setState({
-                    ordersNum: false,
-                  });
-                }}
-                defaultValue={0}
-                min={0}
-                onChange={e => this.ordersAmountChange(e)}
-              />
-              &nbsp;
-              {this.state.ordersNum ? '   0代表不限制订单并发数量' : null}
-            </li>
-          </ul>
-          <div className={styles.footerBox}>
-            <Button onClick={() => this.props.dispatch(routerRedux.goBack())}>取消</Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                this.addBuyAd();
-              }}
-            >
-              发布
-            </Button>
-          </div>
-                    */}
+          <BuyForm
+            changeEdit={this.changeEdit}
+            defaultValue={adDetail}
+            action={action}
+            terms={terms}
+            onSubmit={this.addFormBuyAd}
+          />
         </PageHeaderLayout>
       </div>
     );

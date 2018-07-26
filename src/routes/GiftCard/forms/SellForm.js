@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { routerRedux } from 'dva/router';
 import {
   Select,
   Button,
@@ -14,7 +15,7 @@ import {
   Row,
   Col,
 } from 'antd';
-import { map, last } from 'lodash';
+import { map, last, head } from 'lodash';
 import styles from './SellForm.less';
 import OnlyPassWord from './OnlyPassWord';
 import OnlyPicture from './OnlyPicture';
@@ -26,12 +27,21 @@ const Option = Select.Option;
 
 @Form.create()
 export default class SellForm extends Component {
-  state = {
-    termModalInfo: false,
-    addDenoVisible: false,
-    cards: [],
-    pswType: 1,
-  };
+  constructor(props) {
+    super();
+    this.state = {
+      termModalInfo: false,
+      addDenoVisible: false,
+      cards: [],
+      pswType: 1,
+    };
+  }
+
+  componentDidMount() {
+    const { defaultValue, action } = this.props;
+    console.log(action);
+    console.log(defaultValue);
+  }
 
   handleCancel = () => {
     this.props.form.resetFields();
@@ -42,9 +52,10 @@ export default class SellForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       console.log(err, values);
-      // if (!err) {
-      //   this.props.onSubmit(values);
-      // }
+      delete values.cards;
+      if (!err) {
+        this.props.onSubmit({ ...values, cards: this.state.cards });
+      }
     });
   };
 
@@ -137,8 +148,14 @@ export default class SellForm extends Component {
   };
 
   changePswType = e => {
-    console.log(e.target.value);
-    this.setState({ pswType: e.target.value });
+    const { form } = this.props;
+    this.setState({
+      pswType: e.target.value,
+      cards: [],
+    });
+    form.setFieldsValue({
+      'cards[]': [],
+    });
   };
 
   addMoney = i => {
@@ -152,9 +169,14 @@ export default class SellForm extends Component {
   };
 
   changePsw = (e, index, littleIndex) => {
-    const { cards } = this.state;
+    const { action, defaultValue } = this.props;
+    const cards = action ? defaultValue.cards : this.state.cards;
     console.log(e.target.value);
+    console.log(index);
+    console.log(littleIndex);
     cards[index].items[littleIndex].password = e.target.value;
+    console.log(cards);
+
     this.props.form.setFieldsValue({
       'cards[]': cards,
     });
@@ -170,19 +192,68 @@ export default class SellForm extends Component {
     this.setState({ cards });
   };
 
+  confirm = (index, littleIndex) => {
+    const { cards } = this.state;
+    const { form, action, defaultValue } = this.props;
+    // let cardState = cards
+    //
+    // const newItems = cards[index].items.filter((i,key) => key !== littleIndex);
+    // cards[index].items = newItems;
+    //
+    console.log(defaultValue);
+    if (action) {
+      //编辑、查看
+      const editCards = defaultValue.cards;
+      editCards[index].items.splice(littleIndex, 1);
+      this.setState({ cards: editCards });
+      form.setFieldsValue({
+        'cards[]': editCards,
+      });
+    } else {
+      cards[index].items.splice(littleIndex, 1);
+      this.setState({ cards });
+      form.setFieldsValue({
+        'cards[]': cards,
+      });
+    }
+    // cards[index].items.splice(littleIndex, 1)
+    // this.setState({
+    //   cards
+    // });
+    // console.log(cards);
+    // form.setFieldsValue({
+    //   'cards[]': cards,
+    // });
+    // console.log(form.getFieldValue('cards[]'));
+  };
+
   bindForm = (a, b) => {
     this.props.form.setFieldsValue({
       a: b,
     });
   };
 
+  getCards = v => {
+    console.log(v.cards);
+    // this.setState({
+    //   cards:v.cards
+    // })
+    // this.props.form.setFieldsValue({
+    //   'cards[]': v.cards,
+    // });
+  };
+
   render() {
     const { termModalInfo } = this.state;
     const {
+      defaultValue,
+      action,
       terms = [],
       form: { getFieldDecorator, getFieldValue, resetForm, onFieldsChange },
-      initialValues = {},
     } = this.props;
+    // if (!defaultValue.ad_no && !edit) {
+    //   return null
+    // }
     const formItemLayout = {
       labelCol: {
         sm: { span: 4 },
@@ -191,6 +262,11 @@ export default class SellForm extends Component {
         sm: { span: 16 },
       },
     };
+
+    if (action && !defaultValue.cards) {
+      return null;
+    }
+    console.log(defaultValue);
 
     const addDenoBox = (
       <div>
@@ -229,17 +305,27 @@ export default class SellForm extends Component {
       </div>
     );
 
-    getFieldDecorator('cards[]', {
-      // initialValue: []
-    });
+    const initialValues = {
+      card_type:
+        CONFIG.card_type &&
+        CONFIG.card_type.filter(c => c.valid)[0] &&
+        CONFIG.card_type.filter(c => c.valid)[0].type,
+      term_id: 0,
+      unit_price: 10,
+      guarantee_time: CONFIG.guarantee_time && head(CONFIG.guarantee_time),
+      password_type: 1,
+      concurrency_order: 0,
+      cards: [],
+    };
 
+    getFieldDecorator('cards[]', { initialValue: [] });
     const cards = getFieldValue('cards[]') || [];
     return (
       <div>
         <Form className={styles.form} onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout} label="类型">
             {getFieldDecorator('card_type', {
-              initialValue: initialValues.card_type,
+              initialValue: action ? defaultValue.card_type : initialValues.card_type,
               rules: [
                 {
                   required: true,
@@ -247,31 +333,35 @@ export default class SellForm extends Component {
                 },
               ],
             })(
-              <Select style={{ width: 200 }}>
-                {map(CONFIG.card_type, item => (
-                  <Option key={item.type} value={item.type}>
-                    {item.name}
-                  </Option>
-                ))}
+              <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
+                {map(CONFIG.card_type, item => {
+                  if (item.valid) {
+                    return (
+                      <Option key={item.type} value={item.type}>
+                        {item.name}
+                      </Option>
+                    );
+                  }
+                })}
               </Select>
             )}
           </FormItem>
 
           <FormItem {...formItemLayout} label="单价">
             {getFieldDecorator('unit_price', {
-              initialValue: initialValues.unit_price,
+              initialValue: action ? defaultValue.unit_price : initialValues.unit_price,
               rules: [
                 {
                   required: true,
                   message: '请输入单价',
                 },
               ],
-            })(<InputNumber />)}
+            })(<InputNumber disabled={action && action !== 'edit'} />)}
           </FormItem>
 
           <FormItem {...formItemLayout} label="保障时间">
             {getFieldDecorator('guarantee_time', {
-              initialValue: initialValues.guarantee_time,
+              initialValue: action ? defaultValue.guarantee_time : initialValues.guarantee_time,
               rules: [
                 {
                   required: true,
@@ -279,7 +369,7 @@ export default class SellForm extends Component {
                 },
               ],
             })(
-              <Select style={{ width: 200 }}>
+              <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
                 {map(CONFIG.guarantee_time, (item, index) => (
                   <Option key={item} value={item}>
                     {item}分钟
@@ -298,37 +388,42 @@ export default class SellForm extends Component {
             }
           >
             {getFieldDecorator('term_id', {
-              initialValue: initialValues.term_id,
-              rules: [],
+              initialValue: action ? defaultValue.term_id : initialValues.term_id,
+              rules: [
+                {
+                  required: false,
+                  message: '请选择交易条款',
+                },
+              ],
             })(
-              <div>
-                <Select style={{ width: 200 }}>
-                  {map(terms, (item, index) => (
-                    <Option key={item.id} value={item.id}>
-                      {item.title}
-                    </Option>
-                  ))}
-                </Select>
-                {/*getFiedzfdsazzldValzzz`ue('term_id') >= 0 && <a onClick={this.handleShowTerm}>查看</a>*/}
-              </div>
+              <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
+                <Option value={0}>无</Option>
+                {map(terms, (item, index) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.title}
+                  </Option>
+                ))}
+              </Select>
             )}
           </FormItem>
 
           <FormItem {...formItemLayout} label="同时处理订单数">
             {getFieldDecorator('concurrency_order', {
-              initialValue: initialValues.concurrency_order,
+              initialValue: action
+                ? defaultValue.concurrency_order
+                : initialValues.concurrency_order,
               rules: [
                 {
                   required: true,
                   message: '请输入同时处理订单数',
                 },
               ],
-            })(<InputNumber />)}
+            })(<InputNumber disabled={action && action !== 'edit'} />)}
           </FormItem>
 
           <FormItem {...formItemLayout} label="包含">
             {getFieldDecorator('password_type', {
-              initialValue: 1,
+              initialValue: action ? defaultValue.password_type : initialValues.password_type,
               rules: [
                 {
                   required: true,
@@ -336,7 +431,7 @@ export default class SellForm extends Component {
                 },
               ],
             })(
-              <RadioGroup onChange={this.changePswType}>
+              <RadioGroup disabled={action && action !== 'edit'} onChange={this.changePswType}>
                 {map(CONFIG.cardPwdType, (text, value) => (
                   <Radio key={value} value={+value}>
                     {text}
@@ -353,6 +448,7 @@ export default class SellForm extends Component {
               }}
               type="dashed"
               style={{ width: '60%', marginLeft: '20%' }}
+              disabled={action && action !== 'edit'}
             >
               <Icon type="plus" />
               添加面额
@@ -388,33 +484,36 @@ export default class SellForm extends Component {
             </Modal>
           </FormItem>
 
-          {/*
-        {getFieldValue('password_type') === '1'
-          ? cards.map((item, index) => {
-              return (
-                <OnlyPassWord/>
-                  // key={index}
-                  // filedName={`cards[${index}]`}
-                  // data={item}
-                  // onChange={this.handleCard.bind(this, index)}
-                  // addDenoIpt={() => this.addDenoIpt(index)}
-                  // removeIpt={id => this.removeIpt(id, index)}
-                  // changeData={(i, changeItem) => this.changeData(i, changeItem, index)}
-
-              );
-            })
-          : null}
-        {getFieldValue('password_type') === '2' && <OnlyPicture />}
-        {getFieldValue('password_type') === '3' && <OnlyPassWord />}
-        */}
+          <OnlyPassWord
+            defaultValue={action ? defaultValue.cards : cards}
+            addMoney={this.addMoney}
+            changePsw={this.changePsw}
+            changePic={this.changePic}
+            action={action}
+            psw={action ? defaultValue.password_type : this.state.pswType}
+            confirm={this.confirm}
+          />
 
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>
-              取消
+              返回
             </Button>
-            <Button className={styles.submit} type="primary" htmlType="submit">
-              发布
-            </Button>
+            {action && action !== 'edit' ? (
+              <Button
+                className={styles.submit}
+                type="primary"
+                onClick={() => {
+                  this.props.changeEdit();
+                }}
+              >
+                编辑
+              </Button>
+            ) : null}
+            {!action || (action && action === 'edit') ? (
+              <Button className={styles.submit} type="primary" htmlType="submit">
+                发布
+              </Button>
+            ) : null}
           </FormItem>
           {termModalInfo && (
             <Modal
@@ -427,14 +526,6 @@ export default class SellForm extends Component {
             </Modal>
           )}
         </Form>
-        <OnlyPassWord
-          defaultValue={this.state.cards}
-          addMoney={this.addMoney}
-          changePsw={this.changePsw}
-          changePic={this.changePic}
-          psw={this.state.pswType}
-        />
-        {/*<OnlyPicture />*/}
       </div>
     );
   }

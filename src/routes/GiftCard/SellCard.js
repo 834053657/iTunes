@@ -27,6 +27,7 @@ const InputGroup = Input.Group;
 
 @connect(({ card }) => ({
   card,
+  adDetail: card.adDetail || {},
 }))
 export default class BuyCard extends Component {
   constructor(props) {
@@ -52,16 +53,25 @@ export default class BuyCard extends Component {
     };
   }
 
-  componentDidMount() {
-    const { dispatch } = this.props;
+  componentWillMount() {
+    const { params: { id, action } } = this.props.match || {};
+    const { location = {}, dispatch } = this.props;
+    const { query } = location;
+    if (id) {
+      dispatch({
+        type: 'card/fetchAdDetail',
+        payload: { id },
+      });
+      this.setState({
+        action,
+      });
+    }
     dispatch({
       type: 'card/fetchTerms',
-      payload: {
-        status: 3,
-        page_size: 10000,
-      },
     });
   }
+
+  componentDidMount() {}
 
   changePasswordType = e => {
     this.data.password_type = e.target.value;
@@ -211,25 +221,26 @@ export default class BuyCard extends Component {
     });
   };
 
-  addAdvertising = () => {
-    this.data.cards = this.state.cards;
-    if (this.data.cards.length === 0) {
-      message.warning('请输入礼品卡信息');
-      return false;
+  addAdvertising = v => {
+    const value = v;
+    if (this.state.action) {
+      value.id = this.props.adDetail.id;
     }
-    this.props
-      .dispatch({
-        type: 'card/addSellAd',
-        payload: this.data,
-      })
-      .then(res => {
-        if (res.code === 0) {
-          this.data = {};
-          this.props.history.push({ pathname: '/ad/my' });
-        } else {
-          message.error('发送失败，失败原因：' + res.msg);
-        }
-      });
+    this.props.dispatch({
+      type: 'card/addSellAd',
+      payload: value,
+      callback: res => {
+        this.props.history.push({ pathname: '/ad/my' });
+      },
+    });
+  };
+
+  changeEdit = () => {
+    const { params: { id, action } } = this.props.match || {};
+    this.props.dispatch(routerRedux.push(`/card/edit-sell-card/${id}/${'edit'}`));
+    this.setState({
+      action: 'edit',
+    });
   };
 
   calcuMoney = () => {
@@ -254,9 +265,10 @@ export default class BuyCard extends Component {
     if (!CONFIG.card_type) {
       return false;
     }
-    const { cardType } = this.state;
-    const items = this.props.card.terms;
 
+    const { cardType, action } = this.state;
+    const items = this.props.card.terms;
+    const { adDetail = {} } = this.props;
     const addDenoBox = (
       <div className={styles.denoBox}>
         <span className={styles.left}>面额:</span>
@@ -290,10 +302,21 @@ export default class BuyCard extends Component {
       </div>
     );
 
+    const actionTitle = () => {
+      switch (action) {
+        case 'edit':
+          return '编辑';
+        case 'preview':
+          return '查看';
+        default:
+          '创建出售';
+      }
+    };
+
     const breadcrumbList = [
       { title: '广告管理', href: '/ad/my' },
       { title: '礼品卡', href: '/card/market' },
-      { title: '创建出售' },
+      { title: actionTitle() },
     ];
 
     const { terms } = this.props.card || {};
@@ -301,246 +324,14 @@ export default class BuyCard extends Component {
     return (
       <div className={styles.addSale}>
         <PageHeaderLayout breadcrumbList={breadcrumbList}>
-          <SellForm terms={terms} initialValues={{ card_type: 3 }} />
-          {/*
-          <ul className={styles.submitTable}>
-            <li>
-              <span className={styles.tableLeft}>类型：</span>
-              <Select
-                style={{width: 90}}
-                defaultValue={cardType[0].name}
-                onChange={this.selectCardType}
-              >
-                {CONFIG.card_type.filter(c => c.valid).map(t => {
-                  return (
-                    <Option key={t.type} value={t.type}>
-                      {t.name}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </li>
-            <li>
-              <span className={styles.tableLeft}>单价：</span>
-              <InputNumber defaultValue={1} min={1} onChange={e => this.unitPriceChange(e)}/>
-            </li>
-            <li>
-              <span className={styles.tableLeft}>保障时间：</span>
-              <Select
-                style={{width: 90}}
-                defaultValue={CONFIG.guarantee_time[0]}
-                onChange={this.selectGuaTime}
-              >
-                {CONFIG.guarantee_time.map(t => {
-                  return <Option key={t}>{t}</Option>;
-                })}
-              </Select>
-            </li>
-            <li>
-              <span className={styles.tableLeft}>
-                交易条款
-                <i>(可选)</i>
-                ：
-              </span>
-
-              <Select defaultValue="无" style={{width: 90}} onChange={this.selectTermTitle}>
-                <Option key="noTerm">无</Option>
-                {items ? (
-                  items.filter(i => i.status === 3) ? (
-                    items.filter(i => i.status === 3).map(t => {
-                      return (
-                        <Option value={t.id} key={t.id}>
-                          {t.title}
-                        </Option>
-                      );
-                    })
-                  ) : (
-                    <Menu.Item>请等待条款审核</Menu.Item>
-                  )
-                ) : (
-                  <Menu.Item>请在我的订单里新建条款</Menu.Item>
-                )}
-              </Select>
-            </li>
-            <li>
-              <span className={styles.tableLeft}>同时处理订单数：</span>
-              <InputNumber
-                onFocus={() => {
-                  this.setState({
-                    ordersNum: true,
-                  });
-                }}
-                onBlur={() => {
-                  this.setState({
-                    ordersNum: false,
-                  });
-                }}
-                defaultValue={0}
-                min={0}
-                onChange={e => this.ordersAmountChange(e)}
-              />
-              &nbsp;
-              {this.state.ordersNum ? '   0代表不限制订单并发数量' : null}
-            </li>
-
-            <li>
-              <span className={styles.tableLeft}>包含：</span>
-              <RadioGroup
-                onChange={e => this.changePasswordType(e)}
-                value={this.state.passwordType}
-              >
-                <Radio value={1}>有卡密</Radio>
-                <Radio value={2}>有图</Radio>
-                <Radio value={3}>有图有卡密</Radio>
-              </RadioGroup>
-            </li>
-            <li>
-              <span className={styles.tableLeft}>&nbsp;</span>
-              <Popover
-                key={this.state.date}
-                placement="topRight"
-                content={addDenoBox}
-                title="添加面额"
-                trigger="click"
-                visible={this.state.addDenoVisible}
-                onVisibleChange={() => {
-                  this.setVisible('addDenoVisible', !this.state.addDenoVisible);
-                }}
-              >
-                <Button
-                  style={{width: '260px', borderStyle: 'dashed'}}
-                  onClick={() => {
-                    this.setState({
-                      date: new Date(),
-                    });
-                  }}
-                >
-                  + 添加面额
-                </Button>
-              </Popover>
-            </li>
-          </ul>
-          */}
-          {/*
-          {this.state.passwordType === 1
-            ? this.state.cards.map((item, index) => {
-                return (
-                  <div key={index + 'cards'} className={styles.denomination}>
-                    <header>
-                      <span>{item.money}</span>
-                      面额 （{item.items.length}）
-                      <div>
-                        <Button>删除</Button>
-                      </div>
-                    </header>
-                    <section>
-                      <div className={styles.left}>
-                        <span>卡密：</span>
-                      </div>
-                      <div className={styles.right}>
-                        {item.items.map((card, i) => {
-                          return (
-                            <div key={index + i} className={styles.iptBox}>
-                              <div className={styles.input}>
-                                <Input
-                                  type="text"
-                                  value={this.state.cards[index].items[i].password}
-                                  onChange={e => {
-                                    this.denoIptValueChange(e, i, index);
-                                  }}
-                                />
-                              </div>
-                              <div className={styles.icon}>
-                                <Icon
-                                  onClick={() => {
-                                    this.delCDKBox(item.money, i);
-                                  }}
-                                  type="delete"
-                                />
-                              </div>
-                            </div>
-                          );
-                        })}
-
-                        <div className={styles.addBtn}>
-                          <Button
-                            style={{ width: '580px', borderStyle: 'dashed' }}
-                            onClick={() => {
-                              this.addCDKBox(item.money);
-                            }}
-                          >
-                            + 添加卡密
-                          </Button>
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                );
-              })
-            : null}
-
-          {this.state.passwordType === 2
-            ? this.state.cards.map((item, index) => {
-                return (
-                  <OnlyPicture
-                    key={index}
-                    item={item}
-                    styles={styles}
-                    index={index}
-                    changeAppealPic={(info, prefix) => this.changeAppealPic(info, prefix, index)}
-                    //onlyPic={info => this.onlyPic(info, item, index)}
-                    remove={info => this.remove(info, index, item)}
-                    getReceipt={url => this.getReceipt(url, index)}
-                  />
-                );
-              })
-            : null}
-
-          {this.state.passwordType === 3
-            ? this.state.cards.map((item, index) => {
-                return (
-                  <PicWithText
-                    key={index}
-                    item={item}
-                    styles={styles}
-                    index={index}
-                    addCDKBox={this.addCDKBox}
-                    delCDKBox={this.delCDKBox}
-                    changePTPass={this.denoIptValueChange}
-                    getUrl={(url, i) => this.getUrl(url, index, i)}
-                    getReceipt={url => this.getReceipt(url, index)}
-                  />
-                );
-              })
-            : null}
-
-          {this.state.cards.length ? (
-            <div>
-              <div className={styles.amount}>
-                <h4>
-                  <span>总面额：</span>
-                  <span>{this.state.totalMoney}</span>
-                </h4>
-                <h5>
-                  <span>总价：</span>
-                  <span>{this.state.totalMoney * this.data.unit_price}RMB</span>
-                </h5>
-              </div>
-            </div>
-          ) : null}
-          <div className={styles.footer}>
-            <Button onClick={() => this.props.dispatch(routerRedux.goBack())}>取消</Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                this.addAdvertising();
-              }}
-              loading={this.props.addSelleCard}
-            >
-              发布
-            </Button>
-          </div>
-          */}
+          <SellForm
+            changeEdit={this.changeEdit}
+            defaultValue={adDetail}
+            action={action}
+            terms={terms}
+            onCancel={() => this.props.dispatch(routerRedux.push('/ad/my'))}
+            onSubmit={this.addAdvertising}
+          />
         </PageHeaderLayout>
       </div>
     );

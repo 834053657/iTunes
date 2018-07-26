@@ -57,17 +57,43 @@ export default class List extends Component {
   };
 
   viewAd = (r, action) => {
-    message.warning('跳转页面开发中');
-    return null;
-    // todo
-    // if (r.goods_type !== 1) {
-    //   //?id=${r.id}&ad_type=${r.ad_type}&action=${action}`
-    //   this.props.dispatch(routerRedux.push(`/card/a_detail`));
-    // } else {
-    //   this.props.dispatch(
-    //     routerRedux.push(`/ad/itunes/detail?id=${r.id}&ad_type=${r.ad_type}&action=${action}`)
-    //   );
-    // }
+    console.log(r);
+    console.log(r.goods_type);
+    const id = r.id;
+    if (r.goods_type === 2) {
+      //礼品卡
+      if (r.ad_type === 1) {
+        //买入
+        this.props.dispatch(
+          routerRedux.push({
+            pathname: `/card/edit-buy-card/${id}/${action}`,
+            query: {
+              id,
+              goods_type: r.goods_type,
+              action,
+            },
+          })
+        );
+      } else if (r.ad_type === 2) {
+        //出售
+        console.log('出售');
+        this.props.dispatch(
+          routerRedux.replace({
+            pathname: `/card/edit-sell-card/${id}/${action}`,
+            query: {
+              id: r.id,
+              goods_type: r.goods_type,
+              action,
+            },
+          })
+        );
+      }
+    }
+    if (r.goods_type === 1) {
+      this.props.dispatch(
+        routerRedux.push(`/ad/itunes/detail?id=${r.id}&ad_type=${r.ad_type}&action=${action}`)
+      );
+    }
   };
 
   deleteAd = r => {
@@ -134,7 +160,7 @@ export default class List extends Component {
       width: '25%',
       render: r => (
         <Fragment>
-          <a onClick={() => this.viewAd(r, '_OPEN')}>查看</a>
+          <a onClick={() => this.viewAd(r, 'preview')}>查看</a>
           {r.status === 1 && (
             <span>
               <Divider type="vertical" />
@@ -150,7 +176,7 @@ export default class List extends Component {
           {[1, 2].indexOf(r.status) > -1 && (
             <span>
               <Divider type="vertical" />
-              <a onClick={() => this.viewAd(r, '_EDIT')}>编辑</a>
+              <a onClick={() => this.viewAd(r, 'edit')}>编辑</a>
             </span>
           )}
           {[1, 2, 4].indexOf(r.status) > -1 && (
