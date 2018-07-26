@@ -190,7 +190,7 @@ export default class List extends Component {
   };
 
   initColumns = () => {
-    const { user } = this.props;
+    const { user = {} } = this.props;
     const { type, denominFilterValue } = this.state;
     const cardTypes = map(CONFIG.card_type.filter(t => t.valid), item => {
       return { text: item.name, value: item.type };

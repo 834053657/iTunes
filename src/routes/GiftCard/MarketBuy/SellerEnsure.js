@@ -78,7 +78,7 @@ export default class SellerEnsure extends Component {
                 保障时间剩余 &nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                <CountDown formatStr="mm:ss" target={guaranteeTime} />
+                <CountDown formatstr="mm:ss" target={guaranteeTime} />
                 分钟
               </h5>
               {pageStatus === 11 ? (

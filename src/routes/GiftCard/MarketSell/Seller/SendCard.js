@@ -255,7 +255,7 @@ export default class Process extends Component {
                   请在&nbsp;
                   <Icon type="clock-circle-o" />
                   &nbsp;
-                  <CountDown formatStr="mm:ss" target={this.targetTime} />
+                  <CountDown formatstr="mm:ss" target={this.targetTime} />
                   秒内发卡
                 </div>
                 <Button
