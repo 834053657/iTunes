@@ -267,6 +267,9 @@ export const getRouterData = app => {
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
     },
+    '/form/redux-form': {
+      component: dynamicWrapper(app, [], () => import('../routes/Forms/ReduxForm')),
+    },
   };
 
   // Get name from ./menu.js or just set it in the router data.
