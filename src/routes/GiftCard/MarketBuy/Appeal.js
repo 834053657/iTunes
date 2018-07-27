@@ -13,7 +13,7 @@ import {
   message,
   Badge,
 } from 'antd';
-import { map } from 'lodash';
+import { map, orderBy } from 'lodash';
 import moment from 'moment';
 import cx from 'classnames';
 import styles from './appeal.less';
@@ -406,7 +406,8 @@ export default class Appeal extends Component {
 }
 
 const AppealInfo = props => {
-  const { data = [] } = props;
+  let { data = [] } = props;
+  data = orderBy(data, ['created_at'], ['asc']);
   return (
     <div>
       <ul className={styles.tabTwoTab}>
