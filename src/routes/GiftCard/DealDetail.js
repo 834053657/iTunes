@@ -394,6 +394,7 @@ export default class DealDeatil extends Component {
     const { detail = {}, match: { params } } = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
       values.order_detail = filter(values.order_detail, item => item.count > 0);
+      //console.log(detail.updated_at);
       if (!err) {
         this.props.dispatch({
           type: 'card/createSellOrder',
@@ -401,6 +402,17 @@ export default class DealDeatil extends Component {
             ad_id: +params.id,
             updated_at: detail.updated_at,
             ...values,
+          },
+          callback: res => {
+            if (res.code === 606) {
+              message.warning(res.msg);
+              this.props.dispatch(routerRedux.push('/card/market'));
+              // this.fetch(+params.id);
+            }
+            if (res.code === 607) {
+              message.warning(res.msg);
+              this.fetch(+params.id);
+            }
           },
         });
       }
