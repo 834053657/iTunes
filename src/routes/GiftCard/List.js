@@ -16,6 +16,7 @@ import {
   Form,
   Avatar,
   Badge,
+  Popconfirm,
 } from 'antd';
 import { routerRedux } from 'dva/router';
 import FilterDemoinForm from './forms/FilterDemoinForm';
@@ -342,7 +343,7 @@ export default class List extends Component {
         dataIndex: 'operation_',
         render: (text, record = {}) => {
           const { owner = {} } = record || {};
-          return (
+          return type === '2' ? (
             <Button
               type="primary"
               disabled={owner.id === user.id}
@@ -352,8 +353,23 @@ export default class List extends Component {
                 });
               }}
             >
-              {type === '2' ? '购买' : '出售'}
+              购买
             </Button>
+          ) : (
+            <Popconfirm
+              title={`广告主要求在${record.deadline}分钟内发卡，您确认出售？`}
+              onConfirm={() => {
+                this.props.history.push({
+                  pathname: `/card/deal-detail/${record.id}`,
+                });
+              }}
+              okText="确定"
+              cancelText="取消"
+            >
+              <Button type="primary" disabled={owner.id === user.id}>
+                出售
+              </Button>
+            </Popconfirm>
           );
         },
       },
@@ -364,6 +380,7 @@ export default class List extends Component {
     } else {
       columns = filter(columns, item => item.dataIndex !== 'total_denomination');
     }
+
     return columns;
   };
 

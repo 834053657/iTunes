@@ -395,7 +395,11 @@ export default class DealDeatil extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       values.order_detail = filter(values.order_detail, item => item.count > 0);
       //console.log(detail.updated_at);
-      if (!err) {
+      console.log(values.order_detail);
+      if (!values.order_detail.length) {
+        return message.warning('未填写面额详情');
+      }
+      if (!err && values.order_detail.length) {
         this.props.dispatch({
           type: 'card/createSellOrder',
           payload: {

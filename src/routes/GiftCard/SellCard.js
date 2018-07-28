@@ -303,12 +303,13 @@ export default class BuyCard extends Component {
     );
 
     const actionTitle = () => {
+      console.log(action);
       switch (action) {
         case 'edit':
           return '编辑';
         case 'preview':
           return '查看';
-        default:
+        case undefined:
           '创建出售';
       }
     };
@@ -316,7 +317,7 @@ export default class BuyCard extends Component {
     const breadcrumbList = [
       { title: '广告管理', href: '/ad/my' },
       { title: '礼品卡', href: '/card/market' },
-      { title: actionTitle() },
+      { title: '出售广告' },
     ];
 
     const { terms } = this.props.card || {};

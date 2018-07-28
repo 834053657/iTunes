@@ -56,8 +56,10 @@ export default class BuyerCheckCard extends Component {
     console.log(detail);
     const orderDetail = order.order_detail;
     const userInfo = trader;
-    const deadline = new Date().getTime() + order.deadline_at * 1000;
-    const checkAt = new Date().getTime() + order.check_at * 1000;
+    //const deadline = new Date().getTime() + order.deadline_at * 1000;
+    const deadline = order.deadline_at;
+    //const checkAt = new Date().getTime() + order.check_at * 1000;
+    const checkAt = order.check_at;
     return (
       <div className={styles.receiveCard}>
         <StepModel steps={steps} current={0} />
@@ -113,7 +115,7 @@ export default class BuyerCheckCard extends Component {
                 <Icon type="clock-circle-o" />
                 &nbsp;
                 <CountDown formatstr="mm:ss" target={deadline} />
-                分钟发卡
+                秒发卡
               </h4>
             ) : (
               <div>
@@ -122,7 +124,7 @@ export default class BuyerCheckCard extends Component {
                   <Icon type="clock-circle-o" />
                   &nbsp;
                   <CountDown formatstr="mm:ss" target={checkAt} />
-                  分钟
+                  秒
                 </h4>
                 <Button type="primary" size="large" onClick={this.handlePostCheck}>
                   立即查收

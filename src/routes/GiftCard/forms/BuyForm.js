@@ -11,6 +11,7 @@ import {
   Modal,
   Row,
   Col,
+  Popconfirm,
 } from 'antd';
 import { map, mapKeys, cloneDeep, filter, head, mapValues } from 'lodash';
 import styles from './SellForm.less';
@@ -39,6 +40,7 @@ export default class BuyForm extends Component {
       },
     ],
     conditionRange: { min_money: '', max_money: '' },
+    conditionType: 1,
   };
   postData = [];
   handleCancel = () => {
@@ -196,6 +198,22 @@ export default class BuyForm extends Component {
     });
   };
 
+  checkFormCount = (rule, value, callback, index) => {
+    const { conditionFix } = this.state;
+    console.log(value);
+    if (conditionFix[index].max_count && value > conditionFix[index].max_count) callback('error');
+    if (conditionFix[index].min_count && value < conditionFix[index].min_count) callback('error');
+    callback();
+  };
+
+  checkFormRange = (rule, value, callback) => {
+    const { conditionRange } = this.state;
+    console.log(value);
+    if (conditionRange.max_money && value > conditionRange.max_money) callback('error');
+    if (conditionRange.min_money && value < conditionRange.min_money) callback('error');
+    callback();
+  };
+
   changeFixMax = (e, index) => {
     console.log('fixmax', e);
     const { action, defaultValue } = this.props;
@@ -347,6 +365,10 @@ export default class BuyForm extends Component {
                 required: true,
                 message: '请输入倍数',
               },
+              {
+                pattern: /^[1-9]\d*$/,
+                message: '请输入正整数',
+              },
             ],
           })(<InputNumber disabled={action && action !== 'edit'} />)}
         </FormItem>
@@ -403,6 +425,11 @@ export default class BuyForm extends Component {
                             required: true,
                             message: '请输入最小数量',
                           },
+                          {
+                            validator: (rule, value, callback) =>
+                              this.checkFormCount(rule, value, callback, index),
+                            message: `最小数量应小于${conditionFix[index].max_count}`,
+                          },
                         ],
                       })(
                         <InputNumber
@@ -424,6 +451,11 @@ export default class BuyForm extends Component {
                             required: true,
                             message: '请输入最大数量',
                           },
+                          {
+                            validator: (rule, value, callback) =>
+                              this.checkFormCount(rule, value, callback, index),
+                            message: `最大数量应大于${conditionFix[index].min_count}`,
+                          },
                         ],
                       })(
                         <InputNumber
@@ -433,15 +465,14 @@ export default class BuyForm extends Component {
                         />
                       )}
                       &nbsp;
-                      {!action ||
-                        (action === 'edit' && (
-                          <Icon
-                            className="dynamic-delete-button"
-                            type="minus-circle-o"
-                            disabled={conditionList.length === 1}
-                            onClick={() => this.remove(index)}
-                          />
-                        ))}
+                      {(!action || action === 'edit') && (
+                        <Icon
+                          className="dynamic-delete-button"
+                          type="minus-circle-o"
+                          disabled={conditionList.length === 1}
+                          onClick={() => this.remove(index)}
+                        />
+                      )}
                     </FormItem>
                   </Col>
                 </Row>
@@ -462,8 +493,9 @@ export default class BuyForm extends Component {
               </Button>
             </FormItem>
           )}
-        {(defaultValue.condition_type === 2 || this.state.conditionType === 2) &&
-        this.state.conditionType !== 1 ? (
+
+        {(defaultValue.condition_type === 2 && action) ||
+        (!action && this.state.conditionType === 2) ? (
           <Row>
             <FormItem className={styles.minNum}>
               {getFieldDecorator('condition.min_money', {
@@ -474,13 +506,18 @@ export default class BuyForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入最小数量',
+                    message: '请输入最小面额',
+                  },
+                  {
+                    validator: (rule, value, callback) =>
+                      this.checkFormRange(rule, value, callback),
+                    message: `最小面额应小于${conditionRange.max_money}`,
                   },
                 ],
               })(
                 <InputNumber
                   disabled={action && action !== 'edit'}
-                  placeholder="最小数量"
+                  placeholder="最小面额"
                   onChange={this.rangeMin}
                   min={1}
                   style={{ width: '100%' }}
@@ -498,13 +535,18 @@ export default class BuyForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入最大数量',
+                    message: '请输入最大面额',
+                  },
+                  {
+                    validator: (rule, value, callback) =>
+                      this.checkFormRange(rule, value, callback),
+                    message: `最大面额应大于${conditionRange.min_money}`,
                   },
                 ],
               })(
                 <InputNumber
                   disabled={action && action !== 'edit'}
-                  placeholder="最大数量"
+                  placeholder="最大面额"
                   onChange={this.rangeMax}
                   min={1}
                   style={{ width: '100%' }}
@@ -595,11 +637,15 @@ export default class BuyForm extends Component {
           })(
             <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
               <Option value={0}>无</Option>
-              {map(terms, (item, index) => (
-                <Option key={item.id} value={+item.id}>
-                  {item.title}
-                </Option>
-              ))}
+              {map(terms, (item, index) => {
+                if (item.status === 3) {
+                  return (
+                    <Option key={item.id} value={+item.id}>
+                      {item.title}
+                    </Option>
+                  );
+                }
+              })}
             </Select>
           )}
         </FormItem>
@@ -610,8 +656,12 @@ export default class BuyForm extends Component {
             initialValue: action ? defaultValue.concurrency_order : initialValues.concurrency_order,
             rules: [
               {
-                required: true,
+                required: false,
                 message: '请输入同时处理订单数',
+              },
+              {
+                pattern: /^[0-9]\d*$/,
+                message: '请输入整数，0代表不限制',
               },
             ],
           })(<InputNumber disabled={action && action !== 'edit'} />)}
@@ -628,14 +678,22 @@ export default class BuyForm extends Component {
               onClick={() => {
                 this.props.changeEdit();
               }}
+              disabled={defaultValue.status !== 1 || defaultValue.status !== 2}
             >
               编辑
             </Button>
           ) : null}
           {!action || (action && action === 'edit') ? (
-            <Button className={styles.submit} type="primary" htmlType="submit">
-              发布
-            </Button>
+            <Popconfirm
+              title="确定发布吗？"
+              onConfirm={this.handleSubmit}
+              okText="是"
+              cancelText="否"
+            >
+              <Button className={styles.submit} type="primary" htmlType="submit">
+                发布
+              </Button>
+            </Popconfirm>
           ) : null}
         </FormItem>
         {termModalInfo && (

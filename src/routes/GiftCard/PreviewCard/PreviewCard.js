@@ -27,6 +27,10 @@ export default class PreviewCard extends Component {
         payload: { page: olderPageStatus },
       });
     }
+    this.props.dispatch({
+      type: 'card/fetchOrderDetail',
+      payload: { id: +this.props.orderId },
+    });
   };
 
   status = status => {

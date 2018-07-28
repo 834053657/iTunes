@@ -14,6 +14,7 @@ import {
   Card,
   Row,
   Col,
+  Popconfirm,
 } from 'antd';
 import { map, last, head } from 'lodash';
 import styles from './SellForm.less';
@@ -51,8 +52,11 @@ export default class SellForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(err);
+      console.log(this.state.cards);
       console.log(values);
+      if (!this.state.cards.length) {
+        return message.warning('还未添加卡信息');
+      }
       delete values.cards;
       if (!err) {
         this.props.onSubmit({ ...values, cards: this.state.cards });
@@ -434,11 +438,15 @@ export default class SellForm extends Component {
             })(
               <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
                 <Option value={0}>无</Option>
-                {map(terms, (item, index) => (
-                  <Option key={item.id} value={item.id}>
-                    {item.title}
-                  </Option>
-                ))}
+                {map(terms, (item, index) => {
+                  if (item.status === 3) {
+                    return (
+                      <Option key={item.id} value={+item.id}>
+                        {item.title}
+                      </Option>
+                    );
+                  }
+                })}
               </Select>
             )}
           </FormItem>
@@ -544,14 +552,22 @@ export default class SellForm extends Component {
                 onClick={() => {
                   this.props.changeEdit();
                 }}
+                disabled={defaultValue.status !== 1 || defaultValue.status !== 2}
               >
                 编辑
               </Button>
             ) : null}
             {!action || (action && action === 'edit') ? (
-              <Button className={styles.submit} type="primary" htmlType="submit">
-                发布
-              </Button>
+              <Popconfirm
+                title="确定发布吗？"
+                onConfirm={this.handleSubmit}
+                okText="是"
+                cancelText="否"
+              >
+                <Button className={styles.submit} type="primary" htmlType="submit">
+                  发布
+                </Button>
+              </Popconfirm>
             ) : null}
           </FormItem>
           {termModalInfo && (

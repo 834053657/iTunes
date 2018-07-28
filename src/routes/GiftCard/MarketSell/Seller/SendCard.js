@@ -27,7 +27,8 @@ export default class Process extends Component {
       order_id: this.state.detail.order.id,
       cards: [],
     };
-    this.targetTime = new Date().getTime() + props.detail.order.deadline_at * 1000;
+    //this.targetTime = new Date().getTime() + props.detail.order.deadline_at * 1000;
+    this.targetTime = props.detail.order.deadline_at;
   }
 
   componentWillMount() {
@@ -80,10 +81,11 @@ export default class Process extends Component {
 
   sendCDK = () => {
     this.data.cards = this.cardsData;
-    this.props.dispatch({
-      type: 'card/sendCDK',
-      payload: this.data,
-    });
+    console.log(this.data);
+    // this.props.dispatch({
+    //   type: 'card/sendCDK',
+    //   payload: this.data,
+    // });
   };
 
   deadline = () => {

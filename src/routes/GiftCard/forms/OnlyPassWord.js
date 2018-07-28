@@ -89,19 +89,18 @@ export default class OnlyPassWord extends Component {
                   导入
                 </Button>
               )}
-              {psw === 2 &&
-                (!action || action === 'edit') && (
-                  <div style={{ float: 'right' }}>
-                    <Popconfirm
-                      title="确定删除吗？"
-                      onConfirm={() => this.props.deleteCard(index)}
-                      okText="是"
-                      cancelText="否"
-                    >
-                      <Icon className={styles.deleteIcon} type="minus-circle-o" />
-                    </Popconfirm>
-                  </div>
-                )}
+              {(!action || action === 'edit') && (
+                <div style={{ float: 'right' }}>
+                  <Popconfirm
+                    title="确定删除吗？"
+                    onConfirm={() => this.props.deleteCard(index)}
+                    okText="是"
+                    cancelText="否"
+                  >
+                    <Icon className={styles.deleteIcon} type="minus-circle-o" />
+                  </Popconfirm>
+                </div>
+              )}
             </div>
           }
           className={styles.card}
@@ -133,8 +132,7 @@ export default class OnlyPassWord extends Component {
                             onChange={e => this.props.changePsw(e, index, littleIndex)}
                             defaultValue={action ? card.password : ''}
                             placeholder="请输入卡密"
-                            disabled={action && action !== 'edit'}
-                            min={1}
+                            disabled={(action && action !== 'edit') || card.status !== 0}
                           />
                         </Col>
                         {(!action || action === 'edit') && (
@@ -193,8 +191,8 @@ export default class OnlyPassWord extends Component {
             );
           })}
 
-          {
-            //凭证
+          {//凭证
+          (psw === 2 || psw === 3) && (
             <FormItem required={false}>
               {getFieldDecorator(`cards[${index}].receipt`, {
                 initialValue: action ? c.receipt : '',
@@ -218,7 +216,7 @@ export default class OnlyPassWord extends Component {
                 </Row>
               )}
             </FormItem>
-          }
+          )}
 
           <FormItem {...formItemLayoutBtn}>
             <Button
