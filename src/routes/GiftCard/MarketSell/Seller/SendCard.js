@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Icon, Input, Avatar, Badge, Modal, Popconfirm } from 'antd';
+import { Button, Icon, Input, Avatar, Badge, Modal, Popconfirm, Form, message } from 'antd';
 import CountDown from 'components/CountDown';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
 import { sendCDK } from '../../../../services/api';
 import SendOnlyPicture from './OnlyPic';
 import SendPicWithText from './PicWithText';
+import OnlyPassWord from '../../forms/OnlyPassWord';
 
+const FormItem = Form.Item;
+
+@Form.create()
 @connect(({ loading, card }) => ({
   card,
   submitting: loading.effects['card/sendCDK'],
@@ -21,6 +25,7 @@ export default class Process extends Component {
       user: props.user,
       time: props.detail.ad.deadline,
       termView: false,
+      cards: [],
     };
     this.cardsData = [];
     this.data = {
@@ -33,24 +38,66 @@ export default class Process extends Component {
 
   componentWillMount() {
     const { order_detail = {} } = this.state.detail.order;
-    order_detail.map(o => {
+    order_detail.map((o, index) => {
       return this.cardsData.push({
         money: o.money,
-        cards: [],
+        items: this.makeData(o, index),
+        receipt: '',
       });
     });
+
+    const a = this.renderInputs(order_detail);
+    this.setState({
+      cards: a,
+    });
   }
+
+  makeData = (item, index) => {
+    const iptArr = [];
+    for (let i = 0; i < item.count; i++) {
+      iptArr.push({
+        password: '',
+        picture: '',
+      });
+    }
+    return iptArr;
+  };
 
   renderInput = (item, index) => {
     const iptArr = [];
     for (let i = 0; i < item.count; i++) {
       iptArr.push({
-        password: null,
-        picture: null,
+        password: '',
+        picture: '',
       });
     }
-    this.cardsData[index].cards = iptArr;
     return iptArr;
+  };
+
+  renderInputs = item => {
+    const fatherArr = [];
+    item.map((data, index) => {
+      const childArr = [];
+      fatherArr.push({
+        money: data.money,
+        recepit: '',
+        items: this.renderInput(data, index),
+      });
+      return fatherArr;
+    });
+
+    //console.log(postData);
+
+    // postData.map((p,i)=>{
+    //   console.log(p);
+    //   delete p.items
+    //   p[i].push({cards: fatherArr[i].items})
+    //   return postData
+    // })
+
+    // console.log(postData);
+
+    return fatherArr;
   };
 
   writePassword = (e, item, index, i) => {
@@ -79,13 +126,12 @@ export default class Process extends Component {
     this.cardsData[index].receipt = url;
   };
 
-  sendCDK = () => {
-    this.data.cards = this.cardsData;
-    console.log(this.data);
-    // this.props.dispatch({
-    //   type: 'card/sendCDK',
-    //   payload: this.data,
-    // });
+  sendCDK = v => {
+    console.log(v);
+    this.props.dispatch({
+      type: 'card/sendCDK',
+      payload: v,
+    });
   };
 
   deadline = () => {
@@ -97,15 +143,137 @@ export default class Process extends Component {
     // let a = this.state.time
     // this.setState({
     //   time: a - 1
-    // })
+  };
+
+  changePsw = (e, index, littleIndex) => {
+    console.log(this.cardsData);
+    this.cardsData[index].items[littleIndex].password = e.target.value;
+    console.log(this.cardsData);
+    this.props.form.setFieldsValue({
+      'cards[]': this.cardsData,
+    });
+
+    this.setState({
+      cards: this.cardsData,
+    });
+  };
+
+  changePic = (e, index, littleIndex) => {
+    this.cardsData[index].items[littleIndex].picture = e;
+    console.log(this.cardsData);
+    this.props.form.setFieldsValue({
+      'cards[]': this.cardsData,
+    });
+    this.setState({
+      cards: this.cardsData,
+    });
+  };
+
+  changePZ = (e, index) => {
+    this.cardsData[index].receipt = e;
+    this.props.form.setFieldsValue({
+      'cards[]': this.cardsData,
+    });
+
+    this.setState({
+      cards: this.cardsData,
+    });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.sendCDK({
+          cards: this.cardsData,
+          order_id: this.state.detail.order.id,
+        });
+      }
+    });
+  };
+
+  orderRenderBox = () => {
+    //   {CONFIG.cardPwdType[ad.password_type] === '有卡密'
+    //     ? order.order_detail.map((item, index) => {
+    //       return (
+    //         <div key={index} className={styles.denomination}>
+    //           <header>
+    //             <span>{item.money}</span>
+    //             面额 ({item.count})
+    //             {/*<div>
+    //                       <Button>导入</Button>
+    //                     </div>*/}
+    //           </header>
+    //           <section className={styles.iptSection}>
+    //             <div className={styles.left}>
+    //               <span>卡密：</span>
+    //             </div>
+    //             <div className={styles.right}>
+    //               <div className={styles.iptBox}>
+    //                 <div className={styles.input}>
+    //                   {this.renderInput(item, index).map((n, i) => {
+    //                     return (
+    //                       <Input
+    //                         key={i}
+    //                         type="text"
+    //                         onChange={e => this.writePassword(e, item, index, i)}
+    //                       />
+    //                     );
+    //                   })}
+    //                 </div>
+    //               </div>
+    //             </div>
+    //           </section>
+    //         </div>
+    //       );
+    //     })
+    //     : null}
+    //
+    // {CONFIG.cardPwdType[ad.password_type] === '有卡图'
+    //   ? order.order_detail.map((item, index) => {
+    //     return (
+    //       <SendOnlyPicture
+    //         key={index}
+    //         item={item}
+    //         renderInput={this.renderInput(item, index)}
+    //         sendPic={(info, url, i) => this.sendPic(info, url, i, index)}
+    //         sendRec={(info, url) => this.sendRec(info, url, index)}
+    //       />
+    //     );
+    //   })
+    //   : null}
+    //
+    // {CONFIG.cardPwdType[ad.password_type] !== '有图有卡密'
+    //   ? order.order_detail.map((item, index) => {
+    //     return (
+    //       <SendPicWithText
+    //         key={index}
+    //         item={item}
+    //         renderInput={this.renderInput(item, index)}
+    //         changePTPass={(e, i) => this.changePTPass(e, i, index)}
+    //         sendPicWithText={(info, url, i) => this.sendPicWithText(info, url, i, index)}
+    //         sendRecWithText={(info, url) => this.sendRecWithText(info, url, index)}
+    //       />
+    //     );
+    //   })
+    //   : null}
   };
 
   render() {
-    const { user, detail, submitting, setStatus } = this.props;
+    const {
+      user,
+      detail,
+      submitting,
+      setStatus,
+      form: { getFieldDecorator, getFieldValue, resetForm, onFieldsChange },
+    } = this.props;
     const { ad = {}, cards = {}, order = {} } = detail;
 
     const userInfo = ad.owner;
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
+
+    getFieldDecorator('cards[]', { initialValue: [] });
+
     return (
       <div className={styles.sendBox}>
         <StepModel steps={steps} current={0} />
@@ -172,94 +340,48 @@ export default class Process extends Component {
         </div>
         <div className={styles.denomination}>
           <div className={styles.bottom}>
-            {CONFIG.cardPwdType[ad.password_type] === '有卡密'
-              ? order.order_detail.map((item, index) => {
-                  return (
-                    <div key={index} className={styles.denomination}>
-                      <header>
-                        <span>{item.money}</span>
-                        面额 ({item.count})
-                        {/*<div>
-                          <Button>导入</Button>
-                        </div>*/}
-                      </header>
-                      <section className={styles.iptSection}>
-                        <div className={styles.left}>
-                          <span>卡密：</span>
-                        </div>
-                        <div className={styles.right}>
-                          <div className={styles.iptBox}>
-                            <div className={styles.input}>
-                              {this.renderInput(item, index).map((n, i) => {
-                                return (
-                                  <Input
-                                    key={i}
-                                    type="text"
-                                    onChange={e => this.writePassword(e, item, index, i)}
-                                  />
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-                    </div>
-                  );
-                })
-              : null}
+            <Form className={styles.form} onSubmit={this.handleSubmit}>
+              <OnlyPassWord
+                defaultValue={this.state.cards}
+                changePsw={this.changePsw}
+                changePic={this.changePic}
+                psw={ad.password_type}
+                form={this.props.form}
+                changePZ={this.changePZ}
+                sendCard
+              />
 
-            {CONFIG.cardPwdType[ad.password_type] === '有卡图'
-              ? order.order_detail.map((item, index) => {
-                  return (
-                    <SendOnlyPicture
-                      key={index}
-                      item={item}
-                      renderInput={this.renderInput(item, index)}
-                      sendPic={(info, url, i) => this.sendPic(info, url, i, index)}
-                      sendRec={(info, url) => this.sendRec(info, url, index)}
-                    />
-                  );
-                })
-              : null}
-
-            {CONFIG.cardPwdType[ad.password_type] === '有图有卡密'
-              ? order.order_detail.map((item, index) => {
-                  return (
-                    <SendPicWithText
-                      key={index}
-                      item={item}
-                      renderInput={this.renderInput(item, index)}
-                      changePTPass={(e, i) => this.changePTPass(e, i, index)}
-                      sendPicWithText={(info, url, i) => this.sendPicWithText(info, url, i, index)}
-                      sendRecWithText={(info, url) => this.sendRecWithText(info, url, index)}
-                    />
-                  );
-                })
-              : null}
-
-            <div>
-              <div className={styles.amount}>
-                <h4>
-                  <span className={styles.title}>{order.money}</span>
-                  <span>总面额：</span>
-                </h4>
-                <h4>
-                  <span className={styles.title}>{ad.unit_price}RMB</span>
-                  <span>单价：</span>
-                </h4>
-                <h4>
-                  <span className={styles.title}>{order.amount}RMB</span>
-                  <span>总价：</span>
-                </h4>
-              </div>
-              <div className={styles.footer}>
-                <div>
-                  请在&nbsp;
-                  <Icon type="clock-circle-o" />
-                  &nbsp;
-                  <CountDown formatstr="mm:ss" target={this.targetTime} />
-                  秒内发卡
+              <div>
+                <div className={styles.amount}>
+                  <h4>
+                    <span className={styles.title}>{order.money}</span>
+                    <span>总面额：</span>
+                  </h4>
+                  <h4>
+                    <span className={styles.title}>{ad.unit_price}RMB</span>
+                    <span>单价：</span>
+                  </h4>
+                  <h4>
+                    <span className={styles.title}>{order.amount}RMB</span>
+                    <span>总价：</span>
+                  </h4>
                 </div>
+                <div className={styles.footer}>
+                  <div>
+                    请在&nbsp;
+                    <Icon type="clock-circle-o" />
+                    &nbsp;
+                    <CountDown formatstr="mm:ss" target={this.targetTime} />
+                    秒内发卡
+                  </div>
+                </div>
+              </div>
+              <FormItem className={styles.buttonBox}>
+                <Popconfirm title="您确认要发卡吗?" onConfirm={this.handleSubmit}>
+                  <Button htmlType="submit" type="primary" loading={submitting}>
+                    发卡
+                  </Button>
+                </Popconfirm>
                 <Popconfirm
                   title="您确认要取消订单吗?"
                   onConfirm={() =>
@@ -271,14 +393,8 @@ export default class Process extends Component {
                 >
                   <Button>取消订单</Button>
                 </Popconfirm>
-
-                <Popconfirm title="您确认要发卡吗?" onConfirm={this.sendCDK}>
-                  <Button type="primary" loading={submitting}>
-                    发卡
-                  </Button>
-                </Popconfirm>
-              </div>
-            </div>
+              </FormItem>
+            </Form>
           </div>
         </div>
       </div>

@@ -164,7 +164,7 @@ export default class DealDeatil extends Component {
                   rules: [
                     {
                       required: true,
-                      message: '请输入购买数量！',
+                      message: '请输入出售数量！',
                     },
                     {
                       type: 'number',
@@ -181,7 +181,7 @@ export default class DealDeatil extends Component {
                     min={0}
                     precision={0}
                     style={{ width: 200 }}
-                    placeholder="请输入购买数量"
+                    placeholder="请输入出售数量"
                   />
                 )}
               </FormItem>
@@ -211,7 +211,7 @@ export default class DealDeatil extends Component {
                   rules: [
                     {
                       required: true,
-                      message: '请输入购买数量！',
+                      message: '请输入出售数量！',
                     },
                     {
                       validator: this.checkCount,
@@ -228,7 +228,7 @@ export default class DealDeatil extends Component {
                     min={0}
                     precision={0}
                     style={{ width: 200 }}
-                    placeholder="请输入购买数量"
+                    placeholder="请输入出售数量"
                   />
                 )}
               </FormItem>
