@@ -59,16 +59,20 @@ export default class List extends Component {
       filter: {},
       order_by: false,
     };
-    this.setState({
-      loading: true,
-      ...params,
-    });
-    this.fetchData(params, () => {
-      this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
-      this.setState({
-        loading: false,
-      });
-    });
+    this.setState(
+      {
+        loading: true,
+        ...params,
+      },
+      () => {
+        this.fetchData(params, () => {
+          this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
+          this.setState({
+            loading: false,
+          });
+        });
+      }
+    );
   };
 
   denoType = r => {
@@ -201,7 +205,7 @@ export default class List extends Component {
     let columns = [
       {
         title: '用户名',
-        width: '150',
+        width: '100',
         dataIndex: 'nickname_',
         render: (text, record) => {
           const userinfo = record.owner;
@@ -264,10 +268,15 @@ export default class List extends Component {
         ),
         filterDropdownVisible: this.state.denoVisible,
         filterDropdown: (
-          <FilterDemoinForm
-            onSubmit={this.handleFilterDemoin}
-            onCancel={this.handleResetFilterDemoin}
-          />
+          <div>
+            {this.state.denoVisible ? (
+              <FilterDemoinForm
+                initialValues={this.state.denominFilterValue}
+                onSubmit={this.handleFilterDemoin}
+                onCancel={this.handleResetFilterDemoin}
+              />
+            ) : null}
+          </div>
         ),
         render: (text, record) => {
           if (type === '2') {
@@ -339,6 +348,7 @@ export default class List extends Component {
       },
       {
         title: '操作',
+        width: '100',
         dataIndex: 'operation_',
         render: (text, record = {}) => {
           const { owner = {} } = record || {};
