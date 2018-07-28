@@ -69,7 +69,7 @@ export default class BuyForm extends Component {
   };
 
   setFieldValue = (form, key, value) => {
-    let obj = {};
+    const obj = {};
     obj[key] = value;
     form.setFieldsValue(obj);
   };

@@ -117,14 +117,19 @@ export default class BuyForm extends Component {
     const { action, defaultValue } = this.props;
 
     const data = action ? defaultValue.condition : conditionFix;
-
+    console.log(data);
     data.splice(i, 1);
     this.setState({
       conditionFix: data,
     });
-    this.props.form.setFieldsValue({
-      'condition[]': data,
+    this.conditionFix = data;
+    console.log(data);
+    form.setFieldsValue({
+      'conditionFix[]': data,
     });
+    const a = form.getFieldValue('conditionFix[]');
+    console.log('a');
+    console.log(a);
   };
 
   add = () => {
@@ -141,18 +146,18 @@ export default class BuyForm extends Component {
     const { conditionFix } = this.state;
 
     const formDataObj = {
-      money: 0,
-      min_count: 0,
-      max_count: 0,
+      money: '',
+      min_count: '',
+      max_count: '',
     };
-    const condition = action ? defaultValue.condition : conditionFix;
-    condition.push(formDataObj);
+    const data = action ? defaultValue.condition : conditionFix;
+    data.push(formDataObj);
 
     this.setState({
-      condition,
+      conditionFix: data,
     });
     this.props.form.setFieldsValue({
-      'condition[]': condition,
+      'conditionFix[]': data,
     });
   };
 
@@ -407,6 +412,7 @@ export default class BuyForm extends Component {
                         ],
                       })(
                         <InputNumber
+                          key={index}
                           disabled={action && action !== 'edit'}
                           onChange={e => this.changeFixedMoney(e, index)}
                           placeholder="面额"
@@ -419,7 +425,7 @@ export default class BuyForm extends Component {
                     <FormItem required={false}>
                       {getFieldDecorator(`condition[${index}].min_count`, {
                         initialValue: action ? k.min_count : '',
-                        validateTrigger: ['onChange', 'onBlur'],
+                        validateTrigger: ['onBlur'],
                         rules: [
                           {
                             required: true,
@@ -428,11 +434,14 @@ export default class BuyForm extends Component {
                           {
                             validator: (rule, value, callback) =>
                               this.checkFormCount(rule, value, callback, index),
-                            message: `最小数量应小于${conditionFix[index].max_count}`,
+                            message: conditionFix[index]
+                              ? `最小数量应小于${conditionFix[index].max_count}`
+                              : '',
                           },
                         ],
                       })(
                         <InputNumber
+                          key={index}
                           disabled={action && action !== 'edit'}
                           onChange={e => this.changeFixMin(e, index)}
                           placeholder="最小数量"
@@ -445,7 +454,7 @@ export default class BuyForm extends Component {
                     <FormItem required={false}>
                       {getFieldDecorator(`condition[${index}].max_count`, {
                         initialValue: action ? k.max_count : '',
-                        validateTrigger: ['onChange', 'onBlur'],
+                        validateTrigger: ['onBlur'],
                         rules: [
                           {
                             required: true,
@@ -454,11 +463,14 @@ export default class BuyForm extends Component {
                           {
                             validator: (rule, value, callback) =>
                               this.checkFormCount(rule, value, callback, index),
-                            message: `最大数量应大于${conditionFix[index].min_count}`,
+                            message: conditionFix[index]
+                              ? `最大数量应大于${conditionFix[index].min_count}`
+                              : '',
                           },
                         ],
                       })(
                         <InputNumber
+                          key={index}
                           disabled={action && action !== 'edit'}
                           onChange={e => this.changeFixMax(e, index)}
                           placeholder="最大数量"
@@ -466,12 +478,18 @@ export default class BuyForm extends Component {
                       )}
                       &nbsp;
                       {(!action || action === 'edit') && (
-                        <Icon
-                          className="dynamic-delete-button"
-                          type="minus-circle-o"
-                          disabled={conditionList.length === 1}
-                          onClick={() => this.remove(index)}
-                        />
+                        <Popconfirm
+                          title="确定删除吗？"
+                          onConfirm={() => this.remove(index)}
+                          okText="是"
+                          cancelText="否"
+                        >
+                          <Icon
+                            className="dynamic-delete-button"
+                            type="minus-circle-o"
+                            disabled={conditionList.length === 1}
+                          />
+                        </Popconfirm>
                       )}
                     </FormItem>
                   </Col>
@@ -678,7 +696,7 @@ export default class BuyForm extends Component {
               onClick={() => {
                 this.props.changeEdit();
               }}
-              disabled={defaultValue.status !== 1 || defaultValue.status !== 2}
+              disabled={defaultValue.status !== 1 && defaultValue.status !== 2}
             >
               编辑
             </Button>

@@ -113,11 +113,15 @@ export default class OnlyPassWord extends Component {
                   <FormItem required={false}>
                     {getFieldDecorator(`cards[${index}].items[${littleIndex}].password`, {
                       initialValue: action ? card.password : '',
-                      validateTrigger: ['onChange', 'onBlur'],
+                      validateTrigger: ['onBlur'],
                       rules: [
                         {
                           required: true,
                           message: '请输入面额',
+                        },
+                        {
+                          min: 4,
+                          message: '最小长度不得小于4位',
                         },
                         {
                           max: 50,
@@ -126,13 +130,15 @@ export default class OnlyPassWord extends Component {
                       ],
                     })(
                       <Row>
-                        <Col style={{ width: '6%', float: 'left' }}>密码:</Col>
+                        <Col style={{ width: '6%', float: 'left' }}>卡密:</Col>
                         <Col style={{ width: '85%', float: 'left' }}>
                           <Input
                             onChange={e => this.props.changePsw(e, index, littleIndex)}
                             defaultValue={action ? card.password : ''}
                             placeholder="请输入卡密"
-                            disabled={(action && action !== 'edit') || card.status !== 0}
+                            disabled={
+                              (action && action !== 'edit') || (card.status && card.status !== 0)
+                            }
                           />
                         </Col>
                         {(!action || action === 'edit') && (
