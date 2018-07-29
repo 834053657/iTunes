@@ -76,7 +76,7 @@ export default class List extends Component {
       render: (val, row) => (
         <span>
           {val && CONFIG.order_type[val] ? CONFIG.order_type[val] : '-'}{' '}
-          {row.passive ? '(挂单)' : null}
+          {row.passive ? `(${PROMPT('order.pendingOrder') || 挂单})` : null}
         </span>
       ),
     },
