@@ -22,6 +22,16 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 class Item1 extends PureComponent {
+  submit = () => {
+    console.log('submit', this.props.form.getFieldsError());
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      console.log(err, values);
+      if (!err) {
+        return true;
+      }
+    });
+  };
+
   handleAdd = () => {
     const { getFieldValue, setFieldsValue } = this.props.form;
 
@@ -133,6 +143,16 @@ class Item extends PureComponent {
     });
   };
 
+  submit = () => {
+    console.log('submit', this.props.form.getFieldsError());
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      console.log(err, values);
+      if (!err) {
+        return true;
+      }
+    });
+  };
+
   render() {
     const { data = {} } = this.props;
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -151,6 +171,13 @@ class Item extends PureComponent {
 
     getFieldDecorator('items', {
       initialValue: data.items,
+      rules: [
+        {
+          require: true,
+          type: 'array',
+          min: 1,
+        },
+      ],
     });
 
     return (
@@ -172,6 +199,7 @@ class Item extends PureComponent {
           {map(getFieldValue('items'), (item, index) => {
             return (
               <ItemForm
+                wrappedComponentRef={form => (this.form = form)}
                 index={1 + index}
                 key={index}
                 data={item}
@@ -219,8 +247,10 @@ export default class BasicForms extends PureComponent {
 
   handleSubmit = e => {
     e.preventDefault();
+
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
+      console.log(err, values);
+      this.form.submit();
       // if (!err) {
       //   this.props.dispatch({
       //     type: 'form/submitRegularForm',
@@ -292,6 +322,23 @@ export default class BasicForms extends PureComponent {
           ],
         },
       ],
+      rules: {
+        rules: [
+          {
+            required: true,
+            type: 'array',
+            min: 1,
+            message: 'cards is required!',
+            defaultField: {
+              type: 'object',
+              required: true,
+              fields: {
+                name: { require: true, message: 'name 必填' },
+              },
+            },
+          },
+        ],
+      },
     });
     const cards = getFieldValue('cards') || [];
 
@@ -307,6 +354,7 @@ export default class BasicForms extends PureComponent {
             {map(cards, (item, index) => {
               return (
                 <CustomizedForm
+                  wrappedComponentRef={form => (this.form = form)}
                   key={index}
                   data={item}
                   onChange={this.handleFormChange.bind(this, index)}
