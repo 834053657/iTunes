@@ -93,23 +93,23 @@ export default class OnlyPassWord extends Component {
               {sendCard
                 ? null
                 : ((psw === 1 && !action) || action === 'edit') && (
-                    <Button onClick={() => this.props.intoData(index)} style={{ float: 'right' }}>
+                <Button onClick={() => this.props.intoData(index)} style={{ float: 'right' }}>
                       导入
-                    </Button>
+                </Button>
                   )}
               {sendCard
                 ? null
                 : (!action || action === 'edit') && (
-                    <div style={{ float: 'right' }}>
-                      <Popconfirm
-                        title="确定删除吗？"
-                        onConfirm={() => this.props.deleteCard(index)}
-                        okText="是"
-                        cancelText="否"
-                      >
-                        <Icon className={styles.deleteIcon} type="minus-circle-o" />
-                      </Popconfirm>
-                    </div>
+                <div style={{ float: 'right' }}>
+                  <Popconfirm
+                    title="确定删除吗？"
+                    onConfirm={() => this.props.deleteCard(index)}
+                    okText="是"
+                    cancelText="否"
+                  >
+                    <Icon className={styles.deleteIcon} type="minus-circle-o" />
+                  </Popconfirm>
+                </div>
                   )}
             </div>
           }
@@ -154,14 +154,14 @@ export default class OnlyPassWord extends Component {
                         {sendCard
                           ? null
                           : (!action || action === 'edit') && (
-                              <Popconfirm
-                                title="确定删除吗？"
-                                onConfirm={() => this.props.confirm(index, littleIndex)}
-                                okText="是"
-                                cancelText="否"
-                              >
-                                <Icon className={styles.deleteIcon} type="minus-circle-o" />
-                              </Popconfirm>
+                          <Popconfirm
+                            title="确定删除吗？"
+                            onConfirm={() => this.props.confirm(index, littleIndex)}
+                            okText="是"
+                            cancelText="否"
+                          >
+                            <Icon className={styles.deleteIcon} type="minus-circle-o" />
+                          </Popconfirm>
                             )}
                       </Row>
                     )}

@@ -2,6 +2,7 @@
 import moment from 'moment';
 import numeral from 'numeral';
 import { parse } from 'qs';
+import { getLocale } from './authority';
 // import audioMsg from '../../public/audio/msg.mp3'
 
 export function fixedZero(val) {
@@ -168,6 +169,9 @@ export function getSystemUrl(env) {
   let base_url = 'http://47.106.111.213:3000/mock/19';
   let socket_url = 'http://47.106.111.213:9000/socket.io';
   let web_name = '凯歌交易平台';
+
+  const language = getLocale();
+  if (language === 'en-GB') web_name = 'Kaige Trading Platform';
 
   if (env === 'dev') {
     base_url = 'http://47.106.111.213:3000/mock/19';

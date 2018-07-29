@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon, message, Modal } from 'antd';
+import { Layout, Icon, message, Modal, LocaleProvider } from 'antd';
+import { IntlProvider, FormattedMessage } from 'react-intl';
+import intl from 'intl';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -16,8 +18,10 @@ import { getRoutes, getMessageContent } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.svg';
-import { getAuthority } from '../utils/authority';
+import { getAuthority, setLocale, getLocale } from '../utils/authority';
+import cintl from '../utils/intl';
 
+const appLocale = cintl.getAppLocale();
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
 
@@ -147,6 +151,7 @@ class BasicLayout extends React.Component {
     let title = CONFIG.web_name;
     let currRouterData = null;
     // match params path
+
     Object.keys(routerData).forEach(key => {
       if (pathToRegexp(key).test(pathname)) {
         currRouterData = routerData[key];
@@ -189,7 +194,7 @@ class BasicLayout extends React.Component {
     });
   };
   handleNoticeClear = type => {
-    message.success(`清空了${type}`);
+    message.success(PROMPT('message.clearMessages') || `清空了消息`);
     this.props.dispatch({
       type: 'global/readNotices',
       payload: { all: true },
@@ -248,7 +253,7 @@ class BasicLayout extends React.Component {
           dispatch(routerRedux.push(`/ad/terms`));
         } else if ([51, 52, 61, 62].indexOf(item.msg_type) >= 0) {
           Modal.success({
-            title: '提示',
+            title: PROMPT('message.prompt') || '提示',
             content: getMessageContent(item),
             onOk: () => {},
           });
@@ -298,6 +303,14 @@ class BasicLayout extends React.Component {
       this.props.dispatch({
         type: 'login/logout',
       });
+    }
+  };
+
+  handleLanguageClick = ({ key }) => {
+    console.log('language', key);
+    if (getLocale() !== key) {
+      setLocale(key);
+      window.location.reload();
     }
   };
   handleNoticeVisibleChange = visible => {
@@ -353,6 +366,7 @@ class BasicLayout extends React.Component {
               onNoticeClick={this.handleNoticeRead}
               onCollapse={this.handleMenuCollapse}
               onMenuClick={this.handleMenuClick}
+              onLanguageClick={this.handleLanguageClick}
               onNoticeVisibleChange={this.handleNoticeVisibleChange}
             />
           </Header>
@@ -380,26 +394,27 @@ class BasicLayout extends React.Component {
               links={[
                 {
                   key: '1',
-                  title: '帮助',
+                  title: <FormattedMessage {...MESSAGES.help} description="帮助" />,
                   href: '/#/information/help',
                   blankTarget: true,
                 },
                 {
                   key: '2',
-                  title: '隐私',
+                  title: <FormattedMessage {...MESSAGES.privacy} description="隐私" />,
                   href: '/#/information/privacy',
                   blankTarget: true,
                 },
                 {
                   key: '3',
-                  title: '条款',
+                  title: <FormattedMessage {...MESSAGES.terms} description="条款" />,
                   href: '/#/information/terms',
                   blankTarget: true,
                 },
               ]}
               copyright={
                 <Fragment>
-                  Copyright <Icon type="copyright" /> 深圳凯歌科技有限公司
+                  Copyright <Icon type="copyright" />{' '}
+                  {<FormattedMessage {...MESSAGES.copyright} description="深圳凯歌科技有限公司" />}
                 </Fragment>
               }
             />
@@ -409,11 +424,15 @@ class BasicLayout extends React.Component {
     );
 
     return (
-      <DocumentTitle title={this.getPageTitle()}>
-        <ContainerQuery query={query}>
-          {params => <div className={classNames(params)}>{layout}</div>}
-        </ContainerQuery>
-      </DocumentTitle>
+      <LocaleProvider locale={appLocale.antd}>
+        <IntlProvider locale={appLocale.locale} messages={appLocale.messages}>
+          <DocumentTitle title={this.getPageTitle()}>
+            <ContainerQuery query={query}>
+              {params => <div className={classNames(params)}>{layout}</div>}
+            </ContainerQuery>
+          </DocumentTitle>
+        </IntlProvider>
+      </LocaleProvider>
     );
   }
 }

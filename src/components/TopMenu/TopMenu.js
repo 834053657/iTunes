@@ -4,6 +4,7 @@ import pathToRegexp from 'path-to-regexp';
 import { Link } from 'dva/router';
 import styles from './index.less';
 import { urlToList } from '../_utils/pathTools';
+import { getLocale } from '../../utils/authority';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -12,6 +13,8 @@ const { SubMenu } = Menu;
 //   icon: 'setting',
 //   icon: 'http://demo.com/icon.png',
 //   icon: <Icon type="setting" />,
+const lang = getLocale().replace('-', '_');
+
 const getIcon = icon => {
   if (typeof icon === 'string' && icon.indexOf('http') === 0) {
     return <img src={icon} alt="icon" className={`${styles.icon} sider-menu-item-img`} />;
@@ -81,13 +84,13 @@ export default class TopMenu extends PureComponent {
   getMenuItemPath = item => {
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
-    const { target, name } = item;
+    const { target, name, id } = item;
     // Is it a http link
     if (/^https?:\/\//.test(itemPath)) {
       return (
         <a href={itemPath} target={target}>
           {icon}
-          <span>{name}</span>
+          <span>{item[`name_${lang}`] || name}</span>
         </a>
       );
     }
@@ -105,7 +108,7 @@ export default class TopMenu extends PureComponent {
         }
       >
         {icon}
-        <span>{name}</span>
+        <span>{item[`name_${lang}`] || name}</span>
       </Link>
     );
   };
@@ -123,10 +126,10 @@ export default class TopMenu extends PureComponent {
               item.icon ? (
                 <span>
                   {getIcon(item.icon)}
-                  <span>{item.name}</span>
+                  <span>{item[`name_${lang}`] || item.name}</span>
                 </span>
               ) : (
-                item.name
+                item[`name_${lang}`] || item.name
               )
             }
             key={item.path}

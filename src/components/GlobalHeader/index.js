@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
 import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 import groupBy from 'lodash/groupBy';
 import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
@@ -74,29 +75,34 @@ export default class GlobalHeader extends PureComponent {
       onNoticeClick,
       notices,
       noticesCount,
+      onLanguageClick,
     } = this.props;
     const { wallet } = currentUser || {};
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userCenter">
-          <Icon type="user" />个人中心
+          <Icon type="user" />
+          <FormattedMessage {...MESSAGES.personalCenter} description="个人中心" />
         </Menu.Item>
         <Menu.Item key="ad">
-          <Icon type="code-o" />我的广告
+          <Icon type="code-o" />
+          <FormattedMessage {...MESSAGES.myAd} description="我的广告" />
         </Menu.Item>
         <Menu.Item key="order">
-          <Icon type="file-text" />我的订单
+          <Icon type="file-text" />
+          <FormattedMessage {...MESSAGES.myOrder} description="我的订单" />
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">
-          <Icon type="logout" />退出登录
+          <Icon type="logout" />
+          <FormattedMessage {...MESSAGES.logout} description="退出登录" />
         </Menu.Item>
       </Menu>
     );
     const language = (
-      <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="zh">中文</Menu.Item>
-        <Menu.Item key="en">English</Menu.Item>
+      <Menu className={styles.menu} selectedKeys={[]} onClick={onLanguageClick}>
+        <Menu.Item key="zh-CN">中文</Menu.Item>
+        <Menu.Item key="en-GB">English</Menu.Item>
       </Menu>
     );
     // const noticeData = this.getNoticeData();
@@ -118,9 +124,9 @@ export default class GlobalHeader extends PureComponent {
         )}
 
         <div className={styles.right}>
-          {/*  <Dropdown overlay={language}>
+          <Dropdown overlay={language}>
             <span className={`${styles.action}`}>EN/CN</span>
-          </Dropdown>*/}
+          </Dropdown>
           {currentUser.token && currentUser.user ? (
             <span>
               <Link to="/wallet">
@@ -141,8 +147,10 @@ export default class GlobalHeader extends PureComponent {
                 loading={fetchingNotices}
                 popupAlign={{ offset: [20, -16] }}
                 list={notices}
-                title="消息"
-                emptyText="您已读完所有消息"
+                title={<FormattedMessage {...MESSAGES.message} description="消息" />}
+                emptyText={
+                  <FormattedMessage {...MESSAGES.readedAllMsgs} description="您已读完所有消息" />
+                }
                 emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
               />
               <Dropdown overlay={menu}>
@@ -155,10 +163,10 @@ export default class GlobalHeader extends PureComponent {
           ) : (
             <span>
               <Link className={styles.action} to="/user/login">
-                登录
+                <FormattedMessage {...MESSAGES.login} description="登录" />
               </Link>
               <Link className={styles.action} to="/user/register">
-                注册
+                <FormattedMessage {...MESSAGES.registration} description="注册" />
               </Link>
             </span>
           )}
