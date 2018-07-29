@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Form, Button, Row, Col, Icon } from 'antd';
-
+// import AsyncValidator from 'async-validator'
+import { map } from 'lodash';
 import { connect } from 'dva';
 import {
   Field,
@@ -10,8 +11,29 @@ import {
   FieldArray,
   SubmissionError,
 } from 'redux-form';
+import { validate } from '../../utils/utils';
 import { AInput, ASelect, AOption, AInputNumber } from './createField';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+
+const descriptor = {
+  unit_price: {
+    required: true,
+    message: '必填',
+  },
+  cards: [
+    {
+      type: 'array',
+      defaultField: {
+        type: 'object',
+        fields: {
+          price: { type: 'string', required: true },
+        },
+      },
+    },
+  ],
+};
+// 根据校验规则构造一个 validator
+// const validator = new AsyncValidator(descriptor)
 
 @connect(state => {
   return {
@@ -20,15 +42,30 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 })
 @reduxForm({
   form: 'loginForm', // a unique name for this form
+  validate: (values, props) => {
+    return validate(descriptor, values);
+    // if (!['john', 'paul', 'george', 'ringo'].includes(values.unit_price)) {
+    //     return { unit_price: 'User does not exist' };
+    //   }
+  },
 })
 export default class ReduxForm extends PureComponent {
   save = values => {
-    console.log(values);
-    if (!['john', 'paul', 'george', 'ringo'].includes(values.unit_price)) {
-      throw new SubmissionError({ unit_price: 'User does not exist', _error: 'Login failed!' });
-    } else if (values.password !== 'redux-form') {
-      throw new SubmissionError({ password: 'Wrong password', _error: 'Login failed!' });
+    let err = validate(descriptor, values);
+    if (err) {
+      throw new SubmissionError(err);
     }
+    // if (errors) {
+    //   return errors
+    //   throw new SubmissionError(errors);
+    // }
+    // console.log(values);
+    // return true
+    // if (!['john', 'paul', 'george', 'ringo'].includes(values.unit_price)) {
+    //   throw new SubmissionError({ unit_price: 'User does not exist', _error: 'Login failed!' });
+    // } else if (values.password !== 'redux-form') {
+    //   throw new SubmissionError({ password: 'Wrong password', _error: 'Login failed!' });
+    // }
   };
   renderSubItem = ({ fields, formitemlayout, meta: { touched, error } }) => (
     <Fragment>
@@ -114,7 +151,7 @@ export default class ReduxForm extends PureComponent {
             label="类型"
             name="type"
             component={ASelect}
-            formitemlayout={formItemLayout}
+            {...formItemLayout}
             placeholder="请选择类型"
           >
             <AOption key={1} value={1}>
@@ -125,17 +162,17 @@ export default class ReduxForm extends PureComponent {
             label="单价"
             name="unit_price"
             component={AInput}
-            formitemlayout={formItemLayout}
+            {...formItemLayout}
             placeholder=""
           />
           <Field
             label="倍数"
             name="multiple"
             component={AInput}
-            formitemlayout={formItemLayout}
+            {...formItemLayout}
             placeholder=""
           />
-          <FieldArray name="cards" formitemlayout={formItemLayout} component={this.renderItem} />
+          <FieldArray name="cards" {...formItemLayout} component={this.renderItem} />
 
           <Form.Item>
             <Button type="primary" htmlType="submit">

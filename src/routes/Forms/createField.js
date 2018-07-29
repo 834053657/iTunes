@@ -13,18 +13,24 @@ const createField = Component => ({
   hasFeedback,
   label,
   required,
-  formitemlayout,
+  labelCol,
+  wrapperCol,
+  colon,
+  extra,
   ...rest
 }) => {
   const hasError = meta.touched && meta.invalid;
   return (
     <FormItem
-      {...formitemlayout}
+      wrapperCol={wrapperCol}
+      labelCol={labelCol}
       required={required}
       label={label}
       validateStatus={hasError ? 'error' : 'success'}
       hasFeedback={hasFeedback && hasError}
       help={hasError && meta.error}
+      colon={colon}
+      extra={extra}
     >
       <Component {...input} {...rest} children={children} />
     </FormItem>

@@ -92,6 +92,7 @@
     "redbox-react": "^1.5.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.4.2",
+    "redux-form-antd": "^3.0.0",
     "regenerator-runtime": "^0.11.1",
     "roadhog": "^2.4.1",
     "roadhog-api-doc": "^1.0.3",

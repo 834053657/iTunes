@@ -1,6 +1,7 @@
 // 请勿在此引用静态文件 因为会影响到mock 执行
 import moment from 'moment';
 import numeral from 'numeral';
+import AsyncValidator from 'async-validator';
 import { parse } from 'qs';
 // import audioMsg from '../../public/audio/msg.mp3'
 
@@ -266,4 +267,18 @@ export function formatMoney(rmb) {
 export function getQueryString(str_) {
   const str = str_.replace('?', '');
   return parse(str) || {};
+}
+
+export function validate(rules, values) {
+  const validator = new AsyncValidator(rules);
+  let ret = {};
+
+  validator.validate(values, (errors, fields) => {
+    console.log(errors, fields);
+    errors.forEach(err => {
+      ret[err.field] = err.message;
+    });
+  });
+  console.log(ret);
+  return ret;
 }
