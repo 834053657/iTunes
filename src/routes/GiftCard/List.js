@@ -367,14 +367,16 @@ export default class List extends Component {
             </Button>
           ) : (
             <Popconfirm
-              title={`广告主要求在${record.deadline}分钟内发卡，您确认出售？`}
+              title={
+                <p>
+                  广告主要求在{record.deadline}分钟内发卡，<br />您确认出售？
+                </p>
+              }
               onConfirm={() => {
                 this.props.history.push({
                   pathname: `/card/deal-detail/${record.id}`,
                 });
               }}
-              okText="确定"
-              cancelText="取消"
             >
               <Button type="primary" disabled={owner.id === user.id}>
                 出售
@@ -408,6 +410,7 @@ export default class List extends Component {
           <Tabs.TabPane tab="我要出售" key="1" />
         </Tabs>
         <Table
+          locale={{ emptyText: '' }}
           rowKey={row => row.id}
           dataSource={items}
           columns={this.initColumns()}

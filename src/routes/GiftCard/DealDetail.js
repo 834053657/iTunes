@@ -162,10 +162,10 @@ export default class DealDeatil extends Component {
                 {getFieldDecorator(`order_detail[${index}].count`, {
                   validateFirst: true,
                   rules: [
-                    {
-                      required: true,
-                      message: '请输入出售数量！',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: '请输入出售数量！',
+                    // },
                     {
                       type: 'number',
                       min: c.min_count,
@@ -209,10 +209,10 @@ export default class DealDeatil extends Component {
                 {getFieldDecorator(`order_detail[${index}].count`, {
                   validateFirst: true,
                   rules: [
-                    {
-                      required: true,
-                      message: '请输入出售数量！',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: '请输入出售数量！',
+                    // },
                     {
                       validator: this.checkCount,
                     },
