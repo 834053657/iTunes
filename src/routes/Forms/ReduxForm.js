@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Component, Fragment } from 'react';
 import { Form, Button, Row, Col, Icon } from 'antd';
 // import AsyncValidator from 'async-validator'
 import { map } from 'lodash';
@@ -25,18 +25,82 @@ const descriptor = {
   cards: {
     type: 'array',
     required: true,
-    message: 'abcdd',
+    message: { _error: '错误' },
     defaultField: {
       type: 'object',
       fields: {
         min: { required: true, message: '必填' },
         price: { required: true, message: '必填' },
+        subCards: {
+          type: 'array',
+          defaultField: {
+            type: 'object',
+            fields: {
+              a: { required: true, message: 'a 必填' },
+            },
+          },
+        },
       },
     },
   },
 };
 // 根据校验规则构造一个 validator
 // const validator = new AsyncValidator(descriptor)
+
+class Items extends Component {
+  render() {
+    const {
+      fields,
+      meta,
+      children,
+      hasFeedback,
+      label,
+      required,
+      labelCol,
+      wrapperCol,
+      colon,
+      extra,
+      formitemlayout,
+      ...rest
+    } = this.props;
+
+    const hasError = meta.touched && meta.invalid;
+    return (
+      <FormItem validateStatus={hasError ? 'error' : 'success'} help={hasError && meta.error}>
+        <div>
+          <button type="button" onClick={() => fields.push({ price: '', min: '', max: '' })}>
+            添加 cards
+          </button>
+          {hasError && <span>{meta.error}</span>}
+        </div>
+        {fields.map((member, index) => {
+          return (
+            <Row key={index}>
+              <Col sm={2}>
+                <Button icon="close-circle-o" onClick={() => fields.remove(index)}>
+                  删除
+                </Button>
+                <h4>cards #{index + 1}</h4>
+              </Col>
+              <Col sm={4}>
+                <Field name={`${member}.price`} component={AInputNumber} />
+              </Col>
+              <Col sm={4}>
+                <Field name={`${member}.min`} component={AInputNumber} />
+              </Col>
+              <Col sm={4}>
+                <Field name={`${member}.max`} component={AInputNumber} />
+              </Col>
+              <Col sm={10}>
+                <FieldArray name={`${member}.subCards`} component={this.renderSubItem} />
+              </Col>
+            </Row>
+          );
+        })}
+      </FormItem>
+    );
+  }
+}
 
 @connect(state => {
   return {
@@ -54,10 +118,13 @@ const descriptor = {
 })
 export default class ReduxForm extends PureComponent {
   save = values => {
-    console.log(values);
+    // console.log(values);
+    // // throw new SubmissionError({"unit_price": '错误1'});
+    // throw new SubmissionError({cards: [{},{'price': 'sb13'}]});
+
+    // console.log(values);
     let err = validate(descriptor, values);
     if (err) {
-      err.cards = 'xxx';
       throw new SubmissionError(err);
     }
     // throw new SubmissionError({"cards[0].price":"必填"});
@@ -106,16 +173,13 @@ export default class ReduxForm extends PureComponent {
   };
 
   renderItem = arg => {
-    const { fields, formitemlayout, meta } = arg;
-    const hasError = meta.touched && meta.invalid;
-    console.log('cards', arg, this.props);
+    const { fields, formitemlayout, meta, _error } = arg;
     return (
-      <FormItem validateStatus={hasError ? 'error' : 'success'} help={hasError && meta.error}>
+      <FormItem validateStatus={meta.error ? 'error' : 'success'} help={meta.error && meta.error}>
         <div>
           <button type="button" onClick={() => fields.push({ price: '', min: '', max: '' })}>
             添加 cards
           </button>
-          {hasError && <span>{meta.error}</span>}
         </div>
         {fields.map((member, index) => {
           return (
@@ -157,11 +221,12 @@ export default class ReduxForm extends PureComponent {
         sm: { span: 14 },
       },
     };
+    console.log(this.props);
 
     return (
       <PageHeaderLayout title="高级表单" content="高级表单常见于一次性输入和提交大批量数据的场景。">
         <Form style={{ width: 1000 }} onSubmit={handleSubmit(this.save)}>
-          <Field
+          {/*   <Field
             label="类型"
             name="type"
             component={ASelect}
@@ -171,7 +236,7 @@ export default class ReduxForm extends PureComponent {
             <AOption key={1} value={1}>
               美卡
             </AOption>
-          </Field>
+          </Field>*/}
           <Field
             label="单价"
             name="unit_price"
@@ -179,13 +244,13 @@ export default class ReduxForm extends PureComponent {
             {...formItemLayout}
             placeholder=""
           />
-          <Field
+          {/*   <Field
             label="倍数"
             name="multiple"
             component={AInput}
             {...formItemLayout}
             placeholder=""
-          />
+          />*/}
           <FieldArray name="cards" {...formItemLayout} component={this.renderItem} />
 
           <Form.Item>
