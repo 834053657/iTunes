@@ -15,25 +15,27 @@ const generateMsgs = () => {
     }
   }
 
-  // console.log(msgObj)
   return msgObj;
 };
 
-const messages = defineMessages(generateMsgs());
+const obj = generateMsgs();
+console.log(obj);
 
-/*const messages = defineMessages({
-  buy: {
-    id: 'trade.buy',
-    defaultMessage: defMessages['trade.buy'],
-  },
-  sale: {
-    id: 'trade.sale',
-    defaultMessage: defMessages['trade.sale'],
-  },
-  country: {
-    id: 'trade.country',
-    defaultMessage: defMessages['trade.country'],
-  }
-});*/
+// const messages = defineMessages(obj);
+//
+// /*const messages = defineMessages({
+//   buy: {
+//     id: 'trade.buy',
+//     defaultMessage: defMessages['trade.buy'],
+//   },
+//   sale: {
+//     id: 'trade.sale',
+//     defaultMessage: defMessages['trade.sale'],
+//   },
+//   country: {
+//     id: 'trade.country',
+//     defaultMessage: defMessages['trade.country'],
+//   }
+// });*/
 
-export default messages;
+export default obj;

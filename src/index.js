@@ -3,6 +3,7 @@ import 'url-polyfill';
 import dva from 'dva';
 import { message, notification } from 'antd';
 import createHistory from 'history/createHashHistory';
+import { reducer as formReducer } from 'redux-form';
 // user BrowserHistory
 // import createHistory from 'history/createBrowserHistory';
 import createLoading from 'dva-loading';
@@ -12,7 +13,7 @@ import './rollbar';
 import './index.less';
 import CONFIG from './utils/config';
 import { dvaSocket } from './utils/socket';
-import messages from './locales/messages';
+// import messages from './locales/messages';
 import promptMsgs from './locales/messages-prompt';
 
 message.config({
@@ -27,11 +28,14 @@ notification.config({
 });
 
 global.CONFIG = CONFIG;
-global.MESSAGES = messages;
+// global.MESSAGES = messages;
 global.PROMPT = promptMsgs;
 // 1. Initialize
 const app = dva({
   history: createHistory(),
+  extraReducers: {
+    form: formReducer,
+  },
 });
 
 // 参考文档 https://socket.io/docs/client-api/#with-extraheaders

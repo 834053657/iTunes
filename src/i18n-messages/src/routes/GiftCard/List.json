@@ -1,0 +1,18 @@
+[
+  {
+    "id": "userName",
+    "defaultMessage": "用户名"
+  },
+  {
+    "id": "tradingHell",
+    "defaultMessage": "礼品卡大厅"
+  },
+  {
+    "id": "toBuy",
+    "defaultMessage": "我要购买"
+  },
+  {
+    "id": "toSell",
+    "defaultMessage": "我要出售"
+  }
+]

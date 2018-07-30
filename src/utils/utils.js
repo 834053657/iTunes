@@ -1,6 +1,7 @@
 // 请勿在此引用静态文件 因为会影响到mock 执行
 import moment from 'moment';
 import numeral from 'numeral';
+import AsyncValidator from 'async-validator';
 import { parse } from 'qs';
 import { getLocale } from './authority';
 // import audioMsg from '../../public/audio/msg.mp3'
@@ -270,4 +271,44 @@ export function formatMoney(rmb) {
 export function getQueryString(str_) {
   const str = str_.replace('?', '');
   return parse(str) || {};
+}
+
+export function createError(obj, keyPath, value) {
+  //匹配出属性名
+  let array = keyPath.match(/\w+/g);
+  let i = 0;
+  //遍历属性名数组
+  for (; i < array.length - 1; i++) {
+    let cur = array[i];
+    let next = array[i + 1];
+    //如果当前路径并没有相应对象
+    //就创建对象
+    if (!obj[cur]) {
+      //如果要创建的是对象
+      if (isNaN(next)) {
+        obj[cur] = {};
+      } else {
+        //如果要创建的是数组
+        obj[cur] = [];
+      }
+    }
+    //obj指向新创建的对象
+    obj = obj[cur];
+  }
+  //最后一步赋值
+  obj[array[i]] = value;
+}
+
+export function validate(rules, values) {
+  const validator = new AsyncValidator(rules);
+  let ret = {};
+
+  validator.validate(values, (errors, fields) => {
+    console.log(errors, fields);
+    errors.forEach(err => {
+      createError(ret, err.field, err.message);
+    });
+  });
+  console.log(ret);
+  return ret;
 }
