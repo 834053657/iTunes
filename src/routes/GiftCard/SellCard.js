@@ -18,16 +18,17 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import OnlyPicture from './SellOnlyPicture';
 import PicWithText from './SellPicWithText';
-import SellForm from './forms/SellForm';
 import styles from './SellCard.less';
+import SellForm from './forms/SellForm';
 
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
 
-@connect(({ card }) => ({
+@connect(({ card, loading }) => ({
   card,
   adDetail: card.adDetail || {},
+  submitSellForm: loading.effects['card/addSellAd'],
 }))
 export default class BuyCard extends Component {
   constructor(props) {
@@ -332,6 +333,7 @@ export default class BuyCard extends Component {
             terms={terms}
             onCancel={() => this.props.dispatch(routerRedux.push('/ad/my'))}
             onSubmit={this.addAdvertising}
+            submitSellForm={this.props.submitSellForm}
           />
         </PageHeaderLayout>
       </div>

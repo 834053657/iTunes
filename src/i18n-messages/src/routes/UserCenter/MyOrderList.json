@@ -1,0 +1,42 @@
+[
+  {
+    "id": "orderNo",
+    "defaultMessage": "交易单号"
+  },
+  {
+    "id": "createdAt",
+    "defaultMessage": "创建时间"
+  },
+  {
+    "id": "goodsType",
+    "defaultMessage": "交易产品"
+  },
+  {
+    "id": "tradePartners",
+    "defaultMessage": "交易对象"
+  },
+  {
+    "id": "tradeType",
+    "defaultMessage": "交易类型"
+  },
+  {
+    "id": "amount",
+    "defaultMessage": "金额"
+  },
+  {
+    "id": "fee",
+    "defaultMessage": "手续费"
+  },
+  {
+    "id": "operating",
+    "defaultMessage": "操作"
+  },
+  {
+    "id": "view",
+    "defaultMessage": "查看"
+  },
+  {
+    "id": "myOrder",
+    "defaultMessage": "我的订单"
+  }
+]

@@ -60,19 +60,19 @@ class UserLayout extends React.PureComponent {
                   links={[
                     {
                       key: '1',
-                      title: <FormattedMessage {...MESSAGES.help} description="帮助" />,
+                      title: <FormattedMessage id="help" defaultMessage="帮助" />,
                       href: '/#/information/help',
                       blankTarget: true,
                     },
                     {
                       key: '2',
-                      title: <FormattedMessage {...MESSAGES.privacy} description="隐私" />,
+                      title: <FormattedMessage id="privacy" defaultMessage="隐私" />,
                       href: '/#/information/privacy',
                       blankTarget: true,
                     },
                     {
                       key: '3',
-                      title: <FormattedMessage {...MESSAGES.terms} description="条款" />,
+                      title: <FormattedMessage id="terms" defaultMessage="条款" />,
                       href: '/#/information/terms',
                       blankTarget: true,
                     },
@@ -80,12 +80,7 @@ class UserLayout extends React.PureComponent {
                   copyright={
                     <Fragment>
                       Copyright <Icon type="copyright" />{' '}
-                      {
-                        <FormattedMessage
-                          {...MESSAGES.copyright}
-                          description="深圳凯歌科技有限公司"
-                        />
-                      }
+                      {<FormattedMessage id="copyright" description="深圳凯歌科技有限公司" />}
                     </Fragment>
                   }
                 />
@@ -100,5 +95,5 @@ class UserLayout extends React.PureComponent {
 
 export default UserLayout;
 /*export default connect(({ user, global, loading }) => ({
-  
+
 }))(UserLayout);*/

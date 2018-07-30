@@ -47,31 +47,31 @@ export default class List extends Component {
 
   columns = [
     {
-      title: <FormattedMessage {...MESSAGES.orderNo} description="交易单号" />,
+      title: <FormattedMessage id="orderNo" defaultMessage="交易单号" />,
       dataIndex: 'order_no',
       render: (v, row) => <Link to={`/card/deal-line/${row.id}`}>{v}</Link>,
     },
     {
-      title: <FormattedMessage {...MESSAGES.createdAt} description="创建时间" />,
+      title: <FormattedMessage id="createdAt" defaultMessage="创建时间" />,
       dataIndex: 'created_at',
       render: val => (
         <span>{val ? moment(new Date(val * 1000)).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>
       ),
     },
     {
-      title: <FormattedMessage {...MESSAGES.goodsType} description="交易产品" />,
+      title: <FormattedMessage id="goodsType" defaultMessage="交易产品" />,
       dataIndex: 'goods_type',
       render: (val, row) => (val && CONFIG.goods_type[val] ? CONFIG.goods_type[val] : '-'),
     },
     {
-      title: <FormattedMessage {...MESSAGES.tradePartners} description="交易对象" />,
+      title: <FormattedMessage id="tradePartners" defaultMessage="交易对象" />,
       dataIndex: 'trader',
       render: (_, row) => (
         <span className="text-blue">{row.trader ? row.trader.nickname : '-'}</span>
       ),
     },
     {
-      title: <FormattedMessage {...MESSAGES.tradeType} description="交易类型" />,
+      title: <FormattedMessage id="tradeType" defaultMessage="交易类型" />,
       dataIndex: 'order_type',
       render: (val, row) => (
         <span>
@@ -81,25 +81,25 @@ export default class List extends Component {
       ),
     },
     {
-      title: <FormattedMessage {...MESSAGES.amount} description="金额" />,
+      title: <FormattedMessage id="amount" defaultMessage="金额" />,
       dataIndex: 'amount',
       render: (v, row) => {
         return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
       },
     },
     {
-      title: <FormattedMessage {...MESSAGES.fee} description="手续费" />,
+      title: <FormattedMessage id="fee" defaultMessage="手续费" />,
       dataIndex: 'fee',
       render: (v, row) => {
         return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
       },
     },
     {
-      title: <FormattedMessage {...MESSAGES.operating} description="操作" />,
+      title: <FormattedMessage id="operating" defaultMessage="操作" />,
       dataIndex: '_opt_',
       render: (_, row) => (
         <Link to={`/card/deal-line/${row.id}`}>
-          {<FormattedMessage {...MESSAGES.view} description="查看" />}
+          {<FormattedMessage id="view" defaultMessage="查看" />}
         </Link>
       ),
     },
@@ -151,7 +151,7 @@ export default class List extends Component {
     const { data: { list, pagination }, loading } = this.props;
 
     return (
-      <PageHeaderLayout title={<FormattedMessage {...MESSAGES.myOrder} description="我的订单" />}>
+      <PageHeaderLayout title={<FormattedMessage id="myOrder" defaultMessage="我的订单" />}>
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Tabs activeKey={type} onChange={this.handleChangeType}>

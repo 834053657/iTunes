@@ -13,17 +13,23 @@ import {
   InputNumber,
   Row,
   Col,
+  Upload,
+  Spin,
   Popconfirm,
 } from 'antd';
 import styles from './FilterDemoinForm.less';
 import SellForm from './SellForm';
 import PicUpload from '../../../components/UploadQiNiu/index';
+import { getAuthority } from '../../../utils/authority';
+import { getSystemUrl } from '../../../utils/utils';
 
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
 
 export default class OnlyPassWord extends Component {
-  state = {};
+  state = {
+    uploading: false,
+  };
 
   checkMin = (rule, value, callback) => {
     const { form } = this.props;
@@ -64,13 +70,57 @@ export default class OnlyPassWord extends Component {
     this.props.addMoney(i);
   };
 
+  handlerUpload = (info, index) => {
+    if (info.file.status === 'uploading') {
+      this.setState({
+        uploading: true,
+      });
+    } else if (info.file.status === 'done') {
+      this.reload = false;
+      this.setState({
+        uploading: false,
+      });
+      this.props.addFileData(info.file.response.data.items, index);
+    } else if (info.file.status === 'error') {
+      this.setState({ uploading: false });
+      message.error('上传错误，可能请求已过期，请刷新页面重试');
+    }
+  };
+
   render() {
     const {
       form: { getFieldDecorator, getFieldValue, resetForm },
       psw,
       action,
       sendCard,
+      fileUpload,
     } = this.props;
+    const { token, user } = getAuthority() || {};
+    const { id } = user || {};
+
+    const uploadProps = {
+      name: 'file',
+      action: `${CONFIG.base_url}/itunes/ad/cards/import`,
+      showUploadList: false,
+      headers: {
+        'ITUNES-UID': id,
+        'ITUNES-TOKEN': token,
+        // 'bank_name': this.state.bankName,
+      },
+      data: file => {
+        return {
+          filename: file.name,
+        };
+      },
+      beforeUpload(file) {
+        const fileExt = file.name.substr(file.name.lastIndexOf('.') + 1);
+        if (['csv', 'xls', 'xlsx'].indexOf(fileExt) < 0) {
+          message.error('文件格式不对，您只能导入csv, xls或xlsx文件。');
+          return false;
+        }
+        return true;
+      },
+    };
 
     const formItemLayoutBtn = {
       wrapperCol: {
@@ -78,10 +128,8 @@ export default class OnlyPassWord extends Component {
         sm: { span: 20, offset: 4 },
       },
     };
-    const cards = this.props.defaultValue;
-    //console.log(cards);
+    const cards = this.props.dValue;
     const cardItems = cards.map((c, index) => {
-      console.log(c);
       return (
         <Card
           style={{ marginTop: '10px' }}
@@ -93,9 +141,11 @@ export default class OnlyPassWord extends Component {
               {sendCard
                 ? null
                 : ((psw === 1 && !action) || action === 'edit') && (
-                    <Button onClick={() => this.props.intoData(index)} style={{ float: 'right' }}>
-                      导入
-                    </Button>
+                    <Spin spinning={this.state.uploading}>
+                      <Upload onChange={info => this.handlerUpload(info, index)} {...uploadProps}>
+                        <Button style={{ float: 'right' }}>导入</Button>
+                      </Upload>
+                    </Spin>
                   )}
               {sendCard
                 ? null
@@ -123,12 +173,12 @@ export default class OnlyPassWord extends Component {
                 (psw === 1 || psw === 3) && (
                   <FormItem required={false}>
                     {getFieldDecorator(`cards[${index}].items[${littleIndex}].password`, {
-                      initialValue: action ? card.password : '',
+                      initialValue: card.password,
                       validateTrigger: ['onBlur'],
                       rules: [
                         {
                           required: true,
-                          message: '请输入面额',
+                          message: '请输入卡密',
                         },
                         {
                           min: 4,
@@ -145,7 +195,7 @@ export default class OnlyPassWord extends Component {
                         <Col style={{ width: '85%', float: 'left' }}>
                           <Input
                             onChange={e => this.props.changePsw(e, index, littleIndex)}
-                            defaultValue={action ? card.password : ''}
+                            defaultValue={card.password}
                             placeholder="请输入卡密"
                             disabled={
                               (action && action !== 'edit') || (card.status && card.status !== 0)

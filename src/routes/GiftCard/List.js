@@ -209,7 +209,7 @@ export default class List extends Component {
     });
     let columns = [
       {
-        title: <FormattedMessage {...MESSAGES.userName} description="用户名" />,
+        title: <FormattedMessage id="userName" defaultMessage="用户名" />,
         width: '100',
         dataIndex: 'nickname_',
         render: (text, record) => {
@@ -406,18 +406,12 @@ export default class List extends Component {
     const { items, pagination } = list || {};
     return (
       <div className={styles.page}>
-        <h2>{<FormattedMessage {...MESSAGES.tradingHell} description="礼品卡大厅" />}</h2>
+        <h2>{<FormattedMessage id="tradingHell" defaultMessage="礼品卡大厅" />}</h2>
         <Tabs onChange={this.changeTab} activeKey={type}>
           {/*出售广告*/}
-          <Tabs.TabPane
-            tab={<FormattedMessage {...MESSAGES.toBuy} description="我要购买" />}
-            key="2"
-          />
+          <Tabs.TabPane tab={<FormattedMessage id="toBuy" defaultMessage="我要购买" />} key="2" />
           {/*购买广告*/}
-          <Tabs.TabPane
-            tab={<FormattedMessage {...MESSAGES.toSell} description="我要出售" />}
-            key="1"
-          />
+          <Tabs.TabPane tab={<FormattedMessage id="toSell" defaultMessage="我要出售" />} key="1" />
         </Tabs>
         <Table
           locale={{ emptyText: '' }}

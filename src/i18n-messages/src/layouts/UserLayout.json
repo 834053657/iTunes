@@ -1,0 +1,14 @@
+[
+  {
+    "id": "help",
+    "defaultMessage": "帮助"
+  },
+  {
+    "id": "privacy",
+    "defaultMessage": "隐私"
+  },
+  {
+    "id": "terms",
+    "defaultMessage": "条款"
+  }
+]

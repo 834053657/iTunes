@@ -1,0 +1,30 @@
+[
+  {
+    "id": "more",
+    "defaultMessage": "更多"
+  },
+  {
+    "id": "latestNews",
+    "defaultMessage": "最新资讯"
+  },
+  {
+    "id": "More",
+    "defaultMessage": "更多"
+  },
+  {
+    "id": "RealTimeTransaction",
+    "defaultMessage": "实时成交"
+  },
+  {
+    "id": "ItunesSales",
+    "defaultMessage": "Itunes销售额"
+  },
+  {
+    "id": "giftCard",
+    "defaultMessage": "礼品卡"
+  },
+  {
+    "id": "giftCardSales",
+    "defaultMessage": "礼品卡销售额"
+  }
+]
