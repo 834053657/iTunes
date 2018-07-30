@@ -400,7 +400,7 @@ export default class SellForm extends Component {
                   message: '请输入单价',
                 },
               ],
-            })(<InputNumber disabled={action && action !== 'edit'} />)}
+            })(<InputNumber precision={2} disabled={action && action !== 'edit'} />)}
           </FormItem>
 
           <FormItem {...formItemLayout} label="保障时间">
