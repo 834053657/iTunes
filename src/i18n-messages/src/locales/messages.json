@@ -1,0 +1,14 @@
+[
+  {
+    "id": "trade.buy",
+    "defaultMessage": "trade.buy"
+  },
+  {
+    "id": "trade.sale",
+    "defaultMessage": "trade.sale"
+  },
+  {
+    "id": "trade.country",
+    "defaultMessage": "trade.country"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "help",
+    "defaultMessage": "帮助"
+  },
+  {
+    "id": "privacy",
+    "defaultMessage": "隐私"
+  },
+  {
+    "id": "terms",
+    "defaultMessage": "条款"
+  },
+  {
+    "id": "copyright",
+    "defaultMessage": "深圳凯歌科技有限公司"
+  }
+]
