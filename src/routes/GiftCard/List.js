@@ -28,6 +28,7 @@ const FormItem = Form.Item;
 @connect(({ card, loading, user }) => ({
   list: card.list,
   user: user.currentUser.user,
+  loading: loading.effects['card/fetchCardList_'],
 }))
 export default class List extends Component {
   constructor(props) {
@@ -107,6 +108,8 @@ export default class List extends Component {
     let params = {};
     const { type, card_type, order_by, password_type, denominFilterValue, filters } = this.state;
 
+    params.page = params_.page || {};
+
     params.type = params_.type || type;
     params.card_type = params_.card_type || card_type;
     params.order_by = params_.order_by || order_by;
@@ -128,7 +131,6 @@ export default class List extends Component {
     }
 
     params = omitBy(params, item => !item);
-
     this.props
       .dispatch({
         type: 'card/fetchCardList_',
@@ -145,6 +147,7 @@ export default class List extends Component {
   };
 
   handleTableChange = (pagination, filters, sorter) => {
+    // console.log(pagination)
     const params1 = {
       page: pagination.current,
       page_size: pagination.pageSize,
@@ -368,8 +371,8 @@ export default class List extends Component {
   };
 
   render() {
-    const { list } = this.props;
-    const { type, denominFilterValue, loading } = this.state;
+    const { list, loading } = this.props;
+    const { type, denominFilterValue } = this.state;
     const { items, pagination } = list || {};
     return (
       <div className={styles.page}>
