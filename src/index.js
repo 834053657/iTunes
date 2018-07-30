@@ -13,7 +13,7 @@ import './rollbar';
 import './index.less';
 import CONFIG from './utils/config';
 import { dvaSocket } from './utils/socket';
-// import messages from './locales/messages';
+import messages from './locales/messages';
 import promptMsgs from './locales/messages-prompt';
 
 message.config({
@@ -28,7 +28,7 @@ notification.config({
 });
 
 global.CONFIG = CONFIG;
-// global.MESSAGES = messages;
+global.MESSAGES = messages;
 global.PROMPT = promptMsgs;
 // 1. Initialize
 const app = dva({
