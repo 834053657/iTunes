@@ -276,12 +276,12 @@ export function getQueryString(str_) {
 
 export function createError(obj, keyPath, value) {
   //匹配出属性名
-  let array = keyPath.match(/\w+/g);
+  const array = keyPath.match(/\w+/g);
   let i = 0;
   //遍历属性名数组
   for (; i < array.length - 1; i++) {
-    let cur = array[i];
-    let next = array[i + 1];
+    const cur = array[i];
+    const next = array[i + 1];
     //如果当前路径并没有相应对象
     //就创建对象
     if (!obj[cur]) {

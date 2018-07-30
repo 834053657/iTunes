@@ -175,7 +175,7 @@ export default class ReduxForm extends PureComponent {
     // throw new SubmissionError({cards: [{},{'price': 'sb13'}]});
 
     // console.log(values);
-    let err = validate(descriptor, values);
+    const err = validate(descriptor, values);
     console.log(err);
     if (err) {
       throw new SubmissionError(err);
