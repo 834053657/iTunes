@@ -16,12 +16,14 @@ import {
   Popover,
 } from 'antd';
 import styles from './BuyCard.less';
-import BuyForm from './forms/BuyForm';
+import BuyForm from './forms/BuyForm1';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
+
+const cardList = filter(CONFIG.card_type, c => c.valid, []);
 
 @connect(({ card }) => ({
   card,
@@ -30,7 +32,6 @@ const InputGroup = Input.Group;
 export default class SaleCard extends Component {
   constructor(props) {
     super();
-    const cardList = filter(CONFIG.card_type, c => c.valid, []);
     this.state = {
       condition: [],
       condition_type: 1,
@@ -345,6 +346,8 @@ export default class SaleCard extends Component {
             terms={terms}
             onSubmit={this.addFormBuyAd}
             onCancel={() => this.props.dispatch(routerRedux.push('/ad/my'))}
+            initialValues={{ condition_type: 1, card_type: cardList[0].type }}
+            cardList={cardList}
           />
         </PageHeaderLayout>
       </div>

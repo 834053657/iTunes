@@ -3,6 +3,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import AsyncValidator from 'async-validator';
 import { parse } from 'qs';
+import { size, map } from 'lodash';
 import { getLocale } from './authority';
 // import audioMsg from '../../public/audio/msg.mp3'
 
@@ -301,14 +302,15 @@ export function createError(obj, keyPath, value) {
 
 export function validate(rules, values) {
   const validator = new AsyncValidator(rules);
-  let ret = {};
+  let ret;
 
   validator.validate(values, (errors, fields) => {
-    console.log(errors, fields);
-    errors.forEach(err => {
-      createError(ret, err.field, err.message);
-    });
+    if (size(errors) > 0) {
+      ret = {};
+      errors.forEach(err => {
+        createError(ret, err.field, err.message);
+      });
+    }
   });
-  console.log(ret);
   return ret;
 }
