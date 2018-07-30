@@ -82,20 +82,20 @@ export default class GlobalHeader extends PureComponent {
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userCenter">
           <Icon type="user" />
-          <FormattedMessage {...MESSAGES.personalCenter} description="个人中心" />
+          <FormattedMessage id="personalCenter" description="个人中心" />
         </Menu.Item>
         <Menu.Item key="ad">
           <Icon type="code-o" />
-          <FormattedMessage {...MESSAGES.myAd} description="我的广告" />
+          <FormattedMessage id="myAd" description="我的广告" />
         </Menu.Item>
         <Menu.Item key="order">
           <Icon type="file-text" />
-          <FormattedMessage {...MESSAGES.myOrder} description="我的订单" />
+          <FormattedMessage id="myOrder" description="我的订单" />
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">
           <Icon type="logout" />
-          <FormattedMessage {...MESSAGES.logout} description="退出登录" />
+          <FormattedMessage id="logout" description="退出登录" />
         </Menu.Item>
       </Menu>
     );
@@ -147,10 +147,8 @@ export default class GlobalHeader extends PureComponent {
                 loading={fetchingNotices}
                 popupAlign={{ offset: [20, -16] }}
                 list={notices}
-                title={<FormattedMessage {...MESSAGES.message} description="消息" />}
-                emptyText={
-                  <FormattedMessage {...MESSAGES.readedAllMsgs} description="您已读完所有消息" />
-                }
+                title={<FormattedMessage id="message" description="消息" />}
+                emptyText={<FormattedMessage id="readedAllMsgs" description="您已读完所有消息" />}
                 emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
               />
               <Dropdown overlay={menu}>
@@ -163,10 +161,10 @@ export default class GlobalHeader extends PureComponent {
           ) : (
             <span>
               <Link className={styles.action} to="/user/login">
-                <FormattedMessage {...MESSAGES.login} description="登录" />
+                <FormattedMessage id="login" description="登录" />
               </Link>
               <Link className={styles.action} to="/user/register">
-                <FormattedMessage {...MESSAGES.registration} description="注册" />
+                <FormattedMessage id="registration" description="注册" />
               </Link>
             </span>
           )}

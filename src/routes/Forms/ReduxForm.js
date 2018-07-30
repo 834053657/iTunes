@@ -123,7 +123,7 @@ export default class ReduxForm extends PureComponent {
     // throw new SubmissionError({cards: [{},{'price': 'sb13'}]});
 
     // console.log(values);
-    let err = validate(descriptor, values);
+    const err = validate(descriptor, values);
     if (err) {
       throw new SubmissionError(err);
     }
@@ -174,6 +174,7 @@ export default class ReduxForm extends PureComponent {
 
   renderItem = arg => {
     const { fields, formitemlayout, meta, _error } = arg;
+    console.log(fields);
     return (
       <FormItem validateStatus={meta.error ? 'error' : 'success'} help={meta.error && meta.error}>
         <div>
@@ -191,7 +192,7 @@ export default class ReduxForm extends PureComponent {
                 <h4>cards #{index + 1}</h4>
               </Col>
               <Col sm={4}>
-                <Field name={`${member}.price`} component={AInputNumber} />
+                <input name={`${member}.price`} component={AInputNumber} />
               </Col>
               <Col sm={4}>
                 <Field name={`${member}.min`} component={AInputNumber} />
