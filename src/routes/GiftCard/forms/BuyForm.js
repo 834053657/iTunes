@@ -117,7 +117,6 @@ export default class BuyForm extends Component {
     const { action, defaultValue } = this.props;
 
     const data = action ? defaultValue.condition : conditionFix;
-    console.log(data);
     data.splice(i, 1);
     this.setState({
       conditionFix: data,
@@ -128,8 +127,6 @@ export default class BuyForm extends Component {
       'conditionFix[]': data,
     });
     const a = form.getFieldValue('conditionFix[]');
-    console.log('a');
-    console.log(a);
   };
 
   add = () => {
@@ -178,7 +175,6 @@ export default class BuyForm extends Component {
     const { action, defaultValue } = this.props;
     const { conditionFix } = this.state;
     const data = action ? defaultValue.condition : conditionFix;
-    console.log(typeof e);
     data[index].money = e;
 
     this.setState({
@@ -205,7 +201,6 @@ export default class BuyForm extends Component {
 
   checkFormCount = (rule, value, callback, index) => {
     const { conditionFix } = this.state;
-    console.log(value);
     if (conditionFix[index].max_count && value > conditionFix[index].max_count) callback('error');
     if (conditionFix[index].min_count && value < conditionFix[index].min_count) callback('error');
     callback();
@@ -213,14 +208,12 @@ export default class BuyForm extends Component {
 
   checkFormRange = (rule, value, callback) => {
     const { conditionRange } = this.state;
-    console.log(value);
     if (conditionRange.max_money && value > conditionRange.max_money) callback('error');
     if (conditionRange.min_money && value < conditionRange.min_money) callback('error');
     callback();
   };
 
   changeFixMax = (e, index) => {
-    console.log('fixmax', e);
     const { action, defaultValue } = this.props;
     const { conditionFix } = this.state;
     const data = action ? defaultValue.condition : conditionFix;
@@ -252,7 +245,6 @@ export default class BuyForm extends Component {
     const { action, defaultValue } = this.props;
     const { conditionRange } = this.state;
     const data = action ? defaultValue.condition : conditionRange;
-
     data.min_money = e;
     this.setState({
       conditionRange: data,
@@ -278,7 +270,6 @@ export default class BuyForm extends Component {
         CONFIG.card_type &&
         CONFIG.card_type.filter(c => c.valid)[0] &&
         CONFIG.card_type.filter(c => c.valid)[0].type,
-      //card_type: CONFIG.card_type.filter(c => c.valid)[0].type,
       unit_price: 10,
       multiple: 1,
       condition_type: 1,
@@ -291,12 +282,7 @@ export default class BuyForm extends Component {
     };
 
     const conditionTypeList = initialValues.condition_type === 1 ? conditionFix : conditionRange;
-
     const conditionList = action ? deCo : conditionTypeList;
-
-    console.log(deCo);
-    console.log(conditionList);
-
     const cardList = mapKeys(CONFIG.card_type || [], item => item.type);
 
     getFieldDecorator('conditionFix[]', { initialValue: conditionList });
@@ -408,6 +394,10 @@ export default class BuyForm extends Component {
                           {
                             required: true,
                             message: '请输入面额',
+                          },
+                          {
+                            pattern: /^[1-9]\d*$/,
+                            message: '请输入正整数',
                           },
                         ],
                       })(

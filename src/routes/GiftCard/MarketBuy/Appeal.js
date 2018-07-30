@@ -225,12 +225,12 @@ export default class Appeal extends Component {
 
     let userInfo;
 
-    if (pageStatus === 21 || pageStatus === 23) {
+    if (pageStatus === 20 || pageStatus === 23) {
       userInfo = trader;
-    } else if (pageStatus === 20 || pageStatus === 22) {
+    } else if (pageStatus === 21 || pageStatus === 22) {
       userInfo = ad.owner;
     }
-    console.log(olderPageStatus);
+
     return (
       <div className={styles.appeal}>
         <StepModel steps={steps} current={1} />
@@ -303,7 +303,6 @@ export default class Appeal extends Component {
                   <div className={styles.largeBtnBox}>
                     <Button onClick={() => this.previewCard(steps)}>查看礼品卡清单</Button>
                   </div>
-
                   <div className={styles.ownerInfo}>
                     <div className={styles.userInfo}>
                       <div className={styles.avatar}>

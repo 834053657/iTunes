@@ -99,7 +99,8 @@ export default class OnlyPassWord extends Component {
                   )}
               {sendCard
                 ? null
-                : (!action || action === 'edit') && (
+                : !action &&
+                  cards.length !== 1 && (
                     <div style={{ float: 'right' }}>
                       <Popconfirm
                         title="确定删除吗？"
@@ -153,7 +154,8 @@ export default class OnlyPassWord extends Component {
                         </Col>
                         {sendCard
                           ? null
-                          : (!action || action === 'edit') && (
+                          : (!action || (action === 'edit' && card.status && card.status === 0)) &&
+                            c.items.length !== 1 && (
                               <Popconfirm
                                 title="确定删除吗？"
                                 onConfirm={() => this.props.confirm(index, littleIndex)}
@@ -190,17 +192,19 @@ export default class OnlyPassWord extends Component {
                             disabled={action && action !== 'edit'}
                           />
                         </Col>
-                        {psw === 2 &&
-                          (!action || action === 'edit') && (
-                            <Popconfirm
-                              title="确定删除吗？"
-                              onConfirm={() => this.props.confirm(index, littleIndex)}
-                              okText="是"
-                              cancelText="否"
-                            >
-                              <Icon className={styles.deleteIcon} type="minus-circle-o" />
-                            </Popconfirm>
-                          )}
+                        {sendCard
+                          ? null
+                          : psw === 2 &&
+                            (!action || action === 'edit') && (
+                              <Popconfirm
+                                title="确定删除吗？"
+                                onConfirm={() => this.props.confirm(index, littleIndex)}
+                                okText="是"
+                                cancelText="否"
+                              >
+                                <Icon className={styles.deleteIcon} type="minus-circle-o" />
+                              </Popconfirm>
+                            )}
                       </Row>
                     )}
                   </FormItem>

@@ -51,7 +51,6 @@ export default class SellForm extends Component {
 
   handleSubmit = e => {
     const { action, defaultValue } = this.props;
-
     if (!this.state.cards.length) {
       this.setState({ cards: defaultValue.cards });
       this.state.cards = defaultValue.cards;
@@ -61,12 +60,12 @@ export default class SellForm extends Component {
     }
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(this.state.cards);
-      console.log(values);
-
-      delete values.cards;
       if (!err) {
-        this.props.onSubmit({ ...values, cards: this.state.cards });
+        Promise.all([this.props.onSubmit({ ...values, cards: this.state.cards })]).then(() => {
+          this.setState({
+            cards: [],
+          });
+        });
       }
     });
   };
