@@ -22,5 +22,15 @@
   "message.message": "Messages",
   "message.readedAllMsgs": "You have read all the messages",
   "message.viewMore": "View More",
-  "message.oneClickRead": "One-click Has Been Read"
+  "message.oneClickRead": "One-click Has Been Read",
+  "home.latestNews":"News",
+  "home.More":"more",
+  "home.RealTimeTransaction":"Real time trading volume",
+  "home.giftCard":"Gift card",
+  "home.ItunesSales":"Itunes sales",
+  "home.giftCardSales":"Gift card sales",
+  "deal.tradingHell":"Trading Hell",
+  "deal.toBuy":"To Buy",
+  "deal.toSell":"To sell",
+  "deal.userName":"user name"
 }
