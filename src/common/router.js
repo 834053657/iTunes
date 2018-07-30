@@ -268,9 +268,9 @@ export const getRouterData = app => {
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
     },
-    '/form/zan-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/ZanForm')),
-    },
+    // '/form/zan-form': {
+    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/ZanForm')),
+    // },
     '/form/redux-form': {
       component: dynamicWrapper(app, [], () => import('../routes/Forms/ReduxForm')),
     },
