@@ -18,9 +18,9 @@ import {
 } from 'antd';
 import { map, last, head } from 'lodash';
 import styles from './SellForm.less';
-import OnlyPassWord from './OnlyPassWord';
 import OnlyPicture from './OnlyPicture';
 import PicWithPass from './PicWithPass';
+import OnlyPassWord from './OnlyPassWord';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -111,12 +111,16 @@ export default class SellForm extends Component {
         },
       ],
     };
-    cards.push(formDataObj);
+
+    const { action, defaultValue } = this.props;
+    const data = action ? defaultValue.cards : this.state.cards;
+
+    data.push(formDataObj);
     this.setState({
-      cards,
+      cards: data,
     });
     this.props.form.setFieldsValue({
-      'cards[]': cards,
+      'cards[]': data,
     });
     this.setState({ addDenoVisible: false });
   };
@@ -137,28 +141,21 @@ export default class SellForm extends Component {
     const { form } = this.props;
     const cards = form.getFieldValue('cards[]') || [];
     const lastId = last(cards[index].items, {}).id + 1;
-    console.log(lastId);
     cards[index].items.push({
       id: lastId,
       password: '', // 卡密
       picture: '', // 图片
     });
-    console.log(cards);
     this.props.form.setFieldsValue({
       'cards[]': cards,
     });
-    // this.setState({
-    //   date: new Date()
-    // })
   };
 
   changeData = (i, item, index) => {
     const { form } = this.props;
-
     const { value } = item.password || {};
     const cards = form.getFieldValue('cards[]') || [];
     cards[index].items[i].password = value;
-    console.log(cards);
   };
 
   handleCard = (index, items) => {
@@ -182,15 +179,31 @@ export default class SellForm extends Component {
   };
 
   addMoney = i => {
-    const { cards } = this.state;
-    cards[i].items.push({ password: '', picture: '' });
-    //this.bindForm('cards[]', cards)
+    const { action, defaultValue } = this.props;
+    const data = action ? defaultValue.cards : this.state.cards;
+    data[i].items.push({ password: '', picture: '' });
+    this.props.form.setFieldsValue({
+      'cards[]': data,
+    });
+    this.setState({ cards: data });
+  };
+
+  addFileData = (info, index) => {
+    const { action, defaultValue } = this.props;
+    const cards = action ? defaultValue.cards : this.state.cards;
+    info.map((item, i) => {
+      cards[index].items.push(item);
+      return cards;
+    });
+
     this.props.form.setFieldsValue({
       'cards[]': cards,
     });
-    this.setState({ cards });
+    this.setState({
+      cards,
+      fileUpload: true,
+    });
   };
-
   changePsw = (e, index, littleIndex) => {
     const { action, defaultValue } = this.props;
     const cards = action ? defaultValue.cards : this.state.cards;
@@ -204,7 +217,6 @@ export default class SellForm extends Component {
   changePic = (e, index, littleIndex) => {
     const { action, defaultValue } = this.props;
     const cards = action ? defaultValue.cards : this.state.cards;
-
     cards[index].items[littleIndex].picture = e;
     this.props.form.setFieldsValue({
       'cards[]': cards,
@@ -223,9 +235,7 @@ export default class SellForm extends Component {
   };
 
   confirm = (index, littleIndex) => {
-    const { cards } = this.state;
     const { form, action, defaultValue } = this.props;
-    console.log(defaultValue);
     if (action) {
       //编辑、查看
       const editCards = defaultValue.cards;
@@ -235,10 +245,11 @@ export default class SellForm extends Component {
         'cards[]': editCards,
       });
     } else {
-      cards[index].items.splice(littleIndex, 1);
-      this.setState({ cards });
+      const data = this.state.cards;
+      data[index].items.splice(littleIndex, 1);
+      this.setState({ cards: data });
       form.setFieldsValue({
-        'cards[]': cards,
+        'cards[]': data,
       });
     }
   };
@@ -246,7 +257,6 @@ export default class SellForm extends Component {
   deleteCard = index => {
     const { cards } = this.state;
     const { form, action, defaultValue } = this.props;
-    console.log(defaultValue);
     if (action) {
       //编辑、查看
       const editCards = defaultValue.cards;
@@ -262,22 +272,6 @@ export default class SellForm extends Component {
         'cards[]': cards,
       });
     }
-  };
-
-  intoData = i => {
-    const { cards } = this.state;
-    const { form } = this.props;
-
-    ['121', '141', '151', '161', '171', '181'].map(ina => {
-      cards[i].items.push({ password: ina, picture: '' });
-      return cards;
-    });
-    this.setState({
-      cards,
-    });
-    this.props.form.setFieldsValue({
-      'cards[]': cards,
-    });
   };
 
   bindForm = (a, b) => {
@@ -477,7 +471,7 @@ export default class SellForm extends Component {
                 },
               ],
             })(
-              <RadioGroup disabled={action && action !== 'edit'} onChange={this.changePswType}>
+              <RadioGroup disabled={action} onChange={this.changePswType}>
                 {map(CONFIG.cardPwdType, (text, value) => (
                   <Radio key={value} value={+value}>
                     {text}
@@ -530,7 +524,7 @@ export default class SellForm extends Component {
           </FormItem>
 
           <OnlyPassWord
-            defaultValue={action ? defaultValue.cards : cards}
+            dValue={action ? defaultValue.cards : cards}
             addMoney={this.addMoney}
             changePsw={this.changePsw}
             changePic={this.changePic}
@@ -539,12 +533,13 @@ export default class SellForm extends Component {
             form={this.props.form}
             confirm={this.confirm}
             deleteCard={this.deleteCard}
-            intoData={this.intoData}
             changePZ={this.changePZ}
+            addFileData={this.addFileData}
+            fileUpload={this.state.fileUpload}
           />
 
           <FormItem className={styles.buttonBox}>
-            <Button key="back" onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel} disabled={this.props.submitSellForm}>
               返回
             </Button>
             {action && action !== 'edit' ? (
@@ -566,7 +561,12 @@ export default class SellForm extends Component {
                 okText="是"
                 cancelText="否"
               >
-                <Button className={styles.submit} type="primary" htmlType="submit">
+                <Button
+                  className={styles.submit}
+                  type="primary"
+                  htmlType="submit"
+                  loading={this.props.submitSellForm}
+                >
                   发布
                 </Button>
               </Popconfirm>

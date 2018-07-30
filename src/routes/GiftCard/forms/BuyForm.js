@@ -422,6 +422,10 @@ export default class BuyForm extends Component {
                             message: '请输入最小数量',
                           },
                           {
+                            pattern: /^[0-9]\d*$/,
+                            message: '请输入正整数',
+                          },
+                          {
                             validator: (rule, value, callback) =>
                               this.checkFormCount(rule, value, callback, index),
                             message: conditionFix[index]
@@ -449,6 +453,10 @@ export default class BuyForm extends Component {
                           {
                             required: true,
                             message: '请输入最大数量',
+                          },
+                          {
+                            pattern: /^[0-9]\d*$/,
+                            message: '请输入正整数',
                           },
                           {
                             validator: (rule, value, callback) =>
@@ -510,11 +518,15 @@ export default class BuyForm extends Component {
                 initialValue: action
                   ? defaultValue.condition.min_money
                   : initialValues.condition.min_money,
-                validateTrigger: ['onChange', 'onBlur'],
+                validateTrigger: ['onBlur'],
                 rules: [
                   {
                     required: true,
                     message: '请输入最小面额',
+                  },
+                  {
+                    pattern: /^[0-9]\d*$/,
+                    message: '请输入正整数',
                   },
                   {
                     validator: (rule, value, callback) =>
@@ -527,7 +539,6 @@ export default class BuyForm extends Component {
                   disabled={action && action !== 'edit'}
                   placeholder="最小面额"
                   onChange={this.rangeMin}
-                  min={1}
                   style={{ width: '100%' }}
                 />
               )}
@@ -539,11 +550,15 @@ export default class BuyForm extends Component {
                   ? defaultValue.condition.max_money
                   : initialValues.condition.min_money,
 
-                validateTrigger: ['onChange', 'onBlur'],
+                validateTrigger: ['onBlur'],
                 rules: [
                   {
                     required: true,
                     message: '请输入最大面额',
+                  },
+                  {
+                    pattern: /^[0-9]\d*$/,
+                    message: '请输入正整数',
                   },
                   {
                     validator: (rule, value, callback) =>
@@ -556,7 +571,6 @@ export default class BuyForm extends Component {
                   disabled={action && action !== 'edit'}
                   placeholder="最大面额"
                   onChange={this.rangeMax}
-                  min={1}
                   style={{ width: '100%' }}
                 />
               )}
@@ -574,9 +588,9 @@ export default class BuyForm extends Component {
               },
             ],
           })(
-            <RadioGroup>
+            <RadioGroup disabled={action && action !== 'edit'}>
               {map(CONFIG.cardPwdType, (text, value) => (
-                <Radio disabled={action && action !== 'edit'} key={value} value={+value}>
+                <Radio key={value} value={+value}>
                   {text}
                 </Radio>
               ))}
