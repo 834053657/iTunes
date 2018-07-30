@@ -209,19 +209,9 @@ export default class DealDeatil extends Component {
                 {getFieldDecorator(`order_detail[${index}].count`, {
                   validateFirst: true,
                   rules: [
-                    // {
-                    //   required: true,
-                    //   message: '请输入出售数量！',
-                    // },
                     {
                       validator: this.checkCount,
                     },
-                    // {
-                    //   type: 'number',
-                    //   min: 0,
-                    //   // max: maxCount,
-                    //   message: `数量限额为0 ~ ${maxCount}`,
-                    // },
                   ],
                 })(
                   <InputNumber
@@ -392,10 +382,9 @@ export default class DealDeatil extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { detail = {}, match: { params } } = this.props;
+    console.log(params);
     this.props.form.validateFieldsAndScroll((err, values) => {
       values.order_detail = filter(values.order_detail, item => item.count > 0);
-      //console.log(detail.updated_at);
-      console.log(values.order_detail);
       if (!values.order_detail.length) {
         return message.warning('未填写面额详情');
       }
@@ -409,13 +398,10 @@ export default class DealDeatil extends Component {
           },
           callback: res => {
             if (res.code === 606) {
-              message.warning(res.msg);
               this.props.dispatch(routerRedux.push('/card/market'));
-              // this.fetch(+params.id);
             }
             if (res.code === 607) {
-              message.warning(res.msg);
-              this.fetch(+params.id);
+              this.fetch({ id: +params.id });
             }
           },
         });

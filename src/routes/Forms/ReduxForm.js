@@ -123,7 +123,7 @@ export default class ReduxForm extends PureComponent {
     // throw new SubmissionError({cards: [{},{'price': 'sb13'}]});
 
     // console.log(values);
-    let err = validate(descriptor, values);
+    const err = validate(descriptor, values);
     if (err) {
       throw new SubmissionError(err);
     }
@@ -183,7 +183,6 @@ export default class ReduxForm extends PureComponent {
           </button>
         </div>
         {fields.map((member, index) => {
-          // console.log('123')
           return (
             <Row key={index}>
               <Col sm={2}>
