@@ -14,6 +14,7 @@ import {
   Card,
   Row,
   Col,
+  Popconfirm,
 } from 'antd';
 import { map, last, head } from 'lodash';
 import styles from './SellForm.less';
@@ -49,10 +50,20 @@ export default class SellForm extends Component {
   };
 
   handleSubmit = e => {
+    const { action, defaultValue } = this.props;
+
+    if (!this.state.cards.length) {
+      this.setState({ cards: defaultValue.cards });
+      this.state.cards = defaultValue.cards;
+    }
+    if (!this.state.cards || (this.state.cards && !this.state.cards.length)) {
+      return message.warning('还未添加卡信息');
+    }
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(err);
+      console.log(this.state.cards);
       console.log(values);
+
       delete values.cards;
       if (!err) {
         this.props.onSubmit({ ...values, cards: this.state.cards });
@@ -83,6 +94,13 @@ export default class SellForm extends Component {
     const re = /^[1-9]+[0-9]*]*$/;
     if (!re.test(denoVaule) || denoVaule <= 0) {
       return message.warning('请输入正整数格式');
+    }
+    console.log(cards);
+    console.log(denoVaule);
+    const i = cards.findIndex(card => card.money === denoVaule);
+    console.log(i);
+    if (i >= 0) {
+      return message.warning('该面额已存在');
     }
     const formDataObj = {
       money: denoVaule,
@@ -269,16 +287,6 @@ export default class SellForm extends Component {
     });
   };
 
-  getCards = v => {
-    console.log(v.cards);
-    // this.setState({
-    //   cards:v.cards
-    // })
-    // this.props.form.setFieldsValue({
-    //   'cards[]': v.cards,
-    // });
-  };
-
   render() {
     const { termModalInfo } = this.state;
     const {
@@ -434,11 +442,15 @@ export default class SellForm extends Component {
             })(
               <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
                 <Option value={0}>无</Option>
-                {map(terms, (item, index) => (
-                  <Option key={item.id} value={item.id}>
-                    {item.title}
-                  </Option>
-                ))}
+                {map(terms, (item, index) => {
+                  if (item.status === 3) {
+                    return (
+                      <Option key={item.id} value={+item.id}>
+                        {item.title}
+                      </Option>
+                    );
+                  }
+                })}
               </Select>
             )}
           </FormItem>
@@ -451,12 +463,11 @@ export default class SellForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请输入同时处理订单数',
+                  message: '请输入同时处理订单数,0代表不限制',
                 },
               ],
             })(<InputNumber disabled={action && action !== 'edit'} />)}
           </FormItem>
-
           <FormItem {...formItemLayout} label="包含">
             {getFieldDecorator('password_type', {
               initialValue: action ? defaultValue.password_type : initialValues.password_type,
@@ -544,14 +555,22 @@ export default class SellForm extends Component {
                 onClick={() => {
                   this.props.changeEdit();
                 }}
+                disabled={defaultValue.status !== 1 && defaultValue.status !== 2}
               >
                 编辑
               </Button>
             ) : null}
             {!action || (action && action === 'edit') ? (
-              <Button className={styles.submit} type="primary" htmlType="submit">
-                发布
-              </Button>
+              <Popconfirm
+                title="确定发布吗？"
+                onConfirm={this.handleSubmit}
+                okText="是"
+                cancelText="否"
+              >
+                <Button className={styles.submit} type="primary" htmlType="submit">
+                  发布
+                </Button>
+              </Popconfirm>
             ) : null}
           </FormItem>
           {termModalInfo && (

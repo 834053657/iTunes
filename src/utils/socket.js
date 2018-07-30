@@ -12,9 +12,9 @@ import { playAudio, getMessageContent } from './utils';
 
 export function dvaSocket(url, option) {
   // 如需调试线上socket 请吧isDev 设置成false
-  const isDev = false;
-  // const isDev = process.env.NODE_ENV === 'development';
-  console.log('socket-url', url);
+  // const isDev = false;
+  const isDev = __KG_API_ENV__ === 'dev';
+  console.log('socket-url', url, isDev);
   if (isDev) {
     const mockServer = new Server(url);
     mockServer.on('connection', async server => {
@@ -234,6 +234,9 @@ export function dvaSocket(url, option) {
           evaluate: (action, dispatch, getState) => action.type === 'SOCKET/OPEN',
           request: (action, dispatch, getState, socket) => {
             console.log('SOCKET/OPEN', socket);
+            if (isDev) {
+              return;
+            }
             // socket.on('connect', (data)=> {
             //   console.log('connectxxx');
             // });
@@ -257,6 +260,9 @@ export function dvaSocket(url, option) {
         {
           evaluate: (action, dispatch, getState) => action.type === 'SOCKET/CLOSE',
           request: (action, dispatch, getState, socket) => {
+            if (isDev) {
+              return;
+            }
             console.log('SOCKET/CLOSE', socket);
             // socket.on('connect', (data)=> {
             //   console.log('connectxxx');

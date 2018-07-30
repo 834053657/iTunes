@@ -13,7 +13,7 @@ import {
   message,
   Badge,
 } from 'antd';
-import { map } from 'lodash';
+import { map, orderBy } from 'lodash';
 import moment from 'moment';
 import cx from 'classnames';
 import styles from './appeal.less';
@@ -195,7 +195,7 @@ export default class Appeal extends Component {
     const { currentUser } = this.props.user || {};
     const { user = {}, upload = {} } = currentUser || {};
 
-    const { order = {}, ad, cards, trader } = this.props.detail || {};
+    const { order = {}, ad, cards, trader, olderPageStatus } = this.props.detail || {};
     const { pageStatus, setStatus } = this.props;
     const { chatMsgList = [] } = card;
     const catdType =
@@ -224,12 +224,13 @@ export default class Appeal extends Component {
     };
 
     let userInfo;
+
     if (pageStatus === 21 || pageStatus === 23) {
       userInfo = trader;
     } else if (pageStatus === 20 || pageStatus === 22) {
       userInfo = ad.owner;
     }
-
+    console.log(olderPageStatus);
     return (
       <div className={styles.appeal}>
         <StepModel steps={steps} current={1} />
@@ -262,7 +263,7 @@ export default class Appeal extends Component {
                 }
               }}
               animated={false}
-              defaultActiveKey="2"
+              defaultActiveKey={olderPageStatus === 16 ? '1' : '2'}
             >
               <TabPane tab="订单详情" key="1">
                 <ul className={styles.orderDetail}>
@@ -406,7 +407,8 @@ export default class Appeal extends Component {
 }
 
 const AppealInfo = props => {
-  const { data = [] } = props;
+  let { data = [] } = props;
+  data = orderBy(data, ['created_at'], ['asc']);
   return (
     <div>
       <ul className={styles.tabTwoTab}>

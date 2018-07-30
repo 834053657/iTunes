@@ -60,7 +60,7 @@ export default class EnsureBuyInfo extends Component {
             <div className={styles.orderInfo}>
               <h5>
                 <span>订单：</span>
-                <span className={styles.text}>115216524713875</span>
+                <span className={styles.text}>{order.order_no || '-'}</span>
               </h5>
               <div className={styles.orderDescribe}>
                 {`${trader.nickname}向您出售总面额${order.money}的${
@@ -82,7 +82,7 @@ export default class EnsureBuyInfo extends Component {
                 保障时间剩余 &nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
-                <CountDown formatstr="mm:ss" target={order.guarantee_at} /> 分钟
+                <CountDown formatstr="mm:ss" target={order.guarantee_at} />秒
               </h5>
 
               <Popconfirm

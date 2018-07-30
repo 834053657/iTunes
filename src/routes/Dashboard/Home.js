@@ -69,7 +69,7 @@ export default class Analysis extends Component {
       return (
         <span>
           {`${v.content.substr(0, 350)}... `}
-          <a href={v.link} target="_blank">
+          <a href={v.link} target="_blank" rel="noopener noreferrer">
             更多
           </a>
         </span>
@@ -87,13 +87,13 @@ export default class Analysis extends Component {
         bannersContent.push(
           <div key={key}>
             <div className={styles.banner_items}>
-              <a href={item.link} target="_blank">
+              <a href={item.link} target="_blank" rel="noopener noreferrer">
                 <img className={styles.img} src={item.image_url} alt="" />
               </a>
               <Row className={styles.content}>
                 <Col span={16}>
                   <div className={styles.content_title}>
-                    <a href={item.link} target="_blank">
+                    <a href={item.link} target="_blank" rel="noopener noreferrer">
                       {item.title}
                     </a>
                   </div>

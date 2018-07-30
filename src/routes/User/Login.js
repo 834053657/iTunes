@@ -59,15 +59,17 @@ export default class LoginPage extends Component {
   // };
 
   handleSubmitG2 = (err, values) => {
-    const { loginInfo } = this.props.login;
-
-    this.props.dispatch({
-      type: 'login/login',
-      payload: {
-        ...loginInfo,
-        g2fa_code: values.code,
-      },
-    });
+    if (!err) {
+      const { loginInfo } = this.props.login;
+      delete loginInfo.captcha;
+      this.props.dispatch({
+        type: 'login/login',
+        payload: {
+          ...loginInfo,
+          g2fa_code: values.code,
+        },
+      });
+    }
   };
 
   handleCancel = () => {

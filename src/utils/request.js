@@ -61,7 +61,8 @@ export default function request(postUrl, options, base_url) {
     },
   };
   const newOptions = { ...defaultOptions, ...options };
-  const url = !isDev ? (base_url || CONFIG.base_url) + postUrl : postUrl;
+  // const url = !isDev ? (base_url || CONFIG.base_url) + postUrl : postUrl;
+  const url = (base_url || CONFIG.base_url) + postUrl;
   // console.log(url);
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {

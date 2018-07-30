@@ -16,6 +16,7 @@ import {
   Form,
   Avatar,
   Badge,
+  Popconfirm,
 } from 'antd';
 import { routerRedux } from 'dva/router';
 import FilterDemoinForm from './forms/FilterDemoinForm';
@@ -60,16 +61,20 @@ export default class List extends Component {
       filter: {},
       order_by: false,
     };
-    this.setState({
-      loading: true,
-      ...params,
-    });
-    this.fetchData(params, () => {
-      this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
-      this.setState({
-        loading: false,
-      });
-    });
+    this.setState(
+      {
+        loading: true,
+        ...params,
+      },
+      () => {
+        this.fetchData(params, () => {
+          this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
+          this.setState({
+            loading: false,
+          });
+        });
+      }
+    );
   };
 
   denoType = r => {
@@ -204,7 +209,7 @@ export default class List extends Component {
     let columns = [
       {
         title: '用户名',
-        width: '150',
+        width: '100',
         dataIndex: 'nickname_',
         render: (text, record) => {
           const userinfo = record.owner;
@@ -267,10 +272,15 @@ export default class List extends Component {
         ),
         filterDropdownVisible: this.state.denoVisible,
         filterDropdown: (
-          <FilterDemoinForm
-            onSubmit={this.handleFilterDemoin}
-            onCancel={this.handleResetFilterDemoin}
-          />
+          <div>
+            {this.state.denoVisible ? (
+              <FilterDemoinForm
+                initialValues={this.state.denominFilterValue}
+                onSubmit={this.handleFilterDemoin}
+                onCancel={this.handleResetFilterDemoin}
+              />
+            ) : null}
+          </div>
         ),
         render: (text, record) => {
           if (type === '2') {
@@ -342,10 +352,11 @@ export default class List extends Component {
       },
       {
         title: '操作',
+        width: '100',
         dataIndex: 'operation_',
         render: (text, record = {}) => {
           const { owner = {} } = record || {};
-          return (
+          return type === '2' ? (
             <Button
               type="primary"
               disabled={owner.id === user.id}
@@ -355,8 +366,25 @@ export default class List extends Component {
                 });
               }}
             >
-              {type === '2' ? '购买' : '出售'}
+              购买
             </Button>
+          ) : (
+            <Popconfirm
+              title={
+                <p>
+                  广告主要求在{record.deadline}分钟内发卡，<br />您确认出售？
+                </p>
+              }
+              onConfirm={() => {
+                this.props.history.push({
+                  pathname: `/card/deal-detail/${record.id}`,
+                });
+              }}
+            >
+              <Button type="primary" disabled={owner.id === user.id}>
+                出售
+              </Button>
+            </Popconfirm>
           );
         },
       },
@@ -367,6 +395,7 @@ export default class List extends Component {
     } else {
       columns = filter(columns, item => item.dataIndex !== 'total_denomination');
     }
+
     return columns;
   };
 
@@ -384,6 +413,7 @@ export default class List extends Component {
           <Tabs.TabPane tab="我要出售" key="1" />
         </Tabs>
         <Table
+          locale={{ emptyText: '' }}
           rowKey={row => row.id}
           dataSource={items}
           columns={this.initColumns()}

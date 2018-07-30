@@ -13,7 +13,7 @@ export function setAuthority(authority) {
 
 // get user locale language
 export function getLocale() {
-  return localStorage.getItem(`kg-itunes-locale-${__KG_API_ENV__}`);
+  return localStorage.getItem(`kg-itunes-locale-${__KG_API_ENV__}`) || 'zh-CN';
 }
 
 export function setLocale(locale) {

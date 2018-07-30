@@ -27,6 +27,12 @@ class ImageValidation extends Component {
     this.loadCaptcha();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.visible && nextProps.visible !== this.props.visible) {
+      this.loadCaptcha();
+    }
+  }
+
   handleCancel = () => {
     this.props.form.resetFields();
     this.props.onCancel();

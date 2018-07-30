@@ -3,6 +3,7 @@ import { isUrl } from '../utils/utils';
 let menuData = [
   {
     name: '首页',
+    name_en_GB: 'Home',
     path: 'home',
   },
   {
@@ -22,18 +23,22 @@ let menuData = [
   },
   {
     name: '礼品卡',
+    name_en_GB: 'Gift Card',
     path: 'card',
     children: [
       {
         name: '交易大厅',
+        name_en_GB: 'Trading Hall',
         path: 'market',
       },
       {
         name: '发布购买广告',
+        name_en_GB: 'Post Purchase Ad',
         path: 'buy-card',
       },
       {
         name: '发布出售广告',
+        name_en_GB: 'Post sale Ad',
         path: 'sell-card',
       },
     ],
@@ -177,20 +182,24 @@ if (__KG_API_ENV__ === 'dev') {
     },
     {
       name: '账户',
+      name_en_GB: 'Account',
       icon: 'user',
       path: 'user',
       // authority: 'guest',
       children: [
         {
           name: '登录',
+          name_en_GB: 'Login',
           path: 'login',
         },
         {
           name: '注册',
+          name_en_GB: 'Registration',
           path: 'register',
         },
         {
           name: '注册结果',
+          name_en_GB: 'Registration Result',
           path: 'register-result',
         },
       ],

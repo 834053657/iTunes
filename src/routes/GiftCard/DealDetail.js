@@ -162,10 +162,10 @@ export default class DealDeatil extends Component {
                 {getFieldDecorator(`order_detail[${index}].count`, {
                   validateFirst: true,
                   rules: [
-                    {
-                      required: true,
-                      message: '请输入购买数量！',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: '请输入出售数量！',
+                    // },
                     {
                       type: 'number',
                       min: c.min_count,
@@ -181,7 +181,7 @@ export default class DealDeatil extends Component {
                     min={0}
                     precision={0}
                     style={{ width: 200 }}
-                    placeholder="请输入购买数量"
+                    placeholder="请输入出售数量"
                   />
                 )}
               </FormItem>
@@ -209,10 +209,10 @@ export default class DealDeatil extends Component {
                 {getFieldDecorator(`order_detail[${index}].count`, {
                   validateFirst: true,
                   rules: [
-                    {
-                      required: true,
-                      message: '请输入购买数量！',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: '请输入出售数量！',
+                    // },
                     {
                       validator: this.checkCount,
                     },
@@ -228,7 +228,7 @@ export default class DealDeatil extends Component {
                     min={0}
                     precision={0}
                     style={{ width: 200 }}
-                    placeholder="请输入购买数量"
+                    placeholder="请输入出售数量"
                   />
                 )}
               </FormItem>
@@ -394,13 +394,29 @@ export default class DealDeatil extends Component {
     const { detail = {}, match: { params } } = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
       values.order_detail = filter(values.order_detail, item => item.count > 0);
-      if (!err) {
+      //console.log(detail.updated_at);
+      console.log(values.order_detail);
+      if (!values.order_detail.length) {
+        return message.warning('未填写面额详情');
+      }
+      if (!err && values.order_detail.length) {
         this.props.dispatch({
           type: 'card/createSellOrder',
           payload: {
             ad_id: +params.id,
             updated_at: detail.updated_at,
             ...values,
+          },
+          callback: res => {
+            if (res.code === 606) {
+              message.warning(res.msg);
+              this.props.dispatch(routerRedux.push('/card/market'));
+              // this.fetch(+params.id);
+            }
+            if (res.code === 607) {
+              message.warning(res.msg);
+              this.fetch(+params.id);
+            }
           },
         });
       }

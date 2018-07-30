@@ -1,9 +1,10 @@
 import { createElement } from 'react';
 import dynamic from 'dva/dynamic';
 import pathToRegexp from 'path-to-regexp';
-import { getAuthority } from '../utils/authority';
+import { getAuthority, getLocale } from '../utils/authority';
 import { getMenuData } from './menu';
 
+const lang = getLocale().replace('-', '_');
 let routerDataCache;
 
 const modelNotExisted = (app, model) =>
@@ -267,6 +268,9 @@ export const getRouterData = app => {
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
     },
+    '/form/zan-form': {
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/ZanForm')),
+    },
   };
 
   // Get name from ./menu.js or just set it in the router data.
@@ -293,7 +297,7 @@ export const getRouterData = app => {
     // eg . /list/:type/user/info/:id
     router = {
       ...router,
-      name: router.name || menuItem.name,
+      name: router.name || menuItem[`name_${lang}`] || menuItem.name,
       authority: router.authority || menuItem.authority,
       hideInBreadcrumb: router.hideInBreadcrumb || menuItem.hideInBreadcrumb,
     };
