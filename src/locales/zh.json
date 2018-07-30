@@ -22,5 +22,17 @@
   "message.message": "消息",
   "message.readedAllMsgs": "您已读完所有消息",
   "message.viewMore": "查看更多",
-  "message.oneClickRead": "一键已读"
+  "message.oneClickRead": "一键已读",
+  "home.latestNews":"最新资讯",
+  "home.More":"更多",
+  "home.RealTimeTransaction":"实时成交",
+  "home.giftCard":"礼品卡",
+  "home.giftCardSales":"礼品卡销售额",
+  "home.ItunesSales":"Itunes销售额",
+  "deal.tradingHell":"交易大厅",
+  "deal.toBuy":"我要购买",
+  "deal.toSell":"我要出售",
+  "deal.userName":"用户名"
+
+
 }

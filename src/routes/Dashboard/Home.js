@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { map } from 'lodash';
+import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 // import TextTruncate from 'react-text-truncate';
 import { Row, Col, Icon, Tooltip } from 'antd';
@@ -70,7 +71,7 @@ export default class Analysis extends Component {
         <span>
           {`${v.content.substr(0, 350)}... `}
           <a href={v.link} target="_blank" rel="noopener noreferrer">
-            更多
+            {<FormattedMessage {...MESSAGES.More} description="更多" />}
           </a>
         </span>
       );
@@ -140,11 +141,11 @@ export default class Analysis extends Component {
       <Fragment>
         <Row gutter={24}>
           <Col span={12} className={styles.title}>
-            最新资讯
+            <FormattedMessage {...MESSAGES.latestNews} description="最新资讯" />
           </Col>
           <Col span={12} className={styles.more}>
             <a className={styles.itunes_btn} href="/#/message/info-list">
-              更多
+              <FormattedMessage {...MESSAGES.More} description="更多" />
             </a>
           </Col>
         </Row>
@@ -165,7 +166,7 @@ export default class Analysis extends Component {
         </div>
         <div className={styles.realtime_header}>
           <span span={12} className={styles.title}>
-            实时成交
+            <FormattedMessage {...MESSAGES.RealTimeTransaction} description="实时成交" />
           </span>
           <Icon className={styles.realtime_icon} type="bar-chart" />
         </div>
@@ -176,7 +177,9 @@ export default class Analysis extends Component {
               title="Itunes"
               avatar={<img alt="#" src={HomeIcon} className={styles.home_icon} />}
               action={
-                <Tooltip title="Itunes销售额">
+                <Tooltip
+                  title={<FormattedMessage {...MESSAGES.ItunesSales} description="Itunes销售额" />}
+                >
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
@@ -187,10 +190,14 @@ export default class Analysis extends Component {
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="礼品卡"
+              title={<FormattedMessage {...MESSAGES.giftCard} description="礼品卡" />}
               avatar={<img alt="#" src={HomeIcon} className={styles.home_icon} />}
               action={
-                <Tooltip title="礼品卡销售额">
+                <Tooltip
+                  title={
+                    <FormattedMessage {...MESSAGES.giftCardSales} description="礼品卡销售额" />
+                  }
+                >
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
