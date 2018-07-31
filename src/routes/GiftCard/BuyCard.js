@@ -16,7 +16,7 @@ import {
   Popover,
 } from 'antd';
 import styles from './BuyCard.less';
-import BuyForm from './forms/BuyForm1';
+import BuyForm from './forms/BuyForm';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 const Option = Select.Option;
@@ -328,7 +328,7 @@ export default class SaleCard extends Component {
     const { condition_type, condition, defaultCard = {}, cardType = [], action } = this.state;
     const items = this.props.card.terms;
     const { adDetail = {} } = this.props;
-
+    console.log(adDetail);
     const breadcrumbList = [
       { title: '广告管理', href: '/ad/my' },
       { title: '礼品卡', href: '/card/market' },
@@ -346,8 +346,6 @@ export default class SaleCard extends Component {
             terms={terms}
             onSubmit={this.addFormBuyAd}
             onCancel={() => this.props.dispatch(routerRedux.push('/ad/my'))}
-            initialValues={{ condition_type: 1, card_type: cardList[0].type }}
-            cardList={cardList}
           />
         </PageHeaderLayout>
       </div>

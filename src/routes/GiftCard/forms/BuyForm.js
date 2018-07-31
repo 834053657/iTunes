@@ -262,7 +262,7 @@ export default class BuyForm extends Component {
       terms = [],
       form: { getFieldDecorator, getFieldValue, resetForm },
     } = this.props;
-
+    console.log(defaultValue);
     const { condition: deCo = [] } = defaultValue;
 
     const initialValues = {
@@ -308,7 +308,7 @@ export default class BuyForm extends Component {
         sm: { span: 20, offset: 4 },
       },
     };
-
+    console.log(action);
     return (
       <Form className={styles.form} onSubmit={this.handleSubmit}>
         <FormItem {...formItemLayout} label="类型">

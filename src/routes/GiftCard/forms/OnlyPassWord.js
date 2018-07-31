@@ -264,6 +264,7 @@ export default class OnlyPassWord extends Component {
                         {sendCard
                           ? null
                           : psw === 2 &&
+                            c.items.length !== 1 &&
                             (!action || action === 'edit') && (
                               <Popconfirm
                                 title="确定删除吗？"

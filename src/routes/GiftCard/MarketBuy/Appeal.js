@@ -45,6 +45,28 @@ export default class Appeal extends Component {
     this.appealPictures = null;
   }
 
+  componentDidMount() {
+    const { dispatch, detail: { order = {} } } = this.props;
+
+    this.fetchData(order.id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { detail: { order = {} } } = this.props;
+    const { orderId: nextOrderId } = nextProps;
+
+    if (nextOrderId && parseInt(nextOrderId) !== order.id) {
+      this.fetchData(nextOrderId);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'card/setChatMsgList',
+      payload: { data: [] },
+    });
+  }
+
   handleCancel = () => this.setState({ previewVisible: false });
 
   handleSubmit = e => {
@@ -96,21 +118,6 @@ export default class Appeal extends Component {
 
     return { content, image_url: imageUrls };
   };
-
-  componentDidMount() {
-    const { dispatch, detail: { order = {} } } = this.props;
-
-    this.fetchData(order.id);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { detail: { order = {} } } = this.props;
-    const { orderId: nextOrderId } = nextProps;
-
-    if (nextOrderId && parseInt(nextOrderId) !== order.id) {
-      this.fetchData(nextOrderId);
-    }
-  }
 
   fetchData = order_id => {
     const { dispatch, detail: { order = {} } } = this.props;

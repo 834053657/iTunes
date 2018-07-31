@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { routerRedux } from 'dva/router';
+import numeral from 'numeral';
 import {
   Select,
   Button,
@@ -24,6 +25,8 @@ import OnlyPassWord from './OnlyPassWord';
 
 import DescriptionList from '../../../components/DescriptionList';
 
+import { formatMoney } from '../../../utils/utils';
+
 const { Description } = DescriptionList;
 
 const RadioGroup = Radio.Group;
@@ -39,13 +42,12 @@ export default class SellForm extends Component {
       addDenoVisible: false,
       cards: [],
       pswType: 1,
+      changedUnitPrice: undefined,
     };
   }
 
   componentDidMount() {
     const { defaultValue, action } = this.props;
-    console.log(action);
-    console.log(defaultValue);
   }
 
   handleCancel = () => {
@@ -182,6 +184,13 @@ export default class SellForm extends Component {
     });
   };
 
+  changeUnit = e => {
+    console.log(e);
+    this.setState({
+      changedUnitPrice: e,
+    });
+  };
+
   addMoney = i => {
     const { action, defaultValue } = this.props;
     const data = action ? defaultValue.cards : this.state.cards;
@@ -299,7 +308,7 @@ export default class SellForm extends Component {
   };
 
   render() {
-    const { termModalInfo } = this.state;
+    const { termModalInfo, changedUnitPrice } = this.state;
     const {
       defaultValue,
       action,
@@ -322,7 +331,7 @@ export default class SellForm extends Component {
       return null;
     }
     console.log(defaultValue);
-    const unit = defaultValue.unit_price;
+
     const addDenoBox = (
       <div>
         <Row>
@@ -373,6 +382,8 @@ export default class SellForm extends Component {
       cards: [],
     };
 
+    const unit = changedUnitPrice || (action ? defaultValue.unit_price : initialValues.unit_price);
+
     getFieldDecorator('cards[]', { initialValue: [] });
     const cards = getFieldValue('cards[]') || [];
     return (
@@ -405,6 +416,7 @@ export default class SellForm extends Component {
           <FormItem {...formItemLayout} label="单价">
             {getFieldDecorator('unit_price', {
               initialValue: action ? defaultValue.unit_price : initialValues.unit_price,
+              onChange: this.changeUnit,
               rules: [
                 {
                   required: true,
@@ -558,12 +570,12 @@ export default class SellForm extends Component {
 
           <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
             <Description style={{ float: 'right' }} term="总面额">
-              {this.calculateMoney()}
+              {formatMoney(this.calculateMoney()) || '0'}
             </Description>
           </DescriptionList>
           <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
             <Description style={{ float: 'right' }} term="总价">
-              {unit * this.calculateMoney()}
+              {formatMoney(unit * this.calculateMoney()) || '0'}
             </Description>
           </DescriptionList>
 
