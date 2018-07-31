@@ -264,6 +264,10 @@ export function formatMoney(rmb) {
   return numeral(rmb || 0).format('0,0.00');
 }
 
+export function parseNumber(value) {
+  return !value || isNaN(Number(value)) ? null : Number(value);
+}
+
 /**
  * 获取queryString
  * @param queryString字符串
@@ -312,5 +316,6 @@ export function validate(rules, values) {
       });
     }
   });
+  // console.log(ret);
   return ret;
 }

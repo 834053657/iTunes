@@ -95,12 +95,18 @@ export const getRouterData = app => {
     // 我的广告
     '/ad/my': {
       component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/MyAdList')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/ad/terms': {
       component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/MyTermsList')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/order/my': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/MyOrderList')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     // 帮助，隐私，条款路由控制
     '/information/help': {
@@ -134,12 +140,16 @@ export const getRouterData = app => {
       redirectPath: '/user/login',
     },
     '/card/buy-card': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
+      component: dynamicWrapper(app, ['card_ad', 'card'], () =>
+        import('../routes/GiftCard/BuyCard')
+      ),
       authority: checkLogined,
       redirectPath: '/user/login',
     },
     '/card/edit-buy-card/:id/:action': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
+      component: dynamicWrapper(app, ['card_ad', 'card'], () =>
+        import('../routes/GiftCard/BuyCard')
+      ),
       authority: checkLogined,
       redirectPath: '/user/login',
     },

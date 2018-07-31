@@ -20,7 +20,7 @@ const createField = Component => ({
   ...rest
 }) => {
   const hasError = meta.touched && meta.invalid;
-  // console.log(label, input, meta);
+  // console.log(input, rest)
   return (
     <FormItem
       wrapperCol={wrapperCol}
