@@ -19,13 +19,14 @@ export default {
   },
 
   effects: {
-    *fetchTransfer({ payload }, { call, put }) {
+    *fetchTransfer({ payload, callback }, { call, put }) {
       const response = yield call(getTransfers, payload);
       if (response.code === 0 && response.data) {
         yield put({
           type: 'saveList',
           payload: response.data,
         });
+        yield callback && callback();
       } else {
         message.error(response.msg);
       }
