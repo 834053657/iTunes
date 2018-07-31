@@ -13,7 +13,7 @@ export default {
       const res = yield call(getAdDetail, payload);
       if (res.code === 0) {
         const { condition_type, condition } = res.data || {};
-        let detail = { ...res.data };
+        const detail = { ...res.data };
 
         if (condition_type === 1) {
           detail.condition1 = condition;

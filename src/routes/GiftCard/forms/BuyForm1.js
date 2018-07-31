@@ -130,7 +130,7 @@ export default class ReduxForm extends PureComponent {
     const { condition_type } = this.props;
     const rules = omit(this.descriptor, condition_type === 1 ? 'condition2' : 'condition1');
     const err = validate(rules, values);
-    let checkErr = {};
+    const checkErr = {};
     if (err) {
       throw new SubmissionError(err);
     }
@@ -153,7 +153,7 @@ export default class ReduxForm extends PureComponent {
     if (size(checkErr) > 0) {
       throw new SubmissionError(checkErr);
     }
-    let params = omit(values, ['condition2', 'condition1']);
+    const params = omit(values, ['condition2', 'condition1']);
 
     this.props.onSubmit(params);
   };
