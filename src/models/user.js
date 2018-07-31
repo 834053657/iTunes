@@ -98,7 +98,7 @@ export default {
     *submitUpdatePassword({ payload, callback }, { call }) {
       const response = yield call(updatePassword, payload);
       if (response.code === 0) {
-        message.success('操作成功!');
+        message.success(PROMPT('success') || '操作成功!');
         callback && callback(response);
       } else {
         message.error(response.msg);
@@ -118,7 +118,7 @@ export default {
     *submitChangeMobile({ payload, callback }, { call, put }) {
       const response = yield call(updateMobile, payload);
       if (response.code === 0) {
-        message.success('操作成功');
+        message.success(PROMPT('success') || '操作成功!');
         yield callback && callback();
         yield put({
           type: 'fetchCurrent',
@@ -145,7 +145,7 @@ export default {
         yield put({
           type: 'fetchCurrent',
         });
-        message.success('操作成功！');
+        message.success(PROMPT('success') || '操作成功!');
         callback && callback();
       } else {
         message.error(response.msg);
@@ -168,7 +168,7 @@ export default {
         yield put({
           type: 'fetchCurrent',
         });
-        message.success('操作成功！');
+        message.success(PROMPT('success') || '操作成功!');
         callback && callback();
       } else {
         message.error(response.msg);
@@ -180,7 +180,7 @@ export default {
         yield put({
           type: 'fetchCurrent',
         });
-        message.success('操作成功！');
+        message.success(PROMPT('success') || '操作成功!');
         callback && callback();
       } else {
         message.error(response.msg);
@@ -193,7 +193,7 @@ export default {
         yield put({
           type: 'fetchCurrent',
         });
-        message.success('操作成功！');
+        message.success(PROMPT('success') || '操作成功!');
         callback && callback();
       } else {
         message.error(response.msg);

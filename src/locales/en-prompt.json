@@ -1,5 +1,11 @@
 {
   "message.clearMessages": "Cleared messages",
   "message.prompt": "Prompt",
-  "order.pendingOrder": "Pending Order"
+  "order.pendingOrder": "Pending Order",
+  "message.realNameAuth": "Real name authentication",
+  "message.videoAuth": "Video authentication",
+  "message.bankAccount": "Bank Account",
+  "message.alipayAccount": "Alipay Account",
+  "message.giftCard": "Gift Card",
+  "success": "Successful operation!"
 }
