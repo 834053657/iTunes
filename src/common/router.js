@@ -131,14 +131,17 @@ export const getRouterData = app => {
     '/card/edit-sell-card/:id/:action': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/SellCard')),
       authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/card/buy-card': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
       authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/card/edit-buy-card/:id/:action': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
       authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/card/deal-detail/:id': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealDetail')),
@@ -148,6 +151,8 @@ export const getRouterData = app => {
     },
     '/card/market': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/List')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/card/appeal': {
       component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketBuy/Appeal')),

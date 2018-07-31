@@ -273,7 +273,7 @@ export default class Process extends Component {
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
 
     getFieldDecorator('cards[]', { initialValue: [] });
-
+    console.log(this.state.cards);
     return (
       <div className={styles.sendBox}>
         <StepModel steps={steps} current={0} />
@@ -342,7 +342,7 @@ export default class Process extends Component {
           <div className={styles.bottom}>
             <Form className={styles.form} onSubmit={this.handleSubmit}>
               <OnlyPassWord
-                defaultValue={this.state.cards}
+                dValue={this.state.cards}
                 changePsw={this.changePsw}
                 changePic={this.changePic}
                 psw={ad.password_type}

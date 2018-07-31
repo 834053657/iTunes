@@ -588,7 +588,7 @@ export default class BuyForm extends Component {
               },
             ],
           })(
-            <RadioGroup disabled={action && action !== 'edit'}>
+            <RadioGroup disabled={action}>
               {map(CONFIG.cardPwdType, (text, value) => (
                 <Radio key={value} value={+value}>
                   {text}

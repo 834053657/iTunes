@@ -42,7 +42,12 @@ export default class UploadQiNiu extends Component {
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 5;
     if (!isLt2M) {
-      message.error('头像必须小于5M!');
+      message.error('图片必须小于5M!');
+    }
+    const fileExt = file.name.substr(file.name.lastIndexOf('.') + 1);
+    if (['gif', 'png', 'jpg', 'jpeg', 'bmp'].indexOf(fileExt) < 0) {
+      message.error('文件格式不对，gif、png、jpg、jpeg、或bmp文件。');
+      return false;
     }
     return isLt2M;
   };

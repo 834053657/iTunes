@@ -138,15 +138,32 @@ export default class OnlyPassWord extends Component {
             <div>
               <span>{c.money}面额</span>
               <span>({c.items.length})</span>
+              <div style={{ float: 'right' }}>
+                {sendCard
+                  ? null
+                  : (!action || action === 'edit') &&
+                    psw === 1 && (
+                      <Spin spinning={this.state.uploading}>
+                        <Upload onChange={info => this.handlerUpload(info, index)} {...uploadProps}>
+                          <Button>导入</Button>
+                        </Upload>
+                      </Spin>
+                    )}
+              </div>
+
               {sendCard
                 ? null
-                : ((psw === 1 && !action) || action === 'edit') && (
-                    <Spin spinning={this.state.uploading}>
-                      <Upload onChange={info => this.handlerUpload(info, index)} {...uploadProps}>
-                        <Button style={{ float: 'right' }}>导入</Button>
-                      </Upload>
-                    </Spin>
+                : (!action || action === 'edit') &&
+                  psw === 1 && (
+                    <a
+                      style={{ fontSize: 12, float: 'right', lineHeight: 3, marginRight: 10 }}
+                      href="../../../../public/PasswordTemplate.xlsx"
+                      download="PasswordTemplate.xlsx"
+                    >
+                      点击下载模板
+                    </a>
                   )}
+
               {sendCard
                 ? null
                 : !action &&
@@ -239,7 +256,9 @@ export default class OnlyPassWord extends Component {
                           <PicUpload
                             onChange={e => this.props.changePic(e, index, littleIndex)}
                             value={card.picture}
-                            disabled={action && action !== 'edit'}
+                            disabled={
+                              (action && action !== 'edit') || (card.status && card.status !== 0)
+                            }
                           />
                         </Col>
                         {sendCard
@@ -282,7 +301,7 @@ export default class OnlyPassWord extends Component {
                     <PicUpload
                       onChange={e => this.props.changePZ(e, index)}
                       value={c.receipt}
-                      disabled={action && action !== 'edit'}
+                      disabled={action}
                     />
                   </Col>
                 </Row>
@@ -305,7 +324,6 @@ export default class OnlyPassWord extends Component {
         </Card>
       );
     });
-
     return <div>{cardItems}</div>;
   }
 }

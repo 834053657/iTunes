@@ -22,6 +22,10 @@ import OnlyPicture from './OnlyPicture';
 import PicWithPass from './PicWithPass';
 import OnlyPassWord from './OnlyPassWord';
 
+import DescriptionList from '../../../components/DescriptionList';
+
+const { Description } = DescriptionList;
+
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -280,6 +284,20 @@ export default class SellForm extends Component {
     });
   };
 
+  calculateMoney = () => {
+    const { action, defaultValue } = this.props;
+    const cards = action ? defaultValue.cards : this.state.cards;
+    let money = 0;
+    let calculateMoney = 0;
+    calculateMoney = cards.map((item, index) => {
+      return (calculateMoney += item.money * item.items.length);
+    });
+    calculateMoney.map(item => {
+      return (money += item);
+    });
+    return money;
+  };
+
   render() {
     const { termModalInfo } = this.state;
     const {
@@ -304,7 +322,7 @@ export default class SellForm extends Component {
       return null;
     }
     console.log(defaultValue);
-
+    const unit = defaultValue.unit_price;
     const addDenoBox = (
       <div>
         <Row>
@@ -538,6 +556,17 @@ export default class SellForm extends Component {
             fileUpload={this.state.fileUpload}
           />
 
+          <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
+            <Description style={{ float: 'right' }} term="总面额">
+              {this.calculateMoney()}
+            </Description>
+          </DescriptionList>
+          <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
+            <Description style={{ float: 'right' }} term="总价">
+              {unit * this.calculateMoney()}
+            </Description>
+          </DescriptionList>
+
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel} disabled={this.props.submitSellForm}>
               返回
@@ -567,7 +596,7 @@ export default class SellForm extends Component {
                   htmlType="submit"
                   loading={this.props.submitSellForm}
                 >
-                  发布
+                  发布出售
                 </Button>
               </Popconfirm>
             ) : null}

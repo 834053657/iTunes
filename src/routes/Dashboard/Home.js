@@ -171,22 +171,24 @@ export default class Analysis extends Component {
           <Icon className={styles.realtime_icon} type="bar-chart" />
         </div>
         <Row className={styles.realtime_content} gutter={24}>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered
-              title="Itunes"
-              avatar={<img alt="#" src={HomeIcon} className={styles.home_icon} />}
-              action={
-                <Tooltip
-                  title={<FormattedMessage id="ItunesSales" defaultMessage="Itunes销售额" />}
-                >
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total={() => <Yuan>{statistics.itunes}</Yuan>}
-              contentHeight={46}
-            />
-          </Col>
+          {undefined && (
+            <Col {...topColResponsiveProps}>
+              <ChartCard
+                bordered
+                title="Itunes"
+                avatar={<img alt="#" src={HomeIcon} className={styles.home_icon} />}
+                action={
+                  <Tooltip
+                    title={<FormattedMessage id="ItunesSales" defaultMessage="Itunes销售额" />}
+                  >
+                    <Icon type="info-circle-o" />
+                  </Tooltip>
+                }
+                total={() => <Yuan>{statistics.itunes}</Yuan>}
+                contentHeight={46}
+              />
+            </Col>
+          )}
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
