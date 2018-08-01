@@ -46,7 +46,7 @@ export default {
           type: 'fakeAd',
           payload: response,
         });
-        message.success('操作成功');
+        message.success(PROMPT('success') || '操作成功!');
         if (callback) callback();
       } else {
         message.error(response.msg);
@@ -55,7 +55,7 @@ export default {
     *deleteAd({ payload, callback }, { call, put }) {
       const response = yield call(removeAd, payload);
       if (response.code === 0) {
-        message.success('操作成功');
+        message.success(PROMPT('success') || '操作成功!');
       } else {
         message.error(response.msg);
       }
@@ -68,7 +68,7 @@ export default {
     *saveTerms({ payload, callback }, { call, put }) {
       const response = yield call(fakeTerms, payload);
       if (response.code === 0) {
-        message.success('操作成功');
+        message.success(PROMPT('success') || '操作成功!');
       } else {
         message.error(response.msg);
       }
@@ -81,7 +81,7 @@ export default {
     *deleteTerms({ payload, callback }, { call, put }) {
       const response = yield call(removeTerms, payload);
       if (response.code === 0) {
-        message.success('操作成功');
+        message.success(PROMPT('success') || '操作成功!');
       } else {
         message.error(response.msg);
       }

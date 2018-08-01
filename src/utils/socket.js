@@ -164,6 +164,13 @@ export function dvaSocket(url, option) {
               payload: { data: chatMsgList },
             });
             // playAudio();
+          } else if (msg && [31, 32, 33, 34].indexOf(msg.order_msg_type) >= 0) {
+            // 钱包
+            dispatch({
+              type: 'wallet/fetchTransfer',
+              payload: {},
+            });
+            // playAudio();
           } else {
             /* console.log({ id: msg.content && msg.content.order_id });
             dispatch({
