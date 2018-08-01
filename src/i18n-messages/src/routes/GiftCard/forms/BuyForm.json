@@ -1,0 +1,198 @@
+[
+  {
+    "id": "buyForm.card_type",
+    "defaultMessage": "类型"
+  },
+  {
+    "id": "buyForm.card_type_choose",
+    "defaultMessage": "请选择类型"
+  },
+  {
+    "id": "buyForm.unit_price",
+    "defaultMessage": "单价"
+  },
+  {
+    "id": "buyForm.unit_price_input",
+    "defaultMessage": "请输入单价"
+  },
+  {
+    "id": "buyForm.multiple",
+    "defaultMessage": "倍数"
+  },
+  {
+    "id": "buyForm.multiple_input",
+    "defaultMessage": "请输入倍数"
+  },
+  {
+    "id": "buyForm.num_input",
+    "defaultMessage": "请输入正整数"
+  },
+  {
+    "id": "buyForm.condition_type",
+    "defaultMessage": "条件"
+  },
+  {
+    "id": "buyForm.condition_type_choose",
+    "defaultMessage": "请选择条件类型"
+  },
+  {
+    "id": "buyForm.amount_choose",
+    "defaultMessage": "指定面额"
+  },
+  {
+    "id": "buyForm.amount_region",
+    "defaultMessage": "面额区间"
+  },
+  {
+    "id": "buyForm.amount_input",
+    "defaultMessage": "请输入面额"
+  },
+  {
+    "id": "buyForm.num_amount_input",
+    "defaultMessage": "请输入正整数"
+  },
+  {
+    "id": "buyForm.min_input",
+    "defaultMessage": "请输入最小数量"
+  },
+  {
+    "id": "buyForm.num_min_input",
+    "defaultMessage": "请输入正整数"
+  },
+  {
+    "id": "buyForm.num_min_input_less",
+    "defaultMessage": "最小数量应小于{max_con}"
+  },
+  {
+    "id": "buyForm.max_input",
+    "defaultMessage": "请输入最大数量"
+  },
+  {
+    "id": "buyForm.max_num_input",
+    "defaultMessage": "请输入正整数"
+  },
+  {
+    "id": "buyForm.max_num_input_than",
+    "defaultMessage": "最大数量应大于{min_con}"
+  },
+  {
+    "id": "buyForm.delete_sure",
+    "defaultMessage": "确定删除吗?"
+  },
+  {
+    "id": "buyForm.yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "buyForm.no",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "buyForm.addAmount",
+    "defaultMessage": "添加面额"
+  },
+  {
+    "id": "buyForm.min_amount_input",
+    "defaultMessage": "请输入最小面额"
+  },
+  {
+    "id": "buyForm.num_integer_input",
+    "defaultMessage": "请输入正整数"
+  },
+  {
+    "id": "buyForm.min_amount_input_shouldLess",
+    "defaultMessage": "最小面额应小于{min_con}"
+  },
+  {
+    "id": "buyForm.max_amount_input",
+    "defaultMessage": "请输入最大面额"
+  },
+  {
+    "id": "buyForm.max_amount_input_shouldThan",
+    "defaultMessage": "最大面额应大于{min_con}"
+  },
+  {
+    "id": "buyForm.require",
+    "defaultMessage": "要求"
+  },
+  {
+    "id": "buyForm.password_type_input",
+    "defaultMessage": "请输入选择密保卡类型"
+  },
+  {
+    "id": "buyForm.deadline",
+    "defaultMessage": "发卡期限"
+  },
+  {
+    "id": "buyForm.deadline_choose",
+    "defaultMessage": "请选择发卡期限"
+  },
+  {
+    "id": "buyForm.deadline_choose_minute",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "buyForm.guarantee_time",
+    "defaultMessage": "保障时间"
+  },
+  {
+    "id": "buyForm.guarantee_time_choose",
+    "defaultMessage": "请选择保障时间"
+  },
+  {
+    "id": "buyForm.guarantee_time_choose_minute",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "buyForm.sell_clause",
+    "defaultMessage": "交易条款"
+  },
+  {
+    "id": "buyForm.sell_clause_toChoose",
+    "defaultMessage": "可选"
+  },
+  {
+    "id": "buyForm.sell_clause_choose",
+    "defaultMessage": "请选择交易条款"
+  },
+  {
+    "id": "buyForm.nothing",
+    "defaultMessage": "无"
+  },
+  {
+    "id": "buyForm.meantime",
+    "defaultMessage": "同时处理订单数"
+  },
+  {
+    "id": "buyForm.meantime_input",
+    "defaultMessage": "请输入同时处理订单数"
+  },
+  {
+    "id": "buyForm.num_input_limit",
+    "defaultMessage": "请输入整数，0代表不限制"
+  },
+  {
+    "id": "buyForm.back",
+    "defaultMessage": "返回"
+  },
+  {
+    "id": "buyForm.edit",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "buyForm.public_sure",
+    "defaultMessage": "确定发布吗?"
+  },
+  {
+    "id": "buyForm.public_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "buyForm.public_no",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "buyForm.public_btn",
+    "defaultMessage": "发布"
+  }
+]

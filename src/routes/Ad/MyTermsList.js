@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
+import { FormattedMessage as FM, injectIntl } from 'react-intl';
 import moment from 'moment';
 import {
   Table,
@@ -104,18 +105,18 @@ export default class TermsList extends Component {
 
   columns = [
     {
-      title: '标题',
+      title: <FM id="myTermsList.sell_title" defaultMessage="标题"  />,
       dataIndex: 'title',
       width: '30%',
     },
     {
-      title: '交易条款',
+      title: <FM id="myTermsList.sell_rule" defaultMessage="交易条款"  />,
       dataIndex: 'content',
       width: '35%',
       className: styles.term_title,
     },
     {
-      title: '审核状态',
+      title: <FM id="myTermsList.check_status" defaultMessage="审核状态"  />,
       dataIndex: 'status',
       width: '15%',
       render(val, row) {
@@ -124,7 +125,7 @@ export default class TermsList extends Component {
             <span>
               <Badge status={statusMap[0]} text={val ? `${CONFIG.trans_term_status[1]}` : '-'} />
               <Tooltip title={row.reason}>
-                <span className={styles.reason}>原因</span>
+                <span className={styles.reason}><FM id="myTermsList.check_status_reason" defaultMessage="原因"  /></span>
               </Tooltip>
             </span>
           );
@@ -136,23 +137,23 @@ export default class TermsList extends Component {
       },
     },
     {
-      title: '操作',
+      title: <FM id="myTermsList.operator_user" defaultMessage="操作"  />,
       width: '20%',
       render: r => (
         <Fragment>
-          <a onClick={() => this.viewTerm(r)}>查看</a>
+          <a onClick={() => this.viewTerm(r)}><FM id="myTermsList.operator_user_check" defaultMessage="查看"  /></a>
           {[1, 3].indexOf(r.status) > -1 && (
             <span>
               <Divider type="vertical" />
-              <a onClick={() => this.editTerm(r)}>编辑</a>
+              <a onClick={() => this.editTerm(r)}><FM id="myTermsList.operator_user_edit" defaultMessage="编辑"  /></a>
               <Divider type="vertical" />
               <Popconfirm
-                title="您确认要删除此交易条款?"
+                title={<FM id="myTermsList.operator_user_delete" defaultMessage="您确认要删除此交易条款?"  />}
                 onConfirm={() => this.deleteTerm(r)}
-                okText="确认"
-                cancelText="取消"
+                okText={<FM id="myTermsList.operator_user_require" defaultMessage="确认"  />}
+                cancelText={<FM id="myTermsList.operator_user_delete_off" defaultMessage="取消"  />}
               >
-                <a>删除</a>
+                <a><FM id="myTermsList.operator_user_delete_row" defaultMessage="删除"  /></a>
               </Popconfirm>
             </span>
           )}
@@ -191,16 +192,16 @@ export default class TermsList extends Component {
     const { data: { list, pagination }, loading, submitting } = this.props;
     const { selectedRows, termsModalVisible, action, selectedTerms } = this.state;
 
-    const breadcrumbList = [{ title: '我的广告', href: '/ad/my' }, { title: '交易条款管理' }];
+    const breadcrumbList = [{ title: <FM id="myTermsList.my_ad" defaultMessage="我的广告"  />, href: '/ad/my' }, { title: <FM id="myTermsList.sell_rules_title" defaultMessage="交易条款管理"  />}];
 
     const content = (
       <Row gutter={24}>
         <Col span={12} className={styles.title}>
-          交易条款管理
+          <FM id="myTermsList.sell_rule_manage" defaultMessage="交易条款管理"  />
         </Col>
         <Col span={12} className={styles.more}>
           <Button type="primary" onClick={this.addTerm}>
-            添加一条
+            <FM id="myTermsList.add_message" defaultMessage="添加一条"  />
           </Button>
         </Col>
       </Row>

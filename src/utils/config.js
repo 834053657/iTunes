@@ -1,3 +1,5 @@
+import { FormattedMessage as FM } from 'react-intl';
+
 import { getSystemUrl } from './utils';
 
 const { base_url, web_name, socket_url } = getSystemUrl(__KG_API_ENV__);

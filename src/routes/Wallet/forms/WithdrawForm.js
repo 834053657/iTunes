@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, InputNumber, message } from 'antd';
 import { map, filter, find } from 'lodash';
+import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import styles from './RechargeForm.less';
 
@@ -43,7 +44,9 @@ class WithdrawForm extends Component {
           payload: values,
           callback: res => {
             if (res.code === 0) {
-              message.success('已提交提现申请，请等待平台处理');
+              message.success(
+                <FM id="withdrawForm.pay_wait" defaultMessage="已提交提现申请，请等待平台处理" />
+              );
               this.setState({
                 fee: 0,
               });
@@ -101,17 +104,33 @@ class WithdrawForm extends Component {
     return (
       <div className={classNames(className, styles.form)}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="提现账号">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="withdrawForm.cash_account" defaultMessage="提现账号" />}
+          >
             {getFieldDecorator('payment_id', {
               onChange: this.handleGetFee,
               rules: [
                 {
                   required: true,
-                  message: '请选择您的提现账号！',
+                  message: (
+                    <FM
+                      id="withdrawForm.cash_account_choose"
+                      defaultMessage="请选择您的提现账号！"
+                    />
+                  ),
                 },
               ],
             })(
-              <Select size="large" placeholder="请选择您的提现账号">
+              <Select
+                size="large"
+                placeholder={
+                  <FM
+                    id="withdrawForm.cash_account_choose_inp"
+                    defaultMessage="请选择您的提现账号"
+                  />
+                }
+              >
                 {map(filter(userPayments, i => i.status === 4), item => (
                   <Option key={item.id} value={item.id}>
                     <span>
@@ -127,12 +146,17 @@ class WithdrawForm extends Component {
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="提现金额">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="withdrawForm.cash_amount" defaultMessage="提现金额" />}
+          >
             {getFieldDecorator('amount', {
               rules: [
                 {
                   required: true,
-                  message: '请输入提现金额！',
+                  message: (
+                    <FM id="withdrawForm.cash_amount_input" defaultMessage="请输入提现金额！" />
+                  ),
                 },
               ],
             })(
@@ -143,38 +167,71 @@ class WithdrawForm extends Component {
                 style={{ width: '100%' }}
                 precision={2}
                 size="large"
-                placeholder="提现金额"
+                // placeholder={<FM id="withdrawForm.cash_amount_inp" defaultMessage="提现金额" />}
+                placeholder={PROMPT('withdrawForm.cash_amount_inp') || '提现金额'}
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="手续费">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="withdrawForm.service_charge" defaultMessage="手续费" />}
+          >
             <span className="text-blue">{`¥ ${this.state.fee}`}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="输入密码">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="withdrawForm.passWord_input" defaultMessage="输入密码" />}
+          >
             {getFieldDecorator('password', {
               rules: [
                 {
                   required: true,
-                  message: '请输入密码！',
+                  message: (
+                    <FM id="withdrawForm.passWord_input_warning" defaultMessage="请输入密码！" />
+                  ),
                 },
               ],
-            })(<Input type="password" size="large" placeholder="请输入密码" />)}
+            })(
+              <Input
+                type="password"
+                size="large"
+                placeholder={
+                  <FM id="withdrawForm.passWord_input_warning_holder" defaultMessage="请输入密码" />
+                }
+              />
+            )}
           </FormItem>
           {user.g2fa_on ? (
-            <FormItem {...formItemLayout} label="谷歌验证">
+            <FormItem
+              {...formItemLayout}
+              label={<FM id="withdrawForm.chrome_code" defaultMessage="谷歌验证" />}
+            >
               {getFieldDecorator('code', {
                 rules: [
                   {
                     required: true,
-                    message: '请输入谷歌验证码！',
+                    message: (
+                      <FM id="withdrawForm.chrome_code_input" defaultMessage="请输入谷歌验证码！" />
+                    ),
                   },
                 ],
-              })(<Input style={{ width: '100%' }} size="large" placeholder="请输入谷歌验证码" />)}
+              })(
+                <Input
+                  style={{ width: '100%' }}
+                  size="large"
+                  placeholder={
+                    <FM
+                      id="withdrawForm.chrome_code_input_holder"
+                      defaultMessage="请输入谷歌验证码"
+                    />
+                  }
+                />
+              )}
             </FormItem>
           ) : null}
           <FormItem className={styles.buttonBox}>
             <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
-              提交
+              <FM id="withdrawForm.submit" defaultMessage="提交" />
             </Button>
           </FormItem>
         </Form>

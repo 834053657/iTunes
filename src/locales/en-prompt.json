@@ -2,10 +2,16 @@
   "message.clearMessages": "Cleared messages",
   "message.prompt": "Prompt",
   "order.pendingOrder": "Pending Order",
-  "message.realNameAuth": "Real name authentication",
-  "message.videoAuth": "Video authentication",
-  "message.bankAccount": "Bank Account",
-  "message.alipayAccount": "Alipay Account",
-  "message.giftCard": "Gift Card",
-  "success": "Successful operation!"
+  "buyForm.amount":"amount",
+  "buyForm.amount_holder_min":"min",
+  "buyForm.amount_holder_max":"max",
+  "dealDetail.num_amount_price":"amount{price}already exist",
+  "dealDetail.num_amount_limit_sell":"enter the number",
+  "dealDetail.num_amount_sell_input":"enter the number",
+  "dealDetail.num_amount_buy_input":"please input amount",
+  "dealDetail.num_amount_inp_":"please input amount",
+  "dealDetail.buy_amount_money_stock":"stock residue{Stock}",
+  "buyForm.min_amount_holder":"the min amount",
+  "buyForm.max_amount_holder":"the max amount"
+
 }

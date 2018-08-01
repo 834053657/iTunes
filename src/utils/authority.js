@@ -13,9 +13,11 @@ export function setAuthority(authority) {
 
 // get user locale language
 export function getLocale() {
-	const browserLang = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
-	let defLang = 'zh-CN';
-	if (browserLang.indexOf('en') > -1) defLang = 'en-GB';
+  const browserLang = window.navigator.browserLanguage
+    ? window.navigator.browserLanguage
+    : window.navigator.language;
+  let defLang = 'zh-CN';
+  if (browserLang.indexOf('en') > -1) defLang = 'en-GB';
 
   return localStorage.getItem(`kg-itunes-locale-${__KG_API_ENV__}`) || defLang;
 }

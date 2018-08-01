@@ -1,0 +1,62 @@
+[
+  {
+    "id": "rechargeForm.pay_wait",
+    "defaultMessage": "已提交充值申请，请等待平台处理"
+  },
+  {
+    "id": "rechargeForm.account",
+    "defaultMessage": "平台账号"
+  },
+  {
+    "id": "rechargeForm.open_account",
+    "defaultMessage": "开户人"
+  },
+  {
+    "id": "rechargeForm.open_account_bank",
+    "defaultMessage": "开户行"
+  },
+  {
+    "id": "rechargeForm.user_account",
+    "defaultMessage": "账号"
+  },
+  {
+    "id": "rechargeForm.user_name",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "rechargeForm.pay_code",
+    "defaultMessage": "收款二维码"
+  },
+  {
+    "id": "rechargeForm.pay_code_1",
+    "defaultMessage": "收款二维码"
+  },
+  {
+    "id": "rechargeForm.pay_way",
+    "defaultMessage": "充值方式"
+  },
+  {
+    "id": "rechargeForm.pay_way_choose",
+    "defaultMessage": "请选择充值方式！"
+  },
+  {
+    "id": "rechargeForm.pay_use_account",
+    "defaultMessage": "充值账号"
+  },
+  {
+    "id": "rechargeForm.pay_use_account_choose",
+    "defaultMessage": "请选择您的充值账号！"
+  },
+  {
+    "id": "rechargeForm.pay_amount_num",
+    "defaultMessage": "充值金额"
+  },
+  {
+    "id": "rechargeForm.pay_amount_num_input",
+    "defaultMessage": "请输入充值金额！"
+  },
+  {
+    "id": "rechargeForm.pay_submit",
+    "defaultMessage": "提交"
+  }
+]

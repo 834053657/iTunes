@@ -2,10 +2,18 @@
   "message.clearMessages": "清空了消息",
   "message.prompt": "提示",
   "order.pendingOrder": "挂单",
-  "message.realNameAuth": "实名认证",
-  "message.videoAuth": "视频认证",
-  "message.bankAccount": "银行账号",
-  "message.alipayAccount": "支付宝账号",
-  "message.giftCard": "礼品卡",
-  "success": "操作成功！"
+  "buyForm.amount":"面额",
+  "buyForm.amount_holder_min":"最小数量",
+  "buyForm.amount_holder_max":"最大数量",
+  "dealDetail.num_amount_price":"面额{price}已存在",
+  "dealDetail.num_amount_limit_sell":"请输入出售数量",
+  "dealDetail.num_amount_sell_input":"请输入出售数量",
+  "dealDetail.num_amount_buy_input":"请输入购买数量",
+  "dealDetail.num_amount_inp_":"请输入面额",
+  "dealDetail.buy_amount_money_stock":"库存{Stock}个",
+  "buyForm.min_amount_holder":"最小面额",
+  "buyForm.max_amount_holder":"最大面额",
+  "onlyPassWord.upload_default":"上传错误，可能请求已过期，请刷新页面重试",
+  "onlyPassWord.file_format":"文件格式不对，您只能导入csv, xls或xlsx文件。"
+
 }

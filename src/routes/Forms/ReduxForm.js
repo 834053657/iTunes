@@ -178,7 +178,7 @@ export default class ReduxForm extends PureComponent {
     return (
       <FormItem validateStatus={meta.error ? 'error' : 'success'} help={meta.error && meta.error}>
         <div>
-          <button type="button" onClick={() => fields.push({ price: '', min: '', max: '' })}>
+          <button type="button" onClick={() => fields.push({ priwce: '', min: '', max: '' })}>
             添加 cards
           </button>
         </div>
@@ -192,7 +192,7 @@ export default class ReduxForm extends PureComponent {
                 <h4>cards #{index + 1}</h4>
               </Col>
               <Col sm={4}>
-                <input name={`${member}.price`} component={AInputNumber} />
+                <Field name={`${member}.priwce`} component={AInputNumber} />
               </Col>
               <Col sm={4}>
                 <Field name={`${member}.min`} component={AInputNumber} />

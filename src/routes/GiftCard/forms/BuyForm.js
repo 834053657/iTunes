@@ -14,6 +14,7 @@ import {
   Popconfirm,
 } from 'antd';
 import { map, mapKeys, cloneDeep, filter, head, mapValues } from 'lodash';
+import { FormattedMessage as FM, injectIntl } from 'react-intl';
 import styles from './SellForm.less';
 
 const RadioGroup = Radio.Group;
@@ -25,10 +26,10 @@ const dataItem = {
   min_count: null,
   max_count: null,
 };
-
 const uuid = 0;
+
 @Form.create()
-export default class BuyForm extends Component {
+class BuyForm extends Component {
   state = {
     termModalInfo: false,
     formNumber: [],
@@ -256,13 +257,15 @@ export default class BuyForm extends Component {
 
   render() {
     const { termModalInfo, conditionFix, conditionRange, conditionType } = this.state;
+
     const {
       defaultValue,
       action,
       terms = [],
+      intl,
       form: { getFieldDecorator, getFieldValue, resetForm },
     } = this.props;
-    console.log(defaultValue);
+
     const { condition: deCo = [] } = defaultValue;
 
     const initialValues = {
@@ -308,16 +311,16 @@ export default class BuyForm extends Component {
         sm: { span: 20, offset: 4 },
       },
     };
-    console.log(action);
+
     return (
       <Form className={styles.form} onSubmit={this.handleSubmit}>
-        <FormItem {...formItemLayout} label="类型">
+        <FormItem {...formItemLayout} label={<FM id="buyForm.card_type" defaultMessage="类型" />}>
           {getFieldDecorator('card_type', {
             initialValue: action ? defaultValue.card_type : initialValues.card_type,
             rules: [
               {
                 required: true,
-                message: '请选择类型',
+                message: <FM id="buyForm.card_type_choose" defaultMessage="请选择类型" />,
               },
             ],
           })(
@@ -335,48 +338,55 @@ export default class BuyForm extends Component {
           )}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="单价">
+        <FormItem {...formItemLayout} label={<FM id="buyForm.unit_price" defaultMessage="单价" />}>
           {getFieldDecorator('unit_price', {
             initialValue: action ? defaultValue.unit_price : initialValues.unit_price,
             rules: [
               {
                 required: true,
-                message: '请输入单价',
+                message: <FM id="buyForm.unit_price_input" defaultMessage="请输入单价" />,
               },
             ],
           })(<InputNumber precision={2} disabled={action && action !== 'edit'} />)}
         </FormItem>
 
         {/*倍数*/}
-        <FormItem {...formItemLayout} label="倍数">
+        <FormItem {...formItemLayout} label={<FM id="buyForm.multiple" defaultMessage="倍数" />}>
           {getFieldDecorator('multiple', {
             initialValue: action ? defaultValue.multiple : initialValues.multiple,
             rules: [
               {
                 required: true,
-                message: '请输入倍数',
+                message: <FM id="buyForm.multiple_input" defaultMessage="请输入倍数" />,
               },
               {
                 pattern: /^[1-9]\d*$/,
-                message: '请输入正整数',
+                message: <FM id="buyForm.num_input" defaultMessage="请输入正整数" />,
               },
             ],
           })(<InputNumber disabled={action && action !== 'edit'} />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="条件">
+        <FormItem
+          {...formItemLayout}
+          label={<FM id="buyForm.condition_type" defaultMessage="条件" />}
+        >
           {getFieldDecorator('condition_type', {
             initialValue: action ? defaultValue.condition_type : initialValues.condition_type,
             rules: [
               {
                 required: true,
-                message: '请选择条件类型',
+                message: <FM id="buyForm.condition_type_choose" defaultMessage="请选择条件类型" />,
               },
             ],
           })(
             <Radio.Group onChange={this.changeConditionType} disabled={action}>
-              <Radio.Button value={1}>指定面额</Radio.Button>
-              <Radio.Button value={2}>面额区间</Radio.Button>
+              <Radio.Button value={1}>
+                <FM id="buyForm.amount_choose" defaultMessage="指定面额" />
+              </Radio.Button>
+              <Radio.Button value={2}>
+                {<FM id="buyForm.amount_region" defaultMessage="面额区间" />}
+              </Radio.Button>
             </Radio.Group>
           )}
         </FormItem>
@@ -393,11 +403,13 @@ export default class BuyForm extends Component {
                         rules: [
                           {
                             required: true,
-                            message: '请输入面额',
+                            message: <FM id="buyForm.amount_input" defaultMessage="请输入面额" />,
                           },
                           {
                             pattern: /^[1-9]\d*$/,
-                            message: '请输入正整数',
+                            message: (
+                              <FM id="buyForm.num_amount_input" defaultMessage="请输入正整数" />
+                            ),
                           },
                         ],
                       })(
@@ -405,7 +417,8 @@ export default class BuyForm extends Component {
                           key={index}
                           disabled={action && action !== 'edit'}
                           onChange={e => this.changeFixedMoney(e, index)}
-                          placeholder="面额"
+                          // placeholder={intl.formatMessage({id:'buyForm.amount',defaultMessage:"面额"})}
+                          placeholder={PROMPT('buyForm.amount') || '面额'}
                         />
                       )}
                       &nbsp;--
@@ -419,18 +432,26 @@ export default class BuyForm extends Component {
                         rules: [
                           {
                             required: true,
-                            message: '请输入最小数量',
+                            message: <FM id="buyForm.min_input" defaultMessage="请输入最小数量" />,
                           },
                           {
                             pattern: /^[0-9]\d*$/,
-                            message: '请输入正整数',
+                            message: (
+                              <FM id="buyForm.num_min_input" defaultMessage="请输入正整数" />
+                            ),
                           },
                           {
                             validator: (rule, value, callback) =>
                               this.checkFormCount(rule, value, callback, index),
-                            message: conditionFix[index]
-                              ? `最小数量应小于${conditionFix[index].max_count}`
-                              : '',
+                            message: conditionFix[index] ? (
+                              <FM
+                                id="buyForm.num_min_input_less"
+                                defaultMessage="最小数量应小于{max_con}"
+                                values={{ max_con: conditionFix[index].max_count }}
+                              />
+                            ) : (
+                              ''
+                            ),
                           },
                         ],
                       })(
@@ -438,7 +459,8 @@ export default class BuyForm extends Component {
                           key={index}
                           disabled={action && action !== 'edit'}
                           onChange={e => this.changeFixMin(e, index)}
-                          placeholder="最小数量"
+                          // placeholder="最小数量"
+                          placeholder={PROMPT('buyForm.amount_holder_min') || '最小数量'}
                         />
                       )}
                       &nbsp;--
@@ -452,18 +474,26 @@ export default class BuyForm extends Component {
                         rules: [
                           {
                             required: true,
-                            message: '请输入最大数量',
+                            message: <FM id="buyForm.max_input" defaultMessage="请输入最大数量" />,
                           },
                           {
                             pattern: /^[0-9]\d*$/,
-                            message: '请输入正整数',
+                            message: (
+                              <FM id="buyForm.max_num_input" defaultMessage="请输入正整数" />
+                            ),
                           },
                           {
                             validator: (rule, value, callback) =>
                               this.checkFormCount(rule, value, callback, index),
-                            message: conditionFix[index]
-                              ? `最大数量应大于${conditionFix[index].min_count}`
-                              : '',
+                            message: conditionFix[index] ? (
+                              <FM
+                                id="buyForm.max_num_input_than"
+                                defaultMessage="最大数量应大于{min_con}"
+                                values={{ min_con: conditionFix[index].min_count }}
+                              />
+                            ) : (
+                              ''
+                            ),
                           },
                         ],
                       })(
@@ -471,16 +501,17 @@ export default class BuyForm extends Component {
                           key={index}
                           disabled={action && action !== 'edit'}
                           onChange={e => this.changeFixMax(e, index)}
-                          placeholder="最大数量"
+                          // placeholder="最大数量"
+                          placeholder={PROMPT('buyForm.amount_holder_max') || '最大数量'}
                         />
                       )}
                       &nbsp;
                       {(!action || action === 'edit') && (
                         <Popconfirm
-                          title="确定删除吗？"
+                          title={<FM id="buyForm.delete_sure" defaultMessage="确定删除吗?" />}
                           onConfirm={() => this.remove(index)}
-                          okText="是"
-                          cancelText="否"
+                          okText={<FM id="buyForm.yes" defaultMessage="是" />}
+                          cancelText={<FM id="buyForm.no" defaultMessage="否" />}
                         >
                           <Icon
                             className="dynamic-delete-button"
@@ -505,7 +536,7 @@ export default class BuyForm extends Component {
                 onClick={this.addTest}
                 style={{ width: '60%' }}
               >
-                <Icon type="plus" /> 添加面额
+                <Icon type="plus" /> <FM id="buyForm.addAmount" defaultMessage="添加面额" />
               </Button>
             </FormItem>
           )}
@@ -522,22 +553,28 @@ export default class BuyForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入最小面额',
+                    message: <FM id="buyForm.min_amount_input" defaultMessage="请输入最小面额" />,
                   },
                   {
                     pattern: /^[0-9]\d*$/,
-                    message: '请输入正整数',
+                    message: <FM id="buyForm.num_integer_input" defaultMessage="请输入正整数" />,
                   },
                   {
                     validator: (rule, value, callback) =>
                       this.checkFormRange(rule, value, callback),
-                    message: `最小面额应小于${conditionRange.max_money}`,
+                    message: (
+                      <FM
+                        id="buyForm.min_amount_input_shouldLess"
+                        defaultMessage="最小面额应小于{min_con}"
+                        values={{ min_con: conditionRange.max_money }}
+                      />
+                    ),
                   },
                 ],
               })(
                 <InputNumber
                   disabled={action && action !== 'edit'}
-                  placeholder="最小面额"
+                  placeholder={PROMPT('buyForm.min_amount_holder')}
                   onChange={this.rangeMin}
                   style={{ width: '100%' }}
                 />
@@ -554,22 +591,28 @@ export default class BuyForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入最大面额',
+                    message: <FM id="buyForm.max_amount_input" defaultMessage="请输入最大面额" />,
                   },
                   {
                     pattern: /^[0-9]\d*$/,
-                    message: '请输入正整数',
+                    message: <FM id="buyForm.num_integer_input" defaultMessage="请输入正整数" />,
                   },
                   {
                     validator: (rule, value, callback) =>
                       this.checkFormRange(rule, value, callback),
-                    message: `最大面额应大于${conditionRange.min_money}`,
+                    message: (
+                      <FM
+                        id="buyForm.max_amount_input_shouldThan"
+                        defaultMessage="最大面额应大于{min_con}"
+                        values={{ min_con: conditionRange.min_money }}
+                      />
+                    ),
                   },
                 ],
               })(
                 <InputNumber
                   disabled={action && action !== 'edit'}
-                  placeholder="最大面额"
+                  placeholder={PROMPT('buyForm.max_amount_holder')}
                   onChange={this.rangeMax}
                   style={{ width: '100%' }}
                 />
@@ -578,17 +621,19 @@ export default class BuyForm extends Component {
           </Row>
         ) : null}
 
-        <FormItem {...formItemLayout} label="要求">
+        <FormItem {...formItemLayout} label={<FM id="buyForm.require" defaultMessage="要求" />}>
           {getFieldDecorator('password_type', {
             initialValue: action ? defaultValue.password_type : initialValues.password_type,
             rules: [
               {
                 required: true,
-                message: '请输入选择密保卡类型',
+                message: (
+                  <FM id="buyForm.password_type_input" defaultMessage="请输入选择密保卡类型" />
+                ),
               },
             ],
           })(
-            <RadioGroup disabled={action}>
+            <RadioGroup disabled={action && action !== 'edit'}>
               {map(CONFIG.cardPwdType, (text, value) => (
                 <Radio key={value} value={+value}>
                   {text}
@@ -598,42 +643,50 @@ export default class BuyForm extends Component {
           )}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="发卡期限">
+        <FormItem
+          {...formItemLayout}
+          label={<FM id="buyForm.deadline" defaultMessage="发卡期限" />}
+        >
           {getFieldDecorator('deadline', {
             // initialValue: CONFIG.deadline ? CONFIG.deadline[0] : null,
             initialValue: action ? defaultValue.deadline : initialValues.deadline,
             rules: [
               {
                 required: true,
-                message: '请选择发卡期限',
+                message: <FM id="buyForm.deadline_choose" defaultMessage="请选择发卡期限" />,
               },
             ],
           })(
             <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
               {map(CONFIG.deadline, (item, index) => (
                 <Option key={item} value={item}>
-                  {item}分钟
+                  {item}
+                  <FM id="buyForm.deadline_choose_minute" defaultMessage="分钟" />
                 </Option>
               ))}
             </Select>
           )}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="保障时间">
+        <FormItem
+          {...formItemLayout}
+          label={<FM id="buyForm.guarantee_time" defaultMessage="保障时间" />}
+        >
           {getFieldDecorator('guarantee_time', {
             //initialValue: CONFIG.guarantee_time ? CONFIG.guarantee_time[0] : null,
             initialValue: action ? defaultValue.guarantee_time : initialValues.guarantee_time,
             rules: [
               {
                 required: true,
-                message: '请选择保障时间',
+                message: <FM id="buyForm.guarantee_time_choose" defaultMessage="请选择保障时间" />,
               },
             ],
           })(
             <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
               {map(CONFIG.guarantee_time, (item, index) => (
                 <Option key={item} value={item}>
-                  {item}分钟
+                  {item}
+                  <FM id="buyForm.guarantee_time_choose_minute" defaultMessage="分钟" />
                 </Option>
               ))}
             </Select>
@@ -644,7 +697,10 @@ export default class BuyForm extends Component {
           {...formItemLayout}
           label={
             <span>
-              交易条款<i>(可选)</i>
+              <FM id="buyForm.sell_clause" defaultMessage="交易条款" />
+              <i>
+                ( <FM id="buyForm.sell_clause_toChoose" defaultMessage="可选" />)
+              </i>
             </span>
           }
         >
@@ -653,12 +709,12 @@ export default class BuyForm extends Component {
             rules: [
               {
                 required: false,
-                message: '请选择交易条款',
+                message: <FM id="buyForm.sell_clause_choose" defaultMessage="请选择交易条款" />,
               },
             ],
           })(
             <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
-              <Option value={0}>无</Option>
+              <Option value={0}>{<FM id="buyForm.nothing" defaultMessage="无" />}</Option>
               {map(terms, (item, index) => {
                 if (item.status === 3) {
                   return (
@@ -672,18 +728,23 @@ export default class BuyForm extends Component {
           )}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="同时处理订单数">
+        <FormItem
+          {...formItemLayout}
+          label={<FM id="buyForm.meantime" defaultMessage="同时处理订单数" />}
+        >
           {getFieldDecorator('concurrency_order', {
             //initialValue: 0,
             initialValue: action ? defaultValue.concurrency_order : initialValues.concurrency_order,
             rules: [
               {
                 required: false,
-                message: '请输入同时处理订单数',
+                message: <FM id="buyForm.meantime_input" defaultMessage="请输入同时处理订单数" />,
               },
               {
                 pattern: /^[0-9]\d*$/,
-                message: '请输入整数，0代表不限制',
+                message: (
+                  <FM id="buyForm.num_input_limit" defaultMessage="请输入整数，0代表不限制" />
+                ),
               },
             ],
           })(<InputNumber disabled={action && action !== 'edit'} />)}
@@ -691,7 +752,7 @@ export default class BuyForm extends Component {
 
         <FormItem className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>
-            返回
+            {<FM id="buyForm.back" defaultMessage="返回" />}
           </Button>
           {action && action !== 'edit' ? (
             <Button
@@ -702,18 +763,18 @@ export default class BuyForm extends Component {
               }}
               disabled={defaultValue.status !== 1 && defaultValue.status !== 2}
             >
-              编辑
+              {<FM id="buyForm.edit" defaultMessage="编辑" />}
             </Button>
           ) : null}
           {!action || (action && action === 'edit') ? (
             <Popconfirm
-              title="确定发布吗？"
+              title={<FM id="buyForm.public_sure" defaultMessage="确定发布吗?" />}
               onConfirm={this.handleSubmit}
-              okText="是"
-              cancelText="否"
+              okText={<FM id="buyForm.public_yes" defaultMessage="是" />}
+              cancelText={<FM id="buyForm.public_no" defaultMessage="否" />}
             >
               <Button className={styles.submit} type="primary" htmlType="submit">
-                发布
+                {<FM id="buyForm.public_btn" defaultMessage="发布" />}
               </Button>
             </Popconfirm>
           ) : null}
@@ -732,3 +793,4 @@ export default class BuyForm extends Component {
     );
   }
 }
+export default Form.create()(injectIntl(BuyForm));

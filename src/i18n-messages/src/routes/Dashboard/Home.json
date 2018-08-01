@@ -1,30 +1,30 @@
 [
   {
-    "id": "more",
+    "id": "home.more",
     "defaultMessage": "更多"
   },
   {
-    "id": "latestNews",
+    "id": "home.news",
     "defaultMessage": "最新资讯"
   },
   {
-    "id": "More",
+    "id": "home.More",
     "defaultMessage": "更多"
   },
   {
-    "id": "RealTimeTransaction",
+    "id": "home.RealTimeTransaction",
     "defaultMessage": "实时成交"
   },
   {
-    "id": "ItunesSales",
+    "id": "home.ItunesSales",
     "defaultMessage": "Itunes销售额"
   },
   {
-    "id": "giftCard",
+    "id": "home.giftCard",
     "defaultMessage": "礼品卡"
   },
   {
-    "id": "giftCardSales",
+    "id": "home.giftCardSales",
     "defaultMessage": "礼品卡销售额"
   }
 ]

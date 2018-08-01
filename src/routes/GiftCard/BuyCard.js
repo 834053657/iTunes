@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { filter } from 'lodash';
 import { routerRedux } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import {
   Button,
   Menu,
@@ -114,7 +115,7 @@ export default class SaleCard extends Component {
         });
         this.data.condition = a;
       } else {
-        message.warning('请输入数字格式');
+        message.warning(<FM id="buy.numberType" defaultMessage="请输入数字格式" />);
       }
     };
 
@@ -128,7 +129,7 @@ export default class SaleCard extends Component {
         });
         this.data.condition = a;
       } else {
-        message.warning('请输入数字格式');
+        message.warning(<FM id="buy.numberType_1" defaultMessage="请输入数字格式" />);
       }
     };
 
@@ -139,7 +140,7 @@ export default class SaleCard extends Component {
         a[index].max_count !== '' &&
         a[index].min_count > a[index].max_count
       ) {
-        message.warning('不得超过最大数量');
+        message.warning(<FM id="buy.maxNum" defaultMessage="不得超过最大数量" />);
         return false;
       }
     };
@@ -152,7 +153,7 @@ export default class SaleCard extends Component {
         a[index].max_count !== '' &&
         a[index].min_count > a[index].max_count
       ) {
-        message.warning('不得低于最小数量');
+        message.warning(<FM id="buy.minNum" defaultMessage="不得低于最小数量" />);
       }
     };
 
@@ -166,7 +167,7 @@ export default class SaleCard extends Component {
         });
         this.data.condition = a;
       } else {
-        message.warning('请输入数字格式');
+        message.warning(<FM id="buy.numberType_2" defaultMessage="请输入数字格式" />);
       }
     };
 
@@ -199,7 +200,7 @@ export default class SaleCard extends Component {
       if (re.test(e)) {
         this.data.condition.min_money = +e;
       } else {
-        message.warning('请输入数字格式');
+        message.warning(<FM id="buy.numberType_3" defaultMessage="请输入数字格式" />);
       }
     };
 
@@ -225,7 +226,7 @@ export default class SaleCard extends Component {
         });
         this.data.condition.max_money = +e;
       } else {
-        message.warning('请输入数字格式');
+        message.warning(<FM id="buy.numberType_4" defaultMessage="请输入数字格式" />);
       }
     };
 
@@ -247,14 +248,14 @@ export default class SaleCard extends Component {
     this.addBuyAd = () => {
       if (Array.isArray(this.data.condition)) {
         if (this.data.condition.length === 0) {
-          message.warning('面额信息不完整');
+          message.warning(<FM id="buy.amountMsg" defaultMessage="面额信息不完整" />);
           return false;
         }
       } else if (
         !Array.isArray(this.data.condition) &&
         (!this.data.condition.min_money || !this.data.condition.max_money)
       ) {
-        message.warning('面额信息不完整');
+        message.warning(<FM id="buy.amountMsg_1" defaultMessage="面额信息不完整" />);
         return false;
       }
       this.props
@@ -267,7 +268,9 @@ export default class SaleCard extends Component {
             this.data = {};
             this.props.history.push({ pathname: '/ad/my' });
           } else {
-            message.error('发送失败，失败原因：' + res.msg);
+            message.error(
+              <FM id="buy.sendFalse" defaultMessage="发送失败，失败原因：" /> + res.msg
+            );
           }
         });
     };
@@ -330,9 +333,9 @@ export default class SaleCard extends Component {
     const { adDetail = {} } = this.props;
     console.log(adDetail);
     const breadcrumbList = [
-      { title: '广告管理', href: '/ad/my' },
-      { title: '礼品卡', href: '/card/market' },
-      { title: '创建购买' },
+      { title: <FM id="buy.adManage" defaultMessage="广告管理" />, href: '/ad/my' },
+      { title: <FM id="buy.giftCard" defaultMessage="礼品卡" />, href: '/card/market' },
+      { title: <FM id="buy.createBuy" defaultMessage="创建购买" /> },
     ];
     const { terms } = this.props.card || {};
     console.log(adDetail);

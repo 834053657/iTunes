@@ -1,7 +1,55 @@
 [
   {
-    "id": "userName",
+    "id": "nickname_",
     "defaultMessage": "用户名"
+  },
+  {
+    "id": "type",
+    "defaultMessage": "类型"
+  },
+  {
+    "id": "contain",
+    "defaultMessage": "包含"
+  },
+  {
+    "id": "require",
+    "defaultMessage": "要求"
+  },
+  {
+    "id": "denomination",
+    "defaultMessage": "面额"
+  },
+  {
+    "id": "total_denomination",
+    "defaultMessage": "总面额"
+  },
+  {
+    "id": "deadline",
+    "defaultMessage": "发卡期限"
+  },
+  {
+    "id": "unit_price",
+    "defaultMessage": "单价"
+  },
+  {
+    "id": "guarantee_time",
+    "defaultMessage": "保障时间"
+  },
+  {
+    "id": "operation_",
+    "defaultMessage": "操作"
+  },
+  {
+    "id": "toBuy_",
+    "defaultMessage": "购买"
+  },
+  {
+    "id": "toBuy_confirm",
+    "defaultMessage": "广告主要求在{deadline}分钟内发卡您确认出售"
+  },
+  {
+    "id": "toSell_",
+    "defaultMessage": "出售"
   },
   {
     "id": "tradingHell",

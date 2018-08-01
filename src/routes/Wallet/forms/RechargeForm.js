@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { routerRedux } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import {
   Form,
   Input,
@@ -58,7 +59,9 @@ class RechargeForm extends Component {
           payload: values,
           callback: res => {
             if (res.code === 0) {
-              message.success('已提交充值申请，请等待平台处理');
+              message.success(
+                <FM id="rechargeForm.pay_wait" defaultMessage="已提交充值申请，请等待平台处理" />
+              );
               this.props.form.resetFields();
               this.props.onSubmit && this.props.onSubmit();
             } else {
@@ -82,13 +85,22 @@ class RechargeForm extends Component {
     if (payment_method === 'bank') {
       return (
         <div>
-          <FormItem {...formItemLayout} label="平台账号">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="rechargeForm.account" defaultMessage="平台账号" />}
+          >
             <span>{payment_detail.bank_account}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="开户人">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="rechargeForm.open_account" defaultMessage="开户人" />}
+          >
             <span>{payment_detail.name}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="开户行">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="rechargeForm.open_account_bank" defaultMessage="开户行" />}
+          >
             <span>{payment_detail.bank_name}</span>
           </FormItem>
         </div>
@@ -96,14 +108,27 @@ class RechargeForm extends Component {
     } else {
       return (
         <div>
-          <FormItem {...formItemLayout} label="账号">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="rechargeForm.user_account" defaultMessage="账号" />}
+          >
             <span>{payment_detail.account}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="姓名">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="rechargeForm.user_name" defaultMessage="姓名" />}
+          >
             <span>{payment_detail.name}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="收款二维码">
-            <img className={styles.qrcode} src={payment_detail.qrcode_url} alt="收款二维码" />
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="rechargeForm.pay_code" defaultMessage="收款二维码" />}
+          >
+            <img
+              className={styles.qrcode}
+              src={payment_detail.qrcode_url}
+              alt={<FM id="rechargeForm.pay_code_1" defaultMessage="收款二维码" />}
+            />
           </FormItem>
         </div>
       );
@@ -131,12 +156,17 @@ class RechargeForm extends Component {
     return (
       <div className={classNames(className, styles.form)}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="充值方式">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="rechargeForm.pay_way" defaultMessage="充值方式" />}
+          >
             {getFieldDecorator('platform_payment_id', {
               rules: [
                 {
                   required: true,
-                  message: '请选择充值方式！',
+                  message: (
+                    <FM id="rechargeForm.pay_way_choose" defaultMessage="请选择充值方式！" />
+                  ),
                 },
               ],
               onChange: () => {
@@ -157,12 +187,20 @@ class RechargeForm extends Component {
             )}
           </FormItem>
           {this.renderPaymentInfo()}
-          <FormItem {...formItemLayout} label="充值账号">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="rechargeForm.pay_use_account" defaultMessage="充值账号" />}
+          >
             {getFieldDecorator('user_payment_id', {
               rules: [
                 {
                   required: true,
-                  message: '请选择您的充值账号！',
+                  message: (
+                    <FM
+                      id="rechargeForm.pay_use_account_choose"
+                      defaultMessage="请选择您的充值账号！"
+                    />
+                  ),
                 },
               ],
             })(
@@ -187,12 +225,17 @@ class RechargeForm extends Component {
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="充值金额">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="rechargeForm.pay_amount_num" defaultMessage="充值金额" />}
+          >
             {getFieldDecorator('amount', {
               rules: [
                 {
                   required: true,
-                  message: '请输入充值金额！',
+                  message: (
+                    <FM id="rechargeForm.pay_amount_num_input" defaultMessage="请输入充值金额！" />
+                  ),
                 },
               ],
             })(<InputNumber precision={2} style={{ width: '100%' }} size="large" />)}
@@ -204,7 +247,7 @@ class RechargeForm extends Component {
               type="primary"
               htmlType="submit"
             >
-              提交
+              <FM id="rechargeForm.pay_submit" defaultMessage="提交" />
             </Button>
           </FormItem>
         </Form>

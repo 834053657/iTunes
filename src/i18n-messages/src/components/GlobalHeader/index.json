@@ -1,0 +1,34 @@
+[
+  {
+    "id": "personalCenter",
+    "defaultMessage": "个人中心"
+  },
+  {
+    "id": "myAd",
+    "defaultMessage": "我的广告"
+  },
+  {
+    "id": "header_myOrder_",
+    "defaultMessage": "我的订单"
+  },
+  {
+    "id": "logout",
+    "defaultMessage": "退出登录"
+  },
+  {
+    "id": "message",
+    "defaultMessage": "消息"
+  },
+  {
+    "id": "readedAllMsgs",
+    "defaultMessage": "您已读完所有消息"
+  },
+  {
+    "id": "login",
+    "defaultMessage": "登录"
+  },
+  {
+    "id": "registration",
+    "defaultMessage": "注册"
+  }
+]

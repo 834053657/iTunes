@@ -1,0 +1,58 @@
+[
+  {
+    "id": "myAdList.ad_no",
+    "defaultMessage": "广告编号"
+  },
+  {
+    "id": "myAdList.goods_type",
+    "defaultMessage": "产品类型"
+  },
+  {
+    "id": "myAdList.ad_type",
+    "defaultMessage": "交易类型"
+  },
+  {
+    "id": "myAdList.unit_price",
+    "defaultMessage": "单价"
+  },
+  {
+    "id": "myAdList.status_",
+    "defaultMessage": "状态"
+  },
+  {
+    "id": "myAdList.operator_",
+    "defaultMessage": "操作"
+  },
+  {
+    "id": "myAdList.operator_check",
+    "defaultMessage": "查看"
+  },
+  {
+    "id": "myAdList.operator_stop",
+    "defaultMessage": "暂停"
+  },
+  {
+    "id": "myAdList.operator_recover",
+    "defaultMessage": "恢复"
+  },
+  {
+    "id": "myAdList.operator_edit",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "myAdList.operator_toDelete",
+    "defaultMessage": "您确认要删除此广告?"
+  },
+  {
+    "id": "myAdList.operator_deleted",
+    "defaultMessage": "删除"
+  },
+  {
+    "id": "myAdList.my_ad",
+    "defaultMessage": "我的广告"
+  },
+  {
+    "id": "myAdList.my_ad_manage",
+    "defaultMessage": "交易条款管理"
+  }
+]
