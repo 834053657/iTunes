@@ -19,6 +19,7 @@ import cx from 'classnames';
 import styles from './appeal.less';
 import StepModel from '../Step';
 import UploadComponent from './Upload';
+import { formatMoney } from '../../../utils/utils';
 
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
@@ -282,7 +283,7 @@ export default class Appeal extends Component {
                   </li>
                   <li className={styles.item}>
                     <span className={styles.title}>单价：</span>
-                    <div className={styles.content}>{ad.unit_price || '-'}</div>
+                    <div className={styles.content}>{formatMoney(ad.unit_price) || '-'}</div>
                   </li>
                   <li className={styles.item}>
                     <span className={styles.title}>数量：</span>
@@ -295,7 +296,7 @@ export default class Appeal extends Component {
                   <li className={styles.item}>
                     <span className={styles.title}>总价：</span>
                     <div className={styles.content}>
-                      {order.amount ? order.amount + 'RMB' : '-'}
+                      {order.amount ? formatMoney(order.amount) + 'RMB' : '-'}
                     </div>
                   </li>
                   <li className={styles.item}>

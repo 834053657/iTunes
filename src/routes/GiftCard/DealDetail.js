@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { sumBy, map, get, findIndex, filter } from 'lodash';
-import { Badge, Button, message, Avatar, Popover, Icon, Input, Spin, Form } from 'antd';
+import { Badge, Button, message, Avatar, Popover, Icon, Input, Spin, Form, Popconfirm } from 'antd';
 import DescriptionList from 'components/DescriptionList';
 import InputNumber from 'components/InputNumber';
 import PriceForm from './forms/PriceForm';
 import styles from './DealDetail.less';
+import { formatMoney } from '../../utils/utils';
 
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
@@ -80,7 +81,7 @@ export default class DealDeatil extends Component {
     const accountBalance = get(this.props, 'detail.owner.amount');
     const { money, count } = item || {};
     const userBuySum = sumBy(orderData, row => {
-      return row.money * row.count || 0;
+      return row.money * row.count * row.unit_price || 0;
     });
     const result = (accountBalance - userBuySum) * 10000 / money / 10000;
     return result < 0 ? 0 : +parseInt(result);
@@ -273,7 +274,7 @@ export default class DealDeatil extends Component {
           </DescriptionList>
           {this.renderCondition(detail)}
           <DescriptionList col={1}>
-            <Description term="总价">{this.calcuBuyTotal()} RMB</Description>
+            <Description term="总价">{formatMoney(this.calcuBuyTotal())} RMB</Description>
             <Description term="发卡期限">{deadline} 分钟</Description>
             <Description term="保障时间">{guarantee_time} 分钟</Description>
           </DescriptionList>
@@ -282,14 +283,21 @@ export default class DealDeatil extends Component {
             <Button key="back" onClick={this.handleBack}>
               取消
             </Button>
-            <Button
-              loading={this.props.submitting}
-              style={{ marginLeft: 15 }}
-              type="primary"
-              htmlType="submit"
+            <Popconfirm
+              title="确认出售吗?"
+              onConfirm={this.handleSubmit}
+              okText="是"
+              cancelText="否"
             >
-              确认出售
-            </Button>
+              <Button
+                loading={this.props.submitting}
+                style={{ marginLeft: 15 }}
+                type="primary"
+                htmlType="submit"
+              >
+                确认出售
+              </Button>
+            </Popconfirm>
           </FormItem>
         </Spin>
       </div>
@@ -357,22 +365,29 @@ export default class DealDeatil extends Component {
             })}
           </div>
           <DescriptionList size="large" col={1}>
-            <Description term="总价">{this.calcuBuyTotal1(money)} RMB</Description>
+            <Description term="总价">{formatMoney(this.calcuBuyTotal1(money))} RMB</Description>
             <Description term="保障时间">{guarantee_time} 分钟</Description>
           </DescriptionList>
           <FormItem className={styles.bottom}>
             <Button key="back" onClick={this.handleBack}>
               取消
             </Button>
-            <Button
-              loading={this.props.submitting}
-              style={{ marginLeft: 15 }}
-              disabled={this.calcuBuyTotal1(money) <= 0}
-              type="primary"
-              htmlType="submit"
+            <Popconfirm
+              title="确认购买吗?"
+              onConfirm={this.handleSubmit}
+              okText="是"
+              cancelText="否"
             >
-              确认购买
-            </Button>
+              <Button
+                loading={this.props.submitting}
+                style={{ marginLeft: 15 }}
+                disabled={this.calcuBuyTotal1(money) <= 0}
+                type="primary"
+                htmlType="submit"
+              >
+                确认购买
+              </Button>
+            </Popconfirm>
           </FormItem>
         </Spin>
       </div>
@@ -382,7 +397,6 @@ export default class DealDeatil extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { detail = {}, match: { params } } = this.props;
-    console.log(params);
     this.props.form.validateFieldsAndScroll((err, values) => {
       values.order_detail = filter(values.order_detail, item => item.count > 0);
       if (!values.order_detail.length) {

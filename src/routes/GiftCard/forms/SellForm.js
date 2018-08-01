@@ -296,15 +296,11 @@ export default class SellForm extends Component {
   calculateMoney = () => {
     const { action, defaultValue } = this.props;
     const cards = action ? defaultValue.cards : this.state.cards;
-    let money = 0;
     let calculateMoney = 0;
-    calculateMoney = cards.map((item, index) => {
-      return (calculateMoney += item.money * item.items.length);
+    cards.map(card => {
+      return (calculateMoney += card.money * card.items.length);
     });
-    calculateMoney.map(item => {
-      return (money += item);
-    });
-    return money;
+    return calculateMoney;
   };
 
   render() {
@@ -580,7 +576,11 @@ export default class SellForm extends Component {
           </DescriptionList>
 
           <FormItem className={styles.buttonBox}>
-            <Button key="back" onClick={this.handleCancel} disabled={this.props.submitSellForm}>
+            <Button
+              key="back"
+              onClick={this.handleCancel}
+              disabled={this.props.submitSellForm ? 1 : undefined}
+            >
               返回
             </Button>
             {action && action !== 'edit' ? (

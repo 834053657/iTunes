@@ -9,6 +9,7 @@ import { sendCDK } from '../../../../services/api';
 import SendOnlyPicture from './OnlyPic';
 import SendPicWithText from './PicWithText';
 import OnlyPassWord from '../../forms/OnlyPassWord';
+import { formatMoney } from '../../../../utils/utils';
 
 const FormItem = Form.Item;
 
@@ -358,11 +359,11 @@ export default class Process extends Component {
                     <span>总面额：</span>
                   </h4>
                   <h4>
-                    <span className={styles.title}>{ad.unit_price}RMB</span>
+                    <span className={styles.title}>{formatMoney(ad.unit_price)}RMB</span>
                     <span>单价：</span>
                   </h4>
                   <h4>
-                    <span className={styles.title}>{order.amount}RMB</span>
+                    <span className={styles.title}>{formatMoney(order.amount)}RMB</span>
                     <span>总价：</span>
                   </h4>
                 </div>

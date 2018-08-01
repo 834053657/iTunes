@@ -139,16 +139,14 @@ export default class OnlyPassWord extends Component {
               <span>{c.money}面额</span>
               <span>({c.items.length})</span>
               <div style={{ float: 'right' }}>
-                {sendCard
-                  ? null
-                  : (!action || action === 'edit') &&
-                    psw === 1 && (
-                      <Spin spinning={this.state.uploading}>
-                        <Upload onChange={info => this.handlerUpload(info, index)} {...uploadProps}>
-                          <Button>导入</Button>
-                        </Upload>
-                      </Spin>
-                    )}
+                {(!action || action === 'edit') &&
+                  psw === 1 && (
+                    <Spin spinning={this.state.uploading}>
+                      <Upload onChange={info => this.handlerUpload(info, index)} {...uploadProps}>
+                        <Button>导入</Button>
+                      </Upload>
+                    </Spin>
+                  )}
               </div>
 
               {sendCard

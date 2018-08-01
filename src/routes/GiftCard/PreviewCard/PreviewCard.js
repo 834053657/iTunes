@@ -4,6 +4,7 @@ import { routerRedux } from 'dva/router';
 import { Tabs, Icon } from 'antd';
 import styles from './PreviewCard.less';
 import StepModel from '../Step';
+import { formatMoney } from '../../../utils/utils';
 
 const TabPane = Tabs.TabPane;
 
@@ -101,11 +102,11 @@ export default class PreviewCard extends Component {
           </div>
           <div className={styles.price}>
             <span>单价：</span>
-            <span>{ad.unit_price}</span>RMB
+            <span>{formatMoney(ad.unit_price)}</span>RMB
           </div>
           <div>
             <span>总价：</span>
-            <span>{order.amount}</span>RMB
+            <span>{formatMoney(order.amount)}</span>RMB
           </div>
         </div>
         <div className={styles.tabsLine}>

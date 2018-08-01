@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
 import CountDown from 'components/CountDown';
-
 import {
   Table,
   Tabs,
@@ -19,6 +18,7 @@ import {
 } from 'antd';
 import styles from './BuyerCheckCard.less';
 import StepModel from '../../Step';
+import { formatMoney } from '../../../../utils/utils';
 
 const Step = Steps.Step;
 
@@ -84,7 +84,7 @@ export default class BuyerCheckCard extends Component {
             </li>
             <li className={styles.item}>
               <span className={styles.title}>单价：</span>
-              <div className={styles.content}>{ad.unit_price}</div>
+              <div className={styles.content}>{formatMoney(ad.unit_price)}</div>
             </li>
             <li className={styles.item}>
               <span className={styles.title}>数量：</span>
@@ -105,7 +105,7 @@ export default class BuyerCheckCard extends Component {
             })}
             <li className={styles.item}>
               <span className={styles.title}>总价：</span>
-              <div className={styles.content}>{order.amount}RMB</div>
+              <div className={styles.content}>{formatMoney(order.amount)}RMB</div>
             </li>
           </ul>
           <div className={styles.bottom}>

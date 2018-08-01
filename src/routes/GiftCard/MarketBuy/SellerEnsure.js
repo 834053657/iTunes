@@ -7,6 +7,7 @@ import styles from './OrderDetail.less';
 import StepModel from '../Step';
 import QuickMsg from '../QuickMsg';
 import SetInterval from '../SetInterval';
+import { formatMoney } from '../../../utils/utils';
 
 const Option = Select.Option;
 
@@ -66,11 +67,11 @@ export default class SellerEnsure extends Component {
               </div>
               <div className={styles.price}>
                 <span>单价：</span>
-                <span>{ad.unit_price}</span>RMB
+                <span>{formatMoney(ad.unit_price)}</span>RMB
               </div>
               <div>
                 <span>总价：</span>
-                <span>{order.amount}</span>RMB
+                <span>{formatMoney(order.amount)}</span>RMB
               </div>
             </div>
             <div className={styles.guarantee}>
