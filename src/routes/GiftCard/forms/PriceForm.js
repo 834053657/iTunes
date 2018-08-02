@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Button } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import InputNumber from 'components/InputNumber';
 import styles from './PriceForm.less';
 
@@ -39,18 +41,32 @@ export default class PriceForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormItem extra={`可添加面额 ${min} - ${max}`}>
+        <FormItem
+          extra={
+            <FM
+              id="priceForm.amount_add_region_"
+              defaultMessage="可添加面额 {min} - {max}"
+              values={{ min, max }}
+            />
+          }
+        >
           {getFieldDecorator('price', {
             rules: [
               {
                 required: true,
-                message: '请输入面额！',
+                message: <FM id="priceForm.amount_add_input" defaultMessage="请输入面额！" />,
               },
               {
                 type: 'number',
                 min,
                 max,
-                message: `可添加面额为${min} ~ ${max}`,
+                message: (
+                  <FM
+                    id="priceForm.amount_add_msg_region"
+                    defaultMessage="可添加面额为 {min} - {max}"
+                    values={{ min, max }}
+                  />
+                ),
               },
               // {
               //   validator: this.checkCount,
@@ -58,10 +74,9 @@ export default class PriceForm extends Component {
             ],
           })(<InputNumber precision={0} style={{ width: 200 }} placeholder="请输入面额" />)}
         </FormItem>
-
         <FormItem className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>
-            取消
+            <FM id="priceForm.amount_add_input_cancel" defaultMessage="取消" />
           </Button>
           <Button
             // loading={submitting}
@@ -69,7 +84,7 @@ export default class PriceForm extends Component {
             type="primary"
             htmlType="submit"
           >
-            添加
+            <FM id="priceForm.amount_add_input_submit" defaultMessage="添加" />
           </Button>
         </FormItem>
       </Form>

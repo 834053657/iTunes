@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { filter, last } from 'lodash';
+import { FormattedMessage as FM, injectIntl } from 'react-intl';
 import {
   Table,
   Tabs,
@@ -18,6 +19,7 @@ import {
   Popconfirm,
 } from 'antd';
 import styles from './FilterDemoinForm.less';
+
 import SellForm from './SellForm';
 import PicUpload from '../../../components/UploadQiNiu/index';
 import { getAuthority } from '../../../utils/authority';
@@ -83,7 +85,7 @@ export default class OnlyPassWord extends Component {
       this.props.addFileData(info.file.response.data.items, index);
     } else if (info.file.status === 'error') {
       this.setState({ uploading: false });
-      message.error('上传错误，可能请求已过期，请刷新页面重试');
+      message.error(PROMPT('onlyPassWord.upload_default')); //上传错误，可能请求已过期，请刷新页面重试
     }
   };
 
@@ -115,7 +117,7 @@ export default class OnlyPassWord extends Component {
       beforeUpload(file) {
         const fileExt = file.name.substr(file.name.lastIndexOf('.') + 1);
         if (['csv', 'xls', 'xlsx'].indexOf(fileExt) < 0) {
-          message.error('文件格式不对，您只能导入csv, xls或xlsx文件。');
+          message.error(PROMPT('onlyPassWord.file_format')); //文件格式不对，您只能导入csv, xls或xlsx文件。
           return false;
         }
         return true;
@@ -136,42 +138,32 @@ export default class OnlyPassWord extends Component {
           key={c.money}
           title={
             <div>
-              <span>{c.money}面额</span>
+              <span>
+                {c.money}
+                <FM id="onlyPassWord.amount_title" defaultMessage="面额" />
+              </span>
               <span>({c.items.length})</span>
-              <div style={{ float: 'right' }}>
-                {(!action || action === 'edit') &&
-                  psw === 1 && (
-                    <Spin spinning={this.state.uploading}>
-                      <Upload onChange={info => this.handlerUpload(info, index)} {...uploadProps}>
-                        <Button>导入</Button>
-                      </Upload>
-                    </Spin>
-                  )}
-              </div>
-
               {sendCard
                 ? null
-                : (!action || action === 'edit') &&
-                  psw === 1 && (
-                    <a
-                      style={{ fontSize: 12, float: 'right', lineHeight: 3, marginRight: 10 }}
-                      href="../../../../public/PasswordTemplate.xlsx"
-                      download="PasswordTemplate.xlsx"
-                    >
-                      点击下载模板
-                    </a>
+                : ((psw === 1 && !action) || action === 'edit') && (
+                <Spin spinning={this.state.uploading}>
+                  <Upload onChange={info => this.handlerUpload(info, index)} {...uploadProps}>
+                    <Button style={{ float: 'right' }}>
+                      <FM id="onlyPassWord.upload_btn" defaultMessage="导入" />{' '}
+                    </Button>
+                  </Upload>
+                </Spin>
                   )}
-
               {sendCard
                 ? null
                 : !action &&
                   cards.length !== 1 && (
                     <div style={{ float: 'right' }}>
                       <Popconfirm
-                        title="确定删除吗？"
+                        title={<FM id="onlyPassWord.sure_delete" defaultMessage="确定删除吗？" />}
                         onConfirm={() => this.props.deleteCard(index)}
-                        okText="是"
-                        cancelText="否"
+                        okText={<FM id="onlyPassWord.sure_delete_y" defaultMessage="是" />}
+                        cancelText={<FM id="onlyPassWord.sure_delete_n" defaultMessage="否" />}
                       >
                         <Icon className={styles.deleteIcon} type="minus-circle-o" />
                       </Popconfirm>
@@ -193,25 +185,39 @@ export default class OnlyPassWord extends Component {
                       rules: [
                         {
                           required: true,
-                          message: '请输入卡密',
+                          message: (
+                            <FM id="onlyPassWord.card_password" defaultMessage="请输入卡密" />
+                          ),
                         },
                         {
                           min: 4,
-                          message: '最小长度不得小于4位',
+                          message: (
+                            <FM
+                              id="onlyPassWord.card_password_min"
+                              defaultMessage="最小长度不得小于4位"
+                            />
+                          ),
                         },
                         {
                           max: 50,
-                          message: '最大长度不得超过50位',
+                          message: (
+                            <FM
+                              id="onlyPassWord.card_password_max"
+                              defaultMessage="最大长度不得超过50位"
+                            />
+                          ),
                         },
                       ],
                     })(
                       <Row>
-                        <Col style={{ width: '6%', float: 'left' }}>卡密:</Col>
+                        <Col style={{ width: '6%', float: 'left' }}>
+                          <FM id="onlyPassWord.card_passWord_title_in" defaultMessage="卡密:" />
+                        </Col>
                         <Col style={{ width: '85%', float: 'left' }}>
                           <Input
                             onChange={e => this.props.changePsw(e, index, littleIndex)}
                             defaultValue={card.password}
-                            placeholder="请输入卡密"
+                            placeholder={PROMPT('onlyPassWord.card_passWord_input')} //请输入卡密
                             disabled={
                               (action && action !== 'edit') || (card.status && card.status !== 0)
                             }
@@ -222,10 +228,19 @@ export default class OnlyPassWord extends Component {
                           : (!action || (action === 'edit' && card.status && card.status === 0)) &&
                             c.items.length !== 1 && (
                               <Popconfirm
-                                title="确定删除吗？"
+                                title={
+                                  <FM
+                                    id="onlyPassWord.delete_user_sure"
+                                    defaultMessage="确定删除吗?"
+                                  />
+                                }
                                 onConfirm={() => this.props.confirm(index, littleIndex)}
-                                okText="是"
-                                cancelText="否"
+                                okText={
+                                  <FM id="onlyPassWord.delete_user_sure_y" defaultMessage="是" />
+                                }
+                                cancelText={
+                                  <FM id="onlyPassWord.delete_user_sure_n" defaultMessage="否" />
+                                }
                               >
                                 <Icon className={styles.deleteIcon} type="minus-circle-o" />
                               </Popconfirm>
@@ -244,31 +259,41 @@ export default class OnlyPassWord extends Component {
                       rules: [
                         {
                           required: true,
-                          message: '请上传卡图',
+                          message: (
+                            <FM id="onlyPassWord.card_img_upload" defaultMessage="请上传卡图" />
+                          ),
                         },
                       ],
                     })(
                       <Row>
-                        <Col style={{ width: '6%', float: 'left' }}>卡图:</Col>
+                        <Col style={{ width: '6%', float: 'left' }}>
+                          <FM id="onlyPassWord.card_img_upload_title" defaultMessage="卡图:" />
+                        </Col>
                         <Col style={{ width: '85%', float: 'left' }}>
                           <PicUpload
                             onChange={e => this.props.changePic(e, index, littleIndex)}
                             value={card.picture}
-                            disabled={
-                              (action && action !== 'edit') || (card.status && card.status !== 0)
-                            }
+                            disabled={action && action !== 'edit'}
                           />
                         </Col>
                         {sendCard
                           ? null
                           : psw === 2 &&
-                            c.items.length !== 1 &&
                             (!action || action === 'edit') && (
                               <Popconfirm
-                                title="确定删除吗？"
+                                title={
+                                  <FM
+                                    id="onlyPassWord.card_img_delete"
+                                    defaultMessage="确定删除吗？"
+                                  />
+                                }
                                 onConfirm={() => this.props.confirm(index, littleIndex)}
-                                okText="是"
-                                cancelText="否"
+                                okText={
+                                  <FM id="onlyPassWord.card_img_delete_y" defaultMessage="是" />
+                                }
+                                cancelText={
+                                  <FM id="onlyPassWord.card_img_delete_n" defaultMessage="否" />
+                                }
                               >
                                 <Icon className={styles.deleteIcon} type="minus-circle-o" />
                               </Popconfirm>
@@ -290,17 +315,21 @@ export default class OnlyPassWord extends Component {
                 rules: [
                   {
                     required: false,
-                    message: '请上传凭证',
+                    message: (
+                      <FM id="onlyPassWord.card_voucher_upload" defaultMessage="请上传凭证" />
+                    ),
                   },
                 ],
               })(
                 <Row>
-                  <Col style={{ width: '6%', float: 'left' }}>凭证:</Col>
+                  <Col style={{ width: '6%', float: 'left' }}>
+                    <FM id="onlyPassWord.card_voucher_upload_title" defaultMessage="凭证:" />
+                  </Col>
                   <Col style={{ width: '85%', float: 'left' }}>
                     <PicUpload
                       onChange={e => this.props.changePZ(e, index)}
                       value={c.receipt}
-                      disabled={action}
+                      disabled={action && action !== 'edit'}
                     />
                   </Col>
                 </Row>
@@ -316,13 +345,15 @@ export default class OnlyPassWord extends Component {
                 style={{ width: '60%' }}
                 disabled={action && action !== 'edit'}
               >
-                <Icon type="plus" /> 添加卡密
+                <Icon type="plus" />{' '}
+                <FM id="onlyPassWord.card_pass_add" defaultMessage="添加卡密" />
               </Button>
             </FormItem>
           )}
         </Card>
       );
     });
+
     return <div>{cardItems}</div>;
   }
 }

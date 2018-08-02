@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { filter } from 'lodash';
 import { routerRedux } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import {
   Button,
   Menu,
@@ -113,7 +114,7 @@ export default class BuyCard extends Component {
   //添加面额种类
   addDeno = () => {
     if (isNaN(this.state.denoVaule)) {
-      return message.warning('请输入正确格式');
+      return message.warning(<FM id="sell.correct" defaultMessage="请输入正确格式" />);
     }
     const a = this.state.cards;
     const item = {
@@ -275,7 +276,7 @@ export default class BuyCard extends Component {
         <span className={styles.left}>面额:</span>
         <div className={styles.right}>
           <Input
-            placeholder="请输入面额"
+            placeholder={<FM id="sell.amountInp" defaultMessage="请输入面额" />}
             defaultValue=""
             onChange={e => {
               this.setVisible('denoVaule', e.target.value);
@@ -289,7 +290,7 @@ export default class BuyCard extends Component {
               this.setVisible('addDenoVisible', false);
             }}
           >
-            取消
+            {<FM id="sell.delete" defaultMessage="取消" />}
           </Button>
           <Button
             onClick={() => {
@@ -297,7 +298,7 @@ export default class BuyCard extends Component {
             }}
             type="primary"
           >
-            确定
+            {<FM id="sell.confirm" defaultMessage="确定" />}
           </Button>
         </div>
       </div>
@@ -307,18 +308,18 @@ export default class BuyCard extends Component {
       console.log(action);
       switch (action) {
         case 'edit':
-          return '编辑';
+          return <FM id="sell.edit" defaultMessage="编辑" />;
         case 'preview':
-          return '查看';
+          return <FM id="sell.check" defaultMessage="查看" />;
         case undefined:
-          '创建出售';
+          return <FM id="sell.createSell" defaultMessage="创建出售" />;
       }
     };
 
     const breadcrumbList = [
-      { title: '广告管理', href: '/ad/my' },
-      { title: '礼品卡', href: '/card/market' },
-      { title: '出售广告' },
+      { title: <FM id="sell.adManage" defaultMessage="广告管理" />, href: '/ad/my' },
+      { title: <FM id="sell.giftCard" defaultMessage="礼品卡" />, href: '/card/market' },
+      { title: <FM id="sell.adSell" defaultMessage="出售广告" /> },
     ];
 
     const { terms } = this.props.card || {};

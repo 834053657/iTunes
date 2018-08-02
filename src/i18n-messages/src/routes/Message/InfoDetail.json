@@ -1,0 +1,22 @@
+[
+  {
+    "id": "noticeList.the_first_page",
+    "defaultMessage": "首页"
+  },
+  {
+    "id": "noticeList.more_news",
+    "defaultMessage": "更多资讯"
+  },
+  {
+    "id": "noticeList.news_details",
+    "defaultMessage": "资讯详情"
+  },
+  {
+    "id": "noticeList.news_details_title",
+    "defaultMessage": "资讯详情"
+  },
+  {
+    "id": "noticeList.go_back",
+    "defaultMessage": "返回"
+  }
+]

@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import cx from 'classnames';
 import { Link } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import {
   Row,
   Col,
@@ -175,7 +176,7 @@ export default class UserCenterPage extends Component {
     return (
       <Modal
         width={500}
-        title="修改密码"
+        title={<FM id="passWordChange.change_passWord_title" defaultMessage="修改密码" />}
         visible={pwdModalVisible}
         onCancel={this.hidePwdlModal}
         maskClosable={false}
@@ -197,7 +198,7 @@ export default class UserCenterPage extends Component {
     return (
       <Modal
         width={500}
-        title="实名认证"
+        title={<FM id="personalCenter.real_name" defaultMessage="实名认证" />}
         visible={realNameModalVisible}
         onCancel={this.hideRealNameModal}
         maskClosable={false}
@@ -219,7 +220,7 @@ export default class UserCenterPage extends Component {
     return (
       <Modal
         width={500}
-        title="视频认证"
+        title={<FM id="personalCenter.video" defaultMessage="视频认证" />}
         visible={videoAuthModalVisible}
         onCancel={this.hideVideoAuthModal}
         maskClosable={false}
@@ -231,15 +232,31 @@ export default class UserCenterPage extends Component {
   };
 
   handleGetLevel = user => {
-    let level = <span className={styles.low}>低</span>;
+    let level = (
+      <span className={styles.low}>
+        <FM id="personalCenter.lower" defaultMessage="低" />
+      </span>
+    );
     if (user.email) {
-      level = <span className={styles.low}>低</span>;
+      level = (
+        <span className={styles.low}>
+          <FM id="personalCenter.lower_1" defaultMessage="低" />
+        </span>
+      );
     }
     if (user.email && (user.g2fa_on || user.telephone)) {
-      level = <span className={styles.middle}>中</span>;
+      level = (
+        <span className={styles.middle}>
+          <FM id="personalCenter.center" defaultMessage="中" />
+        </span>
+      );
     }
     if (user.email && user.telephone && user.g2fa_on) {
-      level = <span className={styles.hight}>高</span>;
+      level = (
+        <span className={styles.hight}>
+          <FM id="personalCenter.height" defaultMessage="高" />
+        </span>
+      );
     }
 
     return level;
@@ -295,20 +312,25 @@ export default class UserCenterPage extends Component {
           avatar,
         },
         callback: () => {
-          message.success('修改头像成功');
+          message.success(<FM id="personalCenter.change_photo" defaultMessage="修改头像成功" />);
           this.setState({ uploadLoading: false });
         },
       });
     } else if (info.file.status === 'error') {
       this.setState({ uploadLoading: false });
-      message.error('上传错误，可能请求已过期，请刷新页面重试');
+      message.error(
+        <FM
+          id="personalCenter.upload_error"
+          defaultMessage="上传错误，可能请求已过期，请刷新页面重试"
+        />
+      );
     }
   };
 
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error('头像必须小于2M!');
+      message.error(<FM id="personalCenter.photo_limit" defaultMessage="头像必须小于2M!" />);
     }
     return isLt2M;
   };
@@ -354,22 +376,30 @@ export default class UserCenterPage extends Component {
                     data={{ token: upload.token }}
                   >
                     <Button disabled={uploadLoading}>
-                      <Icon type={uploadLoading ? 'loading' : 'upload'} /> 上传头像
+                      <Icon type={uploadLoading ? 'loading' : 'upload'} />{' '}
+                      <FM id="personalCenter.upload_head_photo" defaultMessage="上传头像" />
                     </Button>
                   </Upload>
                 </div>
                 <Divider />
                 <p>
-                  本帐号于{' '}
-                  <span>
-                    {user.created_at
-                      ? moment(user.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')
-                      : '-'}
-                  </span>{' '}
-                  注册 <br />
-                  {first_trade_at
-                    ? `首次交易于 ${moment(first_trade_at * 1000).format('YYYY-MM-DD HH:mm:ss')}`
-                    : null}
+                  <FM
+                    id="personalCenter.desc1"
+                    defaultMessage="本帐号于{time}注册"
+                    values={{
+                      time: user.created_at
+                        ? moment(user.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')
+                        : '-',
+                    }}
+                  />
+                  <br />
+                  {first_trade_at ? (
+                    <FM
+                      id="personalCenter.desc2"
+                      defaultMessage="首次交易于{time}"
+                      values={{ time: moment(first_trade_at * 1000).format('YYYY-MM-DD HH:mm:ss') }}
+                    />
+                  ) : null}
                 </p>
               </div>
             </div>
@@ -380,9 +410,14 @@ export default class UserCenterPage extends Component {
               <div className={styles.box}>
                 <div className={styles.box_head}>
                   <div className={styles.box_head_wrapper}>
-                    <div className={styles.box_head_title}>账号与安全</div>
+                    <div className={styles.box_head_title}>
+                      <FM id="title1" defaultMessage="账号与安全" />
+                    </div>
                     <div className={styles.box_head_extra}>
-                      <span>安全等级: {this.handleGetLevel(user)}</span>
+                      <span>
+                        <FM id="personalCenter.safe_grade" defaultMessage="安全等级:" />
+                        {this.handleGetLevel(user)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -391,16 +426,28 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="mail" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>邮箱</h4>
+                        <h4 className={styles.box_item_title}>
+                          <FM id="personalCenter.email_" defaultMessage="邮箱" />
+                        </h4>
                         <div className={styles.box_item_descript}>
-                          {user.email ? '已绑定' : '未绑定'}
+                          {user.email ? (
+                            <FM id="personalCenter.email_binding" defaultMessage="已绑定" />
+                          ) : (
+                            <FM id="personalCenter.email_unbind" defaultMessage="未绑定" />
+                          )}
                         </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content}>{user.email}</div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a onClick={this.showEmailModal}>{user.email ? '修改' : '绑定'}</a>
+                        <a onClick={this.showEmailModal}>
+                          {user.email ? (
+                            <FM id="personalCenter.email_change" defaultMessage="修改" />
+                          ) : (
+                            <FM id="personalCenter.email_toBind" defaultMessage="绑定" />
+                          )}
+                        </a>
                       </li>
                     </ul>
                   </div>
@@ -409,16 +456,28 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="mobile" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>手机</h4>
+                        <h4 className={styles.box_item_title}>
+                          <FM id="personalCenter.phone_" defaultMessage="手机" />
+                        </h4>
                         <div className={styles.box_item_descript}>
-                          {user.telephone ? '已绑定' : '未绑定'}
+                          {user.telephone ? (
+                            <FM id="personalCenter.phone_binding" defaultMessage="已绑定" />
+                          ) : (
+                            <FM id="personalCenter.phone_unBind" defaultMessage="未绑定" />
+                          )}
                         </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content}>{user.telephone}</div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a onClick={this.showMobileModal}>{user.telephone ? '修改' : '绑定'}</a>
+                        <a onClick={this.showMobileModal}>
+                          {user.telephone ? (
+                            <FM id="personalCenter.phone_change" defaultMessage="修改" />
+                          ) : (
+                            <FM id="personalCenter.phone_toBind" defaultMessage="绑定" />
+                          )}
+                        </a>
                       </li>
                     </ul>
                   </div>
@@ -427,9 +486,15 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="chrome" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>谷歌验证码</h4>
+                        <h4 className={styles.box_item_title}>
+                          <FM id="personalCenter.chrome_" defaultMessage="谷歌验证码" />
+                        </h4>
                         <div className={styles.box_item_descript}>
-                          {user.g2fa_on ? '已绑定' : '未绑定'}
+                          {user.g2fa_on ? (
+                            <FM id="personalCenter.chrome_binding" defaultMessage="已绑定" />
+                          ) : (
+                            <FM id="personalCenter.chrome_unbind" defaultMessage="未绑定" />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -437,9 +502,13 @@ export default class UserCenterPage extends Component {
                     <ul className={styles.box_item_action}>
                       <li>
                         {user.g2fa_on ? (
-                          <a onClick={this.showG2Modal}>停用</a>
+                          <a onClick={this.showG2Modal}>
+                            <FM id="personalCenter.chrome_unUse" defaultMessage="停用" />
+                          </a>
                         ) : (
-                          <Link to="/user-center/g2validate">设置</Link>
+                          <Link to="/user-center/g2validate">
+                            <FM id="personalCenter.chrome_toSet" defaultMessage="设置" />
+                          </Link>
                         )}
                       </li>
                     </ul>
@@ -449,14 +518,20 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="unlock" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>登录密码</h4>
-                        <div className={styles.box_item_descript}>已绑定</div>
+                        <h4 className={styles.box_item_title}>
+                          <FM id="personalCenter.passWord_" defaultMessage="登录密码" />
+                        </h4>
+                        <div className={styles.box_item_descript}>
+                          <FM id="personalCenter.passWord_toBind" defaultMessage="已绑定" />
+                        </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content} />
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a onClick={this.showPwdeModal}>修改</a>
+                        <a onClick={this.showPwdeModal}>
+                          <FM id="personalCenter.passWord_change" defaultMessage="修改" />
+                        </a>
                       </li>
                     </ul>
                   </div>
@@ -467,10 +542,15 @@ export default class UserCenterPage extends Component {
               <div className={styles.box}>
                 <div className={styles.box_head}>
                   <div className={styles.box_head_wrapper}>
-                    <div className={styles.box_head_title}>身份认证</div>
+                    <div className={styles.box_head_title}>
+                      <FM id="personalCenter.identity_" defaultMessage="身份认证" />
+                    </div>
                   </div>
                   <div className={styles.box_head_subtitle}>
-                    请如实填写您的身份信息，一经认证不可修改
+                    <FM
+                      id="personalCenter.identity_warning"
+                      defaultMessage="请如实填写您的身份信息，一经认证不可修改"
+                    />
                   </div>
                 </div>
                 <div className={styles.box_content}>
@@ -478,17 +558,30 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="idcard" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>实名认证</h4>
+                        <h4 className={styles.box_item_title}>
+                          <FM id="personalCenter.identity_real_name" defaultMessage="实名认证" />
+                        </h4>
                         <div className={styles.box_item_descript}>
                           {CONFIG.auth_status[real_name_status]}
                           {real_name_status === 3 ? (
                             <Popover
                               placement="bottomRight"
-                              title="审核反馈"
+                              title={
+                                <FM
+                                  id="personalCenter.identity_real_name_identity"
+                                  defaultMessage="审核反馈"
+                                />
+                              }
                               content={real_name.reason}
                               trigger="click"
                             >
-                              <a> 原因 </a>
+                              <a>
+                                {' '}
+                                <FM
+                                  id="personalCenter.identity_real_name_reason"
+                                  defaultMessage="原因"
+                                />{' '}
+                              </a>
                             </Popover>
                           ) : null}
                         </div>
@@ -503,7 +596,9 @@ export default class UserCenterPage extends Component {
                     <ul className={styles.box_item_action}>
                       <li>
                         {!!~[1, 3].indexOf(real_name_status) && (
-                          <a onClick={this.showRealNameModal}>编辑</a>
+                          <a onClick={this.showRealNameModal}>
+                            <FM id="personalCenter.identity_real_name_edit" defaultMessage="编辑" />
+                          </a>
                         )}
                       </li>
                     </ul>
@@ -512,17 +607,33 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="video-camera" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>视频认证</h4>
+                        <h4 className={styles.box_item_title}>
+                          <FM
+                            id="personalCenter.identity_real_name_video"
+                            defaultMessage="视频认证"
+                          />
+                        </h4>
                         <div className={styles.box_item_descript}>
                           {CONFIG.auth_status[video_status]}
                           {video_status === 3 ? (
                             <Popover
                               placement="bottomRight"
-                              title="审核反馈"
+                              title={
+                                <FM
+                                  id="personalCenter.identity_real_name_video_identity"
+                                  defaultMessage="审核反馈"
+                                />
+                              }
                               content={video.reason}
                               trigger="click"
                             >
-                              <a> 原因 </a>
+                              <a>
+                                {' '}
+                                <FM
+                                  id="personalCenter.identity_real_name_video_reason"
+                                  defaultMessage="原因"
+                                />{' '}
+                              </a>
                             </Popover>
                           ) : null}
                         </div>
@@ -532,7 +643,12 @@ export default class UserCenterPage extends Component {
                     <ul className={styles.box_item_action}>
                       <li>
                         {!!~[1, 3].indexOf(video_status) && (
-                          <a onClick={this.showVideoAuthModal}>认证</a>
+                          <a onClick={this.showVideoAuthModal}>
+                            <FM
+                              id="personalCenter.identity_real_name_video_toApprove"
+                              defaultMessage="认证"
+                            />
+                          </a>
                         )}
                       </li>
                     </ul>
@@ -544,7 +660,9 @@ export default class UserCenterPage extends Component {
               <div className={styles.box}>
                 <div className={styles.box_head}>
                   <div className={styles.box_head_wrapper}>
-                    <div className={styles.box_head_title}>支付方式</div>
+                    <div className={styles.box_head_title}>
+                      <FM id="personalCenter.pay_way_" defaultMessage="支付方式" />
+                    </div>
                   </div>
                 </div>
                 <div className={styles.box_content}>
@@ -578,11 +696,22 @@ export default class UserCenterPage extends Component {
                               {item.status === 3 ? (
                                 <Popover
                                   placement="bottomRight"
-                                  title="审核反馈"
+                                  title={
+                                    <FM
+                                      id="personalCenter.Method_payment_identity"
+                                      defaultMessage="审核反馈"
+                                    />
+                                  }
                                   content={item.reason}
                                   trigger="click"
                                 >
-                                  <a> 原因 </a>
+                                  <a>
+                                    {' '}
+                                    <FM
+                                      id="personalCenter.Method_payment_reason"
+                                      defaultMessage="原因"
+                                    />{' '}
+                                  </a>
                                 </Popover>
                               ) : null}
                             </div>
@@ -592,14 +721,26 @@ export default class UserCenterPage extends Component {
                         {~[1, 3].indexOf(item.status) ? (
                           <ul className={styles.box_item_action}>
                             <li>
-                              <a onClick={this.showPayMethodModal.bind(this, item)}>设置</a>
+                              <a onClick={this.showPayMethodModal.bind(this, item)}>
+                                <FM id="personalCenter.Method_payment_set" defaultMessage="设置" />
+                              </a>
                             </li>
                             <li>
                               <Popconfirm
-                                title="确定要删除吗?"
+                                title={
+                                  <FM
+                                    id="personalCenter.Method_payment_toDet"
+                                    defaultMessage="确定要删除吗?"
+                                  />
+                                }
                                 onConfirm={this.handleDeletePayMethod.bind(this, item.id)}
                               >
-                                <a className="text-red">删除</a>
+                                <a className="text-red">
+                                  <FM
+                                    id="personalCenter.Method_payment_hasDet"
+                                    defaultMessage="删除"
+                                  />
+                                </a>
                               </Popconfirm>
                             </li>
                           </ul>
@@ -611,7 +752,11 @@ export default class UserCenterPage extends Component {
                 {payments.length < 10 && (
                   <div className={styles.box_footer}>
                     <a onClick={this.showPayMethodModal}>
-                      <Icon type="plus" /> 添加新的支付方式
+                      <Icon type="plus" />{' '}
+                      <FM
+                        id="personalCenter.Method_payment_addPayment"
+                        defaultMessage="添加新的支付方式"
+                      />
                     </a>
                   </div>
                 )}
@@ -638,7 +783,7 @@ export default class UserCenterPage extends Component {
             {this.renderPwdModal()}
 
             <G2Validation
-              title="安全验证"
+              title={<FM id="personalCenter.Method_payment_safe" defaultMessage="安全验证" />}
               visible={g2ModalVisible}
               onCancel={this.hideG2Modal}
               onSubmit={this.handleSubmitG2}
@@ -651,7 +796,14 @@ export default class UserCenterPage extends Component {
             <PayMethodModal
               {...this.props}
               title={
-                payMethodModalVisible && payMethodModalVisible.id ? '修改支付方式' : '添加支付方式'
+                payMethodModalVisible && payMethodModalVisible.id ? (
+                  <FM
+                    id="personalCenter.Method_payment_change_payWay"
+                    defaultMessage="修改支付方式"
+                  />
+                ) : (
+                  <FM id="personalCenter.Method_payment_add_payWay" defaultMessage="添加支付方式" />
+                )
               }
               data={payMethodModalVisible}
               onCancel={this.hidePayMethodModal}

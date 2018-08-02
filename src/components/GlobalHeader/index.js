@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage as FM } from 'react-intl';
 import groupBy from 'lodash/groupBy';
 import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
@@ -82,20 +82,20 @@ export default class GlobalHeader extends PureComponent {
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userCenter">
           <Icon type="user" />
-          <FormattedMessage id="personalCenter" description="个人中心" />
+          <FM id="personalCenter" defaultMessage="个人中心" />
         </Menu.Item>
         <Menu.Item key="ad">
           <Icon type="code-o" />
-          <FormattedMessage id="myAd" description="我的广告" />
+          <FM id="myAd" defaultMessage="我的广告" />
         </Menu.Item>
         <Menu.Item key="order">
           <Icon type="file-text" />
-          <FormattedMessage id="myOrder" description="我的订单" />
+          <FM id="header_myOrder_" defaultMessage="我的订单" />
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">
           <Icon type="logout" />
-          <FormattedMessage id="logout" description="退出登录" />
+          <FM id="logout" defaultMessage="退出登录" />
         </Menu.Item>
       </Menu>
     );
@@ -147,8 +147,8 @@ export default class GlobalHeader extends PureComponent {
                 loading={fetchingNotices}
                 popupAlign={{ offset: [20, -16] }}
                 list={notices}
-                title={<FormattedMessage id="message" description="消息" />}
-                emptyText={<FormattedMessage id="readedAllMsgs" description="您已读完所有消息" />}
+                title={<FM id="message" defaultMessage="消息" />}
+                emptyText={<FM id="readedAllMsgs" defaultMessage="您已读完所有消息" />}
                 emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
               />
               <Dropdown overlay={menu}>
@@ -161,10 +161,10 @@ export default class GlobalHeader extends PureComponent {
           ) : (
             <span>
               <Link className={styles.action} to="/user/login">
-                <FormattedMessage id="login" description="登录" />
+                <FM id="login" defaultMessage="登录" />
               </Link>
               <Link className={styles.action} to="/user/register">
-                <FormattedMessage id="registration" description="注册" />
+                <FM id="registration" defaultMessage="注册" />
               </Link>
             </span>
           )}

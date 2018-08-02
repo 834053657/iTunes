@@ -1,0 +1,54 @@
+[
+  {
+    "id": "waitBuyerCheck.send_card",
+    "defaultMessage": "发送礼品卡"
+  },
+  {
+    "id": "waitBuyerCheck.confirm_msg",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "waitBuyerCheck.send_card_finish",
+    "defaultMessage": "完成"
+  },
+  {
+    "id": "waitBuyerCheck.toSell_card",
+    "defaultMessage": "您向{name}出售总面额{money}的{card}"
+  },
+  {
+    "id": "waitBuyerCheck.unit_price",
+    "defaultMessage": "单价："
+  },
+  {
+    "id": "waitBuyerCheck.amount_all",
+    "defaultMessage": "总价："
+  },
+  {
+    "id": "waitBuyerCheck.safe_time_remain",
+    "defaultMessage": "保障时间剩余 {icon} {time}分钟"
+  },
+  {
+    "id": "waitBuyerCheck.check_card_buyer",
+    "defaultMessage": "买家查收卡密时间剩余 {icon} {time}秒"
+  },
+  {
+    "id": "waitBuyerCheck.cancel_order_sure",
+    "defaultMessage": "您确认要取消订单吗?"
+  },
+  {
+    "id": "waitBuyerCheck.cancel_order_btn",
+    "defaultMessage": "取消订单"
+  },
+  {
+    "id": "waitBuyerCheck.check_giftCard_list",
+    "defaultMessage": "查看礼品卡清单"
+  },
+  {
+    "id": "waitBuyerCheck.order_one_month",
+    "defaultMessage": "30日成单："
+  },
+  {
+    "id": "waitBuyerCheck.seal_rules",
+    "defaultMessage": "交易条款："
+  }
+]

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Upload, Icon, message } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import UploadQiNiu from 'components/UploadQiNiu';
 import styles from './PasswordForm.less';
 

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { delay } from 'lodash';
 import MobileForm from '../forms/MobileForm';
 import styles from './EmailModal.less';
@@ -10,7 +12,7 @@ const { Step } = Steps;
 export default class MobileModal extends Component {
   static defaultProps = {
     className: '',
-    title: '手机绑定',
+    title: <FM id="mobileModal.phone_bind" defaultMessage="手机绑定" />,
     onCancel: () => {},
   };
   static propTypes = {
@@ -87,7 +89,7 @@ export default class MobileModal extends Component {
     const { current } = this.state;
     let steps = [
       {
-        title: '验证旧手机',
+        title: <FM id="mobileModal.phone_check" defaultMessage="验证旧手机" />,
         hide: !user.telephone,
         component: (
           <MobileForm
@@ -101,7 +103,7 @@ export default class MobileModal extends Component {
         ),
       },
       {
-        title: '绑定新手机',
+        title: <FM id="mobileModal.phone_bind_new" defaultMessage="绑定新手机" />,
         component: (
           <MobileForm
             key="2"
@@ -112,7 +114,7 @@ export default class MobileModal extends Component {
         ),
       },
       {
-        title: '完成',
+        title: <FM id="mobileModal.phone_bind_finish" defaultMessage="完成" />,
       },
     ];
 

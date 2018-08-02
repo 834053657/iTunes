@@ -1,0 +1,58 @@
+[
+  {
+    "id": "sellAd.card_type",
+    "defaultMessage": "类型"
+  },
+  {
+    "id": "sellAd.card_type_choose",
+    "defaultMessage": "请选择类型"
+  },
+  {
+    "id": "sellAd.unit_price",
+    "defaultMessage": "请输入单价"
+  },
+  {
+    "id": "sellAd.guarantee_time",
+    "defaultMessage": "保障时间"
+  },
+  {
+    "id": "sellAd.guarantee_time_choose",
+    "defaultMessage": "请选择保障时间"
+  },
+  {
+    "id": "sellAd.safe_time_minute",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "sellAd.deal_rules",
+    "defaultMessage": "交易条款"
+  },
+  {
+    "id": "sellAd.deal_rules_choose",
+    "defaultMessage": "可选"
+  },
+  {
+    "id": "sellAd.deal_num",
+    "defaultMessage": "同时处理订单数"
+  },
+  {
+    "id": "sellAd.deal_num_input",
+    "defaultMessage": "请输入同时处理订单数"
+  },
+  {
+    "id": "sellAd.contain_card",
+    "defaultMessage": "包含"
+  },
+  {
+    "id": "sellAd.passWorld_type",
+    "defaultMessage": "请输入选择密保卡类型"
+  },
+  {
+    "id": "sellAd.card_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "sellAd.order_publish",
+    "defaultMessage": "发布"
+  }
+]

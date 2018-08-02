@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Select, Button, Icon, Input, message, Form, InputNumber, Radio, Modal } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { map } from 'lodash';
 import styles from './PreviewAd.less';
 
@@ -60,13 +62,13 @@ export default class SellAd extends Component {
 
     return (
       <Form className={styles.form} onSubmit={this.handleSubmit}>
-        <FormItem {...formItemLayout} label="类型">
+        <FormItem {...formItemLayout} label={<FM id="sellAd.card_type" defaultMessage="类型" />}>
           {getFieldDecorator('card_type', {
             initialValue: initialValues.card_type,
             rules: [
               {
                 required: true,
-                message: '请选择类型',
+                message: <FM id="sellAd.card_type_choose" defaultMessage="请选择类型" />,
               },
             ],
           })(
@@ -86,26 +88,26 @@ export default class SellAd extends Component {
             rules: [
               {
                 required: true,
-                message: '请输入单价',
+                message: <FM id="sellAd.unit_price" defaultMessage="请输入单价" />,
               },
             ],
           })(<InputNumber />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="保障时间">
+        <FormItem {...formItemLayout} label={<FM id="sellAd.guarantee_time" defaultMessage="保障时间" />}>
           {getFieldDecorator('guarantee_time', {
             initialValue: initialValues.guarantee_time,
             rules: [
               {
                 required: true,
-                message: '请选择保障时间',
+                message: <FM id="sellAd.guarantee_time_choose" defaultMessage="请选择保障时间" />,
               },
             ],
           })(
             <Select style={{ width: 200 }}>
               {map(CONFIG.guarantee_time, (item, index) => (
                 <Option key={item} value={item}>
-                  {item}分钟
+                  {item}<FM id="sellAd.safe_time_minute" defaultMessage="分钟" />
                 </Option>
               ))}
             </Select>
@@ -116,7 +118,7 @@ export default class SellAd extends Component {
           {...formItemLayout}
           label={
             <span>
-              交易条款<i>(可选)</i>
+              <FM id="sellAd.deal_rules" defaultMessage="交易条款" /><i>(<FM id="sellAd.deal_rules_choose" defaultMessage="可选" />)</i>
             </span>
           }
         >
@@ -137,25 +139,25 @@ export default class SellAd extends Component {
           )}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="同时处理订单数">
+        <FormItem {...formItemLayout} label={<FM id="sellAd.deal_num" defaultMessage="同时处理订单数" />}>
           {getFieldDecorator('concurrency_order', {
             initialValue: initialValues.concurrency_order,
             rules: [
               {
                 required: true,
-                message: '请输入同时处理订单数',
+                message: <FM id="sellAd.deal_num_input" defaultMessage="请输入同时处理订单数" />,
               },
             ],
           })(<InputNumber />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="包含">
+        <FormItem {...formItemLayout} label={<FM id="sellAd.contain_card" defaultMessage="包含" />}>
           {getFieldDecorator('password_type', {
             initialValue: initialValues.password_type,
             rules: [
               {
                 required: true,
-                message: '请输入选择密保卡类型',
+                message: <FM id="sellAd.passWorld_type" defaultMessage="请输入选择密保卡类型" />,
               },
             ],
           })(
@@ -169,10 +171,10 @@ export default class SellAd extends Component {
 
         <FormItem className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>
-            取消
+            <FM id="sellAd.card_cancel" defaultMessage="取消" />
           </Button>
           <Button className={styles.submit} type="primary" htmlType="submit">
-            发布
+            <FM id="sellAd.order_publish" defaultMessage="发布" />
           </Button>
         </FormItem>
         {termModalInfo && (

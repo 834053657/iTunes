@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { Button, Icon, Steps, Avatar, Select, Badge, Popconfirm } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import CountDown from 'components/CountDown';
 import styles from '../../MarketBuy/StepTwo.less';
 import StepModel from '../../Step';
@@ -69,7 +71,7 @@ export default class SellerWaitBuyerCheck extends Component {
   };
 
   render() {
-    const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
+    const steps = [{ title: <FM id="waitBuyerCheck.send_card" defaultMessage="发送礼品卡" /> }, { title: <FM id="waitBuyerCheck.confirm_msg" defaultMessage="确认信息" /> }, { title:  <FM id="waitBuyerCheck.send_card_finish" defaultMessage="完成" />}];
     const { detail } = this.props;
     const { trader = {}, order = {}, ad = {} } = this.props.detail;
     const { status } = order;
@@ -90,16 +92,16 @@ export default class SellerWaitBuyerCheck extends Component {
               </h5>
               <div className={styles.orderDescribe}>
                 {CONFIG.cardTypeMap
-                  ? `您向${ad.owner.nickname}出售总面额${order.money}的
-                  ${CONFIG.cardTypeMap[order.card_type].name}`
+                  ? <FM id="waitBuyerCheck.toSell_card" defaultMessage="您向{name}出售总面额{money}的{card}" values={{name:ad.owner.nickname,money:order.money,card:CONFIG.cardTypeMap[order.card_type].name}} />
+                  // `您向${ad.owner.nickname}出售总面额${order.money}的${CONFIG.cardTypeMap[order.card_type].name}`
                   : null}
               </div>
               <div className={styles.price}>
-                <span>单价：</span>
+                <span><FM id="waitBuyerCheck.unit_price" defaultMessage="单价：" /></span>
                 <span>{ad.unit_price}</span>RMB
               </div>
               <div>
-                <span>总价：</span>
+                <span><FM id="waitBuyerCheck.amount_all" defaultMessage="总价：" /></span>
                 <span>{formatMoney(order.amount)}</span>RMB
               </div>
             </div>
@@ -107,29 +109,23 @@ export default class SellerWaitBuyerCheck extends Component {
             <div className={styles.guarantee}>
               {status === 3 ? (
                 <h5>
-                  保障时间剩余 &nbsp;
-                  <Icon type="clock-circle-o" />
-                  &nbsp;
-                  <CountDown formatstr="mm:ss" target={guaranteeTime} />
-                  分钟
+                  <FM id="waitBuyerCheck.safe_time_remain" defaultMessage="保障时间剩余 {icon} {time}分钟"  values={{icon:<Icon type="clock-circle-o" />,time:<CountDown formatstr="mm:ss" target={guaranteeTime} />}} />
+                  {/*保障时间剩余 &nbsp;<Icon type="clock-circle-o" />&nbsp;<CountDown formatstr="mm:ss" target={guaranteeTime} />分钟*/}
                 </h5>
               ) : (
                 <h5>
-                  买家查收卡密时间剩余 &nbsp;
-                  <Icon type="clock-circle-o" />
-                  &nbsp;
-                  <CountDown formatstr="mm:ss" target={checkTime} />
-                  秒
+                  <FM id="waitBuyerCheck.check_card_buyer" defaultMessage="买家查收卡密时间剩余 {icon} {time}秒" values={{icon:<Icon type="clock-circle-o" />,time:<CountDown formatstr="mm:ss" target={checkTime} />}} />
+                  {/*买家查收卡密时间剩余 &nbsp;<Icon type="clock-circle-o" />&nbsp;<CountDown formatstr="mm:ss" target={checkTime} />秒*/}
                 </h5>
               )}
 
-              <Popconfirm title="您确认要取消订单吗?" onConfirm={this.cancelOrder}>
+              <Popconfirm title={<FM id="waitBuyerCheck.cancel_order_sure" defaultMessage="您确认要取消订单吗?" />} onConfirm={this.cancelOrder}>
                 <Button
                   style={{ borderColor: 'red', backgroundColor: '#fff', color: 'red' }}
                   type="danger"
                   loading={this.props.cancel}
                 >
-                  取消订单
+                  <FM id="waitBuyerCheck.cancel_order_btn" defaultMessage="取消订单" />
                 </Button>
               </Popconfirm>
             </div>
@@ -139,7 +135,7 @@ export default class SellerWaitBuyerCheck extends Component {
           </div>
           <div className={styles.stepBottomRight}>
             <div className={styles.largeBtnBox}>
-              <Button onClick={() => this.previewCard(steps)}>查看礼品卡清单</Button>
+              <Button onClick={() => this.previewCard(steps)}><FM id="waitBuyerCheck.check_giftCard_list" defaultMessage="查看礼品卡清单" /></Button>
             </div>
 
             <div className={styles.ownerInfo}>
@@ -154,13 +150,13 @@ export default class SellerWaitBuyerCheck extends Component {
                     </Badge>
                   </div>
                   <div className={styles.infoBottom}>
-                    <span className={styles.dealTit}>30日成单：</span>
+                    <span className={styles.dealTit}><FM id="waitBuyerCheck.order_one_month" defaultMessage="30日成单：" /></span>
                     <span className={styles.dealNum}>{userInfo.month_volume}</span>
                   </div>
                 </div>
               </div>
               <div className={styles.term}>
-                <h3>交易条款：</h3>
+                <h3><FM id="waitBuyerCheck.seal_rules" defaultMessage="交易条款：" /></h3>
                 <p>{order.term}</p>
               </div>
             </div>

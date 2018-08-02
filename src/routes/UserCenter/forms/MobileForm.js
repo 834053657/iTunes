@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { Form, Input, Button, Select, Row, Col } from 'antd';
 import classNames from 'classnames';
 import styles from './MobileForm.less';
@@ -86,13 +88,13 @@ class MobileForm extends Component {
     return (
       <div className={classNames(className, styles.login)}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="国家">
+          <FormItem {...formItemLayout} label={<FM id="mobileForm.country_" defaultMessage="国家" />}>
             {getFieldDecorator('telephone_code', {
               initialValue: initialValue.telephone_code,
               rules: [
                 {
                   required: true,
-                  message: '请选择国家！',
+                  message: <FM id="mobileForm.country_select" defaultMessage="请选择国家！" />,
                 },
               ],
             })(
@@ -105,7 +107,7 @@ class MobileForm extends Component {
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="手机号码">
+          <FormItem {...formItemLayout} label={<FM id="mobileForm.phone_num" defaultMessage="手机号码" />}>
             <Row gutter={8}>
               <Col span={16}>
                 {getFieldDecorator('telephone', {
@@ -113,11 +115,11 @@ class MobileForm extends Component {
                   rules: [
                     {
                       required: true,
-                      message: '请输入手机号码！',
+                      message: <FM id="mobileForm.phone_num_input" defaultMessage="请输入手机号码！" />,
                     },
                     {
                       pattern: /^[1-9]\d*$/,
-                      message: '请输入正确的手机号码',
+                      message: <FM id="mobileForm.phone_num_input_right" defaultMessage="请输入正确的手机号码" />,
                     },
                   ],
                 })(
@@ -140,27 +142,28 @@ class MobileForm extends Component {
                   size="large"
                   onClick={this.handleSendCaptcha}
                 >
-                  {count ? `${count} s` : '获取验证码'}
+                  {count ? `${count} s` : (PROMPT("loginItem.get_code" || "获取验证码"))}
                 </Button>
               </Col>
             </Row>
           </FormItem>
-          <FormItem {...formItemLayout} label="验证码">
+          <FormItem {...formItemLayout} label={<FM id="mobileForm.mobile_code" defaultMessage="验证码" />}>
             {getFieldDecorator('verify_code', {
               rules: [
                 {
                   required: true,
-                  message: '请输入验证码！',
+                  message: <FM id="mobileForm.mobile_code_input" defaultMessage="请输入验证码！" />,
                 },
               ],
-            })(<Input size="large" placeholder="验证码" />)}
+            })(<Input size="large" placeholder={(PROMPT('mobileForm.mobile_code_input'))} />)}
+            {/*验证码*/}
           </FormItem>
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>
-              取消
+              <FM id="mobileForm.code_cancel" defaultMessage="取消" />
             </Button>
             <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
-              下一步
+              <FM id="mobileForm.next_step" defaultMessage="下一步" />
             </Button>
           </FormItem>
         </Form>

@@ -1,0 +1,126 @@
+[
+  {
+    "id": "sellForm.addCardMessage",
+    "defaultMessage": "还未添加卡信息"
+  },
+  {
+    "id": "sellForm.num_int_input",
+    "defaultMessage": "请输入正整数格式"
+  },
+  {
+    "id": "sellForm.amount_alive",
+    "defaultMessage": "该面额已存在"
+  },
+  {
+    "id": "sellForm.amount_",
+    "defaultMessage": "面额:"
+  },
+  {
+    "id": "sellForm.amount_input",
+    "defaultMessage": "请输入面额"
+  },
+  {
+    "id": "sellForm.cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "sellForm.insure",
+    "defaultMessage": "确定"
+  },
+  {
+    "id": "sellForm.card_type",
+    "defaultMessage": "类型"
+  },
+  {
+    "id": "sellForm.card_type_choose",
+    "defaultMessage": "请选择类型"
+  },
+  {
+    "id": "sellForm.unit_price",
+    "defaultMessage": "单价"
+  },
+  {
+    "id": "sellForm.unit_price_input",
+    "defaultMessage": "请输入单价"
+  },
+  {
+    "id": "sellForm.guarantee_time",
+    "defaultMessage": "保障时间"
+  },
+  {
+    "id": "sellForm.guarantee_time_choose",
+    "defaultMessage": "请选择保障时间"
+  },
+  {
+    "id": "sellForm.minute",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "sellForm.deal_clause",
+    "defaultMessage": "交易条款"
+  },
+  {
+    "id": "sellForm.chooseAble",
+    "defaultMessage": "可选"
+  },
+  {
+    "id": "sellForm.deal_clause_choose",
+    "defaultMessage": "请选择交易条款"
+  },
+  {
+    "id": "sellForm.none",
+    "defaultMessage": "无"
+  },
+  {
+    "id": "sellForm.meantime_indent",
+    "defaultMessage": "同时处理订单数"
+  },
+  {
+    "id": "sellForm.meantime_indent_limit",
+    "defaultMessage": "请输入同时处理订单数,0代表不限制"
+  },
+  {
+    "id": "sellForm.contain",
+    "defaultMessage": "包含"
+  },
+  {
+    "id": "sellForm.password_type_choose",
+    "defaultMessage": "请输入选择密保卡类型"
+  },
+  {
+    "id": "sellForm.amount_add",
+    "defaultMessage": "添加面额"
+  },
+  {
+    "id": "sellForm.amount_add_1",
+    "defaultMessage": "添加面额"
+  },
+  {
+    "id": "sellForm.amount_title",
+    "defaultMessage": "面额:"
+  },
+  {
+    "id": "sellForm.goBack",
+    "defaultMessage": "返回"
+  },
+  {
+    "id": "sellForm.edit",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "sellForm.public_insure",
+    "defaultMessage": "确定发布吗？"
+  },
+  {
+    "id": "sellForm.public_sure_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "sellForm.public_sure_no",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "sellForm.public",
+    "defaultMessage": "发布"
+  }
+]

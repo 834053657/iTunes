@@ -112,10 +112,10 @@ export default {
     *sendVerify({ payload, callback }, { call }) {
       const res = yield call(postVerify, payload);
       if (res.code === 0) {
-        message.success('发送成功');
+        message.success(PROMPT('send_success'));
         callback && callback();
       } else {
-        message.error(res.msg || '操作失败');
+        message.error(PROMPT('{msg}',{msg:res.msg}) || '操作失败');
       }
     },
     *verifyCaptcha({ payload, callback }, { call }) {

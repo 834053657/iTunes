@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Icon, Row, Col, Checkbox, message } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import classNames from 'classnames';
 import jrQrcode from 'jr-qrcode';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -58,32 +60,32 @@ class G2ValidateForm extends Component {
             </Col>
             <Col xs={24} sm={14} className={styles.right}>
               <FormItem>
-                <h3>身份密匙</h3>
+                <h3><FM id="G2Identity.personal_passWord" defaultMessage="身份密匙" /></h3>
                 <Input placeholder="身份密匙" value={data.secret} addonAfter={copy} disabled />
               </FormItem>
               <FormItem>
-                <h3>验证码</h3>
+                <h3><FM id="G2Identity.check_code" defaultMessage="验证码" /></h3>
                 {getFieldDecorator('captcha', {
                   rules: [
                     {
                       required: true,
-                      message: '请输入验证码！',
+                      message: <FM id="G2Identity.code_input_" defaultMessage="请输入验证码！" />,
                     },
                   ],
-                })(<Input size="large" placeholder="验证码" />)}
+                })(<Input size="large" placeholder={(PROMPT('mobileForm.mobile_code_input'))} />)}
               </FormItem>
               <FormItem>
                 <Checkbox
                   checked={ready}
                   onChange={e => this.setState({ ready: e.target.checked })}
                 >
-                  我已经备份了身份验证秘钥
+                  <FM id="G2Identity.personal_passWord_copy" defaultMessage="我已经备份了身份验证秘钥" />
                 </Checkbox>
               </FormItem>
 
               <FormItem className={styles.buttonBox}>
                 <Button key="back" onClick={this.handleCancel}>
-                  返回
+                  <FM id="G2Identity.goback" defaultMessage="返回" />
                 </Button>
                 <Button
                   loading={submitting}
@@ -92,7 +94,7 @@ class G2ValidateForm extends Component {
                   type="primary"
                   htmlType="submit"
                 >
-                  启用
+                  <FM id="G2Identity.toUse" defaultMessage="启用" />
                 </Button>
               </FormItem>
             </Col>

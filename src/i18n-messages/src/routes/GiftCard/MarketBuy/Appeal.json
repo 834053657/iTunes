@@ -1,0 +1,106 @@
+[
+  {
+    "id": "appeal.open_charge",
+    "defaultMessage": "打开交易"
+  },
+  {
+    "id": "appeal.sure_message",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "appeal.order_over",
+    "defaultMessage": "完成"
+  },
+  {
+    "id": "appeal.someone_toSell",
+    "defaultMessage": "{name}向您出售总面额{money}的{card}"
+  },
+  {
+    "id": "appeal.toSomeone_toSell",
+    "defaultMessage": "您向{name}出售总面额{money}的{card}"
+  },
+  {
+    "id": "appeal.toSomeone_toBuy",
+    "defaultMessage": "您向{name}购买总面额{money}的{card}"
+  },
+  {
+    "id": "appeal.Someone_toBuy",
+    "defaultMessage": "{name}向您购买总面额{money}的{card}"
+  },
+  {
+    "id": "appeal.order_detail",
+    "defaultMessage": "订单详情"
+  },
+  {
+    "id": "appeal.order_type",
+    "defaultMessage": "类型："
+  },
+  {
+    "id": "appeal.order_unit_price",
+    "defaultMessage": "单价："
+  },
+  {
+    "id": "appeal.amount_num",
+    "defaultMessage": "数量："
+  },
+  {
+    "id": "appeal.amount_all",
+    "defaultMessage": "总面额："
+  },
+  {
+    "id": "appeal.amount_all_money",
+    "defaultMessage": "总价："
+  },
+  {
+    "id": "appeal.safe_time_",
+    "defaultMessage": "保障时间："
+  },
+  {
+    "id": "appeal.order_minute",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "appeal.check_order_list",
+    "defaultMessage": "查看礼品卡清单"
+  },
+  {
+    "id": "appeal.one_month_order",
+    "defaultMessage": "30日成单："
+  },
+  {
+    "id": "appeal.charge_rules",
+    "defaultMessage": "交易条款："
+  },
+  {
+    "id": "appeal.state_inTime",
+    "defaultMessage": "申诉中"
+  },
+  {
+    "id": "appeal.upload_img",
+    "defaultMessage": "上传图片:"
+  },
+  {
+    "id": "appeal.upload_test",
+    "defaultMessage": "上传"
+  },
+  {
+    "id": "appeal.input_user_want",
+    "defaultMessage": "请输入您要提交的内容"
+  },
+  {
+    "id": "appeal.message_submit",
+    "defaultMessage": "提交"
+  },
+  {
+    "id": "appeal.seller_",
+    "defaultMessage": "卖家"
+  },
+  {
+    "id": "appeal.buyer_",
+    "defaultMessage": "买家"
+  },
+  {
+    "id": "appeal.service",
+    "defaultMessage": "客服"
+  }
+]

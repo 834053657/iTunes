@@ -20,13 +20,14 @@ import {
   Popconfirm,
 } from 'antd';
 import { routerRedux } from 'dva/router';
+import moment from 'moment/moment';
 import FilterDemoinForm from './forms/FilterDemoinForm';
 import { getQueryString } from '../../utils/utils';
 import styles from './List.less';
 
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
-
+const FM = FormattedMessage;
 @connect(({ card, loading, user }) => ({
   list: card.list,
   user: user.currentUser.user,
@@ -209,7 +210,7 @@ export default class List extends Component {
     });
     let columns = [
       {
-        title: <FormattedMessage id="userName" defaultMessage="用户名" />,
+        title: <FM id="nickname_" defaultMessage="用户名" />,
         width: '100',
         dataIndex: 'nickname_',
         render: (text, record) => {
@@ -229,7 +230,7 @@ export default class List extends Component {
         },
       },
       {
-        title: '类型',
+        title: <FM id="type" defaultMessage="类型" />,
         dataIndex: 'type',
         width: '100',
         filterMultiple: false,
@@ -246,7 +247,12 @@ export default class List extends Component {
         },
       },
       {
-        title: type === '2' ? '包含' : '要求',
+        title:
+          type === '2' ? (
+            <FM id="contain" defaultMessage="包含" />
+          ) : (
+            <FM id="require" defaultMessage="要求" />
+          ),
         dataIndex: 'password_type',
         width: '200',
         filters: cardPwdType,
@@ -257,7 +263,7 @@ export default class List extends Component {
         },
       },
       {
-        title: '面额',
+        title: <FM id="denomination" defaultMessage="面额" />,
         dataIndex: 'denomination',
         width: '100',
         onFilterDropdownVisibleChange: e => {
@@ -275,7 +281,7 @@ export default class List extends Component {
         filterDropdown: (
           <div>
             {this.state.denoVisible ? (
-              <FilterDemoinForm
+              <FM
                 initialValues={this.state.denominFilterValue}
                 onSubmit={this.handleFilterDemoin}
                 onCancel={this.handleResetFilterDemoin}
@@ -326,19 +332,19 @@ export default class List extends Component {
         },
       },
       {
-        title: '总面额',
+        title: <FM id="total_denomination" defaultMessage="总面额" />,
         width: '100',
         dataIndex: 'total_denomination',
         render: (text, record) => <span>{numeral(record.total_money).format('0,0.00')}</span>,
       },
       {
-        title: '发卡期限',
+        title: <FM id="deadline" defaultMessage="发卡期限" />,
         width: '100',
         dataIndex: 'deadline',
-        render: v => <span>{v} 分钟</span>,
+        render: v => <span>{v} {(PROMPT('listHell.minute'))}</span>,
       },
       {
-        title: '单价',
+        title: <FM id="unit_price" defaultMessage="单价" />,
         width: '100',
         dataIndex: 'unit_price',
         render: v => <span>{numeral(v).format('0,0.00')} RMB</span>,
@@ -346,13 +352,13 @@ export default class List extends Component {
         sortOrder: this.state.order_by,
       },
       {
-        title: '保障时间',
+        title: <FM id="guarantee_time" defaultMessage="保障时间" />,
         width: '100',
         dataIndex: 'guarantee_time',
-        render: v => <span>{v} 分钟</span>,
+        render: v => <span>{v} {(PROMPT('listHell.minute'))}</span>,
       },
       {
-        title: '操作',
+        title: <FM id="operation_" defaultMessage="操作" />,
         width: '100',
         dataIndex: 'operation_',
         render: (text, record = {}) => {
@@ -367,13 +373,20 @@ export default class List extends Component {
                 });
               }}
             >
-              购买
+              {<FM id="toBuy_" defaultMessage="购买" />}
             </Button>
           ) : (
             <Popconfirm
               title={
                 <p>
-                  广告主要求在{record.deadline}分钟内发卡，<br />您确认出售？
+                  {
+                    <FM
+                      id="toBuy_confirm"
+                      defaultMessage="广告主要求在{deadline}分钟内发卡您确认出售"
+                      values={{ deadline: record.deadline }}
+                    />
+                  }
+                  {/*广告主要求在{record.deadline}分钟内发卡，<br />您确认出售？*/}
                 </p>
               }
               onConfirm={() => {
@@ -383,7 +396,7 @@ export default class List extends Component {
               }}
             >
               <Button type="primary" disabled={owner.id === user.id}>
-                出售
+                {<FM id="toSell_" defaultMessage="出售" />}
               </Button>
             </Popconfirm>
           );
@@ -406,12 +419,12 @@ export default class List extends Component {
     const { items, pagination } = list || {};
     return (
       <div className={styles.page}>
-        <h2>{<FormattedMessage id="tradingHell" defaultMessage="礼品卡大厅" />}</h2>
+        <h2>{<FM id="tradingHell" defaultMessage="礼品卡大厅" />}</h2>
         <Tabs onChange={this.changeTab} activeKey={type}>
           {/*出售广告*/}
-          <Tabs.TabPane tab={<FormattedMessage id="toBuy" defaultMessage="我要购买" />} key="2" />
+          <Tabs.TabPane tab={<FM id="toBuy" defaultMessage="我要购买" />} key="2" />
           {/*购买广告*/}
-          <Tabs.TabPane tab={<FormattedMessage id="toSell" defaultMessage="我要出售" />} key="1" />
+          <Tabs.TabPane tab={<FM id="toSell" defaultMessage="我要出售" />} key="1" />
         </Tabs>
         <Table
           locale={{ emptyText: '' }}

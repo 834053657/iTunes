@@ -1,0 +1,66 @@
+[
+  {
+    "id": "EnsureBuyInfo.quick_Message",
+    "defaultMessage": "快捷短语"
+  },
+  {
+    "id": "EnsureBuyInfo.gift_card_check",
+    "defaultMessage": "查收礼品卡"
+  },
+  {
+    "id": "EnsureBuyInfo.message_require",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "EnsureBuyInfo.buy_ready",
+    "defaultMessage": "完成"
+  },
+  {
+    "id": "EnsureBuyInfo.gift_card_indent",
+    "defaultMessage": "订单："
+  },
+  {
+    "id": "EnsureBuyInfo.order_Describe_sell",
+    "defaultMessage": "{name}向您出售总面额{money}的{card}"
+  },
+  {
+    "id": "EnsureBuyInfo.unit_price",
+    "defaultMessage": "单价："
+  },
+  {
+    "id": "EnsureBuyInfo.amount_all",
+    "defaultMessage": "总价："
+  },
+  {
+    "id": "EnsureBuyInfo.safe_time_residue",
+    "defaultMessage": "保障时间剩余"
+  },
+  {
+    "id": "EnsureBuyInfo.user_sure_toComplain",
+    "defaultMessage": "确认申诉吗?"
+  },
+  {
+    "id": "EnsureBuyInfo.user_sure_toComplain_btn",
+    "defaultMessage": "申诉"
+  },
+  {
+    "id": "EnsureBuyInfo.require_release_sure_user",
+    "defaultMessage": "确认释放吗?"
+  },
+  {
+    "id": "EnsureBuyInfo.require_release_btn",
+    "defaultMessage": "确认释放"
+  },
+  {
+    "id": "EnsureBuyInfo.check_giftCard_list",
+    "defaultMessage": "查看礼品卡清单"
+  },
+  {
+    "id": "EnsureBuyInfo.one_month",
+    "defaultMessage": "30日成单："
+  },
+  {
+    "id": "EnsureBuyInfo.sell_rules_user",
+    "defaultMessage": "交易条款："
+  }
+]

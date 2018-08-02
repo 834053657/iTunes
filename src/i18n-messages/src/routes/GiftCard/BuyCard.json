@@ -1,0 +1,54 @@
+[
+  {
+    "id": "buy.numberType",
+    "defaultMessage": "请输入数字格式"
+  },
+  {
+    "id": "buy.numberType_1",
+    "defaultMessage": "请输入数字格式"
+  },
+  {
+    "id": "buy.maxNum",
+    "defaultMessage": "不得超过最大数量"
+  },
+  {
+    "id": "buy.minNum",
+    "defaultMessage": "不得低于最小数量"
+  },
+  {
+    "id": "buy.numberType_2",
+    "defaultMessage": "请输入数字格式"
+  },
+  {
+    "id": "buy.numberType_3",
+    "defaultMessage": "请输入数字格式"
+  },
+  {
+    "id": "buy.numberType_4",
+    "defaultMessage": "请输入数字格式"
+  },
+  {
+    "id": "buy.amountMsg",
+    "defaultMessage": "面额信息不完整"
+  },
+  {
+    "id": "buy.amountMsg_1",
+    "defaultMessage": "面额信息不完整"
+  },
+  {
+    "id": "buy.sendFalse",
+    "defaultMessage": "发送失败，失败原因："
+  },
+  {
+    "id": "buy.adManage",
+    "defaultMessage": "广告管理"
+  },
+  {
+    "id": "buy.giftCard",
+    "defaultMessage": "礼品卡"
+  },
+  {
+    "id": "buy.createBuy",
+    "defaultMessage": "创建购买"
+  }
+]

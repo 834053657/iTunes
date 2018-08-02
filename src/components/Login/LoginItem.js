@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button, Row, Col } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import omit from 'omit.js';
 import styles from './index.less';
 import map from './map';
@@ -75,7 +77,7 @@ function generator({ defaultProps, defaultRules, type }) {
                     size="large"
                     onClick={this.onGetCaptcha}
                   >
-                    {count ? `${count} s` : '获取验证码'}
+                    {count ? `${count} s` : (PROMPT("loginItem.get_code" || "获取验证码"))}
                   </Button>
                 </Col>
               </Row>

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { routerRedux } from 'dva/router';
-import numeral from 'numeral';
+import { FormattedMessage as FM } from 'react-intl';
 import {
   Select,
   Button,
@@ -23,12 +23,6 @@ import OnlyPicture from './OnlyPicture';
 import PicWithPass from './PicWithPass';
 import OnlyPassWord from './OnlyPassWord';
 
-import DescriptionList from '../../../components/DescriptionList';
-
-import { formatMoney } from '../../../utils/utils';
-
-const { Description } = DescriptionList;
-
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -42,12 +36,13 @@ export default class SellForm extends Component {
       addDenoVisible: false,
       cards: [],
       pswType: 1,
-      changedUnitPrice: undefined,
     };
   }
 
   componentDidMount() {
     const { defaultValue, action } = this.props;
+    console.log(action);
+    console.log(defaultValue);
   }
 
   handleCancel = () => {
@@ -62,7 +57,7 @@ export default class SellForm extends Component {
       this.state.cards = defaultValue.cards;
     }
     if (!this.state.cards || (this.state.cards && !this.state.cards.length)) {
-      return message.warning('还未添加卡信息');
+      return message.warning(<FM id="sellForm.addCardMessage" defaultMessage="还未添加卡信息" />);
     }
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -98,14 +93,14 @@ export default class SellForm extends Component {
     const { cards, denoVaule } = this.state;
     const re = /^[1-9]+[0-9]*]*$/;
     if (!re.test(denoVaule) || denoVaule <= 0) {
-      return message.warning('请输入正整数格式');
+      return message.warning(<FM id="sellForm.num_int_input" defaultMessage="请输入正整数格式" />);
     }
     console.log(cards);
     console.log(denoVaule);
     const i = cards.findIndex(card => card.money === denoVaule);
     console.log(i);
     if (i >= 0) {
-      return message.warning('该面额已存在');
+      return message.warning(<FM id="sellForm.amount_alive" defaultMessage="该面额已存在" />);
     }
     const formDataObj = {
       money: denoVaule,
@@ -181,13 +176,6 @@ export default class SellForm extends Component {
     });
     form.setFieldsValue({
       'cards[]': [],
-    });
-  };
-
-  changeUnit = e => {
-    console.log(e);
-    this.setState({
-      changedUnitPrice: e,
     });
   };
 
@@ -293,18 +281,8 @@ export default class SellForm extends Component {
     });
   };
 
-  calculateMoney = () => {
-    const { action, defaultValue } = this.props;
-    const cards = action ? defaultValue.cards : this.state.cards;
-    let calculateMoney = 0;
-    cards.map(card => {
-      return (calculateMoney += card.money * card.items.length);
-    });
-    return calculateMoney;
-  };
-
   render() {
-    const { termModalInfo, changedUnitPrice } = this.state;
+    const { termModalInfo } = this.state;
     const {
       defaultValue,
       action,
@@ -331,10 +309,12 @@ export default class SellForm extends Component {
     const addDenoBox = (
       <div>
         <Row>
-          <Col style={{ width: 80, float: 'left' }}>面额:</Col>
+          <Col style={{ width: 80, float: 'left' }}>
+            {<FM id="sellForm.amount_" defaultMessage="面额:" />}
+          </Col>
           <Col style={{ width: 240, float: 'left' }}>
             <InputNumber
-              placeholder="请输入面额"
+              placeholder={<FM id="sellForm.amount_input" defaultMessage="请输入面额" />}
               defaultValue=""
               onChange={e => {
                 this.setState({ denoVaule: e });
@@ -350,7 +330,7 @@ export default class SellForm extends Component {
               this.setState({ addDenoVisible: false });
             }}
           >
-            取消
+            {<FM id="sellForm.cancel" defaultMessage="取消" />}
           </Button>
           <Button
             onClick={() => {
@@ -359,7 +339,7 @@ export default class SellForm extends Component {
             }}
             type="primary"
           >
-            确定
+            <FM id="sellForm.insure" defaultMessage="确定" />
           </Button>
         </div>
       </div>
@@ -378,20 +358,21 @@ export default class SellForm extends Component {
       cards: [],
     };
 
-    const unit = changedUnitPrice || (action ? defaultValue.unit_price : initialValues.unit_price);
-
     getFieldDecorator('cards[]', { initialValue: [] });
     const cards = getFieldValue('cards[]') || [];
     return (
       <div>
         <Form className={styles.form} onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="类型">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="sellForm.card_type" defaultMessage="类型" />}
+          >
             {getFieldDecorator('card_type', {
               initialValue: action ? defaultValue.card_type : initialValues.card_type,
               rules: [
                 {
                   required: true,
-                  message: '请选择类型',
+                  message: <FM id="sellForm.card_type_choose" defaultMessage="请选择类型" />,
                 },
               ],
             })(
@@ -409,33 +390,41 @@ export default class SellForm extends Component {
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="单价">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="sellForm.unit_price" defaultMessage="单价" />}
+          >
             {getFieldDecorator('unit_price', {
               initialValue: action ? defaultValue.unit_price : initialValues.unit_price,
-              onChange: this.changeUnit,
               rules: [
                 {
                   required: true,
-                  message: '请输入单价',
+                  message: <FM id="sellForm.unit_price_input" defaultMessage="请输入单价" />,
                 },
               ],
             })(<InputNumber precision={2} disabled={action && action !== 'edit'} />)}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="保障时间">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="sellForm.guarantee_time" defaultMessage="保障时间" />}
+          >
             {getFieldDecorator('guarantee_time', {
               initialValue: action ? defaultValue.guarantee_time : initialValues.guarantee_time,
               rules: [
                 {
                   required: true,
-                  message: '请选择保障时间',
+                  message: (
+                    <FM id="sellForm.guarantee_time_choose" defaultMessage="请选择保障时间" />
+                  ),
                 },
               ],
             })(
               <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
                 {map(CONFIG.guarantee_time, (item, index) => (
                   <Option key={item} value={item}>
-                    {item}分钟
+                    {item}
+                    <FM id="sellForm.minute" defaultMessage="分钟" />
                   </Option>
                 ))}
               </Select>
@@ -446,7 +435,10 @@ export default class SellForm extends Component {
             {...formItemLayout}
             label={
               <span>
-                交易条款<i>(可选)</i>
+                <FM id="sellForm.deal_clause" defaultMessage="交易条款" />
+                <i>
+                  (<FM id="sellForm.chooseAble" defaultMessage="可选" />)
+                </i>
               </span>
             }
           >
@@ -455,12 +447,14 @@ export default class SellForm extends Component {
               rules: [
                 {
                   required: false,
-                  message: '请选择交易条款',
+                  message: <FM id="sellForm.deal_clause_choose" defaultMessage="请选择交易条款" />,
                 },
               ],
             })(
               <Select disabled={action && action !== 'edit'} style={{ width: 200 }}>
-                <Option value={0}>无</Option>
+                <Option value={0}>
+                  <FM id="sellForm.none" defaultMessage="无" />
+                </Option>
                 {map(terms, (item, index) => {
                   if (item.status === 3) {
                     return (
@@ -474,7 +468,10 @@ export default class SellForm extends Component {
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="同时处理订单数">
+          <FormItem
+            {...formItemLayout}
+            label={<FM id="sellForm.meantime_indent" defaultMessage="同时处理订单数" />}
+          >
             {getFieldDecorator('concurrency_order', {
               initialValue: action
                 ? defaultValue.concurrency_order
@@ -482,18 +479,25 @@ export default class SellForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请输入同时处理订单数,0代表不限制',
+                  message: (
+                    <FM
+                      id="sellForm.meantime_indent_limit"
+                      defaultMessage="请输入同时处理订单数,0代表不限制"
+                    />
+                  ),
                 },
               ],
             })(<InputNumber disabled={action && action !== 'edit'} />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="包含">
+          <FormItem {...formItemLayout} label={<FM id="sellForm.contain" defaultMessage="包含" />}>
             {getFieldDecorator('password_type', {
               initialValue: action ? defaultValue.password_type : initialValues.password_type,
               rules: [
                 {
                   required: true,
-                  message: '请输入选择密保卡类型',
+                  message: (
+                    <FM id="sellForm.password_type_choose" defaultMessage="请输入选择密保卡类型" />
+                  ),
                 },
               ],
             })(
@@ -517,10 +521,10 @@ export default class SellForm extends Component {
               disabled={action && action !== 'edit'}
             >
               <Icon type="plus" />
-              添加面额
+              <FM id="sellForm.amount_add" defaultMessage="添加面额" />
             </Button>
             <Modal
-              title="添加面额"
+              title={<FM id="sellForm.amount_add_1" defaultMessage="添加面额" />}
               width={400}
               destroyOnClose
               maskClosable={false}
@@ -533,11 +537,13 @@ export default class SellForm extends Component {
               }}
             >
               <Row>
-                <Col style={{ width: 50, float: 'left', lineHeight: '30px' }}>面额:</Col>
+                <Col style={{ width: 50, float: 'left', lineHeight: '30px' }}>
+                  {<FM id="sellForm.amount_title" defaultMessage="面额:" />}
+                </Col>
                 <Col style={{ width: 150, float: 'left' }}>
                   <InputNumber
                     style={{ width: 150 }}
-                    placeholder="请输入面额"
+                    placeholder={PROMPT('dealDetail.num_amount_inp_')}
                     onChange={e => {
                       this.setState({ denoVaule: e });
                     }}
@@ -564,24 +570,9 @@ export default class SellForm extends Component {
             fileUpload={this.state.fileUpload}
           />
 
-          <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
-            <Description style={{ float: 'right' }} term="总面额">
-              {formatMoney(this.calculateMoney()) || '0'}
-            </Description>
-          </DescriptionList>
-          <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
-            <Description style={{ float: 'right' }} term="总价">
-              {formatMoney(unit * this.calculateMoney()) || '0'}
-            </Description>
-          </DescriptionList>
-
           <FormItem className={styles.buttonBox}>
-            <Button
-              key="back"
-              onClick={this.handleCancel}
-              disabled={this.props.submitSellForm ? 1 : undefined}
-            >
-              返回
+            <Button key="back" onClick={this.handleCancel} disabled={this.props.submitSellForm}>
+              <FM id="sellForm.goBack" defaultMessage="返回" />
             </Button>
             {action && action !== 'edit' ? (
               <Button
@@ -592,15 +583,15 @@ export default class SellForm extends Component {
                 }}
                 disabled={defaultValue.status !== 1 && defaultValue.status !== 2}
               >
-                编辑
+                <FM id="sellForm.edit" defaultMessage="编辑" />
               </Button>
             ) : null}
             {!action || (action && action === 'edit') ? (
               <Popconfirm
-                title="确定发布吗？"
+                title={<FM id="sellForm.public_insure" defaultMessage="确定发布吗？" />}
                 onConfirm={this.handleSubmit}
-                okText="是"
-                cancelText="否"
+                okText={<FM id="sellForm.public_sure_yes" defaultMessage="是" />}
+                cancelText={<FM id="sellForm.public_sure_no" defaultMessage="否" />}
               >
                 <Button
                   className={styles.submit}
@@ -608,7 +599,7 @@ export default class SellForm extends Component {
                   htmlType="submit"
                   loading={this.props.submitSellForm}
                 >
-                  发布出售
+                  <FM id="sellForm.public" defaultMessage="发布" />
                 </Button>
               </Popconfirm>
             ) : null}

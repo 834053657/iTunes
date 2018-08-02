@@ -1,0 +1,42 @@
+[
+  {
+    "id": "sell.correct",
+    "defaultMessage": "请输入正确格式"
+  },
+  {
+    "id": "sell.amountInp",
+    "defaultMessage": "请输入面额"
+  },
+  {
+    "id": "sell.delete",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "sell.confirm",
+    "defaultMessage": "确定"
+  },
+  {
+    "id": "sell.edit",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "sell.check",
+    "defaultMessage": "查看"
+  },
+  {
+    "id": "sell.createSell",
+    "defaultMessage": "创建出售"
+  },
+  {
+    "id": "sell.adManage",
+    "defaultMessage": "广告管理"
+  },
+  {
+    "id": "sell.giftCard",
+    "defaultMessage": "礼品卡"
+  },
+  {
+    "id": "sell.adSell",
+    "defaultMessage": "出售广告"
+  }
+]

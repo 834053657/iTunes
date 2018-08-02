@@ -98,7 +98,7 @@ class EmailForm extends Component {
                   size="large"
                   onClick={this.handleSendCaptcha}
                 >
-                  {count ? `${count} s` : '获取验证码'}
+                  {count ? `${count} s` : (PROMPT("loginItem.get_code" || "获取验证码"))}
                 </Button>
               </Col>
             </Row>
