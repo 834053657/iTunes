@@ -17,7 +17,7 @@
   },
   {
     "id": "previewCard.toSomeone_sell",
-    "defaultMessage": "{name}向您出售总面额{money}的{card}"
+    "defaultMessage": "您向{name}出售总面额{money}的{card}"
   },
   {
     "id": "previewCard.unit_price",
