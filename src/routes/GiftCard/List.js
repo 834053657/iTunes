@@ -341,7 +341,7 @@ export default class List extends Component {
         title: <FM id="deadline" defaultMessage="发卡期限" />,
         width: '100',
         dataIndex: 'deadline',
-        render: v => <span>{v} 分钟</span>,
+        render: v => <span>{v} {(PROMPT('listHell.minute'))}</span>,
       },
       {
         title: <FM id="unit_price" defaultMessage="单价" />,
@@ -355,7 +355,7 @@ export default class List extends Component {
         title: <FM id="guarantee_time" defaultMessage="保障时间" />,
         width: '100',
         dataIndex: 'guarantee_time',
-        render: v => <span>{v} 分钟</span>,
+        render: v => <span>{v} {(PROMPT('listHell.minute'))}</span>,
       },
       {
         title: <FM id="operation_" defaultMessage="操作" />,

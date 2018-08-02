@@ -32,6 +32,7 @@
   "payMethodModal.bank_open":"开户行E",
   "payMethodModal.bank_card_num":"银行卡号E",
   "payMethodModal.pay_way_choose":"请选择支付方式E",
-  "buyForm.max_num_input_than":"at least{min_con}"
+  "buyForm.max_num_input_than":"at least{min_con}",
+  "listHell.minute":"minute"
 
 }

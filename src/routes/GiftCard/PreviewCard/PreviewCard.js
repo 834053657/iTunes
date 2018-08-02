@@ -91,7 +91,7 @@ export default class PreviewCard extends Component {
               ? <FM id="previewCard.someone_toSell" defaultMessage="{name}向您出售总面额{money}的{card}" values={{name:trader.nickname,money:order.money,card:CONFIG.cardTypeMap[order.card_type].name}} />  //${trader.nickname}向您出售总面额${order.money}的${CONFIG.cardTypeMap[order.card_type].name}
               : null}
             {pageStatus === 8 || pageStatus === 9
-              ? <FM id="previewCard.toSomeone_sell" defaultMessage="{name}向您出售总面额{money}的{card}" values={{name:ad.owner.nickname,money:order.money,card:CONFIG.cardTypeMap[order.card_type].name}} />  //`您向${ad.owner.nickname}出售总面额${order.money}的${CONFIG.cardTypeMap[order.card_type].name}`
+              ? <FM id="previewCard.toSomeone_sell" defaultMessage="您向{name}出售总面额{money}的{card}" values={{name:ad.owner.nickname,money:order.money,card:CONFIG.cardTypeMap[order.card_type].name}} />  //`您向${ad.owner.nickname}出售总面额${order.money}的${CONFIG.cardTypeMap[order.card_type].name}`
               : null}
           </div>
           <div className={styles.price}>

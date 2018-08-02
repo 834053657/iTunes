@@ -323,10 +323,10 @@ export default class DealDeatil extends Component {
               {this.calcuBuyTotal()} RMB
             </Description>
             <Description term={<FM id="dealDetail.sell_deadLine" defaultMessage="发卡期限" />}>
-              {deadline} 分钟
+              {deadline} <FM id="dealDetail._minute" defaultMessage="分钟" />
             </Description>
             <Description term={<FM id="dealDetail.sell_safe_time" defaultMessage="保障时间" />}>
-              {guarantee_time} 分钟
+              {guarantee_time} <FM id="dealDetail._minute_1" defaultMessage="分钟" />
             </Description>
           </DescriptionList>
 

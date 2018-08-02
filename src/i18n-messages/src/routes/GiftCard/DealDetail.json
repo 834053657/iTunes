@@ -52,8 +52,16 @@
     "defaultMessage": "发卡期限"
   },
   {
+    "id": "dealDetail._minute",
+    "defaultMessage": "分钟"
+  },
+  {
     "id": "dealDetail.sell_safe_time",
     "defaultMessage": "保障时间"
+  },
+  {
+    "id": "dealDetail._minute_1",
+    "defaultMessage": "分钟"
   },
   {
     "id": "dealDetail.sell_toDelete",
