@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
+
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -8,13 +10,13 @@ import styles from './Message.less';
 
 const columns = [
   {
-    title: '标题',
+    title: <FM id="infoList.title" defaultMessage="标题" />,
     dataIndex: 'title',
     width: '70%',
     render: (val, row) => <Link to={`/message/info-detail/${row.id}`}>{val}</Link>,
   },
   {
-    title: '发布时间',
+    title: <FM id="inforList.public_time" defaultMessage="发布时间" />,
     dataIndex: 'publish_at',
     width: '30%',
     align: 'right',
@@ -76,7 +78,7 @@ export default class InfoList extends Component {
     const { data: { list, pagination }, loading } = this.props;
     const { selectedRows } = this.state;
 
-    const breadcrumbList = [{ title: '首页', href: '/' }, { title: '更多资讯' }];
+    const breadcrumbList = [{ title: <FM id="infoList.main_page" defaultMessage="首页" />, href: '/' }, { title: <FM id="infoList.more_new" defaultMessage="更多资讯" /> }];
 
     console.log(111, this.props);
 

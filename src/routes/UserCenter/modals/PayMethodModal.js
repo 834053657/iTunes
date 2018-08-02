@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { delay } from 'lodash';
 import PayMethodForm from '../forms/PayMethodForm';
 import styles from './EmailModal.less';
@@ -9,7 +11,7 @@ const { Step } = Steps;
 
 export default class MobileModal extends Component {
   static defaultProps = {
-    title: '添加支付方式',
+    title: <FM id="payMethodModal.pay_way_add" defaultMessage="添加支付方式" />,
     onCancel: () => {},
   };
   static propTypes = {
@@ -20,7 +22,6 @@ export default class MobileModal extends Component {
   state = {};
 
   handleSubmit = (err, values) => {
-    console.log(err, values);
     if (!err) {
       this.props.dispatch({
         type: 'user/submitUserPayMethod',

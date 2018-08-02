@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import { FormattedMessage as FM } from 'react-intl';
+
 import {
   Table,
   Button,
@@ -41,11 +43,11 @@ export default class DealFinish extends Component {
   ratingOrder = () => {
     const { starT, contentT } = this.state;
     if (contentT && contentT.length < 5) {
-      message.warning('评价内容不能小于5个字');
+      message.warning(PROMPT('dealFinish.evaluate_content_min')); //评价内容不能小于5个字
       return false;
     }
     if (contentT && contentT.length > 500) {
-      message.warning('评价内容不能超出500个字,目前字数' + contentT.length);
+      message.warning(PROMPT('dealFinish.evaluate_content_max', {word:contentT.length}) ); //评价内容不能超出500个字,目前字数
       return false;
     }
     const data = {
@@ -60,10 +62,10 @@ export default class DealFinish extends Component {
           payload: data,
         })
         .then(() => {
-          message.success('评价提交成功!');
+          message.success(PROMPT('dealFinish.evaluate_content_success')); //评价提交成功!
         });
     } else {
-      message.error('请输入完整评价信息');
+      message.error(PROMPT('dealFinish.evaluate_content_limit_completion'));   //请输入完整评价信息
     }
   };
 
@@ -93,21 +95,21 @@ export default class DealFinish extends Component {
         : '-';
 
     if (pageStatus === 12 || pageStatus === 17) {
-      steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
+      steps = [{ title: <FM id="dealFinish.user_open_charge" defaultMessage="打开交易" /> }, { title: <FM id="dealFinish.require_Message" defaultMessage="确认信息" /> }, { title:  <FM id="dealFinish.sell_list_ready" defaultMessage="完成" />}];
     } else if (pageStatus === 13) {
       //13 卖家已取消       卖家视图
-      steps = [{ title: '打开交易' }, { title: '订单已取消' }]; //您已取消
+      steps = [{ title:  <FM id="dealFinish.user_open_charge_sell" defaultMessage="打开交易" />}, { title: <FM id="dealFinish.user_cancel_charge_sell" defaultMessage="订单已取消" /> }]; //您已取消
     } else if (pageStatus === 15) {
       //13 卖家已取消       买家视图
-      steps = [{ title: '打开交易' }, { title: '订单已取消' }]; //卖家已取消
+      steps = [{ title: <FM id="dealFinish.open_seller" defaultMessage="打开交易" /> }, { title:  <FM id="dealFinish.cancel_message" defaultMessage="订单已取消" /> }]; //卖家已取消
     } else if (pageStatus === 8) {
-      steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
+      steps = [{ title: <FM id="dealFinish.send_card_gift" defaultMessage="发送礼品卡" /> }, { title: <FM id="dealFinish.user_require_Message" defaultMessage="确认信息" /> }, { title: <FM id="dealFinish.user_require_Message_ready" defaultMessage="完成" /> }];
     } else if (pageStatus === 9) {
-      steps = [{ title: '发送礼品卡' }, { title: '订单已取消' }]; //您已取消
+      steps = [{ title: <FM id="dealFinish.send_gift_card_user" defaultMessage="发送礼品卡" /> }, { title:  <FM id="dealFinish.order_cancel" defaultMessage="订单已取消" />}]; //您已取消
     } else if (pageStatus === 3) {
-      steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
+      steps = [{ title: <FM id="dealFinish.check_get_card" defaultMessage="查收礼品卡" /> }, { title: <FM id="dealFinish.toRequire_Message" defaultMessage="确认信息" /> }, { title: <FM id="dealFinish.check_card_finish" defaultMessage="完成" /> }];
     } else if (pageStatus === 4) {
-      steps = [{ title: '打开交易' }, { title: '订单已取消' }]; //卖家已取消
+      steps = [{ title: <FM id="dealFinish.open_sell_list" defaultMessage="打开交易" /> }, { title: <FM id="dealFinish.order_canceled" defaultMessage="订单已取消" /> }]; //卖家已取消
     }
 
     if (!userInfo) {
@@ -126,29 +128,29 @@ export default class DealFinish extends Component {
               </h5>
               <div className={styles.orderDescribe}>
                 {pageStatus === 12 || pageStatus === 13
-                  ? `${trader.nickname}向您购买总面额${order.money}的${card_name}`
+                  ? <FM id="dealFinish.someone_toBuy" defaultMessage="{name}向您购买总面额{money}的{card}" values={{name:trader.nickname,money:order.money,card:card_name}} />
                   : null}
                 {pageStatus === 15 || pageStatus === 17
-                  ? `您向${ad.owner.nickname}购买总面额${order.money}的${card_name}`
+                  ?<FM id="dealFinish.toSomeone_toBuy" defaultMessage="您向{name}购买总面额{money}的{card}" values={{name:ad.owner.nickname,money:order.money,card:card_name}} />  // `您向${ad.owner.nickname}购买总面额${order.money}的${card_name}`
                   : null}
                 {pageStatus === 3 || pageStatus === 4
-                  ? `${trader.nickname}向您出售总面额${order.money}的${card_name}`
+                  ? <FM id="dealFinish.someone_toSell" defaultMessage="{name}向您出售总面额{money}的{card}" values={{name:trader.nickname,money:order.money,card:card_name}} />   //`${trader.nickname}向您出售总面额${order.money}的${card_name}`
                   : null}
                 {pageStatus === 8 || pageStatus === 9
-                  ? `您向${ad.owner.nickname}出售总面额${order.money}的${card_name}`
+                  ?<FM id="dealFinish.toSomeone_toSell" defaultMessage="您向{name}出售总面额{money}的{card}" values={{name:ad.owner.nickname,money:order.money,card:card_name}} />  // `您向${ad.owner.nickname}出售总面额${order.money}的${card_name}`
                   : null}
               </div>
               <div className={styles.price}>
-                <span>单价：</span>
+                <span><FM id="dealFinish.unit_price_order" defaultMessage="单价：" /></span>
                 <span>{formatMoney(ad.unit_price)}</span>RMB
               </div>
               <div>
-                <span>总价：</span>
+                <span><FM id="dealFinish.amount_price_order" defaultMessage="总价：" /></span>
                 <span>{formatMoney(order.amount)}</span>RMB
               </div>
             </div>
             <div className={styles.term}>
-              <h3>交易条款：</h3>
+              <h3><FM id="dealFinish.charge_rules" defaultMessage="交易条款：" /></h3>
               <p>{order.term}</p>
             </div>
           </div>
@@ -161,7 +163,7 @@ export default class DealFinish extends Component {
             pageStatus === 13 ||
             pageStatus === 17 ? (
               <div className={styles.largeBtnBox}>
-                <Button onClick={() => this.previewCard(steps)}>查看礼品卡清单</Button>
+                <Button onClick={() => this.previewCard(steps)}><FM id="dealFinish.check_list_all" defaultMessage="查看礼品卡清单" /></Button>
               </div>
             ) : null}
 
@@ -184,14 +186,14 @@ export default class DealFinish extends Component {
                     </Badge>
                   </div>
                   <div className={styles.infoBottom}>
-                    <span className={styles.dealTit}>30日成单：</span>
+                    <span className={styles.dealTit}><FM id="dealFinish.order_of_one_month" defaultMessage="30日成单：" /></span>
                     <span className={styles.dealNum}>{userInfo.month_volume}</span>
                   </div>
                 </div>
               </div>
 
               <div className={styles.evaluate}>
-                <h4>你好，评价一下我的服务吧~</h4>
+                <h4><FM id="dealFinish.serve_user_evaluate" defaultMessage="你好，评价一下我的服务吧~" /></h4>
                 <div className={styles.rate}>
                   <Rate
                     allowHalf
@@ -204,14 +206,14 @@ export default class DealFinish extends Component {
                   />
                   <span className={styles.starNumber}>
                     {this.state.starT}
-                    {this.state.starT ? '星' : null}
+                    {this.state.starT ?  <FM id="dealFinish.evaluate_star" defaultMessage="星" />: null}
                   </span>
                 </div>
               </div>
               <div className={styles.editor}>
                 {
                   <TextArea
-                    placeholder="您的建议会督促我做得更好~"
+                    placeholder={PROMPT('dealFinish.user_evaluate_massage')}   //"您的建议会督促我做得更好~"
                     defaultValue={this.state.contentT ? this.state.contentT : ''}
                     rows={4}
                     value={this.state.contentT}
@@ -223,7 +225,7 @@ export default class DealFinish extends Component {
               </div>
               <div className={styles.ratingBox}>
                 <Button loading={this.props.submit} onClick={this.ratingOrder} type="primary">
-                  {this.props.detail.rate ? '更新' : '提交'}
+                  {this.props.detail.rate ? <FM id="dealFinish.to_upload" defaultMessage="更新" /> : <FM id="dealFinish.to_submit" defaultMessage="提交" />}
                 </Button>
               </div>
             </div>

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "wallet.warning_title",
+    "defaultMessage": "请注意!"
+  },
+  {
+    "id": "wallet.warning",
+    "defaultMessage": "您当前没有已认证支付账号，请前往!"
+  },
+  {
+    "id": "wallet.personal_center",
+    "defaultMessage": "个人中心"
+  },
+  {
+    "id": "wallet.payWay",
+    "defaultMessage": "填写支付方式信息并提交审核!"
+  },
+  {
+    "id": "wallet.my_wallet",
+    "defaultMessage": "我的钱包"
+  },
+  {
+    "id": "wallet.total_money",
+    "defaultMessage": "总资产折合："
+  },
+  {
+    "id": "wallet.freeze",
+    "defaultMessage": "冻结"
+  },
+  {
+    "id": "wallet.recharge",
+    "defaultMessage": "充值"
+  },
+  {
+    "id": "wallet.withdraw",
+    "defaultMessage": "提现"
+  },
+  {
+    "id": "wallet.trading_record",
+    "defaultMessage": "交易记录"
+  }
+]

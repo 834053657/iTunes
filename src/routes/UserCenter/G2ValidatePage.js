@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import moment from 'moment';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { routerRedux } from 'dva/router';
 import { Button, Card, Row, Col, Input, Checkbox } from 'antd';
 import G2ValidateForm from './forms/G2ValidateForm';
@@ -45,14 +47,14 @@ export default class G2ValidatePage extends Component {
   render() {
     const { data = {} } = this.props;
     const breadcrumbList = [
-      { title: '个人中心', href: '/user-center/index' },
-      { title: '双重身份认证' },
+      { title: <FM id="G2Identity.personal" defaultMessage="个人中心" />, href: '/user-center/index' },
+      { title: <FM id="G2Identity.identity_check_title" defaultMessage="双重身份认证" /> },
     ];
 
     return (
       <PageHeaderLayout title="" breadcrumbList={breadcrumbList}>
         <div className={classNames(styles.detail, 'horizontal')}>
-          <Card title="开启谷歌双重身份验证">
+          <Card title={<FM id="G2Identity.identity_check" defaultMessage="开启谷歌双重身份验证" />}>
             <G2ValidateForm data={data} onCancel={this.handleBack} onSubmit={this.handleSubmit} />
           </Card>
         </div>

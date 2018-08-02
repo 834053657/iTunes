@@ -223,7 +223,7 @@ export default class Register extends Component {
                   className={styles.getCaptcha}
                   onClick={this.showImageValidationModal}
                 >
-                  {count ? `${count} s` : '获取验证码'}
+                  {count ? `${count} s` : (PROMPT("loginItem.get_code" || "获取验证码"))}
                 </Button>
               </Col>
             </Row>

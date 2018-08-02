@@ -197,7 +197,7 @@ export function getSystemUrl(env) {
 
 export function getMessageContent(msgObj) {
   //get language
-  const lang = 'zh_CN';
+  const lang =getLocale().replace('-','_') ||  'zh_CN';
   let msgText = CONFIG[`message_type_${lang}`][msgObj.msg_type];
 
   if (msgObj.msg_type === 1) {

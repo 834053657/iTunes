@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
 import styles from './ChangePassword.less';
 
@@ -120,7 +122,7 @@ export default class Register extends Component {
     const { getFieldDecorator } = form;
     return (
       <div className={styles.main}>
-        <h3>修改密码</h3>
+        <h3><FM id="changePassWord.change_pwd" defaultMessage="修改密码" /></h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem help={this.state.help}>
             <Popover
@@ -129,7 +131,7 @@ export default class Register extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。
+                    <FM id="changePassWord.change_pwd_limit" defaultMessage="请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。" />
                   </div>
                 </div>
               }
@@ -144,7 +146,7 @@ export default class Register extends Component {
                   },
                   {
                     min: 6,
-                    message: '请输入至少6位字符！',
+                    message: <FM id="changePassWord.change_pwd_wordLimit" defaultMessage="请输入至少6位字符！" />,
                   },
                 ],
               })(
@@ -152,7 +154,7 @@ export default class Register extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder="至少6位密码，区分大小写"
+                  placeholder={PROMPT('changePassWord.change_pwd_wordLimit_title')}
                 />
               )}
             </Popover>
@@ -162,13 +164,14 @@ export default class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请确认密码！',
+                  message: <FM id="changePassWord.require_passWord" defaultMessage="请确认密码！" />,
                 },
                 {
                   validator: this.checkConfirm,
                 },
               ],
-            })(<Input size="large" type="password" placeholder="确认密码" />)}
+            })(<Input size="large" type="password" placeholder={PROMPT('changePassWord.require_passWord_again')} />)}
+            {/*确认密码*/}
           </FormItem>
 
           <FormItem>
@@ -179,7 +182,7 @@ export default class Register extends Component {
               type="primary"
               htmlType="submit"
             >
-              提交
+              <FM id="changePassWord.submit_" defaultMessage="提交" />
             </Button>
           </FormItem>
         </Form>

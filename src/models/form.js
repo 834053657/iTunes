@@ -17,7 +17,7 @@ export default {
   effects: {
     *submitRegularForm({ payload }, { call }) {
       yield call(fakeSubmitForm, payload);
-      message.success('提交成功');
+      message.success(PROMPT('submit_success'));
     },
     *submitStepForm({ payload }, { call, put }) {
       yield call(fakeSubmitForm, payload);
@@ -29,7 +29,7 @@ export default {
     },
     *submitAdvancedForm({ payload }, { call }) {
       yield call(fakeSubmitForm, payload);
-      message.success('提交成功');
+      message.success(PROMPT('submit_success'));
     },
   },
 

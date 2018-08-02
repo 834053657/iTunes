@@ -1,0 +1,86 @@
+[
+  {
+    "id": "transferList.created_at",
+    "defaultMessage": "交易时间"
+  },
+  {
+    "id": "transferList.goods_type",
+    "defaultMessage": "产品类型"
+  },
+  {
+    "id": "transferList.paid_type",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "transferList.trade_type",
+    "defaultMessage": "交易类型"
+  },
+  {
+    "id": "transferList.amount",
+    "defaultMessage": "金额"
+  },
+  {
+    "id": "transferList.fee",
+    "defaultMessage": "手续费"
+  },
+  {
+    "id": "transferList.status",
+    "defaultMessage": "状态"
+  },
+  {
+    "id": "transferList.status_reason",
+    "defaultMessage": "原因"
+  },
+  {
+    "id": "transferList.operator",
+    "defaultMessage": "操作"
+  },
+  {
+    "id": "transferList.operator_detail",
+    "defaultMessage": "详情"
+  },
+  {
+    "id": "transferList.payment_unUse_phone",
+    "defaultMessage": "无效的支付方式"
+  },
+  {
+    "id": "transferList.payment_unUse_bank",
+    "defaultMessage": "无效的支付方式"
+  },
+  {
+    "id": "transferList.product_type",
+    "defaultMessage": "产品类型"
+  },
+  {
+    "id": "transferList.product_type_none",
+    "defaultMessage": "无"
+  },
+  {
+    "id": "transferList.deal_type",
+    "defaultMessage": "交易类型"
+  },
+  {
+    "id": "transferList.deal_type_none",
+    "defaultMessage": "无"
+  },
+  {
+    "id": "transferList.account_user",
+    "defaultMessage": "账号"
+  },
+  {
+    "id": "transferList.amount_wallet",
+    "defaultMessage": "金额"
+  },
+  {
+    "id": "transferList.charge",
+    "defaultMessage": "手续费"
+  },
+  {
+    "id": "transferList.deal_detail_time",
+    "defaultMessage": "交易时间"
+  },
+  {
+    "id": "transferList.deal_modal_detail",
+    "defaultMessage": "交易详情"
+  }
+]

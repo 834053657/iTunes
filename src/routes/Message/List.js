@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -165,7 +166,7 @@ export default class List extends Component {
     const { selectedRows } = this.state;
 
     return (
-      <PageHeaderLayout title="消息中心">
+      <PageHeaderLayout title={<FM id="message_list.message_center" defaultMessage="消息中心" />}>
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Table

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "withdrawForm.pay_wait",
+    "defaultMessage": "已提交提现申请，请等待平台处理"
+  },
+  {
+    "id": "withdrawForm.cash_account",
+    "defaultMessage": "提现账号"
+  },
+  {
+    "id": "withdrawForm.cash_account_choose",
+    "defaultMessage": "请选择您的提现账号！"
+  },
+  {
+    "id": "withdrawForm.cash_account_choose_inp",
+    "defaultMessage": "请选择您的提现账号"
+  },
+  {
+    "id": "withdrawForm.cash_amount",
+    "defaultMessage": "提现金额"
+  },
+  {
+    "id": "withdrawForm.cash_amount_input",
+    "defaultMessage": "请输入提现金额！"
+  },
+  {
+    "id": "withdrawForm.service_charge",
+    "defaultMessage": "手续费"
+  },
+  {
+    "id": "withdrawForm.passWord_input",
+    "defaultMessage": "输入密码"
+  },
+  {
+    "id": "withdrawForm.passWord_input_warning",
+    "defaultMessage": "请输入密码！"
+  },
+  {
+    "id": "withdrawForm.passWord_input_warning_holder",
+    "defaultMessage": "请输入密码"
+  },
+  {
+    "id": "withdrawForm.chrome_code",
+    "defaultMessage": "谷歌验证"
+  },
+  {
+    "id": "withdrawForm.chrome_code_input",
+    "defaultMessage": "请输入谷歌验证码！"
+  },
+  {
+    "id": "withdrawForm.chrome_code_input_holder",
+    "defaultMessage": "请输入谷歌验证码"
+  },
+  {
+    "id": "withdrawForm.submit",
+    "defaultMessage": "提交"
+  }
+]
