@@ -176,7 +176,7 @@ export default class UserCenterPage extends Component {
     return (
       <Modal
         width={500}
-        title="修改密码"
+        title={<FM id="passWordChange.change_passWord_title" defaultMessage="修改密码" />}
         visible={pwdModalVisible}
         onCancel={this.hidePwdlModal}
         maskClosable={false}

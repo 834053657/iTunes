@@ -1,0 +1,90 @@
+[
+  {
+    "id": "payMethodForm.payer_name",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "payMethodForm.payer_name_input",
+    "defaultMessage": "请输入姓名！"
+  },
+  {
+    "id": "payMethodForm.payer_account",
+    "defaultMessage": "账号"
+  },
+  {
+    "id": "payMethodForm.payer_account_input",
+    "defaultMessage": "请输入账号！"
+  },
+  {
+    "id": "payMethodForm.payer_account_input_limit",
+    "defaultMessage": "请输入4~30位的数字"
+  },
+  {
+    "id": "payMethodForm.user_name",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "payMethodModal.user_name_input",
+    "defaultMessage": "请输入姓名！"
+  },
+  {
+    "id": "payMethodModal.user_account",
+    "defaultMessage": "账号"
+  },
+  {
+    "id": "payMethodModal.user_account_input",
+    "defaultMessage": "请输入账号！"
+  },
+  {
+    "id": "payMethodModal.num_amount_limit",
+    "defaultMessage": "请输入4~30位的数字"
+  },
+  {
+    "id": "payMethodModal.bank_name",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "payMethodModal.name_input",
+    "defaultMessage": "请输入姓名！"
+  },
+  {
+    "id": "payMethodModal.bank_open",
+    "defaultMessage": "开户行"
+  },
+  {
+    "id": "payMethodModal.bank_open_input",
+    "defaultMessage": "请输入开户行！"
+  },
+  {
+    "id": "payMethodModal.bank_card_num",
+    "defaultMessage": "银行卡号"
+  },
+  {
+    "id": "payMethodModal.bank_card_num_input",
+    "defaultMessage": "请输入银行卡号！"
+  },
+  {
+    "id": "payMethodModal.bank_card_num_input_limit",
+    "defaultMessage": "请输入4~30位的数字"
+  },
+  {
+    "id": "payMethodModal.pay_way_user",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "payMethodModal.pay_way_choose",
+    "defaultMessage": "请选择支付方式"
+  },
+  {
+    "id": "payMethodModal.cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "payMethodModal._update",
+    "defaultMessage": "更新"
+  },
+  {
+    "id": "payMethodModal._insure",
+    "defaultMessage": "确定"
+  }
+]

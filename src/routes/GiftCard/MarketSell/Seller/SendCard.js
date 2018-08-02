@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Button, Icon, Input, Avatar, Badge, Modal, Popconfirm, Form, message } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import CountDown from 'components/CountDown';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
@@ -271,7 +273,7 @@ export default class Process extends Component {
     const { ad = {}, cards = {}, order = {} } = detail;
 
     const userInfo = ad.owner;
-    const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
+    const steps = [{ title: <FM id="sendCard.send_card" defaultMessage="发送礼品卡" /> }, { title: <FM id="sendCard.confirm_msg" defaultMessage="确认信息" /> }, { title: <FM id="sendCard.send_card_finish" defaultMessage="完成" /> }];
 
     getFieldDecorator('cards[]', { initialValue: [] });
     console.log(this.state.cards);
@@ -281,7 +283,7 @@ export default class Process extends Component {
         <div className={styles.top}>
           <div className={styles.orderInfo}>
             <div className={styles.price}>
-              <span>类型：</span>
+              <span><FM id="sendCard.card_type" defaultMessage="类型：" /></span>
               <p>
                 {CONFIG.cardTypeMap && order.card_type
                   ? CONFIG.cardTypeMap[ad.card_type].name || '-'
@@ -289,12 +291,12 @@ export default class Process extends Component {
               </p>
             </div>
             <div className={styles.price}>
-              <span>要求：</span>
+              <span><FM id="sendCard.send_card_require" defaultMessage="要求：" /></span>
               <p>{(CONFIG.cardPwdType && CONFIG.cardPwdType[ad.password_type]) || '-'}</p>
             </div>
             <div className={styles.price}>
-              <span>保障时间：</span>
-              <p>{ad.guarantee_time}</p>分钟
+              <span><FM id="sendCard.safe_time" defaultMessage="保障时间：" /></span>
+              <p>{ad.guarantee_time}</p><FM id="sendCard.minute_time" defaultMessage="分钟" />
             </div>
           </div>
 
@@ -311,13 +313,13 @@ export default class Process extends Component {
                     </Badge>
                   </div>
                   <div className={styles.infoBottom}>
-                    <span className={styles.dealTit}>30日成单：</span>
+                    <span className={styles.dealTit}><FM id="sendCard.time_month_order" defaultMessage="30日成单：" /></span>
                     <span className={styles.dealNum}>{userInfo.month_volume}</span>
                   </div>
                 </div>
               </div>
               <div className={styles.term}>
-                <h3>交易条款：</h3>
+                <h3><FM id="sendCard.charge_clause" defaultMessage="交易条款：" /></h3>
                 <Button
                   onClick={() => {
                     this.setState({
@@ -325,10 +327,10 @@ export default class Process extends Component {
                     });
                   }}
                 >
-                  查看交易条款
+                  <FM id="sendCard.check_rules_deal" defaultMessage="查看交易条款" />
                 </Button>
                 <Modal
-                  title="交易条款"
+                  title={<FM id="sendCard.charge_rules" defaultMessage="交易条款" />}
                   visible={this.state.termView}
                   onCancel={() => this.setState({ termView: false })}
                   footer={null}
@@ -356,35 +358,36 @@ export default class Process extends Component {
                 <div className={styles.amount}>
                   <h4>
                     <span className={styles.title}>{order.money}</span>
-                    <span>总面额：</span>
+                    <span><FM id="sendCard.amount_num" defaultMessage="总面额：" /></span>
                   </h4>
                   <h4>
                     <span className={styles.title}>{formatMoney(ad.unit_price)}RMB</span>
-                    <span>单价：</span>
+                    <span><FM id="sendCard.unit_price" defaultMessage="单价：" /></span>
                   </h4>
                   <h4>
                     <span className={styles.title}>{formatMoney(order.amount)}RMB</span>
-                    <span>总价：</span>
+                    <span><FM id="sendCard.amount_money" defaultMessage="总价：" /></span>
                   </h4>
                 </div>
                 <div className={styles.footer}>
                   <div>
-                    请在&nbsp;
-                    <Icon type="clock-circle-o" />
-                    &nbsp;
-                    <CountDown formatstr="mm:ss" target={this.targetTime} />
-                    秒内发卡
+                    <FM id="sendCard.send_card_time" defaultMessage="请在 {icon} {time}秒内发卡" values={{icon:<Icon type="clock-circle-o" />,time:<CountDown formatstr="mm:ss" target={this.targetTime} />}} />
+                    {/*请在&nbsp;*/}
+                    {/*<Icon type="clock-circle-o" />*/}
+                    {/*&nbsp;*/}
+                    {/*<CountDown formatstr="mm:ss" target={this.targetTime} />*/}
+                    {/*秒内发卡*/}
                   </div>
                 </div>
               </div>
               <FormItem className={styles.buttonBox}>
-                <Popconfirm title="您确认要发卡吗?" onConfirm={this.handleSubmit}>
+                <Popconfirm title={<FM id="sendCard.send_card_confirm" defaultMessage="您确认要发卡吗?" />} onConfirm={this.handleSubmit}>
                   <Button htmlType="submit" type="primary" loading={submitting}>
-                    发卡
+                    <FM id="sendCard.send_card_" defaultMessage="发卡" />
                   </Button>
                 </Popconfirm>
                 <Popconfirm
-                  title="您确认要取消订单吗?"
+                  title={<FM id="sendCard.send_card_cancel_order" defaultMessage="您确认要取消订单吗?" />}
                   onConfirm={() =>
                     this.props.dispatch({
                       type: 'card/cacelOrder',
@@ -392,7 +395,7 @@ export default class Process extends Component {
                     })
                   }
                 >
-                  <Button>取消订单</Button>
+                  <Button><FM id="sendCard.cancel_order_" defaultMessage="取消订单" /></Button>
                 </Popconfirm>
               </FormItem>
             </Form>

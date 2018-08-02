@@ -1,0 +1,14 @@
+[
+  {
+    "id": "G2Identity.personal",
+    "defaultMessage": "个人中心"
+  },
+  {
+    "id": "G2Identity.identity_check_title",
+    "defaultMessage": "双重身份认证"
+  },
+  {
+    "id": "G2Identity.identity_check",
+    "defaultMessage": "开启谷歌双重身份验证"
+  }
+]

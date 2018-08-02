@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { delay } from 'lodash';
 import CheckEmailForm from '../forms/EmailForm';
 import styles from './EmailModal.less';
@@ -10,7 +12,7 @@ const { Step } = Steps;
 export default class EmailModal extends Component {
   static defaultProps = {
     className: '',
-    title: '邮箱绑定',
+    title: <FM id="emailModal.email_bind" defaultMessage="邮箱绑定" /> ,
     onCancel: () => {},
   };
   static propTypes = {
@@ -85,7 +87,7 @@ export default class EmailModal extends Component {
     const { current } = this.state;
     let steps = [
       {
-        title: '验证旧邮箱',
+        title: <FM id="emailModal.email_old_verify" defaultMessage="验证旧邮箱" />,
         hide: !user.email,
         component: (
           <CheckEmailForm
@@ -99,7 +101,7 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title: '绑定新邮箱',
+        title: <FM id="emailModal.email_new_bind" defaultMessage="绑定新邮箱" />,
         component: (
           <CheckEmailForm
             key="2"
@@ -110,7 +112,7 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title: '完成',
+        title: <FM id="emailModal.email_bind_finish" defaultMessage="完成" />,
       },
     ];
 

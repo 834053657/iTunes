@@ -1,0 +1,122 @@
+[
+  {
+    "id": "dealFinish.user_open_charge",
+    "defaultMessage": "打开交易"
+  },
+  {
+    "id": "dealFinish.require_Message",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "dealFinish.sell_list_ready",
+    "defaultMessage": "完成"
+  },
+  {
+    "id": "dealFinish.user_open_charge_sell",
+    "defaultMessage": "打开交易"
+  },
+  {
+    "id": "dealFinish.user_cancel_charge_sell",
+    "defaultMessage": "订单已取消"
+  },
+  {
+    "id": "dealFinish.open_seller",
+    "defaultMessage": "打开交易"
+  },
+  {
+    "id": "dealFinish.cancel_message",
+    "defaultMessage": "订单已取消"
+  },
+  {
+    "id": "dealFinish.send_card_gift",
+    "defaultMessage": "发送礼品卡"
+  },
+  {
+    "id": "dealFinish.user_require_Message",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "dealFinish.user_require_Message_ready",
+    "defaultMessage": "完成"
+  },
+  {
+    "id": "dealFinish.send_gift_card_user",
+    "defaultMessage": "发送礼品卡"
+  },
+  {
+    "id": "dealFinish.order_cancel",
+    "defaultMessage": "订单已取消"
+  },
+  {
+    "id": "dealFinish.check_get_card",
+    "defaultMessage": "查收礼品卡"
+  },
+  {
+    "id": "dealFinish.toRequire_Message",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "dealFinish.check_card_finish",
+    "defaultMessage": "完成"
+  },
+  {
+    "id": "dealFinish.open_sell_list",
+    "defaultMessage": "打开交易"
+  },
+  {
+    "id": "dealFinish.order_canceled",
+    "defaultMessage": "订单已取消"
+  },
+  {
+    "id": "dealFinish.someone_toBuy",
+    "defaultMessage": "{name}向您购买总面额{money}的{card}"
+  },
+  {
+    "id": "dealFinish.toSomeone_toBuy",
+    "defaultMessage": "您向{name}购买总面额{money}的{card}"
+  },
+  {
+    "id": "dealFinish.someone_toSell",
+    "defaultMessage": "{name}向您出售总面额{money}的{card}"
+  },
+  {
+    "id": "dealFinish.toSomeone_toSell",
+    "defaultMessage": "您向{name}出售总面额{money}的{card}"
+  },
+  {
+    "id": "dealFinish.unit_price_order",
+    "defaultMessage": "单价："
+  },
+  {
+    "id": "dealFinish.amount_price_order",
+    "defaultMessage": "总价："
+  },
+  {
+    "id": "dealFinish.charge_rules",
+    "defaultMessage": "交易条款："
+  },
+  {
+    "id": "dealFinish.check_list_all",
+    "defaultMessage": "查看礼品卡清单"
+  },
+  {
+    "id": "dealFinish.order_of_one_month",
+    "defaultMessage": "30日成单："
+  },
+  {
+    "id": "dealFinish.serve_user_evaluate",
+    "defaultMessage": "你好，评价一下我的服务吧~"
+  },
+  {
+    "id": "dealFinish.evaluate_star",
+    "defaultMessage": "星"
+  },
+  {
+    "id": "dealFinish.to_upload",
+    "defaultMessage": "更新"
+  },
+  {
+    "id": "dealFinish.to_submit",
+    "defaultMessage": "提交"
+  }
+]

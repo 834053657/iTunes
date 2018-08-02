@@ -72,10 +72,6 @@
     "defaultMessage": "请输入正整数"
   },
   {
-    "id": "buyForm.max_num_input_than",
-    "defaultMessage": "最大数量应大于{min_con}"
-  },
-  {
     "id": "buyForm.delete_sure",
     "defaultMessage": "确定删除吗?"
   },

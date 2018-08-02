@@ -1,0 +1,54 @@
+[
+  {
+    "id": "previewCard.order_title",
+    "defaultMessage": "订单："
+  },
+  {
+    "id": "previewCard.someone_toBuy",
+    "defaultMessage": "{name}向您购买总面额{money}的{card}"
+  },
+  {
+    "id": "previewCard.toSomeone_Buy",
+    "defaultMessage": "您向{name}购买总面额{money}的{card}"
+  },
+  {
+    "id": "previewCard.someone_toSell",
+    "defaultMessage": "{name}向您出售总面额{money}的{card}"
+  },
+  {
+    "id": "previewCard.toSomeone_sell",
+    "defaultMessage": "{name}向您出售总面额{money}的{card}"
+  },
+  {
+    "id": "previewCard.unit_price",
+    "defaultMessage": "单价："
+  },
+  {
+    "id": "previewCard.order_amount",
+    "defaultMessage": "总价："
+  },
+  {
+    "id": "previewCard.order_details",
+    "defaultMessage": "订单详情"
+  },
+  {
+    "id": "previewCard.card_order_title",
+    "defaultMessage": "礼品卡清单"
+  },
+  {
+    "id": "previewCard.amount_list",
+    "defaultMessage": "面额"
+  },
+  {
+    "id": "previewCard.card_passWord_",
+    "defaultMessage": "卡密："
+  },
+  {
+    "id": "previewCard.card_img_",
+    "defaultMessage": "卡图："
+  },
+  {
+    "id": "previewCard.order_receipt",
+    "defaultMessage": "收据:"
+  }
+]

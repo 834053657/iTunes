@@ -1,5 +1,9 @@
 [
   {
+    "id": "passWordChange.change_passWord_title",
+    "defaultMessage": "修改密码"
+  },
+  {
     "id": "personalCenter.real_name",
     "defaultMessage": "实名认证"
   },

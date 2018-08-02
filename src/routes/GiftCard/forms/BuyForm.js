@@ -486,11 +486,8 @@ class BuyForm extends Component {
                             validator: (rule, value, callback) =>
                               this.checkFormCount(rule, value, callback, index),
                             message: conditionFix[index] ? (
-                              <FM
-                                id="buyForm.max_num_input_than"
-                                defaultMessage="最大数量应大于{min_con}"
-                                values={{ min_con: conditionFix[index].min_count }}
-                              />
+                                PROMPT('buyForm.max_num_input_than',{min_con: conditionFix[index].min_count}  )
+                              //<FM id="buyForm.max_num_input_than" defaultMessage="最大数量应大于{min_con}" values={{ min_con: conditionFix[index].min_count }} />
                             ) : (
                               ''
                             ),
