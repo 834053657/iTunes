@@ -1,0 +1,14 @@
+[
+  {
+    "id": "UserLogin.indexPage_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "UserLogin.indexPage_confirm",
+    "defaultMessage": "确定"
+  },
+  {
+    "id": "UserLogin.indexPage_code_input",
+    "defaultMessage": "请输入验证码！"
+  }
+]

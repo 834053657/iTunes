@@ -1,0 +1,70 @@
+[
+  {
+    "id": "UserLogin.sign_word_strong",
+    "defaultMessage": "强度：强"
+  },
+  {
+    "id": "UserLogin.sign_word_center",
+    "defaultMessage": "强度：中"
+  },
+  {
+    "id": "UserLogin.sign_word_lower",
+    "defaultMessage": "强度：太短"
+  },
+  {
+    "id": "UserLogin.sign_word_input",
+    "defaultMessage": "请输入密码！"
+  },
+  {
+    "id": "UserLogin.sign_user_title",
+    "defaultMessage": "注册"
+  },
+  {
+    "id": "UserLogin.sign_word_input_email",
+    "defaultMessage": "请输入邮箱地址！"
+  },
+  {
+    "id": "UserLogin.sign_word_error_type",
+    "defaultMessage": "邮箱地址格式错误！"
+  },
+  {
+    "id": "UserLogin.sign_code_input_",
+    "defaultMessage": "请输入验证码！"
+  },
+  {
+    "id": "UserLogin.sign_input_userName",
+    "defaultMessage": "请输入用户名！"
+  },
+  {
+    "id": "UserLogin.sign_userName_limit",
+    "defaultMessage": "用户名只能是2~20位字符，数字，下划线，减号"
+  },
+  {
+    "id": "UserLogin.sign_word_num_limit",
+    "defaultMessage": "请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。"
+  },
+  {
+    "id": "UserLogin.sign_word_min_inp",
+    "defaultMessage": "请输入至少6位字符！"
+  },
+  {
+    "id": "UserLogin.sign_word_again_",
+    "defaultMessage": "请确认密码！"
+  },
+  {
+    "id": "UserLogin.sign_input_Invitation",
+    "defaultMessage": "请输入邀请码！"
+  },
+  {
+    "id": "UserLogin.sign_btn_",
+    "defaultMessage": "注册"
+  },
+  {
+    "id": "UserLogin.sign_old_account_",
+    "defaultMessage": "使用已有账户登录"
+  },
+  {
+    "id": "UserLogin.sign_safe_check_user",
+    "defaultMessage": "安全验证"
+  }
+]

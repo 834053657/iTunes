@@ -1,0 +1,14 @@
+[
+  {
+    "id": "UserLogin.G2_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "UserLogin.G2_confirm",
+    "defaultMessage": "确定"
+  },
+  {
+    "id": "UserLogin.G2_inputGoogle_code",
+    "defaultMessage": "请输入谷歌验证码"
+  }
+]

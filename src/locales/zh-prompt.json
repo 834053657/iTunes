@@ -37,6 +37,31 @@
   "payMethodModal.bank_card_num":"银行卡号",
   "payMethodModal.pay_way_choose":"请选择支付方式",
   "buyForm.max_num_input_than":"最大数量应大于{min_con}",
-  "listHell.minute":"分钟"
+  "listHell.minute":"分钟",
+
+
+  "UserLogin.login_email":"邮箱",
+  "UserLogin.login_passWord":"密码",
+  "UserLogin.login_code":"验证码",
+  "UserLogin.sign_word_notRight":"两次输入的密码不匹配!",
+  "loginItem.sign_input_code":"验证码",
+  "loginItem.get_code_login":"获取验证码",
+  "UserLogin.userName_inp_lim":"用户名 2-20位",
+  "UserLogin.sign_letter":"6~16位密码，区分大小写",
+  "UserLogin.resign_passWord":"确认密码",
+  "UserLogin.sign_Invitation":"邀请码",
+  "UserLogin.login_userEmail":"邮箱",
+  "UserLogin.map_phone_num":"手机号",
+  "UserLogin.map_phone_code":"验证码",
+  "UserLogin.map_phone_img_code":"图像验证码",
+  "UserLogin.emailForm_email_inp":"邮箱",
+  "UserLogin.emailForm_code_Inp":"邀请码",
+  "UserLogin.emailForm_code_Inp_user":"验证码",
+  "UserLogin.indexPage_code_inp":"验证码",
+  "UserLogin.G2_Google_code":"验证码",
+  "UserLogin.realName_user_leave":"真实姓名",
+  "UserLogin.realName_leave_num_person_input":"身份证号",
+  "UserLogin.forget_code_":"验证码",
+  "UserLogin.login_emailOrUser":"用户名或邮箱"
 
 }

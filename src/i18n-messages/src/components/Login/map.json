@@ -1,0 +1,26 @@
+[
+  {
+    "id": "UserLogin.map_account_input",
+    "defaultMessage": "请输入账户名！"
+  },
+  {
+    "id": "UserLogin.map_passWord_input",
+    "defaultMessage": "请输入密码！"
+  },
+  {
+    "id": "UserLogin.map_phone_num_input",
+    "defaultMessage": "请输入手机号！"
+  },
+  {
+    "id": "UserLogin.map_phone_error_type",
+    "defaultMessage": "手机号格式错误！"
+  },
+  {
+    "id": "UserLogin.map_phone_code_input",
+    "defaultMessage": "请输入验证码！"
+  },
+  {
+    "id": "UserLogin.map_code_input",
+    "defaultMessage": "请输入验证码!"
+  }
+]

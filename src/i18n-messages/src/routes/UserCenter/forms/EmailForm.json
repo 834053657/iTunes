@@ -1,0 +1,30 @@
+[
+  {
+    "id": "UserLogin.emailForm_email",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "UserLogin.emailForm_email_input",
+    "defaultMessage": "请输入邮箱！"
+  },
+  {
+    "id": "UserLogin.emailForm_email_typeError",
+    "defaultMessage": "邮箱地址格式错误！"
+  },
+  {
+    "id": "UserLogin.emailForm_code_",
+    "defaultMessage": "验证码"
+  },
+  {
+    "id": "UserLogin.emailForm_code_userInput",
+    "defaultMessage": "请输入验证码！"
+  },
+  {
+    "id": "UserLogin.emailForm_cancel_btn",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "UserLogin.emailForm_nextStep",
+    "defaultMessage": "下一步"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "realName.realName_user_leave",
+    "defaultMessage": "真实姓名"
+  },
+  {
+    "id": "UserLogin.realName_user_input_leave",
+    "defaultMessage": "请输入真实姓名！"
+  },
+  {
+    "id": "realName.realName_leave_user_person_card",
+    "defaultMessage": "身份证号"
+  },
+  {
+    "id": "realName.realName_leave_user_person_input",
+    "defaultMessage": "请输入身份证号！"
+  },
+  {
+    "id": "realName.realName_leave_user_card_upload",
+    "defaultMessage": "上传证件"
+  },
+  {
+    "id": "realName.realName_leave_user_card_front",
+    "defaultMessage": "请上传身份证正面！"
+  },
+  {
+    "id": "realName.realName_leave_user_card_reverse",
+    "defaultMessage": "请上传身份证反面！！"
+  },
+  {
+    "id": "realName.realName_leave_cancel_btn",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "realName.realName_leave_confirm_btn",
+    "defaultMessage": "确定"
+  }
+]

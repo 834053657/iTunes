@@ -543,7 +543,7 @@ export default class SellForm extends Component {
                 <Col style={{ width: 150, float: 'left' }}>
                   <InputNumber
                     style={{ width: 150 }}
-                    placeholder={PROMPT('dealDetail.num_amount_inp_')}
+                    placeholder={PROMPT('dealDetail.num_amount_inp_')||'请输入面额'}
                     onChange={e => {
                       this.setState({ denoVaule: e });
                     }}

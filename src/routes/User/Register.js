@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress, message } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import ImageValidation from 'components/ImageValidation';
 import styles from './Register.less';
 import { getCaptcha } from '../../services/api';
@@ -11,9 +13,9 @@ const { Option } = Select;
 const InputGroup = Input.Group;
 
 const passwordStatusMap = {
-  ok: <div className={styles.success}>强度：强</div>,
-  pass: <div className={styles.warning}>强度：中</div>,
-  poor: <div className={styles.error}>强度：太短</div>,
+  ok: <div className={styles.success}><FM id='UserLogin.sign_word_strong' defaultMessage='强度：强'/></div>,
+  pass: <div className={styles.warning}><FM id='UserLogin.sign_word_center' defaultMessage='强度：中'/></div>,
+  poor: <div className={styles.error}><FM id='UserLogin.sign_word_lower' defaultMessage='强度：太短'/></div>,
 };
 
 const passwordProgressMap = {
@@ -118,7 +120,7 @@ export default class Register extends Component {
   checkConfirm = (rule, value, callback) => {
     const { form } = this.props;
     if (value && value !== form.getFieldValue('password')) {
-      callback('两次输入的密码不匹配!');
+      callback(PROMPT('UserLogin.sign_word_notRight')||'两次输入的密码不匹配!');
     } else {
       callback();
     }
@@ -127,7 +129,7 @@ export default class Register extends Component {
   checkPassword = (rule, value, callback) => {
     if (!value) {
       this.setState({
-        help: '请输入密码！',
+        help: <FM id='UserLogin.sign_word_input' defaultMessage='请输入密码！'/>,
         visible: !!value,
       });
       callback('error');
@@ -188,21 +190,21 @@ export default class Register extends Component {
     const { count, image, imageValidationVisible } = this.state;
     return (
       <div className={styles.main}>
-        <h3>注册</h3>
+        <h3><FM id='UserLogin.sign_user_title' defaultMessage='注册'/></h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
             {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
-                  message: '请输入邮箱地址！',
+                  message: <FM id='UserLogin.sign_word_input_email' defaultMessage='请输入邮箱地址！'/>,
                 },
                 {
                   type: 'email',
-                  message: '邮箱地址格式错误！',
+                  message: <FM id='UserLogin.sign_word_error_type' defaultMessage='邮箱地址格式错误！'/>,
                 },
               ],
-            })(<Input size="large" placeholder="邮箱" />)}
+            })(<Input size="large" placeholder={(PROMPT('UserLogin.login_userEmail')||'邮箱')} />)}
           </FormItem>
           <FormItem>
             <Row gutter={8}>
@@ -211,10 +213,10 @@ export default class Register extends Component {
                   rules: [
                     {
                       required: true,
-                      message: '请输入验证码！',
+                      message: <FM id='UserLogin.sign_code_input_' defaultMessage='请输入验证码！'/>,
                     },
                   ],
-                })(<Input size="large" placeholder="验证码" />)}
+                })(<Input size="large" placeholder={(PROMPT("loginItem.sign_input_code" || "验证码"))} />)}
               </Col>
               <Col span={8}>
                 <Button
@@ -223,7 +225,7 @@ export default class Register extends Component {
                   className={styles.getCaptcha}
                   onClick={this.showImageValidationModal}
                 >
-                  {count ? `${count} s` : (PROMPT("loginItem.get_code" || "获取验证码"))}
+                  {count ? `${count} s` : (PROMPT("loginItem.get_code_login" || "获取验证码"))}
                 </Button>
               </Col>
             </Row>
@@ -233,7 +235,7 @@ export default class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请输入用户名！',
+                  message: <FM id='UserLogin.sign_input_userName' defaultMessage='请输入用户名！'/>,
                 },
                 // {
                 //   min: 2,
@@ -245,10 +247,10 @@ export default class Register extends Component {
                 // },
                 {
                   pattern: /^[\u4E00-\u9FA5_a-zA-Z0-9/-]{2,20}$/,
-                  message: '用户名只能是2~20位字符，数字，下划线，减号',
+                  message: <FM id='UserLogin.sign_userName_limit' defaultMessage='用户名只能是2~20位字符，数字，下划线，减号'/>,
                 },
               ],
-            })(<Input size="large" placeholder="用户名 2-20位" />)}
+            })(<Input size="large" placeholder={(PROMPT('UserLogin.userName_inp_lim')||'用户名 2-20位')} />)}
           </FormItem>
           <FormItem help={this.state.help}>
             <Popover
@@ -257,7 +259,7 @@ export default class Register extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。
+                    <FM id='UserLogin.sign_word_num_limit' defaultMessage='请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。'/>
                   </div>
                 </div>
               }
@@ -272,7 +274,7 @@ export default class Register extends Component {
                   },
                   {
                     min: 6,
-                    message: '请输入至少6位字符！',
+                    message: <FM id='UserLogin.sign_word_min_inp' defaultMessage='请输入至少6位字符！'/>,
                   },
                 ],
               })(
@@ -280,7 +282,7 @@ export default class Register extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder="6~16位密码，区分大小写"
+                  placeholder={(PROMPT('UserLogin.sign_letter')||'6~16位密码，区分大小写')}
                 />
               )}
             </Popover>
@@ -290,23 +292,23 @@ export default class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请确认密码！',
+                  message: <FM id='UserLogin.sign_word_again_' defaultMessage='请确认密码！'/>,
                 },
                 {
                   validator: this.checkConfirm,
                 },
               ],
-            })(<Input size="large" type="password" placeholder="确认密码" />)}
+            })(<Input size="large" type="password" placeholder={(PROMPT('UserLogin.resign_passWord')||"确认密码")} />)}
           </FormItem>
           <FormItem>
             {getFieldDecorator('invite_code', {
               rules: [
                 {
                   required: true,
-                  message: '请输入邀请码！',
+                  message: <FM id='UserLogin.sign_input_Invitation' defaultMessage='请输入邀请码！'/>,
                 },
               ],
-            })(<Input size="large" placeholder="邀请码" />)}
+            })(<Input size="large" placeholder={(PROMPT('UserLogin.sign_Invitation')||'邀请码')} />)}
           </FormItem>
 
           <FormItem>
@@ -317,15 +319,15 @@ export default class Register extends Component {
               type="primary"
               htmlType="submit"
             >
-              注册
+              <FM id='UserLogin.sign_btn_' defaultMessage='注册'/>
             </Button>
             <Link className={styles.login} to="/user/login">
-              使用已有账户登录
+              <FM id='UserLogin.sign_old_account_' defaultMessage='使用已有账户登录'/>
             </Link>
           </FormItem>
         </Form>
         <ImageValidation
-          title="安全验证"
+          title={<FM id='UserLogin.sign_safe_check_user' defaultMessage='安全验证'/>}
           onCancel={() => {
             this.setState({ imageValidationVisible: false });
           }}

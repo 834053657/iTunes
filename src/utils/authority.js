@@ -23,5 +23,6 @@ export function getLocale() {
 }
 
 export function setLocale(locale) {
+  console.log(locale)
   return localStorage.setItem(`kg-itunes-locale-${__KG_API_ENV__}`, locale);
 }
