@@ -246,8 +246,9 @@ export default class Register extends Component {
                 //   message: '请输入最多20位字符！',
                 // },
                 {
-                  pattern: /^[\u4E00-\u9FA5_a-zA-Z0-9/-]{2,20}$/,
-                  message: <FM id='UserLogin.sign_userName_limit' defaultMessage='用户名只能是2~20位字符，数字，下划线，减号'/>,
+                 // pattern: /^[\u4E00-\u9FA5_a-zA-Z0-9/-]{2,20}$/,
+                  pattern: /^[a-zA-Z0-9_-]{2,20}$/,
+                  message: <FM id='UserLogin.sign_userName_limit' defaultMessage='用户名只能是2~20位字母，数字，下划线，减号'/>,
                 },
               ],
             })(<Input size="large" placeholder={(PROMPT('UserLogin.userName_inp_lim')||'用户名 2-20位')} />)}
