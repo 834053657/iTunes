@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import DescriptionList from 'components/DescriptionList';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { map } from 'lodash';
 import styles from './VideoAuthForm.less';
 
@@ -15,7 +17,7 @@ export default class VideoAuthForm extends Component {
       <div className={styles.main}>
         <DescriptionList
           className={styles.headerList}
-          title="请主动联系客服,进行视频认证"
+          title={<FM id="videoAuthForm.service_contact" defaultMessage="请主动联系客服,进行视频认证" />}
           size="large"
           col="1"
         >

@@ -1,4 +1,4 @@
-import React, { PureComponent, Component, Fragment } from 'react';
+import React, {PureComponent, Component, Fragment} from 'react';
 import {
   Form,
   Button,
@@ -17,8 +17,8 @@ import {
   Upload,
 } from 'antd';
 // import AsyncValidator from 'async-validator'
-import { map, filter, omit, forEach, size, get } from 'lodash';
-import { connect } from 'dva';
+import {map, filter, omit, forEach, size, get} from 'lodash';
+import {connect} from 'dva';
 import {
   Field,
   reduxForm,
@@ -28,7 +28,7 @@ import {
   SubmissionError,
   FormSection,
 } from 'redux-form';
-import { validate, parseNumber, createError, formatMoney } from '../../../utils/utils';
+import {validate, parseNumber, createError, formatMoney} from '../../../utils/utils';
 import DescriptionList from '../../../components/DescriptionList';
 import {
   AInput,
@@ -40,14 +40,20 @@ import {
 } from '../../../components/_utils/createField';
 import styles from './SellForm.less';
 import CardsMsgForm from './CardsMsgForm';
-import { getAuthority } from '../../../utils/authority';
+import {getAuthority} from '../../../utils/authority';
 
 const FormItem = Form.Item;
-const { Description } = DescriptionList;
+const {Description} = DescriptionList;
 
 // 根据校验规则构造一个 validator
 // const validator = new AsyncValidator(descriptor)
-
+@connect(state => {
+  return {
+    password_type: formValueSelector('sellForm')(state, 'password_type'),
+    cards: formValueSelector('sellForm')(state, 'cards') || [],
+    unit_price: formValueSelector('sellForm')(state, 'unit_price') || [],
+  };
+})
 @reduxForm({
   form: 'sellForm', // a unique name for this form
 })
@@ -79,7 +85,7 @@ export default class ReduxForm extends Component {
       cards: {
         type: 'array',
         required: true,
-        message: { _error: '请添加面额' },
+        message: {_error: '请添加面额'},
         defaultField: {
           type: 'object',
           fields: {
@@ -121,8 +127,8 @@ export default class ReduxForm extends Component {
                 },
               },
             ],
-            money: [{ required: true, type: 'number', message: '面额' }],
-            receipt: { required: false, type: 'string', message: '凭证' },
+            money: [{required: true, type: 'number', message: '面额'}],
+            receipt: {required: false, type: 'string', message: '凭证'},
           },
         },
       },
@@ -130,7 +136,7 @@ export default class ReduxForm extends Component {
   };
 
   save = values => {
-    const { condition_type } = this.props;
+    const {condition_type} = this.props;
     const rules = omit(this.descriptor());
     const err = validate(rules, values);
     const checkErr = {};
@@ -147,16 +153,16 @@ export default class ReduxForm extends Component {
   };
 
   renderItem = arg => {
-    const { fields, formitemlayout, meta, _error, disabled } = arg;
+    const {fields, formitemlayout, meta, _error, disabled} = arg;
     return (
       <FormItem
-        wrapperCol={{ offset: 4 }}
+        wrapperCol={{offset: 4}}
         validateStatus={meta.error ? 'error' : 'success'}
         help={meta.error && meta.error}
       >
         {fields.map((member, index) => {
           return (
-            <Row key={index} style={{ marginBottom: 20 }}>
+            <Row key={index} style={{marginBottom: 20}}>
               <Col sm={4}>
                 <Field
                   name={`${member}.money`}
@@ -165,7 +171,7 @@ export default class ReduxForm extends Component {
                   placeholder="面额"
                   precision={0}
                   min={0}
-                  style={{ width: '100%' }}
+                  style={{width: '100%'}}
                   disabled={disabled}
                 />
               </Col>
@@ -177,7 +183,7 @@ export default class ReduxForm extends Component {
                   precision={0}
                   min={0}
                   placeholder="最小数量"
-                  style={{ width: '100%' }}
+                  style={{width: '100%'}}
                   disabled={disabled}
                 />
               </Col>
@@ -189,7 +195,7 @@ export default class ReduxForm extends Component {
                   precision={0}
                   min={0}
                   component={AInputNumber}
-                  style={{ width: '100%' }}
+                  style={{width: '100%'}}
                   disabled={disabled}
                 />
               </Col>
@@ -218,12 +224,12 @@ export default class ReduxForm extends Component {
   };
 
   showAddMoneyBox = () => {
-    this.setState({ addDenoVisible: true });
+    this.setState({addDenoVisible: true});
   };
 
   handlerAddCard = () => {
-    const { denoVaule } = this.state;
-    const { cards } = this.props;
+    const {denoVaule} = this.state;
+    const {cards} = this.props;
     const re = /^\+?[1-9][0-9]*$/;
     if (!re.test(denoVaule)) {
       return message.warning('请输入正整数格式');
@@ -249,7 +255,7 @@ export default class ReduxForm extends Component {
   };
 
   renderModal = fields => {
-    const { denoVaule, addDenoVisible } = this.state;
+    const {denoVaule, addDenoVisible} = this.state;
     return (
       <Modal
         title="添加面额"
@@ -259,17 +265,17 @@ export default class ReduxForm extends Component {
         visible={addDenoVisible}
         onOk={this.handlerAddCard}
         onCancel={() => {
-          this.setState({ addDenoVisible: false });
+          this.setState({addDenoVisible: false});
         }}
       >
         <Row>
-          <Col style={{ width: 50, float: 'left', lineHeight: '30px' }}>面额:</Col>
-          <Col style={{ width: 150, float: 'left' }}>
+          <Col style={{width: 50, float: 'left', lineHeight: '30px'}}>面额:</Col>
+          <Col style={{width: 150, float: 'left'}}>
             <Input
-              style={{ width: 150 }}
+              style={{width: 150}}
               placeholder="请输入面额"
               onChange={e => {
-                this.setState({ denoVaule: +e.target.value });
+                this.setState({denoVaule: +e.target.value});
               }}
               // onPressEnter={() => this.addDeno()}
             />
@@ -285,7 +291,7 @@ export default class ReduxForm extends Component {
         uploading: true,
       });
     } else if (info.file.status === 'done') {
-      const { array } = this.props;
+      const {array} = this.props;
       const newItems = get(info, 'file.response.data.items') || [];
 
       newItems.map(item => array.push(fieldName, item));
@@ -293,15 +299,15 @@ export default class ReduxForm extends Component {
         uploading: false,
       });
     } else if (info.file.status === 'error') {
-      this.setState({ uploading: false });
+      this.setState({uploading: false});
       message.error('上传错误，可能请求已过期，请刷新页面重试');
     }
   };
 
   renderCards = a => {
-    const { fields, formitemlayout, meta, _error, disabled, pswType, action } = a;
-    const { token, user } = getAuthority() || {};
-    const { id } = user || {};
+    const {fields, formitemlayout, meta, _error, disabled, pswType, action} = a;
+    const {token, user} = getAuthority() || {};
+    const {id} = user || {};
     const uploadProps = {
       name: 'file',
       action: `${CONFIG.base_url}/itunes/ad/cards/import`,
@@ -331,42 +337,46 @@ export default class ReduxForm extends Component {
           const cardItem = c.get(index);
           return (
             <Card
-              style={{ marginTop: '10px' }}
+              style={{marginTop: '10px'}}
               key={index}
               title={
                 <div>
                   <span>{cardItem.money}面额</span>
                   <span>({cardItem.items.length})</span>
-                  <div style={{ float: 'right' }}>
-                    <Spin spinning={this.state.uploading}>
-                      <Upload
-                        onChange={info => this.handlerUpload(info, index, `${fieldName}.items`)}
-                        {...uploadProps}
-                      >
-                        <Button>导入</Button>
-                      </Upload>
-                    </Spin>
-                  </div>
-                  <a
-                    style={{ fontSize: 12, float: 'right', lineHeight: 3, marginRight: 10 }}
-                    href="../../../../public/PasswordTemplate.xlsx"
-                    download="PasswordTemplate.xlsx"
-                  >
-                    点击下载模板
-                  </a>
-                  {!disabled &&
-                    fields.length !== 1 && (
-                      <div style={{ float: 'right' }}>
-                        <Popconfirm
-                          title="确定删除吗？"
-                          onConfirm={() => this.props.array.remove('cards', index)}
-                          okText="是"
-                          cancelText="否"
+                  <div style={{float: 'right'}}>
+                    {pswType === 1 && (
+                      <Spin spinning={this.state.uploading}>
+                        <Upload
+                          onChange={info => this.handlerUpload(info, index, `${fieldName}.items`)}
+                          {...uploadProps}
                         >
-                          <Icon className={styles.deleteIcon} type="minus-circle-o" />
-                        </Popconfirm>
-                      </div>
+                          <Button>导入</Button>
+                        </Upload>
+                      </Spin>
                     )}
+                  </div>
+                  {pswType === 1 && (
+                    <a
+                      style={{fontSize: 12, float: 'right', lineHeight: 3, marginRight: 10}}
+                      href="../../../../public/PasswordTemplate.xlsx"
+                      download="PasswordTemplate.xlsx"
+                    >
+                      点击下载模板
+                    </a>
+                  )}
+                  {!disabled &&
+                  fields.length !== 1 && (
+                    <div style={{float: 'right'}}>
+                      <Popconfirm
+                        title="确定删除吗？"
+                        onConfirm={() => this.props.array.remove('cards', index)}
+                        okText="是"
+                        cancelText="否"
+                      >
+                        <Icon className={styles.deleteIcon} type="minus-circle-o" />
+                      </Popconfirm>
+                    </div>
+                  )}
                 </div>
               }
               className={styles.card}
@@ -384,7 +394,7 @@ export default class ReduxForm extends Component {
                       />
                     </Col>
                   </Row>
-                  <Divider style={{ marginBottom: 32 }} />
+                  <Divider style={{marginBottom: 32}} />
                 </div>
               )}
 
@@ -404,7 +414,7 @@ export default class ReduxForm extends Component {
   };
 
   renderItems = arg => {
-    const { fields, formitemlayout, meta, _error, disabled, pswType } = arg;
+    const {fields, formitemlayout, meta, _error, disabled, pswType} = arg;
     return (
       <div>
         {fields.map((fieldName, i, c) => {
@@ -422,19 +432,19 @@ export default class ReduxForm extends Component {
                     />
                   </Col>
                   {!disabled &&
-                    !status &&
-                    fields.length !== 1 && (
-                      <Col className={styles.deleteIcon}>
-                        <Popconfirm
-                          title="确定删除吗？"
-                          onConfirm={() => fields.remove(i)}
-                          okText="是"
-                          cancelText="否"
-                        >
-                          <Icon type="minus-circle-o" />
-                        </Popconfirm>
-                      </Col>
-                    )}
+                  !status &&
+                  fields.length !== 1 && (
+                    <Col className={styles.deleteIcon}>
+                      <Popconfirm
+                        title="确定删除吗？"
+                        onConfirm={() => fields.remove(i)}
+                        okText="是"
+                        cancelText="否"
+                      >
+                        <Icon type="minus-circle-o" />
+                      </Popconfirm>
+                    </Col>
+                  )}
                 </Row>
               )}
 
@@ -450,19 +460,19 @@ export default class ReduxForm extends Component {
                     />
                   </Col>
                   {!disabled &&
-                    !status &&
-                    pswType === 2 && (
-                      <Col className={styles.deleteIcon}>
-                        <Popconfirm
-                          title="确定删除吗？"
-                          onConfirm={() => fields.remove(i)}
-                          okText="是"
-                          cancelText="否"
-                        >
-                          <Icon type="minus-circle-o" />
-                        </Popconfirm>
-                      </Col>
-                    )}
+                  !status &&
+                  pswType === 2 && (
+                    <Col className={styles.deleteIcon}>
+                      <Popconfirm
+                        title="确定删除吗？"
+                        onConfirm={() => fields.remove(i)}
+                        okText="是"
+                        cancelText="否"
+                      >
+                        <Icon type="minus-circle-o" />
+                      </Popconfirm>
+                    </Col>
+                  )}
                 </Row>
               )}
             </div>
@@ -474,7 +484,7 @@ export default class ReduxForm extends Component {
           className={styles.addBtn}
           disabled={disabled}
           onClick={() => {
-            fields.push({ password: '', picture: '' });
+            fields.push({password: '', picture: ''});
           }}
         >
           <Icon type="plus" /> 添加卡密
@@ -484,9 +494,10 @@ export default class ReduxForm extends Component {
   };
 
   calculateMoney = () => {
-    const { cards } = this.props;
+    const {cards} = this.props;
     let money = 0;
     let calculateMoney;
+    console.log(cards);
     calculateMoney = cards.map((item, index) => {
       calculateMoney = 0;
       return (calculateMoney += item.money * item.items.length);
@@ -514,10 +525,10 @@ export default class ReduxForm extends Component {
 
     const formItemLayout = {
       labelCol: {
-        sm: { span: 4 },
+        sm: {span: 4},
       },
       wrapperCol: {
-        sm: { span: 16 },
+        sm: {span: 16},
       },
     };
     const req = value => (value || typeof value === 'number' ? undefined : 'Required');
@@ -529,7 +540,7 @@ export default class ReduxForm extends Component {
             name="card_type"
             component={ASelect}
             {...formItemLayout}
-            style={{ width: 200 }}
+            style={{width: 200}}
             placeholder="请选择类型"
             disabled={!editing}
           >
@@ -548,7 +559,7 @@ export default class ReduxForm extends Component {
             parse={parseNumber}
             component={AInputNumber}
             {...formItemLayout}
-            style={{ width: 200 }}
+            style={{width: 200}}
             disabled={!editing}
             precision={2}
             min={0}
@@ -560,7 +571,7 @@ export default class ReduxForm extends Component {
             component={ASelect}
             {...formItemLayout}
             placeholder="请选择保障时间"
-            style={{ width: 200 }}
+            style={{width: 200}}
             disabled={!editing}
           >
             {map(CONFIG.guarantee_time, (item, index) => (
@@ -578,7 +589,7 @@ export default class ReduxForm extends Component {
             }
             name="term_id"
             component={ASelect}
-            style={{ width: 200 }}
+            style={{width: 200}}
             {...formItemLayout}
             placeholder="请选择交易条款"
             disabled={!editing}
@@ -595,7 +606,7 @@ export default class ReduxForm extends Component {
             label="同时处理订单数"
             name="concurrency_order"
             component={AInputNumber}
-            style={{ width: 200 }}
+            style={{width: 200}}
             parse={parseNumber}
             min={0}
             precision={0}
@@ -623,7 +634,7 @@ export default class ReduxForm extends Component {
 
           <Button
             type="dashed"
-            style={{ width: '29%', marginLeft: '12%' }}
+            style={{width: '29%', marginLeft: '12%'}}
             onClick={this.showAddMoneyBox}
             disabled={!editing}
           >
@@ -641,14 +652,14 @@ export default class ReduxForm extends Component {
             component={this.renderCards}
           />
 
-          <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
-            <Description style={{ float: 'right' }} term="总面额">
+          <DescriptionList size="large" style={{marginBottom: 15, marginTop: 20}}>
+            <Description style={{float: 'right'}} term="总面额">
               {formatMoney(this.calculateMoney()) || '0'}
             </Description>
           </DescriptionList>
 
-          <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
-            <Description style={{ float: 'right' }} term="总价">
+          <DescriptionList size="large" style={{marginBottom: 15, marginTop: 20}}>
+            <Description style={{float: 'right'}} term="总价">
               {formatMoney(unit_price * this.calculateMoney()) || '0'}
             </Description>
           </DescriptionList>

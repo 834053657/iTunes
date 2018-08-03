@@ -1,0 +1,22 @@
+[
+  {
+    "id": "UserLogin.login_",
+    "defaultMessage": "登录"
+  },
+  {
+    "id": "UserLogin.login_submit",
+    "defaultMessage": "登录"
+  },
+  {
+    "id": "UserLogin.login_forget_passWord",
+    "defaultMessage": "忘记密码?"
+  },
+  {
+    "id": "UserLogin.login_account_sign",
+    "defaultMessage": "注册账户"
+  },
+  {
+    "id": "UserLogin.login_safe_check",
+    "defaultMessage": "安全验证"
+  }
+]

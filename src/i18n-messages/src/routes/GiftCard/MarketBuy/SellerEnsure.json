@@ -1,0 +1,74 @@
+[
+  {
+    "id": "sellEnsure.open_deal",
+    "defaultMessage": "打开交易"
+  },
+  {
+    "id": "sellEnsure.ensure_msg",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "sellEnsure.order_finish",
+    "defaultMessage": "完成"
+  },
+  {
+    "id": "sellEnsure.order_",
+    "defaultMessage": "订单："
+  },
+  {
+    "id": "sellEnsure.buyer_buy",
+    "defaultMessage": "{name}向您购买总面额{money}的{card}"
+  },
+  {
+    "id": "sellEnsure.user_buy",
+    "defaultMessage": "您向{name}购买总面额{money}的{card}"
+  },
+  {
+    "id": "sellEnsure.unit_price",
+    "defaultMessage": "单价："
+  },
+  {
+    "id": "sellEnsure.amount_allMoney",
+    "defaultMessage": "总价："
+  },
+  {
+    "id": "sellEnsure.safe_time_remain",
+    "defaultMessage": "保障时间剩余 {icon} {time}分钟"
+  },
+  {
+    "id": "sellEnsure.cancel_order_sure",
+    "defaultMessage": "确认取消订单吗?"
+  },
+  {
+    "id": "sellEnsure.cancel_order_btn",
+    "defaultMessage": "取消订单"
+  },
+  {
+    "id": "sellEnsure.sure_to_state",
+    "defaultMessage": "确认申诉吗?"
+  },
+  {
+    "id": "sellEnsure.sure_to_state_btn",
+    "defaultMessage": "申诉"
+  },
+  {
+    "id": "sellEnsure.sure_sell_release",
+    "defaultMessage": "确认释放吗?"
+  },
+  {
+    "id": "sellEnsure.sure_sell_release_btn",
+    "defaultMessage": "确认释放"
+  },
+  {
+    "id": "sellEnsure.check_giftCard_order",
+    "defaultMessage": "查看礼品卡清单"
+  },
+  {
+    "id": "sellEnsure.one_month_order",
+    "defaultMessage": "30日成单："
+  },
+  {
+    "id": "sellEnsure.deal_rulers",
+    "defaultMessage": "交易条款："
+  }
+]

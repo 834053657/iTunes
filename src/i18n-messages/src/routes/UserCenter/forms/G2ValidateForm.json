@@ -1,0 +1,26 @@
+[
+  {
+    "id": "G2Identity.personal_passWord",
+    "defaultMessage": "身份密匙"
+  },
+  {
+    "id": "G2Identity.check_code",
+    "defaultMessage": "验证码"
+  },
+  {
+    "id": "G2Identity.code_input_",
+    "defaultMessage": "请输入验证码！"
+  },
+  {
+    "id": "G2Identity.personal_passWord_copy",
+    "defaultMessage": "我已经备份了身份验证秘钥"
+  },
+  {
+    "id": "G2Identity.goback",
+    "defaultMessage": "返回"
+  },
+  {
+    "id": "G2Identity.toUse",
+    "defaultMessage": "启用"
+  }
+]

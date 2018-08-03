@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal, Badge, Tooltip } from 'antd';
 import numeral from 'numeral';
@@ -38,35 +39,35 @@ export default class TransferList extends Component {
 
   columns = [
     {
-      title: '交易时间',
+      title: <FM id="transferList.created_at" defaultMessage="交易时间" />,
       dataIndex: 'created_at',
       render: (v, row) => {
         return <span>{v ? moment(v * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>;
       },
     },
     {
-      title: '产品类型',
+      title: <FM id="transferList.goods_type" defaultMessage="产品类型" />,
       dataIndex: 'goods_type',
       render: (v, row) => {
         return <span>{v ? CONFIG.goods_type[v] : '无'}</span>;
       },
     },
     {
-      title: '支付方式',
+      title: <FM id="transferList.paid_type" defaultMessage="支付方式" />,
       dataIndex: 'paid_type',
       render: (v, row) => {
         return <span>{v ? CONFIG.payments[v] : '无'}</span>;
       },
     },
     {
-      title: '交易类型',
+      title: <FM id="transferList.trade_type" defaultMessage="交易类型" />,
       dataIndex: 'trade_type',
       render: (v, row) => {
         return <span>{v ? CONFIG.tradeType[v] : '无'}</span>;
       },
     },
     {
-      title: '金额',
+      title: <FM id="transferList.amount" defaultMessage="金额" />,
       dataIndex: 'amount',
       render: (v, row) => {
         return (
@@ -77,14 +78,14 @@ export default class TransferList extends Component {
       },
     },
     {
-      title: '手续费',
+      title: <FM id="transferList.fee" defaultMessage="手续费" />,
       dataIndex: 'fee',
       render: (v, row) => {
         return <span>{`￥${numeral(v).format('0,0.00')}`}</span>;
       },
     },
     {
-      title: '状态',
+      title: <FM id="transferList.status" defaultMessage="状态" />,
       dataIndex: 'status',
       render: (val, row) => {
         if (val === 3) {
@@ -92,7 +93,10 @@ export default class TransferList extends Component {
             <span>
               <Badge status={statusMap[2]} text={CONFIG.transaction_status[val]} />
               <Tooltip title={row.reason}>
-                <a> 原因 </a>
+                <a>
+                  {' '}
+                  <FM id="transferList.status_reason" defaultMessage="原因" />{' '}
+                </a>
               </Tooltip>
             </span>
           );
@@ -104,12 +108,14 @@ export default class TransferList extends Component {
       },
     },
     {
-      title: '操作',
+      title: <FM id="transferList.operator" defaultMessage="操作" />,
       dataIndex: 'opt_',
       render: (v, row) => {
         return (
           <Fragment>
-            <a onClick={this.showModal.bind(this, row)}>详情</a>
+            <a onClick={this.showModal.bind(this, row)}>
+              <FM id="transferList.operator_detail" defaultMessage="详情" />
+            </a>
           </Fragment>
         );
       },
@@ -137,14 +143,20 @@ export default class TransferList extends Component {
       case 'alipay':
         content = (
           <div>
-            {CONFIG.payments[paid_type] || '无效的支付方式'} - {payment.account}
+            {CONFIG.payments[paid_type] || (
+              <FM id="transferList.payment_unUse_phone" defaultMessage="无效的支付方式" />
+            )}{' '}
+            - {payment.account}
           </div>
         );
         break;
       case 'bank':
         content = (
           <div>
-            {CONFIG.payments[paid_type] || '无效的支付方式'} - {payment.bank_account}
+            {CONFIG.payments[paid_type] || (
+              <FM id="transferList.payment_unUse_bank" defaultMessage="无效的支付方式" />
+            )}{' '}
+            - {payment.bank_account}
           </div>
         );
         break;
@@ -156,20 +168,30 @@ export default class TransferList extends Component {
     const { created_at, amount, fee, goods_type, trade_type, payment, type } = modalInfo || {};
     return (
       <DescriptionList col={1} className={styles.detailBox}>
-        <Description term="产品类型">
-          {goods_type ? CONFIG.goods_type[goods_type] : '无'}
+        <Description term={<FM id="transferList.product_type" defaultMessage="产品类型" />}>
+          {goods_type ? (
+            CONFIG.goods_type[goods_type]
+          ) : (
+            <FM id="transferList.product_type_none" defaultMessage="无" />
+          )}
         </Description>
-        <Description term="交易类型">
-          {trade_type ? CONFIG.tradeType[trade_type] : '无'}
+        <Description term={<FM id="transferList.deal_type" defaultMessage="交易类型" />}>
+          {trade_type ? (
+            CONFIG.tradeType[trade_type]
+          ) : (
+            <FM id="transferList.deal_type_none" defaultMessage="无" />
+          )}
         </Description>
-        <Description term="账号">{this.getMethodContent(modalInfo)}</Description>
-        <Description term="金额">
+        <Description term={<FM id="transferList.account_user" defaultMessage="账号" />}>
+          {this.getMethodContent(modalInfo)}
+        </Description>
+        <Description term={<FM id="transferList.amount_wallet" defaultMessage="金额" />}>
           <span>{`¥ ${type === 1 ? '+' : '-'}${numeral(amount).format('0,0.00')}`}</span>
         </Description>
-        <Description term="手续费">
+        <Description term={<FM id="transferList.charge" defaultMessage="手续费" />}>
           <span>{`¥ ${numeral(fee).format('0,0.00')}`}</span>
         </Description>
-        <Description term="交易时间">
+        <Description term={<FM id="transferList.deal_detail_time" defaultMessage="交易时间" />}>
           {created_at ? moment(created_at * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}
         </Description>
       </DescriptionList>
@@ -192,7 +214,7 @@ export default class TransferList extends Component {
           onChange={this.handleTableChange}
         />
         <Modal
-          title="交易详情"
+          title={<FM id="transferList.deal_modal_detail" defaultMessage="交易详情" />}
           visible={!!modalInfo}
           onOk={this.hideModal}
           onCancel={this.hideModal}

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "infoList.title",
+    "defaultMessage": "标题"
+  },
+  {
+    "id": "inforList.public_time",
+    "defaultMessage": "发布时间"
+  },
+  {
+    "id": "infoList.main_page",
+    "defaultMessage": "首页"
+  },
+  {
+    "id": "infoList.more_new",
+    "defaultMessage": "更多资讯"
+  }
+]

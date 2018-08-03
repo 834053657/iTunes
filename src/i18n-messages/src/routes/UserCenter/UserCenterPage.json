@@ -1,0 +1,214 @@
+[
+  {
+    "id": "passWordChange.change_passWord_title",
+    "defaultMessage": "修改密码"
+  },
+  {
+    "id": "personalCenter.real_name",
+    "defaultMessage": "实名认证"
+  },
+  {
+    "id": "personalCenter.video",
+    "defaultMessage": "视频认证"
+  },
+  {
+    "id": "personalCenter.lower",
+    "defaultMessage": "低"
+  },
+  {
+    "id": "personalCenter.lower_1",
+    "defaultMessage": "低"
+  },
+  {
+    "id": "personalCenter.center",
+    "defaultMessage": "中"
+  },
+  {
+    "id": "personalCenter.height",
+    "defaultMessage": "高"
+  },
+  {
+    "id": "personalCenter.change_photo",
+    "defaultMessage": "修改头像成功"
+  },
+  {
+    "id": "personalCenter.upload_error",
+    "defaultMessage": "上传错误，可能请求已过期，请刷新页面重试"
+  },
+  {
+    "id": "personalCenter.photo_limit",
+    "defaultMessage": "头像必须小于2M!"
+  },
+  {
+    "id": "personalCenter.upload_head_photo",
+    "defaultMessage": "上传头像"
+  },
+  {
+    "id": "personalCenter.desc1",
+    "defaultMessage": "本帐号于{time}注册"
+  },
+  {
+    "id": "personalCenter.desc2",
+    "defaultMessage": "首次交易于{time}"
+  },
+  {
+    "id": "title1",
+    "defaultMessage": "账号与安全"
+  },
+  {
+    "id": "personalCenter.safe_grade",
+    "defaultMessage": "安全等级:"
+  },
+  {
+    "id": "personalCenter.email_",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "personalCenter.email_binding",
+    "defaultMessage": "已绑定"
+  },
+  {
+    "id": "personalCenter.email_unbind",
+    "defaultMessage": "未绑定"
+  },
+  {
+    "id": "personalCenter.email_change",
+    "defaultMessage": "修改"
+  },
+  {
+    "id": "personalCenter.email_toBind",
+    "defaultMessage": "绑定"
+  },
+  {
+    "id": "personalCenter.phone_",
+    "defaultMessage": "手机"
+  },
+  {
+    "id": "personalCenter.phone_binding",
+    "defaultMessage": "已绑定"
+  },
+  {
+    "id": "personalCenter.phone_unBind",
+    "defaultMessage": "未绑定"
+  },
+  {
+    "id": "personalCenter.phone_change",
+    "defaultMessage": "修改"
+  },
+  {
+    "id": "personalCenter.phone_toBind",
+    "defaultMessage": "绑定"
+  },
+  {
+    "id": "personalCenter.chrome_",
+    "defaultMessage": "谷歌验证码"
+  },
+  {
+    "id": "personalCenter.chrome_binding",
+    "defaultMessage": "已绑定"
+  },
+  {
+    "id": "personalCenter.chrome_unbind",
+    "defaultMessage": "未绑定"
+  },
+  {
+    "id": "personalCenter.chrome_unUse",
+    "defaultMessage": "停用"
+  },
+  {
+    "id": "personalCenter.chrome_toSet",
+    "defaultMessage": "设置"
+  },
+  {
+    "id": "personalCenter.passWord_",
+    "defaultMessage": "登录密码"
+  },
+  {
+    "id": "personalCenter.passWord_toBind",
+    "defaultMessage": "已绑定"
+  },
+  {
+    "id": "personalCenter.passWord_change",
+    "defaultMessage": "修改"
+  },
+  {
+    "id": "personalCenter.identity_",
+    "defaultMessage": "身份认证"
+  },
+  {
+    "id": "personalCenter.identity_warning",
+    "defaultMessage": "请如实填写您的身份信息，一经认证不可修改"
+  },
+  {
+    "id": "personalCenter.identity_real_name",
+    "defaultMessage": "实名认证"
+  },
+  {
+    "id": "personalCenter.identity_real_name_identity",
+    "defaultMessage": "审核反馈"
+  },
+  {
+    "id": "personalCenter.identity_real_name_reason",
+    "defaultMessage": "原因"
+  },
+  {
+    "id": "personalCenter.identity_real_name_edit",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "personalCenter.identity_real_name_video",
+    "defaultMessage": "视频认证"
+  },
+  {
+    "id": "personalCenter.identity_real_name_video_identity",
+    "defaultMessage": "审核反馈"
+  },
+  {
+    "id": "personalCenter.identity_real_name_video_reason",
+    "defaultMessage": "原因"
+  },
+  {
+    "id": "personalCenter.identity_real_name_video_toApprove",
+    "defaultMessage": "认证"
+  },
+  {
+    "id": "personalCenter.pay_way_",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "personalCenter.Method_payment_identity",
+    "defaultMessage": "审核反馈"
+  },
+  {
+    "id": "personalCenter.Method_payment_reason",
+    "defaultMessage": "原因"
+  },
+  {
+    "id": "personalCenter.Method_payment_set",
+    "defaultMessage": "设置"
+  },
+  {
+    "id": "personalCenter.Method_payment_toDet",
+    "defaultMessage": "确定要删除吗?"
+  },
+  {
+    "id": "personalCenter.Method_payment_hasDet",
+    "defaultMessage": "删除"
+  },
+  {
+    "id": "personalCenter.Method_payment_addPayment",
+    "defaultMessage": "添加新的支付方式"
+  },
+  {
+    "id": "personalCenter.Method_payment_safe",
+    "defaultMessage": "安全验证"
+  },
+  {
+    "id": "personalCenter.Method_payment_change_payWay",
+    "defaultMessage": "修改支付方式"
+  },
+  {
+    "id": "personalCenter.Method_payment_add_payWay",
+    "defaultMessage": "添加支付方式"
+  }
+]

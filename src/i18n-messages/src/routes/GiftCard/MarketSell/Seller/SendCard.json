@@ -1,0 +1,78 @@
+[
+  {
+    "id": "sendCard.send_card",
+    "defaultMessage": "发送礼品卡"
+  },
+  {
+    "id": "sendCard.confirm_msg",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "sendCard.send_card_finish",
+    "defaultMessage": "完成"
+  },
+  {
+    "id": "sendCard.card_type",
+    "defaultMessage": "类型："
+  },
+  {
+    "id": "sendCard.send_card_require",
+    "defaultMessage": "要求："
+  },
+  {
+    "id": "sendCard.safe_time",
+    "defaultMessage": "保障时间："
+  },
+  {
+    "id": "sendCard.minute_time",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "sendCard.time_month_order",
+    "defaultMessage": "30日成单："
+  },
+  {
+    "id": "sendCard.charge_clause",
+    "defaultMessage": "交易条款："
+  },
+  {
+    "id": "sendCard.check_rules_deal",
+    "defaultMessage": "查看交易条款"
+  },
+  {
+    "id": "sendCard.charge_rules",
+    "defaultMessage": "交易条款"
+  },
+  {
+    "id": "sendCard.amount_num",
+    "defaultMessage": "总面额："
+  },
+  {
+    "id": "sendCard.unit_price",
+    "defaultMessage": "单价："
+  },
+  {
+    "id": "sendCard.amount_money",
+    "defaultMessage": "总价："
+  },
+  {
+    "id": "sendCard.send_card_time",
+    "defaultMessage": "请在 {icon} {time}秒内发卡"
+  },
+  {
+    "id": "sendCard.send_card_confirm",
+    "defaultMessage": "您确认要发卡吗?"
+  },
+  {
+    "id": "sendCard.send_card_",
+    "defaultMessage": "发卡"
+  },
+  {
+    "id": "sendCard.send_card_cancel_order",
+    "defaultMessage": "您确认要取消订单吗?"
+  },
+  {
+    "id": "sendCard.cancel_order_",
+    "defaultMessage": "取消订单"
+  }
+]

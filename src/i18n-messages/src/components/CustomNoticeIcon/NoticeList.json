@@ -1,0 +1,14 @@
+[
+  {
+    "id": "noticeList.check_more",
+    "defaultMessage": "查看更多"
+  },
+  {
+    "id": "noticeList.all_ready_read",
+    "defaultMessage": "一键已读"
+  },
+  {
+    "id": "noticeList.check_more_message",
+    "defaultMessage": "查看更多"
+  }
+]

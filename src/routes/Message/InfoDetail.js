@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
@@ -79,13 +80,19 @@ export default class InfoDetail extends PureComponent {
     };
 
     const breadcrumbList = [
-      { title: '首页', href: '/' },
-      { title: '更多资讯', href: '/message/info-list' },
-      { title: '资讯详情' },
+      { title: <FM id="noticeList.the_first_page" defaultMessage="首页" />, href: '/' },
+      {
+        title: <FM id="noticeList.more_news" defaultMessage="更多资讯" />,
+        href: '/message/info-list',
+      },
+      { title: <FM id="noticeList.news_details" defaultMessage="资讯详情" /> },
     ];
 
     return (
-      <PageHeaderLayout title="资讯详情" breadcrumbList={breadcrumbList}>
+      <PageHeaderLayout
+        title={<FM id="noticeList.news_details_title" defaultMessage="资讯详情" />}
+        breadcrumbList={breadcrumbList}
+      >
         <div className={clsString}>
           <Card bordered={false}>
             <div>
@@ -93,7 +100,7 @@ export default class InfoDetail extends PureComponent {
                 className={styles.itunes_btn}
                 onClick={() => this.props.dispatch(routerRedux.goBack())}
               >
-                返回
+                <FM id="noticeList.go_back" defaultMessage="返回" />
               </a>
             </div>
             <div className={styles.title}>{data.title}</div>

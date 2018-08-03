@@ -2,7 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { filter } from 'lodash';
 import { routerRedux } from 'dva/router';
-import { Spin, message } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+import {
+  Button,
+  Menu,
+  Dropdown,
+  Icon,
+  Radio,
+  Input,
+  Select,
+  InputNumber,
+  Popconfirm,
+  message,
+  Popover,
+  Spin,
+} from 'antd';
 import styles from './BuyCard.less';
 import BuyForm from './forms/BuyForm1';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -93,9 +107,9 @@ export default class SaleCard extends Component {
       term_id: 0,
     };
     const breadcrumbList = [
-      { title: '广告管理', href: '/ad/my' },
-      { title: '礼品卡', href: '/card/market' },
-      { title: '创建购买' },
+      { title: <FM id="buy.adManage" defaultMessage="广告管理" />, href: '/ad/my' },
+      { title: <FM id="buy.giftCard" defaultMessage="礼品卡" />, href: '/card/market' },
+      { title: <FM id="buy.createBuy" defaultMessage="创建购买" /> },
     ];
     if (!cardList.length) {
       return false;

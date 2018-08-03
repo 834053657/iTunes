@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { filter, last } from 'lodash';
+import { FormattedMessage as FM, injectIntl } from 'react-intl';
 import {
   Table,
   Tabs,
@@ -18,6 +19,7 @@ import {
   Popconfirm,
 } from 'antd';
 import styles from './FilterDemoinForm.less';
+
 import SellForm from './SellForm';
 import PicUpload from '../../../components/UploadQiNiu/index';
 import { getAuthority } from '../../../utils/authority';
@@ -48,7 +50,7 @@ export default class OnlyPassWord extends Component {
       this.props.addFileData(info.file.response.data.items, index, length);
     } else if (info.file.status === 'error') {
       this.setState({ uploading: false });
-      message.error('上传错误，可能请求已过期，请刷新页面重试');
+      message.error(PROMPT('onlyPassWord.upload_default')); //上传错误，可能请求已过期，请刷新页面重试
     }
   };
 
@@ -80,7 +82,7 @@ export default class OnlyPassWord extends Component {
       beforeUpload(file) {
         const fileExt = file.name.substr(file.name.lastIndexOf('.') + 1);
         if (['csv', 'xls', 'xlsx'].indexOf(fileExt) < 0) {
-          message.error('文件格式不对，您只能导入csv, xls或xlsx文件。');
+          message.error(PROMPT('onlyPassWord.file_format')); //文件格式不对，您只能导入csv, xls或xlsx文件。
           return false;
         }
         return true;
@@ -104,7 +106,10 @@ export default class OnlyPassWord extends Component {
               key={c.money}
               title={
                 <div>
-                  <span>{c.money}面额</span>
+                  <span>
+                    {c.money}
+                    <FM id="onlyPassWord.amount_title" defaultMessage="面额" />
+                  </span>
                   <span>({c.items.length})</span>
                   <div style={{ float: 'right' }}>
                     {psw === 1 && (
@@ -113,7 +118,9 @@ export default class OnlyPassWord extends Component {
                           onChange={info => this.handlerUpload(info, index, c.items.length)}
                           {...uploadProps}
                         >
-                          <Button>导入</Button>
+                          <Button>
+                            <FM id="onlyPassWord.upload_btn" defaultMessage="导入" />{' '}
+                          </Button>
                         </Upload>
                       </Spin>
                     )}

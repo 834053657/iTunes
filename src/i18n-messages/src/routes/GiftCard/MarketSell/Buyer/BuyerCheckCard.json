@@ -1,0 +1,58 @@
+[
+  {
+    "id": "buyerCheckCard.check_card",
+    "defaultMessage": "查收礼品卡"
+  },
+  {
+    "id": "buyerCheckCard.ensure_msg",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "buyerCheckCard.check_card_finish",
+    "defaultMessage": "完成"
+  },
+  {
+    "id": "buyerCheckCard.seller_amount",
+    "defaultMessage": "{name}向您出售总面额{money}的{card}"
+  },
+  {
+    "id": "buyerCheckCard.card_type",
+    "defaultMessage": "类型："
+  },
+  {
+    "id": "sellEnsure.unit_price",
+    "defaultMessage": "单价："
+  },
+  {
+    "id": "sellEnsure.amount_num",
+    "defaultMessage": "数量："
+  },
+  {
+    "id": "sellEnsure.amount_money",
+    "defaultMessage": "面额："
+  },
+  {
+    "id": "sellEnsure.total_price",
+    "defaultMessage": "总价："
+  },
+  {
+    "id": "sellEnsure.send_card_remain",
+    "defaultMessage": "对方剩余 {icon} {card}秒发卡"
+  },
+  {
+    "id": "sellEnsure.check_time_remain",
+    "defaultMessage": "查收时间剩余 {icon} {time}秒"
+  },
+  {
+    "id": "sellEnsure.check_inTime",
+    "defaultMessage": "立即查收"
+  },
+  {
+    "id": "sellEnsure.one_mouth_order",
+    "defaultMessage": "30日成单："
+  },
+  {
+    "id": "sellEnsure.order_rules",
+    "defaultMessage": "交易条款："
+  }
+]

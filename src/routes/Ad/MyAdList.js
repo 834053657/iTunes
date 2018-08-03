@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { delay } from 'lodash';
 import { Link, routerRedux } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import moment from 'moment';
 import {
   Table,
@@ -76,7 +77,6 @@ export default class List extends Component {
         );
       } else if (r.ad_type === 2) {
         //出售
-        console.log('出售');
         this.props.dispatch(
           routerRedux.replace({
             pathname: `/card/edit-sell-card/${id}/${action}`,
@@ -114,30 +114,30 @@ export default class List extends Component {
 
   columns = [
     {
-      title: '广告编号',
+      title: <FM id="myAdList.ad_no" defaultMessage="广告编号" />,
       dataIndex: 'ad_no',
       width: '15%',
       render: (v, r) => <a onClick={() => this.viewAd(r, '_OPEN')}>{v}</a>,
     },
     {
-      title: '产品类型',
+      title: <FM id="myAdList.goods_type" defaultMessage="产品类型" />,
       dataIndex: 'goods_type',
       width: '15%',
       render: (val, row) => CONFIG.goods_type[val],
     },
     {
-      title: '交易类型',
+      title: <FM id="myAdList.ad_type" defaultMessage="交易类型" />,
       dataIndex: 'ad_type',
       width: '15%',
       render: (val, row) => CONFIG.ad_type[val],
     },
     {
-      title: '单价',
+      title: <FM id="myAdList.unit_price" defaultMessage="单价" />,
       dataIndex: 'unit_price',
       width: '15%',
     },
     {
-      title: '状态',
+      title: <FM id="myAdList.status_" defaultMessage="状态" />,
       dataIndex: 'status',
       width: '15%',
       render(val, row) {
@@ -156,40 +156,55 @@ export default class List extends Component {
       },
     },
     {
-      title: '操作',
+      title: <FM id="myAdList.operator_" defaultMessage="操作" />,
       width: '25%',
       render: r => (
         <Fragment>
-          <a onClick={() => this.viewAd(r, 'preview')}>查看</a>
+          <a onClick={() => this.viewAd(r, 'preview')}>
+            {' '}
+            <FM id="myAdList.operator_check" defaultMessage="查看" />
+          </a>
           {r.status === 1 && (
             <span>
               <Divider type="vertical" />
-              <a onClick={() => this.updateAd(r, 2)}>暂停</a>
+              <a onClick={() => this.updateAd(r, 2)}>
+                {' '}
+                <FM id="myAdList.operator_stop" defaultMessage="暂停" />
+              </a>
             </span>
           )}
           {r.status === 2 && (
             <span>
               <Divider type="vertical" />
-              <a onClick={() => this.updateAd(r, 1)}>恢复</a>
+              <a onClick={() => this.updateAd(r, 1)}>
+                {' '}
+                <FM id="myAdList.operator_recover" defaultMessage="恢复" />
+              </a>
             </span>
           )}
           {[1, 2].indexOf(r.status) > -1 && (
             <span>
               <Divider type="vertical" />
-              <a onClick={() => this.viewAd(r, 'edit')}>编辑</a>
+              <a onClick={() => this.viewAd(r, 'edit')}>
+                {' '}
+                <FM id="myAdList.operator_edit" defaultMessage="编辑" />
+              </a>
             </span>
           )}
           {[1, 2, 4].indexOf(r.status) > -1 && (
             <span>
               <Divider type="vertical" />
               <Popconfirm
-                title="您确认要删除此广告?"
+                title={<FM id="myAdList.operator_toDelete" defaultMessage="您确认要删除此广告?" />}
                 onConfirm={() => this.updateAd(r, 5)}
                 placement="topLeft"
                 okText="是"
                 cancelText="否"
               >
-                <a className="text-red">删除</a>
+                <a className="text-red">
+                  {' '}
+                  <FM id="myAdList.operator_deleted" defaultMessage="删除" />
+                </a>
               </Popconfirm>
             </span>
           )}
@@ -231,11 +246,11 @@ export default class List extends Component {
     const content = (
       <Row gutter={24}>
         <Col span={12} className={styles.title}>
-          我的广告
+          <FM id="myAdList.my_ad" defaultMessage="我的广告" />
         </Col>
         <Col span={12} className={styles.more}>
           <a className={styles.itunes_btn} href="/#/ad/terms">
-            交易条款管理
+            <FM id="myAdList.my_ad_manage" defaultMessage="交易条款管理" />
           </a>
         </Col>
       </Row>

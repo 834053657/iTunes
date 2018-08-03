@@ -30,14 +30,14 @@ function identify(detail = {}, user = {}) {
   }
   if (detail.order.order_type === 1) {
     if (user.id === detail.ad.owner.id) {
-      return '卖家';
+      return (PROMPT('seller'));
     } else {
-      return '买家';
+      return (PROMPT('buyer'));
     }
   } else if (user.id === detail.ad.owner.id) {
-    return '买家';
+    return (PROMPT('buyer'));
   } else {
-    return '卖家';
+    return (PROMPT('seller'));
   }
 }
 
@@ -54,7 +54,7 @@ function initStatue(detail, user) {
   switch (status) {
     case 1:
       if (order_type === 2) {
-        if (identify(detail, user) === '买家') {
+        if (identify(detail, user) === (PROMPT('buyer'))) {
           pageStatus = 1;
         } else {
           // '卖家'
@@ -64,7 +64,7 @@ function initStatue(detail, user) {
       break;
     case 2:
       if (order_type === 2) {
-        if (identify(detail, user) === '买家') {
+        if (identify(detail, user) === (PROMPT('buyer'))) {
           pageStatus = 1;
         } else {
           // '卖家'
@@ -74,13 +74,13 @@ function initStatue(detail, user) {
       break;
     case 3:
       if (order_type === 2) {
-        if (identify(detail, user) === '买家') {
+        if (identify(detail, user) === (PROMPT('buyer'))) {
           pageStatus = 2;
         } else {
           // '卖家'
           pageStatus = 7;
         }
-      } else if (identify(detail, user) === '买家') {
+      } else if (identify(detail, user) === (PROMPT('buyer'))) {
         pageStatus = 14;
       } else {
         // '卖家'
@@ -89,13 +89,13 @@ function initStatue(detail, user) {
       break;
     case 4:
       if (order_type === 2) {
-        if (identify(detail, user) === '买家') {
+        if (identify(detail, user) === (PROMPT('buyer'))) {
           pageStatus = 20;
         } else {
           // '卖家'
           pageStatus = 21;
         }
-      } else if (identify(detail, user) === '买家') {
+      } else if (identify(detail, user) === (PROMPT('buyer'))) {
         pageStatus = 22;
       } else {
         // '卖家'
@@ -104,13 +104,13 @@ function initStatue(detail, user) {
       break;
     case 5:
       if (order_type === 2) {
-        if (identify(detail, user) === '买家') {
+        if (identify(detail, user) === (PROMPT('buyer'))) {
           pageStatus = 3;
         } else {
           // '卖家'
           pageStatus = 8;
         }
-      } else if (identify(detail, user) === '买家') {
+      } else if (identify(detail, user) === (PROMPT('buyer'))) {
         pageStatus = 17;
       } else {
         // '卖家'
@@ -119,13 +119,13 @@ function initStatue(detail, user) {
       break;
     case 6:
       if (order_type === 2) {
-        if (identify(detail, user) === '买家') {
+        if (identify(detail, user) === (PROMPT('buyer'))) {
           pageStatus = 4;
         } else {
           // '卖家'
           pageStatus = 9;
         }
-      } else if (identify(detail, user) === '买家') {
+      } else if (identify(detail, user) === (PROMPT('buyer'))) {
         pageStatus = 15;
       } else {
         // '卖家'

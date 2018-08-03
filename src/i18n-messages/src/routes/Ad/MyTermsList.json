@@ -1,0 +1,62 @@
+[
+  {
+    "id": "myTermsList.sell_title",
+    "defaultMessage": "标题"
+  },
+  {
+    "id": "myTermsList.sell_rule",
+    "defaultMessage": "交易条款"
+  },
+  {
+    "id": "myTermsList.check_status",
+    "defaultMessage": "审核状态"
+  },
+  {
+    "id": "myTermsList.check_status_reason",
+    "defaultMessage": "原因"
+  },
+  {
+    "id": "myTermsList.operator_user",
+    "defaultMessage": "操作"
+  },
+  {
+    "id": "myTermsList.operator_user_check",
+    "defaultMessage": "查看"
+  },
+  {
+    "id": "myTermsList.operator_user_edit",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "myTermsList.operator_user_delete",
+    "defaultMessage": "您确认要删除此交易条款?"
+  },
+  {
+    "id": "myTermsList.operator_user_require",
+    "defaultMessage": "确认"
+  },
+  {
+    "id": "myTermsList.operator_user_delete_off",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "myTermsList.operator_user_delete_row",
+    "defaultMessage": "删除"
+  },
+  {
+    "id": "myTermsList.my_ad",
+    "defaultMessage": "我的广告"
+  },
+  {
+    "id": "myTermsList.sell_rules_title",
+    "defaultMessage": "交易条款管理"
+  },
+  {
+    "id": "myTermsList.sell_rule_manage",
+    "defaultMessage": "交易条款管理"
+  },
+  {
+    "id": "myTermsList.add_message",
+    "defaultMessage": "添加一条"
+  }
+]

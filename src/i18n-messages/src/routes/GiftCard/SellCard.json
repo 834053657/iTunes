@@ -1,0 +1,14 @@
+[
+  {
+    "id": "sell.adManage",
+    "defaultMessage": "广告管理"
+  },
+  {
+    "id": "sell.giftCard",
+    "defaultMessage": "礼品卡"
+  },
+  {
+    "id": "sell.adSell",
+    "defaultMessage": "出售广告"
+  }
+]

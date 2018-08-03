@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, List, Icon, Badge } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import moment from 'moment';
 import styles from './NoticeList.less';
@@ -26,7 +26,8 @@ export default function CustomNoticeList({
         <div className={styles.action}>
           <div className={styles.view_more} style={{ width: '100%' }} onClick={onView}>
             <a>
-              <FormattedMessage {...MESSAGES.viewMore} description="查看更多" />
+              {/*<FormattedMessage {...MESSAGES.viewMore} description="查看更多" />*/}
+              <FM id="noticeList.check_more" defaultMessage="查看更多" />
             </a>
           </div>
         </div>
@@ -75,12 +76,14 @@ export default function CustomNoticeList({
       <div className={styles.action}>
         <div className={styles.clear} onClick={onClear}>
           <a>
-            <FormattedMessage {...MESSAGES.oneClickRead} description="一键已读" />
+            {/*< {...MESSAGES.oneClickRead} description="一键已读" />*/}
+            <FM id="noticeList.all_ready_read" defaultMessage="一键已读" />
           </a>
         </div>
         <div className={styles.view_more} onClick={onView}>
           <a>
-            <FormattedMessage {...MESSAGES.viewMore} description="查看更多" />
+            {/*<FormattedMessage {...MESSAGES.viewMore} description="查看更多" />*/}
+            <FM id="noticeList.check_more_message" defaultMessage="查看更多" />
           </a>
         </div>
       </div>

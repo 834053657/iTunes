@@ -308,6 +308,7 @@ class BasicLayout extends React.Component {
       window.location.reload();
     }
   };
+
   handleNoticeVisibleChange = visible => {
     if (visible) {
       // this.props.dispatch({
@@ -417,7 +418,7 @@ class BasicLayout extends React.Component {
         </Layout>
       </Layout>
     );
-
+console.log(appLocale)
     return (
       <LocaleProvider locale={appLocale.antd}>
         <IntlProvider locale={appLocale.locale} messages={appLocale.messages}>

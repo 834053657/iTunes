@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Modal, Row, Col } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import styles from './index.less';
 import { getCaptcha } from '../../services/api';
@@ -72,7 +73,7 @@ class ImageValidation extends Component {
         onCancel={this.handleCancel}
         footer={[
           <Button key="back" onClick={this.handleCancel}>
-            取消
+            <FM id='UserLogin.indexPage_cancel' defaultMessage='取消' />
           </Button>,
           <Button
             key="submit"
@@ -81,7 +82,7 @@ class ImageValidation extends Component {
             htmlType="submit"
             onClick={this.handleSubmit}
           >
-            确定
+            <FM id='UserLogin.indexPage_confirm' defaultMessage='确定' />
           </Button>,
         ]}
       >
@@ -94,10 +95,10 @@ class ImageValidation extends Component {
                     rules: [
                       {
                         required: true,
-                        message: '请输入验证码！',
+                        message: <FM id='UserLogin.indexPage_code_input' defaultMessage='请输入验证码！' />,
                       },
                     ],
-                  })(<Input size="large" placeholder="验证码" />)}
+                  })(<Input size="large" placeholder={(PROMPT('UserLogin.indexPage_code_inp')||'验证码')} />)}
                 </Col>
                 <Col span={8}>
                   <img

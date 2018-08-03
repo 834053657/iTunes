@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { filter, head } from 'lodash';
 import { routerRedux } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import {
   Button,
   Menu,
@@ -81,7 +82,7 @@ export default class BuyCard extends Component {
 
   changeEdit = () => {
     const { params: { id, action } } = this.props.match || {};
-    //this.props.dispatch(routerRedux.push(`/card/edit-sell-card/${id}/${'edit'}`));
+    this.props.dispatch(routerRedux.push(`/card/edit-sell-card/${id}/${'edit'}`));
     this.setState({
       action: 'edit',
     });
@@ -95,11 +96,11 @@ export default class BuyCard extends Component {
     const { adDetail = {}, loading, terms } = this.props;
     const cardList = filter(CONFIG.card_type, c => c.valid, []);
     const defaultCard = cardList[0] || {};
+    console.log(cardList);
 
     if (!cardList.length) {
       return false;
     }
-
     const defaultValues = {
       card_type: defaultCard.type,
       term_id: 0,
@@ -111,12 +112,11 @@ export default class BuyCard extends Component {
     };
 
     const breadcrumbList = [
-      { title: '广告管理', href: '/ad/my' },
-      { title: '礼品卡', href: '/card/market' },
-      { title: '出售广告' },
+      { title: <FM id="sell.adManage" defaultMessage="广告管理" />, href: '/ad/my' },
+      { title: <FM id="sell.giftCard" defaultMessage="礼品卡" />, href: '/card/market' },
+      { title: <FM id="sell.adSell" defaultMessage="出售广告" /> },
     ];
     const filteredTerms = terms.filter(term => term.status === 3);
-    console.log(filteredTerms);
 
     return (
       <div className={styles.addSale}>

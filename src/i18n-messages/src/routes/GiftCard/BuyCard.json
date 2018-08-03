@@ -1,0 +1,14 @@
+[
+  {
+    "id": "buy.adManage",
+    "defaultMessage": "广告管理"
+  },
+  {
+    "id": "buy.giftCard",
+    "defaultMessage": "礼品卡"
+  },
+  {
+    "id": "buy.createBuy",
+    "defaultMessage": "创建购买"
+  }
+]

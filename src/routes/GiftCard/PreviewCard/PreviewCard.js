@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { Tabs, Icon } from 'antd';
 import styles from './PreviewCard.less';
 import StepModel from '../Step';
+import { formatMoney } from '../../../utils/utils';
 
 const TabPane = Tabs.TabPane;
 
@@ -74,44 +77,36 @@ export default class PreviewCard extends Component {
         <StepModel steps={steps} current={this.status(status)} />
         <div className={styles.orderInfo}>
           <h5>
-            <span>订单：</span>
+            <span><FM id="previewCard.order_title" defaultMessage="订单：" /></span>
             <span className={styles.text}>{order.order_no}</span>
           </h5>
           <div className={styles.orderDescribe}>
             {pageStatus === 12 || pageStatus === 13
-              ? `${trader.nickname}向您购买总面额${order.money}的${
-                  CONFIG.cardTypeMap[order.card_type].name
-                }`
+              ? <FM id="previewCard.someone_toBuy" defaultMessage="{name}向您购买总面额{money}的{card}" values={{name:trader.nickname,money:order.money,card:CONFIG.cardTypeMap[order.card_type].name}} />
               : null}
             {pageStatus === 15 || pageStatus === 17
-              ? `您向${ad.owner.nickname}购买总面额${order.money}的${
-                  CONFIG.cardTypeMap[order.card_type].name
-                }`
+              ? <FM id="previewCard.toSomeone_Buy" defaultMessage="您向{name}购买总面额{money}的{card}" values={{name:ad.owner.nickname,money:order.money,card:CONFIG.cardTypeMap[order.card_type].name}} />  //您向${ad.owner.nickname}购买总面额${order.money}的${CONFIG.cardTypeMap[order.card_type].name}
               : null}
             {pageStatus === 3 || pageStatus === 4
-              ? `${trader.nickname}向您出售总面额${order.money}的${
-                  CONFIG.cardTypeMap[order.card_type].name
-                }`
+              ? <FM id="previewCard.someone_toSell" defaultMessage="{name}向您出售总面额{money}的{card}" values={{name:trader.nickname,money:order.money,card:CONFIG.cardTypeMap[order.card_type].name}} />  //${trader.nickname}向您出售总面额${order.money}的${CONFIG.cardTypeMap[order.card_type].name}
               : null}
             {pageStatus === 8 || pageStatus === 9
-              ? `您向${ad.owner.nickname}出售总面额${order.money}的${
-                  CONFIG.cardTypeMap[order.card_type].name
-                }`
+              ? <FM id="previewCard.toSomeone_sell" defaultMessage="您向{name}出售总面额{money}的{card}" values={{name:ad.owner.nickname,money:order.money,card:CONFIG.cardTypeMap[order.card_type].name}} />  //`您向${ad.owner.nickname}出售总面额${order.money}的${CONFIG.cardTypeMap[order.card_type].name}`
               : null}
           </div>
           <div className={styles.price}>
-            <span>单价：</span>
-            <span>{ad.unit_price}</span>RMB
+            <span><FM id="previewCard.unit_price" defaultMessage="单价：" /></span>
+            <span>{formatMoney(ad.unit_price)}</span>RMB
           </div>
           <div>
-            <span>总价：</span>
-            <span>{order.amount}</span>RMB
+            <span><FM id="previewCard.order_amount" defaultMessage="总价：" /></span>
+            <span>{formatMoney(order.amount)}</span>RMB
           </div>
         </div>
         <div className={styles.tabsLine}>
           <Tabs defaultActiveKey="2" onChange={this.changeTab} type="card">
-            <TabPane tab="订单详情" key="1" />
-            <TabPane tab="礼品卡清单" key="2">
+            <TabPane tab={<FM id="previewCard.order_details" defaultMessage="订单详情" />} key="1" />
+            <TabPane tab={<FM id="previewCard.card_order_title" defaultMessage="礼品卡清单" />} key="2">
               <Checklist cards={cards} />
             </TabPane>
           </Tabs>
@@ -132,7 +127,7 @@ function Checklist(props) {
             <div key={index} className={styles.picWithText}>
               <header>
                 <span>{card.money}</span>
-                面额 ({card.items.length})
+                <FM id="previewCard.amount_list" defaultMessage="面额" /> ({card.items.length})
               </header>
               <section className={styles.picBox}>
                 <div className={styles.left}>
@@ -143,13 +138,13 @@ function Checklist(props) {
                           <li key={item.id}>
                             {item.password ? (
                               <div className={styles.cardTop}>
-                                <span className={styles.title}>卡密：</span>
+                                <span className={styles.title}><FM id="previewCard.card_passWord_" defaultMessage="卡密：" /></span>
                                 <div className={styles.text}>{item.password}</div>
                               </div>
                             ) : null}
                             {item.picture ? (
                               <div className={styles.cardBottom}>
-                                <span className={styles.title}>卡图：</span>
+                                <span className={styles.title}><FM id="previewCard.card_img_" defaultMessage="卡图：" /></span>
                                 <div className={styles.receiveBox}>
                                   <img width="100%" src={item.picture} alt="" />
                                 </div>
@@ -163,7 +158,7 @@ function Checklist(props) {
                 {card.receipt ? (
                   <div className={styles.receipt}>
                     <div className={styles.left}>
-                      <span>收据:</span>
+                      <span><FM id="previewCard.order_receipt" defaultMessage="收据:" /></span>
                     </div>
                     <div className={styles.right}>
                       <div className={styles.imgBox}>

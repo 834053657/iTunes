@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import { FormattedMessage as FM } from 'react-intl';
+
 import {
   Form,
   Tabs,
@@ -19,6 +21,7 @@ import cx from 'classnames';
 import styles from './appeal.less';
 import StepModel from '../Step';
 import UploadComponent from './Upload';
+import { formatMoney } from '../../../utils/utils';
 
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
@@ -211,7 +214,7 @@ export default class Appeal extends Component {
         : '-';
 
     let steps = null;
-    steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
+    steps = [{ title: <FM id="appeal.open_charge" defaultMessage="打开交易" /> }, { title: <FM id="appeal.sure_message" defaultMessage="确认信息" />  }, { title: <FM id="appeal.order_over" defaultMessage="完成" />  }];
 
     const uploadButton = (
       <div>
@@ -249,16 +252,16 @@ export default class Appeal extends Component {
             </h5>
             <div className={styles.orderDescribe}>
               {pageStatus === 20 && order.card_type && CONFIG.cardTypeMap
-                ? `${trader.nickname}向您出售总面额${order.money}的${catdType}`
+                ? <FM id="appeal.someone_toSell" defaultMessage="{name}向您出售总面额{money}的{card}" values={{name:trader.nickname,money:order.money,card:catdType}} /> //`${trader.nickname}向您出售总面额${order.money}的${catdType}`
                 : null}
               {pageStatus === 21
-                ? `您向${ad.owner.nickname}出售总面额${order.money}的${catdType}`
+                ? <FM id="appeal.toSomeone_toSell" defaultMessage="您向{name}出售总面额{money}的{card}" values={{name:ad.owner.nickname,money:order.money,card:catdType}} />  //`您向${ad.owner.nickname}出售总面额${order.money}的${catdType}`
                 : null}
               {pageStatus === 22
-                ? `您向${ad.owner.nickname}购买总面额${order.money}的${catdType}`
+                ? <FM id="appeal.toSomeone_toBuy" defaultMessage="您向{name}购买总面额{money}的{card}" values={{name:ad.owner.nickname,money:order.money,card:catdType}} /> //`您向${ad.owner.nickname}购买总面额${order.money}的${catdType}`
                 : null}
               {pageStatus === 23
-                ? `${trader.nickname}向您购买总面额${order.money}的${catdType}`
+                ? <FM id="appeal.Someone_toBuy" defaultMessage="{name}向您购买总面额{money}的{card}" values={{name:trader.nickname,money:order.money,card:catdType}} /> //`${trader.nickname}向您购买总面额${order.money}的${catdType}`
                 : null}
             </div>
           </div>
@@ -272,43 +275,43 @@ export default class Appeal extends Component {
               animated={false}
               defaultActiveKey={olderPageStatus === 16 ? '1' : '2'}
             >
-              <TabPane tab="订单详情" key="1">
+              <TabPane tab={<FM id="appeal.order_detail" defaultMessage="订单详情" />}  key="1">
                 <ul className={styles.orderDetail}>
                   <li className={styles.item}>
-                    <span className={styles.title}>类型：</span>
+                    <span className={styles.title}><FM id="appeal.order_type" defaultMessage="类型：" /> </span>
                     <div className={styles.content}>
                       {order.card_type && CONFIG.cardTypeMap ? catdType || '-' : '-'}
                     </div>
                   </li>
                   <li className={styles.item}>
-                    <span className={styles.title}>单价：</span>
-                    <div className={styles.content}>{ad.unit_price || '-'}</div>
+                    <span className={styles.title}><FM id="appeal.order_unit_price" defaultMessage="单价：" /> </span>
+                    <div className={styles.content}>{formatMoney(ad.unit_price) || '-'}</div>
                   </li>
                   <li className={styles.item}>
-                    <span className={styles.title}>数量：</span>
+                    <span className={styles.title}><FM id="appeal.amount_num" defaultMessage="数量：" /> </span>
                     <div className={styles.content}>{this.count(order) || '-'}</div>
                   </li>
                   <li className={styles.item}>
-                    <span className={styles.title}>总面额：</span>
+                    <span className={styles.title}><FM id="appeal.amount_all" defaultMessage="总面额：" /> </span>
                     <div className={styles.content}>{order.money || '-'}</div>
                   </li>
                   <li className={styles.item}>
-                    <span className={styles.title}>总价：</span>
+                    <span className={styles.title}><FM id="appeal.amount_all_money" defaultMessage="总价：" /> </span>
                     <div className={styles.content}>
-                      {order.amount ? order.amount + 'RMB' : '-'}
+                      {order.amount ? formatMoney(order.amount) + 'RMB' : '-'}
                     </div>
                   </li>
                   <li className={styles.item}>
-                    <span className={styles.title}>保障时间：</span>
+                    <span className={styles.title}><FM id="appeal.safe_time_" defaultMessage="保障时间：" /> </span>
                     <div className={styles.content}>
-                      {ad.guarantee_time ? ad.guarantee_time + '分钟' : '-'}
+                      {ad.guarantee_time ? ad.guarantee_time + <FM id="appeal.order_minute" defaultMessage="分钟" />  : '-'}
                     </div>
                   </li>
                 </ul>
 
                 <div className={styles.stepBottomRight}>
                   <div className={styles.largeBtnBox}>
-                    <Button onClick={() => this.previewCard(steps)}>查看礼品卡清单</Button>
+                    <Button onClick={() => this.previewCard(steps)}><FM id="appeal.check_order_list" defaultMessage="查看礼品卡清单" /> </Button>
                   </div>
                   <div className={styles.ownerInfo}>
                     <div className={styles.userInfo}>
@@ -326,25 +329,25 @@ export default class Appeal extends Component {
                           </Badge>
                         </div>
                         <div className={styles.infoBottom}>
-                          <span className={styles.dealTit}>30日成单：</span>
+                          <span className={styles.dealTit}><FM id="appeal.one_month_order" defaultMessage="30日成单：" /> </span>
                           <span className={styles.dealNum}>{userInfo.month_volume || '-'}</span>
                         </div>
                       </div>
                     </div>
                     <div className={styles.term}>
-                      <h3>交易条款：</h3>
+                      <h3><FM id="appeal.charge_rules" defaultMessage="交易条款：" /> </h3>
                       <p>{order.term}</p>
                     </div>
                   </div>
                 </div>
               </TabPane>
-              <TabPane tab="申诉中" key="2">
+              <TabPane tab={<FM id="appeal.state_inTime" defaultMessage="申诉中" />}  key="2">
                 <AppealInfo data={chatMsgList} />
                 <Form onSubmit={this.handleSubmit}>
                   <div className={styles.submitAppeal}>
                     <div>
                       <div className={styles.addPic}>
-                        <span className={styles.addTitle}>上传图片:</span>
+                        <span className={styles.addTitle}><FM id="appeal.upload_img" defaultMessage="上传图片:" /> </span>
                         <div className={styles.addBox}>
                           <Upload
                             name="file"
@@ -359,7 +362,7 @@ export default class Appeal extends Component {
                             {this.state.fileList.length < 10 ? (
                               <div>
                                 <Icon type="plus" />
-                                <div className="ant-upload-text">上传</div>
+                                <div className="ant-upload-text"><FM id="appeal.upload_test" defaultMessage="上传" /> </div>
                               </div>
                             ) : null}
                           </Upload>
@@ -382,7 +385,7 @@ export default class Appeal extends Component {
                         rules: [
                           {
                             required: false,
-                            message: '请输入您要提交的内容',
+                            message: <FM id="appeal.input_user_want" defaultMessage="请输入您要提交的内容" /> ,
                           },
                         ],
                       })(
@@ -399,7 +402,7 @@ export default class Appeal extends Component {
                       type="primary"
                       htmlType="submit"
                     >
-                      提交
+                      <FM id="appeal.message_submit" defaultMessage="提交" />
                     </Button>
                   </div>
                 </Form>
@@ -433,12 +436,12 @@ const AppealInfo = props => {
                 <br />
                 <span>
                   {d.sender &&
-                    d.sender.buyer === 1 && <span className={styles.avaIdentify}>卖家</span>}
+                    d.sender.buyer === 1 && <span className={styles.avaIdentify}><FM id="appeal.seller_" defaultMessage="卖家" /> </span>}
                   {d.sender &&
                     d.sender.buyer !== 1 &&
-                    d.sender.type === 'user' && <span className={styles.avaIdentify}>买家</span>}
+                    d.sender.type === 'user' && <span className={styles.avaIdentify}><FM id="appeal.buyer_" defaultMessage="买家" /> </span>}
                   {d.sender &&
-                    d.sender.type === 'admin' && <span className={styles.avaAdmin}>客服</span>}
+                    d.sender.type === 'admin' && <span className={styles.avaAdmin}><FM id="appeal.service" defaultMessage="客服" /> </span>}
                 </span>
               </div>
               <div className={styles.chatItem}>
