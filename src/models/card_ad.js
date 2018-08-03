@@ -11,6 +11,7 @@ export default {
   effects: {
     *fetchInitialValue({ payload }, { call, put }) {
       const res = yield call(getAdDetail, payload);
+      console.log(payload);
       if (res.code === 0) {
         const { condition_type, condition } = res.data || {};
         const detail = { ...res.data };

@@ -19,8 +19,6 @@ import {
 } from 'antd';
 import { map, last, head } from 'lodash';
 import styles from './SellForm.less';
-import OnlyPicture from './OnlyPicture';
-import PicWithPass from './PicWithPass';
 import OnlyPassWord from './OnlyPassWord';
 
 import DescriptionList from '../../../components/DescriptionList';
@@ -217,6 +215,7 @@ export default class SellForm extends Component {
       fileUpload: true,
     });
   };
+
   changePsw = (e, index, littleIndex) => {
     const { action, defaultValue } = this.props;
     const cards = action ? defaultValue.cards : this.state.cards;
@@ -389,6 +388,7 @@ export default class SellForm extends Component {
     return (
       <div>
         <Form className={styles.form} onSubmit={this.handleSubmit}>
+          {/*类型*/}
           <FormItem {...formItemLayout} label="类型">
             {getFieldDecorator('card_type', {
               initialValue: action ? defaultValue.card_type : initialValues.card_type,
@@ -413,6 +413,7 @@ export default class SellForm extends Component {
             )}
           </FormItem>
 
+          {/*单价*/}
           <FormItem {...formItemLayout} label="单价">
             {getFieldDecorator('unit_price', {
               initialValue: action ? defaultValue.unit_price : initialValues.unit_price,
@@ -426,6 +427,7 @@ export default class SellForm extends Component {
             })(<InputNumber precision={2} disabled={action && action !== 'edit'} />)}
           </FormItem>
 
+          {/*保障时间*/}
           <FormItem {...formItemLayout} label="保障时间">
             {getFieldDecorator('guarantee_time', {
               initialValue: action ? defaultValue.guarantee_time : initialValues.guarantee_time,
@@ -446,6 +448,7 @@ export default class SellForm extends Component {
             )}
           </FormItem>
 
+          {/*交易条款*/}
           <FormItem
             {...formItemLayout}
             label={
@@ -478,6 +481,7 @@ export default class SellForm extends Component {
             )}
           </FormItem>
 
+          {/*同时处理订单数*/}
           <FormItem {...formItemLayout} label="同时处理订单数">
             {getFieldDecorator('concurrency_order', {
               initialValue: action
@@ -491,6 +495,8 @@ export default class SellForm extends Component {
               ],
             })(<InputNumber disabled={action && action !== 'edit'} />)}
           </FormItem>
+
+          {/*包含*/}
           <FormItem {...formItemLayout} label="包含">
             {getFieldDecorator('password_type', {
               initialValue: action ? defaultValue.password_type : initialValues.password_type,
@@ -511,6 +517,7 @@ export default class SellForm extends Component {
             )}
           </FormItem>
 
+          {/*添加面额按钮*/}
           <FormItem {...formItemLayout}>
             <Button
               onClick={() => {
@@ -573,6 +580,7 @@ export default class SellForm extends Component {
               {formatMoney(this.calculateMoney()) || '0'}
             </Description>
           </DescriptionList>
+
           <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
             <Description style={{ float: 'right' }} term="总价">
               {formatMoney(unit * this.calculateMoney()) || '0'}
@@ -613,6 +621,7 @@ export default class SellForm extends Component {
               </Popconfirm>
             ) : null}
           </FormItem>
+
           {termModalInfo && (
             <Modal
               title={termModalInfo.title}

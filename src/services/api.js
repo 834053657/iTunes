@@ -261,6 +261,7 @@ export async function addSellAd(params) {
 
 //创建购买广告
 export async function addBuyAd(params) {
+  console.log(params);
   return request('/itunes/ad/card/buy', {
     method: 'POST',
     body: params,

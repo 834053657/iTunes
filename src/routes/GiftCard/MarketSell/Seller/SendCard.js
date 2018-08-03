@@ -9,6 +9,7 @@ import { sendCDK } from '../../../../services/api';
 import SendOnlyPicture from './OnlyPic';
 import SendPicWithText from './PicWithText';
 import OnlyPassWord from '../../forms/OnlyPassWord';
+import SendCardForm from '../../forms/SendCardForm';
 
 const FormItem = Form.Item;
 
@@ -85,74 +86,21 @@ export default class Process extends Component {
       });
       return fatherArr;
     });
-
-    //console.log(postData);
-
-    // postData.map((p,i)=>{
-    //   console.log(p);
-    //   delete p.items
-    //   p[i].push({cards: fatherArr[i].items})
-    //   return postData
-    // })
-
-    // console.log(postData);
-
     return fatherArr;
   };
 
-  writePassword = (e, item, index, i) => {
-    this.cardsData[index].cards[i].password = e.target.value;
-  };
-
-  //只有图片 上传图片
-  sendPic = (info, url, i, index) => {
-    this.cardsData[index].cards[i].picture = url;
-  };
-
-  //只有图片 上传密码
-  sendRec = (info, url, index) => {
-    this.cardsData[index].receipt = url;
-  };
-
-  changePTPass = (e, i, index) => {
-    this.cardsData[index].cards[i].password = e.target.value;
-  };
-
-  sendPicWithText = (info, url, i, index) => {
-    this.cardsData[index].cards[i].picture = url;
-  };
-
-  sendRecWithText = (info, url, index) => {
-    this.cardsData[index].receipt = url;
-  };
-
   sendCDK = v => {
-    console.log(v);
     this.props.dispatch({
       type: 'card/sendCDK',
       payload: v,
     });
   };
 
-  deadline = () => {
-    // setInterval(this.timeChange(), 1 * 1000)
-    // return this.timeChange()
-  };
-
-  timeChange = () => {
-    // let a = this.state.time
-    // this.setState({
-    //   time: a - 1
-  };
-
   changePsw = (e, index, littleIndex) => {
-    console.log(this.cardsData);
     this.cardsData[index].items[littleIndex].password = e.target.value;
-    console.log(this.cardsData);
     this.props.form.setFieldsValue({
       'cards[]': this.cardsData,
     });
-
     this.setState({
       cards: this.cardsData,
     });
@@ -160,7 +108,6 @@ export default class Process extends Component {
 
   changePic = (e, index, littleIndex) => {
     this.cardsData[index].items[littleIndex].picture = e;
-    console.log(this.cardsData);
     this.props.form.setFieldsValue({
       'cards[]': this.cardsData,
     });
@@ -180,6 +127,18 @@ export default class Process extends Component {
     });
   };
 
+  addFileData = (info, index, length) => {
+    this.cardsData[index].items = info.splice(0, length);
+    console.log(this.cardsData);
+
+    this.props.form.setFieldsValue({
+      'cards[]': this.cardsData,
+    });
+    this.setState({
+      cards: this.cardsData,
+    });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -190,73 +149,6 @@ export default class Process extends Component {
         });
       }
     });
-  };
-
-  orderRenderBox = () => {
-    //   {CONFIG.cardPwdType[ad.password_type] === '有卡密'
-    //     ? order.order_detail.map((item, index) => {
-    //       return (
-    //         <div key={index} className={styles.denomination}>
-    //           <header>
-    //             <span>{item.money}</span>
-    //             面额 ({item.count})
-    //             {/*<div>
-    //                       <Button>导入</Button>
-    //                     </div>*/}
-    //           </header>
-    //           <section className={styles.iptSection}>
-    //             <div className={styles.left}>
-    //               <span>卡密：</span>
-    //             </div>
-    //             <div className={styles.right}>
-    //               <div className={styles.iptBox}>
-    //                 <div className={styles.input}>
-    //                   {this.renderInput(item, index).map((n, i) => {
-    //                     return (
-    //                       <Input
-    //                         key={i}
-    //                         type="text"
-    //                         onChange={e => this.writePassword(e, item, index, i)}
-    //                       />
-    //                     );
-    //                   })}
-    //                 </div>
-    //               </div>
-    //             </div>
-    //           </section>
-    //         </div>
-    //       );
-    //     })
-    //     : null}
-    //
-    // {CONFIG.cardPwdType[ad.password_type] === '有卡图'
-    //   ? order.order_detail.map((item, index) => {
-    //     return (
-    //       <SendOnlyPicture
-    //         key={index}
-    //         item={item}
-    //         renderInput={this.renderInput(item, index)}
-    //         sendPic={(info, url, i) => this.sendPic(info, url, i, index)}
-    //         sendRec={(info, url) => this.sendRec(info, url, index)}
-    //       />
-    //     );
-    //   })
-    //   : null}
-    //
-    // {CONFIG.cardPwdType[ad.password_type] !== '有图有卡密'
-    //   ? order.order_detail.map((item, index) => {
-    //     return (
-    //       <SendPicWithText
-    //         key={index}
-    //         item={item}
-    //         renderInput={this.renderInput(item, index)}
-    //         changePTPass={(e, i) => this.changePTPass(e, i, index)}
-    //         sendPicWithText={(info, url, i) => this.sendPicWithText(info, url, i, index)}
-    //         sendRecWithText={(info, url) => this.sendRecWithText(info, url, index)}
-    //       />
-    //     );
-    //   })
-    //   : null}
   };
 
   render() {
@@ -272,7 +164,7 @@ export default class Process extends Component {
     const userInfo = ad.owner;
     const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
 
-    getFieldDecorator('cards[]', { initialValue: [] });
+    getFieldDecorator('cards[]');
     console.log(this.state.cards);
     return (
       <div className={styles.sendBox}>
@@ -348,9 +240,15 @@ export default class Process extends Component {
                 psw={ad.password_type}
                 form={this.props.form}
                 changePZ={this.changePZ}
+                addFileData={this.addFileData}
                 sendCard
               />
-
+              {/*
+              <SendCardForm
+                defaultValue={this.state.cards}
+                psw={ad.password_type}
+              />
+*/}
               <div>
                 <div className={styles.amount}>
                   <h4>

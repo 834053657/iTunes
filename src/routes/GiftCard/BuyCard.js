@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { filter } from 'lodash';
 import { routerRedux } from 'dva/router';
-import { Spin } from 'antd';
+import { Spin, message } from 'antd';
 import styles from './BuyCard.less';
 import BuyForm from './forms/BuyForm1';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 @connect(({ card_ad, card, loading }) => ({
   detail: card_ad.detail,
-  terms: card.terms,
+  terms: card.terms.filter(term => term.status === 3),
   loading: loading.effects['card_ad/fetchInitialValue'] || false,
 }))
 export default class SaleCard extends Component {
@@ -22,18 +22,20 @@ export default class SaleCard extends Component {
   }
 
   componentWillMount() {
-    const { params: { id } } = this.props.match || {};
+    const { params: { id, action } } = this.props.match || {};
     const { dispatch } = this.props;
-    dispatch({
-      type: 'card/fetchTerms',
-    });
-
     if (id) {
       dispatch({
         type: 'card_ad/fetchInitialValue',
         payload: { id },
       });
+      this.setState({
+        action,
+      });
     }
+    dispatch({
+      type: 'card/fetchTerms',
+    });
   }
 
   componentWillUnmount() {
@@ -45,18 +47,23 @@ export default class SaleCard extends Component {
   handleCancel = () => {
     this.setState({
       editing: false,
+      action: 'preview',
     });
   };
 
   handleEdit = () => {
     this.setState({
       editing: true,
+      action: 'edit',
     });
   };
 
   handleSubmit = values => {
     const { params: { id } } = this.props.match || {};
-
+    console.log(values);
+    if (values.condition_type === 1 && !values.condition.length) {
+      return message.error('未填写指定面额信息');
+    }
     this.props.dispatch({
       type: 'card/addBuyAd',
       payload: {
@@ -71,11 +78,10 @@ export default class SaleCard extends Component {
 
   render() {
     const { params: { id } } = this.props.match || {};
-    const { detail, loading } = this.props;
-    const { editing } = this.state;
+    const { detail, loading, terms } = this.props;
+    const { editing, action } = this.state;
     const cardList = filter(CONFIG.card_type, c => c.valid, []);
     const defaultCard = cardList[0] || {};
-    const { terms } = this.props.card || {};
     const defaultValues = {
       condition_type: 1,
       card_type: defaultCard.type,
@@ -91,8 +97,11 @@ export default class SaleCard extends Component {
       { title: '礼品卡', href: '/card/market' },
       { title: '创建购买' },
     ];
+    if (!cardList.length) {
+      return false;
+    }
 
-    console.log(this.props);
+    const filteredTerms = terms.filter(term => term.status === 3);
 
     return (
       <div className={styles.addSale}>
@@ -102,11 +111,12 @@ export default class SaleCard extends Component {
               <BuyForm
                 editing={editing}
                 terms={terms}
+                cardList={cardList}
                 onEdit={this.handleEdit}
+                action={action}
                 onSubmit={this.handleSubmit}
                 onCancel={this.handleCancel}
                 initialValues={id ? detail : defaultValues}
-                cardList={cardList}
               />
             ) : null}
           </Spin>

@@ -1,5 +1,5 @@
 import React, { PureComponent, Component, Fragment } from 'react';
-import { Form, Button, Row, Col, Icon, Radio } from 'antd';
+import { Form, Button, Row, Col, Icon, Radio, Popconfirm } from 'antd';
 // import AsyncValidator from 'async-validator'
 import { map, filter, omit, forEach, size } from 'lodash';
 import { connect } from 'dva';
@@ -26,8 +26,6 @@ const FormItem = Form.Item;
 
 // 根据校验规则构造一个 validator
 // const validator = new AsyncValidator(descriptor)
-
-const CardType = filter(CONFIG.card_type, item => item.valid);
 
 @connect(state => {
   return {
@@ -138,13 +136,13 @@ export default class ReduxForm extends PureComponent {
     if (condition_type === 1) {
       forEach(values.condition1, (value, key) => {
         if (value.min_count > value.max_count) {
-          createError(checkErr, `condition1.${key}.min_count`, '数量不能大于最大');
+          createError(checkErr, `condition1.${key}.min_count`, '该数量值应小于最大值');
         }
       });
       values.condition = values.condition1;
     } else {
       if (values.condition2.min_money > values.condition2.max_money) {
-        createError(checkErr, `condition2.min_money`, '面额不能大于最大');
+        createError(checkErr, `condition2.min_money`, '该数值应小于右侧数值');
       }
 
       values.condition = values.condition2;
@@ -159,7 +157,7 @@ export default class ReduxForm extends PureComponent {
   };
 
   renderItem = arg => {
-    const { fields, formitemlayout, meta, _error, disabled } = arg;
+    const { fields, formitemlayout, meta, _error, disabled, editing } = arg;
     return (
       <FormItem
         wrapperCol={{ offset: 4 }}
@@ -168,7 +166,7 @@ export default class ReduxForm extends PureComponent {
       >
         {fields.map((member, index) => {
           return (
-            <Row key={index} style={{ marginBottom: 20 }}>
+            <Row key={index} className={styles.denoRow}>
               <Col sm={4}>
                 <Field
                   name={`${member}.money`}
@@ -205,17 +203,25 @@ export default class ReduxForm extends PureComponent {
                   disabled={disabled}
                 />
               </Col>
-              <Col sm={3} offset={1}>
-                <Button icon="close-circle-o" onClick={() => fields.remove(index)}>
-                  删除
-                </Button>
-              </Col>
+              {!disabled && (
+                <Popconfirm
+                  title="您确认要删除吗?"
+                  onConfirm={() => fields.remove(index)}
+                  placement="topLeft"
+                  okText="是"
+                  cancelText="否"
+                >
+                  <Icon className={styles.deleteDenoIcon} type="minus-circle-o" />
+                </Popconfirm>
+              )}
             </Row>
           );
         })}
         <Button
           type="dashed"
+          style={{ width: '40%', marginLeft: '8%', marginTop: '10px' }}
           onClick={() => fields.push({ money: '', min_count: '', max_count: '' })}
+          disabled={disabled}
         >
           <Icon type="plus" /> 添加面额
         </Button>
@@ -239,17 +245,21 @@ export default class ReduxForm extends PureComponent {
 
   render() {
     const {
-      editing = false,
+      editing,
       handleSubmit,
       pristine,
       reset,
+      action,
       submitting,
       terms = [],
       condition_type,
       condition2 = {},
       onEdit,
+      cardList,
     } = this.props;
     console.log(this.props.initialValues1);
+    console.log(editing);
+    console.log(action);
     const formItemLayout = {
       labelCol: {
         sm: { span: 4 },
@@ -271,7 +281,7 @@ export default class ReduxForm extends PureComponent {
           placeholder="请选择类型"
           disabled={!editing}
         >
-          {map(CardType, card => {
+          {map(cardList, card => {
             return (
               <AOption key={card.type} value={card.type}>
                 {card.name}
@@ -336,9 +346,8 @@ export default class ReduxForm extends PureComponent {
                 placeholder="最小面额"
               />
             </Col>
-            <Col sm={1} style={{ textAlign: 'center' }}>
-              {' '}
-              ~{' '}
+            <Col sm={1} style={{ textAlign: 'center', marginTop: '8px' }}>
+              ~
             </Col>
             <Col sm={4}>
               <Field
