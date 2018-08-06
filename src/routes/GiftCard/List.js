@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from 'react';
-import { parse } from 'url';
+import React, {Component, Fragment} from 'react';
+import {parse} from 'url';
 import numeral from 'numeral';
-import { connect } from 'dva';
-import { stringify } from 'qs';
-import { map, omitBy, filter, isEmpty } from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import {connect} from 'dva';
+import {stringify} from 'qs';
+import {map, omitBy, filter, isEmpty} from 'lodash';
+import {FormattedMessage} from 'react-intl';
 import {
   Table,
   Tabs,
@@ -19,16 +19,16 @@ import {
   Badge,
   Popconfirm,
 } from 'antd';
-import { routerRedux } from 'dva/router';
+import {routerRedux} from 'dva/router';
 import moment from 'moment/moment';
 import FilterDemoinForm from './forms/FilterDemoinForm';
-import { getQueryString } from '../../utils/utils';
+import {getQueryString} from '../../utils/utils';
 import styles from './List.less';
 
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
 const FM = FormattedMessage;
-@connect(({ card, loading, user }) => ({
+@connect(({card, loading, user}) => ({
   list: card.list,
   user: user.currentUser.user,
   loading: loading.effects['card/fetchCardList_'],
@@ -36,7 +36,7 @@ const FM = FormattedMessage;
 export default class List extends Component {
   constructor(props) {
     super(props);
-    const { type = '2' } = getQueryString(props.location.search);
+    const {type = '2'} = getQueryString(props.location.search);
     this.state = {
       loading: false,
       type,
@@ -70,7 +70,7 @@ export default class List extends Component {
       },
       () => {
         this.fetchData(params, () => {
-          this.props.dispatch(routerRedux.replace({ search: stringify({ type }) }));
+          this.props.dispatch(routerRedux.replace({search: stringify({type})}));
           this.setState({
             loading: false,
           });
@@ -111,17 +111,14 @@ export default class List extends Component {
   }
 
   fetchData = (params_ = {}, callback) => {
-    // debugger;
     let params = {};
-    const { type, card_type, order_by, password_type, denominFilterValue, filters } = this.state;
-
+    const {type, card_type, order_by, password_type, denominFilterValue, filters} = this.state;
     params.page = params_.page || {};
-
     params.type = params_.type || type;
     params.card_type = params_.card_type || card_type;
     params.order_by = params_.order_by || order_by;
     params.password_type = params_.password_type || password_type;
-    const { min, max } = params_.denominFilterValue || denominFilterValue || {};
+    const {min, max} = params_.denominFilterValue || denominFilterValue || {};
     params.min_money = min;
     params.max_money = max;
 
@@ -154,7 +151,6 @@ export default class List extends Component {
   };
 
   handleTableChange = (pagination, filters, sorter) => {
-    // console.log(pagination)
     const params1 = {
       page: pagination.current,
       page_size: pagination.pageSize,
@@ -189,7 +185,6 @@ export default class List extends Component {
   };
 
   handleFilterDemoin = value => {
-    console.log('handleFilterDemoin', value);
     this.setState({
       denominFilterValue: value,
       denoVisible: false,
@@ -200,18 +195,18 @@ export default class List extends Component {
   };
 
   initColumns = () => {
-    const { user = {} } = this.props;
-    const { type, denominFilterValue } = this.state;
+    const {user = {}} = this.props;
+    const {type, denominFilterValue} = this.state;
     const cardTypes = map(CONFIG.card_type.filter(t => t.valid), item => {
-      return { text: item.name, value: item.type };
+      return {text: item.name, value: item.type};
     });
     const cardPwdType = map(CONFIG.cardPwdType, (text, value) => {
-      return { text, value };
+      return {text, value};
     });
     let columns = [
       {
         title: <FM id="nickname_" defaultMessage="用户名" />,
-        width: '100',
+        width: '130px',
         dataIndex: 'nickname_',
         render: (text, record) => {
           const userinfo = record.owner;
@@ -232,7 +227,7 @@ export default class List extends Component {
       {
         title: <FM id="type" defaultMessage="类型" />,
         dataIndex: 'type',
-        width: '100',
+        width: '80px ',
         filterMultiple: false,
         filteredValue: this.state.card_type,
         filters: cardTypes,
@@ -254,7 +249,7 @@ export default class List extends Component {
             <FM id="require" defaultMessage="要求" />
           ),
         dataIndex: 'password_type',
-        width: '200',
+        width: '90px ',
         filters: cardPwdType,
         filterMultiple: false,
         filteredValue: this.state.password_type,
@@ -265,7 +260,7 @@ export default class List extends Component {
       {
         title: <FM id="denomination" defaultMessage="面额" />,
         dataIndex: 'denomination',
-        width: '100',
+        width: '100px ',
         onFilterDropdownVisibleChange: e => {
           this.setState({
             denoVisible: e,
@@ -274,7 +269,7 @@ export default class List extends Component {
         filterIcon: (
           <Icon
             type="filter"
-            style={{ color: this.state.denominFilterValue ? '#108ee9' : '#aaa' }}
+            style={{color: this.state.denominFilterValue ? '#108ee9' : '#aaa'}}
           />
         ),
         filterDropdownVisible: this.state.denoVisible,
@@ -295,13 +290,10 @@ export default class List extends Component {
               <span>
                 {this.denoBuyList(record)
                   ? this.denoBuyList(record).map((m, index) => {
-                      return (
-                        <span key={index}>
-                          {m}
-                          {index < this.denoBuyList(record).length - 1 ? '/' : null}
-                        </span>
-                      );
-                    })
+                    return (
+                      <span key={index}>{m}{index < this.denoBuyList(record).length - 1 ? '/' : null}</span>
+                    );
+                  })
                   : null}
               </span>
             );
@@ -333,19 +325,19 @@ export default class List extends Component {
       },
       {
         title: <FM id="total_denomination" defaultMessage="总面额" />,
-        width: '100',
+        width: '100px ',
         dataIndex: 'total_denomination',
         render: (text, record) => <span>{numeral(record.total_money).format('0,0.00')}</span>,
       },
       {
         title: <FM id="deadline" defaultMessage="发卡期限" />,
-        width: '100',
+        width: '80px',
         dataIndex: 'deadline',
         render: v => <span>{v} {(PROMPT('listHell.minute'))}</span>,
       },
       {
         title: <FM id="unit_price" defaultMessage="单价" />,
-        width: '100',
+        width: '80px',
         dataIndex: 'unit_price',
         render: v => <span>{numeral(v).format('0,0.00')} RMB</span>,
         sorter: true,
@@ -353,16 +345,16 @@ export default class List extends Component {
       },
       {
         title: <FM id="guarantee_time" defaultMessage="保障时间" />,
-        width: '100',
+        width: '80px',
         dataIndex: 'guarantee_time',
         render: v => <span>{v} {(PROMPT('listHell.minute'))}</span>,
       },
       {
         title: <FM id="operation_" defaultMessage="操作" />,
-        width: '100',
+        width: '80px',
         dataIndex: 'operation_',
         render: (text, record = {}) => {
-          const { owner = {} } = record || {};
+          const {owner = {}} = record || {};
           return type === '2' ? (
             <Button
               type="primary"
@@ -383,7 +375,7 @@ export default class List extends Component {
                     <FM
                       id="toBuy_confirm"
                       defaultMessage="广告主要求在{deadline}分钟内发卡您确认出售"
-                      values={{ deadline: record.deadline }}
+                      values={{deadline: record.deadline}}
                     />
                   }
                   {/*广告主要求在{record.deadline}分钟内发卡，<br />您确认出售？*/}
@@ -414,9 +406,9 @@ export default class List extends Component {
   };
 
   render() {
-    const { list, loading } = this.props;
-    const { type, denominFilterValue } = this.state;
-    const { items, pagination } = list || {};
+    const {list, loading} = this.props;
+    const {type, denominFilterValue} = this.state;
+    const {items, pagination} = list || {};
     return (
       <div className={styles.page}>
         <h2>{<FM id="tradingHell" defaultMessage="礼品卡大厅" />}</h2>
@@ -427,7 +419,7 @@ export default class List extends Component {
           <Tabs.TabPane tab={<FM id="toSell" defaultMessage="我要出售" />} key="1" />
         </Tabs>
         <Table
-          locale={{ emptyText: '' }}
+          locale={{emptyText: ''}}
           rowKey={row => row.id}
           dataSource={items}
           columns={this.initColumns()}
@@ -435,6 +427,7 @@ export default class List extends Component {
           pagination={{
             ...pagination,
           }}
+          scroll={{x: 1200}}
           loading={loading}
         />
       </div>
