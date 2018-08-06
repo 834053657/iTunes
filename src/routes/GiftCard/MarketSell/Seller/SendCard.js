@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
-import { Button, Icon, Input, Avatar, Badge, Modal, Popconfirm, Form, message } from 'antd';
+import React, {Component} from 'react';
+import {connect} from 'dva';
+import {routerRedux} from 'dva/router';
+import {Button, Icon, Input, Avatar, Badge, Modal, Popconfirm, Form, message} from 'antd';
 import CountDown from 'components/CountDown';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
-import { sendCDK } from '../../../../services/api';
+import {sendCDK} from '../../../../services/api';
 import SendOnlyPicture from './OnlyPic';
 import SendPicWithText from './PicWithText';
 import OnlyPassWord from '../../forms/OnlyPassWord';
@@ -13,8 +13,7 @@ import SendCardForm from '../../forms/SendCardForm';
 
 const FormItem = Form.Item;
 
-@Form.create()
-@connect(({ loading, card }) => ({
+@connect(({loading, card}) => ({
   card,
   submitting: loading.effects['card/sendCDK'],
 }))
@@ -23,8 +22,6 @@ export default class Process extends Component {
     super();
     this.state = {
       detail: props.detail,
-      user: props.user,
-      time: props.detail.ad.deadline,
       termView: false,
       cards: [],
     };
@@ -33,12 +30,11 @@ export default class Process extends Component {
       order_id: this.state.detail.order.id,
       cards: [],
     };
-    //this.targetTime = new Date().getTime() + props.detail.order.deadline_at * 1000;
     this.targetTime = props.detail.order.deadline_at;
   }
 
   componentWillMount() {
-    const { order_detail = {} } = this.state.detail.order;
+    const {order_detail = {}} = this.state.detail.order;
     order_detail.map((o, index) => {
       return this.cardsData.push({
         money: o.money,
@@ -89,67 +85,71 @@ export default class Process extends Component {
     return fatherArr;
   };
 
-  sendCDK = v => {
+  onSubmit = (values) => {
     this.props.dispatch({
       type: 'card/sendCDK',
-      payload: v,
+      payload: {
+        ...values,
+        order_id: this.state.detail.order.id,
+      },
     });
-  };
+  }
 
-  changePsw = (e, index, littleIndex) => {
-    this.cardsData[index].items[littleIndex].password = e.target.value;
-    this.props.form.setFieldsValue({
-      'cards[]': this.cardsData,
-    });
-    this.setState({
-      cards: this.cardsData,
-    });
-  };
-
-  changePic = (e, index, littleIndex) => {
-    this.cardsData[index].items[littleIndex].picture = e;
-    this.props.form.setFieldsValue({
-      'cards[]': this.cardsData,
-    });
-    this.setState({
-      cards: this.cardsData,
-    });
-  };
-
-  changePZ = (e, index) => {
-    this.cardsData[index].receipt = e;
-    this.props.form.setFieldsValue({
-      'cards[]': this.cardsData,
-    });
-
-    this.setState({
-      cards: this.cardsData,
-    });
-  };
-
-  addFileData = (info, index, length) => {
-    this.cardsData[index].items = info.splice(0, length);
-    console.log(this.cardsData);
-
-    this.props.form.setFieldsValue({
-      'cards[]': this.cardsData,
-    });
-    this.setState({
-      cards: this.cardsData,
-    });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        this.sendCDK({
-          cards: this.cardsData,
-          order_id: this.state.detail.order.id,
-        });
-      }
-    });
-  };
+  // RC-form
+  // changePsw = (e, index, littleIndex) => {
+  //   this.cardsData[index].items[littleIndex].password = e.target.value;
+  //   this.props.form.setFieldsValue({
+  //     'cards[]': this.cardsData,
+  //   });
+  //   this.setState({
+  //     cards: this.cardsData,
+  //   });
+  // };
+  //
+  // changePic = (e, index, littleIndex) => {
+  //   this.cardsData[index].items[littleIndex].picture = e;
+  //   this.props.form.setFieldsValue({
+  //     'cards[]': this.cardsData,
+  //   });
+  //   this.setState({
+  //     cards: this.cardsData,
+  //   });
+  // };
+  //
+  // changePZ = (e, index) => {
+  //   this.cardsData[index].receipt = e;
+  //   this.props.form.setFieldsValue({
+  //     'cards[]': this.cardsData,
+  //   });
+  //
+  //   this.setState({
+  //     cards: this.cardsData,
+  //   });
+  // };
+  //
+  // addFileData = (info, index, length) => {
+  //   this.cardsData[index].items = info.splice(0, length);
+  //   console.log(this.cardsData);
+  //
+  //   this.props.form.setFieldsValue({
+  //     'cards[]': this.cardsData,
+  //   });
+  //   this.setState({
+  //     cards: this.cardsData,
+  //   });
+  // };
+  //
+  // handleSubmit = e => {
+  //   e.preventDefault();
+  //   this.props.form.validateFieldsAndScroll((err, values) => {
+  //     if (!err) {
+  //       this.sendCDK({
+  //         cards: this.cardsData,
+  //         order_id: this.state.detail.order.id,
+  //       });
+  //     }
+  //   });
+  // };
 
   render() {
     const {
@@ -157,15 +157,15 @@ export default class Process extends Component {
       detail,
       submitting,
       setStatus,
-      form: { getFieldDecorator, getFieldValue, resetForm, onFieldsChange },
+      // form: {getFieldDecorator, getFieldValue, resetForm, onFieldsChange},
     } = this.props;
-    const { ad = {}, cards = {}, order = {} } = detail;
+    const {ad = {}, cards = {}, order = {}} = detail;
 
     const userInfo = ad.owner;
-    const steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
+    const steps = [{title: '发送礼品卡'}, {title: '确认信息'}, {title: '完成'}];
 
-    getFieldDecorator('cards[]');
-    console.log(this.state.cards);
+    //getFieldDecorator('cards[]');
+
     return (
       <div className={styles.sendBox}>
         <StepModel steps={steps} current={0} />
@@ -221,7 +221,7 @@ export default class Process extends Component {
                 <Modal
                   title="交易条款"
                   visible={this.state.termView}
-                  onCancel={() => this.setState({ termView: false })}
+                  onCancel={() => this.setState({termView: false})}
                   footer={null}
                 >
                   <p>{order.term}</p>
@@ -233,7 +233,8 @@ export default class Process extends Component {
         <div className={styles.denomination}>
           <div className={styles.bottom}>
             <Form className={styles.form} onSubmit={this.handleSubmit}>
-              <OnlyPassWord
+              {/* RC-form
+               <OnlyPassWord
                 dValue={this.state.cards}
                 changePsw={this.changePsw}
                 changePic={this.changePic}
@@ -243,55 +244,18 @@ export default class Process extends Component {
                 addFileData={this.addFileData}
                 sendCard
               />
-              {/*
+              */}
               <SendCardForm
                 defaultValue={this.state.cards}
-                psw={ad.password_type}
+                pswType={ad.password_type}
+                submitSellForm={this.props.submitting}
+                onSubmit={this.onSubmit}
+                targetTime={this.targetTime}
+                amount={order.amount}
+                unit_price={ad.unit_price}
+                money={order.money}
+                order_id={order.id}
               />
-*/}
-              <div>
-                <div className={styles.amount}>
-                  <h4>
-                    <span className={styles.title}>{order.money}</span>
-                    <span>总面额：</span>
-                  </h4>
-                  <h4>
-                    <span className={styles.title}>{ad.unit_price}RMB</span>
-                    <span>单价：</span>
-                  </h4>
-                  <h4>
-                    <span className={styles.title}>{order.amount}RMB</span>
-                    <span>总价：</span>
-                  </h4>
-                </div>
-                <div className={styles.footer}>
-                  <div>
-                    请在&nbsp;
-                    <Icon type="clock-circle-o" />
-                    &nbsp;
-                    <CountDown formatstr="mm:ss" target={this.targetTime} />
-                    秒内发卡
-                  </div>
-                </div>
-              </div>
-              <FormItem className={styles.buttonBox}>
-                <Popconfirm title="您确认要发卡吗?" onConfirm={this.handleSubmit}>
-                  <Button htmlType="submit" type="primary" loading={submitting}>
-                    发卡
-                  </Button>
-                </Popconfirm>
-                <Popconfirm
-                  title="您确认要取消订单吗?"
-                  onConfirm={() =>
-                    this.props.dispatch({
-                      type: 'card/cacelOrder',
-                      payload: { order_id: order.id },
-                    })
-                  }
-                >
-                  <Button>取消订单</Button>
-                </Popconfirm>
-              </FormItem>
             </Form>
           </div>
         </div>

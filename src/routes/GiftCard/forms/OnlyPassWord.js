@@ -159,8 +159,6 @@ export default class OnlyPassWord extends Component {
               className={styles.card}
             >
               {c.items.map((card, littleIndex) => {
-                console.log(card);
-                console.log(card.password);
                 return (
                   <div key={littleIndex + 'littleIndex'} className={styles.itemLine}>
                     {//密码
