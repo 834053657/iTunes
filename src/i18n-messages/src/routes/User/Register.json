@@ -37,7 +37,7 @@
   },
   {
     "id": "UserLogin.sign_userName_limit",
-    "defaultMessage": "用户名只能是2~20位字符，数字，下划线，减号"
+    "defaultMessage": "用户名只能是2~20位字母，数字，下划线，减号"
   },
   {
     "id": "UserLogin.sign_word_num_limit",

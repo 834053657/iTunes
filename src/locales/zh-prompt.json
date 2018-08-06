@@ -38,8 +38,6 @@
   "payMethodModal.pay_way_choose":"请选择支付方式",
   "buyForm.max_num_input_than":"最大数量应大于{min_con}",
   "listHell.minute":"分钟",
-
-
   "UserLogin.login_email":"邮箱",
   "UserLogin.login_passWord":"密码",
   "UserLogin.login_code":"验证码",
