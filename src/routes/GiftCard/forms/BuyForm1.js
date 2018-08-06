@@ -136,13 +136,13 @@ export default class ReduxForm extends PureComponent {
     if (condition_type === 1) {
       forEach(values.condition1, (value, key) => {
         if (value.min_count > value.max_count) {
-          createError(checkErr, `condition1.${key}.min_count`, '该数量值应小于最大值');
+          createError(checkErr, `condition1.${key}.min_count`, '该数值应小于右侧值');
         }
       });
       values.condition = values.condition1;
     } else {
       if (values.condition2.min_money > values.condition2.max_money) {
-        createError(checkErr, `condition2.min_money`, '该数值应小于右侧数值');
+        createError(checkErr, `condition2.min_money`, '该数值应小于右侧值');
       }
 
       values.condition = values.condition2;
@@ -257,9 +257,6 @@ export default class ReduxForm extends PureComponent {
       onEdit,
       cardList,
     } = this.props;
-    console.log(this.props.initialValues1);
-    console.log(editing);
-    console.log(action);
     const formItemLayout = {
       labelCol: {
         sm: { span: 4 },

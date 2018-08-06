@@ -344,7 +344,7 @@ export default class ReduxForm extends Component {
                   <span>{cardItem.money}面额</span>
                   <span>({cardItem.items.length})</span>
                   <div style={{float: 'right'}}>
-                    {pswType === 1 && (
+                    {pswType === 1 && !action && (
                       <Spin spinning={this.state.uploading}>
                         <Upload
                           onChange={info => this.handlerUpload(info, index, `${fieldName}.items`)}
@@ -355,7 +355,7 @@ export default class ReduxForm extends Component {
                       </Spin>
                     )}
                   </div>
-                  {pswType === 1 && (
+                  {pswType === 1 && !action && (
                     <a
                       style={{fontSize: 12, float: 'right', lineHeight: 3, marginRight: 10}}
                       href="../../../../public/PasswordTemplate.xlsx"
@@ -373,7 +373,7 @@ export default class ReduxForm extends Component {
                         okText="是"
                         cancelText="否"
                       >
-                        <Icon className={styles.deleteIcon} type="minus-circle-o" />
+                        <Icon className={styles.deleteIcon} type="minus-circle-o"/>
                       </Popconfirm>
                     </div>
                   )}
@@ -394,7 +394,7 @@ export default class ReduxForm extends Component {
                       />
                     </Col>
                   </Row>
-                  <Divider style={{marginBottom: 32}} />
+                  <Divider style={{marginBottom: 32}}/>
                 </div>
               )}
 
@@ -441,7 +441,7 @@ export default class ReduxForm extends Component {
                         okText="是"
                         cancelText="否"
                       >
-                        <Icon type="minus-circle-o" />
+                        <Icon type="minus-circle-o"/>
                       </Popconfirm>
                     </Col>
                   )}
@@ -469,7 +469,7 @@ export default class ReduxForm extends Component {
                         okText="是"
                         cancelText="否"
                       >
-                        <Icon type="minus-circle-o" />
+                        <Icon type="minus-circle-o"/>
                       </Popconfirm>
                     </Col>
                   )}
@@ -487,7 +487,7 @@ export default class ReduxForm extends Component {
             fields.push({password: '', picture: ''});
           }}
         >
-          <Icon type="plus" /> 添加卡密
+          <Icon type="plus"/> 添加卡密
         </Button>
       </div>
     );
@@ -638,7 +638,7 @@ export default class ReduxForm extends Component {
             onClick={this.showAddMoneyBox}
             disabled={!editing}
           >
-            <Icon type="plus" /> 添加面额
+            <Icon type="plus"/> 添加面额
           </Button>
 
           {this.renderModal()}
