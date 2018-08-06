@@ -95,7 +95,7 @@ export default class LoginPage extends Component {
     return (
       <div className={styles.main}>
         {/*登录*/}
-        <h3><FM id='UserLogin.login_' defaultMessage='登录'/></h3>
+        <h3><FM id='UserLogin.login_' defaultMessage='登录' /></h3>
         <Login onSubmit={this.handleSubmit}>
           {login.error && this.renderMessage(login.error)}
           {/*邮箱*/}
@@ -109,17 +109,17 @@ export default class LoginPage extends Component {
             image={image}
             loadCaptcha={this.loadCaptcha}
           />
-          <Submit loading={submitting}><FM id='UserLogin.login_submit' defaultMessage='登录'/></Submit>
+          <Submit loading={submitting}><FM id='UserLogin.login_submit' defaultMessage='登录' /></Submit>
           <div className={styles.other}>
-            <Link to="/user/forget-password"><FM id='UserLogin.login_forget_passWord' defaultMessage='忘记密码?'/></Link>
+            <Link to="/user/forget-password"><FM id='UserLogin.login_forget_passWord' defaultMessage='忘记密码?' /></Link>
             <Link className={styles.register} to="/user/register">
-              <FM id='UserLogin.login_account_sign' defaultMessage='注册账户'/>
+              <FM id='UserLogin.login_account_sign' defaultMessage='注册账户' />
             </Link>
           </div>
         </Login>
 
         <G2Validation
-          title={<FM id='UserLogin.login_safe_check' defaultMessage='安全验证'/>}
+          title={<FM id='UserLogin.login_safe_check' defaultMessage='安全验证' />}
           visible={login.g2Visible}
           onCancel={this.handleCancel}
           onSubmit={this.handleSubmitG2}

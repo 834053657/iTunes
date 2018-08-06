@@ -446,9 +446,22 @@ export default {
       };
     },
     GET_AD_DETAIL(state, action) {
+      const adDetail = { ...action.payload };
+      if (adDetail.condition_type === 1) {
+        adDetail.condition1 = adDetail.condition;
+      } else {
+        adDetail.condition2 = adDetail.condition;
+      }
       const newState = {
         ...state,
-        adDetail: action.payload,
+        adDetail: { ...adDetail },
+      };
+      return newState;
+    },
+    CLEAR_AD_DETAIL(state, action) {
+      const newState = {
+        ...state,
+        adDetail: {},
       };
       return newState;
     },

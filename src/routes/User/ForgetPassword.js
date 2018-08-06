@@ -58,18 +58,18 @@ export default class Register extends Component {
     const { image } = this.state;
     return (
       <div className={styles.main}>
-        <h3><FM id='UserLogin.forget_passWord' defaultMessage='忘记密码'/></h3>
+        <h3><FM id='UserLogin.forget_passWord' defaultMessage='忘记密码' /></h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
             {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
-                  message: <FM id='UserLogin.forget_email_' defaultMessage='请输入邮箱地址！'/>,
+                  message: <FM id='UserLogin.forget_email_' defaultMessage='请输入邮箱地址！' />,
                 },
                 {
                   type: 'email',
-                  message: <FM id='UserLogin.forget_email_error' defaultMessage='邮箱地址格式错误！'/>,
+                  message: <FM id='UserLogin.forget_email_error' defaultMessage='邮箱地址格式错误！' />,
                 },
               ],
             })(<Input size="large" placeholder={(PROMPT('UserLogin.login_email')||'邮箱')} />)}
@@ -81,7 +81,7 @@ export default class Register extends Component {
                   rules: [
                     {
                       required: true,
-                      message: <FM id='UserLogin.forget_input_code' defaultMessage='请输入验证码！'/>,
+                      message: <FM id='UserLogin.forget_input_code' defaultMessage='请输入验证码！' />,
                     },
                   ],
                 })(<Input size="large" placeholder={(PROMPT('UserLogin.forget_code_')||'验证码')} />)}
@@ -105,10 +105,10 @@ export default class Register extends Component {
               type="primary"
               htmlType="submit"
             >
-              <FM id='UserLogin.forget_send_code' defaultMessage='发送'/>
+              <FM id='UserLogin.forget_send_code' defaultMessage='发送' />
             </Button>
             <Link className={styles.login} to="/user/login">
-              <FM id='UserLogin.forget_login_account' defaultMessage='使用已有账户登录'/>
+              <FM id='UserLogin.forget_login_account' defaultMessage='使用已有账户登录' />
             </Link>
           </FormItem>
         </Form>

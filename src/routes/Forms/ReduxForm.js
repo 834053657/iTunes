@@ -142,6 +142,7 @@ export default class ReduxForm extends PureComponent {
     // }
   };
   renderSubItem = ({ fields, formitemlayout, meta: { touched, error } }) => {
+    console.log(fields);
     return (
       <Fragment>
         <div>

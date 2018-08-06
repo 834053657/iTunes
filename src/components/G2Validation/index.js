@@ -46,7 +46,7 @@ class G2Validation extends Component {
         onCancel={this.handleCancel}
         footer={[
           <Button key="back" onClick={this.handleCancel}>
-            <FM id='UserLogin.G2_cancel' defaultMessage='取消'/>
+            <FM id='UserLogin.G2_cancel' defaultMessage='取消' />
           </Button>,
           <Button
             key="submit"
@@ -55,7 +55,7 @@ class G2Validation extends Component {
             htmlType="submit"
             onClick={this.handleSubmit}
           >
-            <FM id='UserLogin.G2_confirm' defaultMessage='确定'/>
+            <FM id='UserLogin.G2_confirm' defaultMessage='确定' />
           </Button>,
         ]}
       >
@@ -66,7 +66,7 @@ class G2Validation extends Component {
                 rules: [
                   {
                     required: true,
-                    message: <FM id='UserLogin.G2_inputGoogle_code' defaultMessage='请输入谷歌验证码'/>,
+                    message: <FM id='UserLogin.G2_inputGoogle_code' defaultMessage='请输入谷歌验证码' />,
                   },
                 ],
               })(<Input size="large" placeholder={(PROMPT('UserLogin.G2_Google_code')||'谷歌验证码')} />)}

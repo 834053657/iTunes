@@ -76,7 +76,7 @@ class EmailForm extends Component {
     return (
       <div className={classNames(className, styles.login)}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label={<FM id='UserLogin.emailForm_email' defaultMessage='邮箱'/>}>
+          <FormItem {...formItemLayout} label={<FM id='UserLogin.emailForm_email' defaultMessage='邮箱' />}>
             <Row gutter={8}>
               <Col span={16}>
                 {getFieldDecorator('email', {
@@ -84,11 +84,11 @@ class EmailForm extends Component {
                   rules: [
                     {
                       required: true,
-                      message: <FM id='UserLogin.emailForm_email_input' defaultMessage='请输入邮箱！'/>,
+                      message: <FM id='UserLogin.emailForm_email_input' defaultMessage='请输入邮箱！' />,
                     },
                     {
                       type: 'email',
-                      message: <FM id='UserLogin.emailForm_email_typeError' defaultMessage='邮箱地址格式错误！'/>,
+                      message: <FM id='UserLogin.emailForm_email_typeError' defaultMessage='邮箱地址格式错误！' />,
                     },
                   ],
                 })(<Input size="large" disabled={disabled} placeholder={(PROMPT('UserLogin.emailForm_email_inp')||'邮箱')} />)}
@@ -105,22 +105,22 @@ class EmailForm extends Component {
               </Col>
             </Row>
           </FormItem>
-          <FormItem {...formItemLayout} label={<FM id='UserLogin.emailForm_code_' defaultMessage='验证码'/>}>
+          <FormItem {...formItemLayout} label={<FM id='UserLogin.emailForm_code_' defaultMessage='验证码' />}>
             {getFieldDecorator('captcha', {
               rules: [
                 {
                   required: true,
-                  message: <FM id='UserLogin.emailForm_code_userInput' defaultMessage='请输入验证码！'/>,
+                  message: <FM id='UserLogin.emailForm_code_userInput' defaultMessage='请输入验证码！' />,
                 },
               ],
             })(<Input size="large" placeholder={(PROMPT('UserLogin.emailForm_code_Inp')||'验证码')} />)}
           </FormItem>
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>
-              <FM id='UserLogin.emailForm_cancel_btn' defaultMessage='取消'/>
+              <FM id='UserLogin.emailForm_cancel_btn' defaultMessage='取消' />
             </Button>
             <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
-              <FM id='UserLogin.emailForm_nextStep' defaultMessage='下一步'/>
+              <FM id='UserLogin.emailForm_nextStep' defaultMessage='下一步' />
             </Button>
           </FormItem>
         </Form>

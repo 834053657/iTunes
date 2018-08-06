@@ -73,7 +73,7 @@ class ImageValidation extends Component {
         onCancel={this.handleCancel}
         footer={[
           <Button key="back" onClick={this.handleCancel}>
-            <FM id='UserLogin.indexPage_cancel' defaultMessage='取消'/>
+            <FM id='UserLogin.indexPage_cancel' defaultMessage='取消' />
           </Button>,
           <Button
             key="submit"
@@ -82,7 +82,7 @@ class ImageValidation extends Component {
             htmlType="submit"
             onClick={this.handleSubmit}
           >
-            <FM id='UserLogin.indexPage_confirm' defaultMessage='确定'/>
+            <FM id='UserLogin.indexPage_confirm' defaultMessage='确定' />
           </Button>,
         ]}
       >
@@ -95,7 +95,7 @@ class ImageValidation extends Component {
                     rules: [
                       {
                         required: true,
-                        message: <FM id='UserLogin.indexPage_code_input' defaultMessage='请输入验证码！'/>,
+                        message: <FM id='UserLogin.indexPage_code_input' defaultMessage='请输入验证码！' />,
                       },
                     ],
                   })(<Input size="large" placeholder={(PROMPT('UserLogin.indexPage_code_inp')||'验证码')} />)}

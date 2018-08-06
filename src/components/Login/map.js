@@ -15,7 +15,7 @@ const map = {
     rules: [
       {
         required: true,
-        message: <FM id='UserLogin.map_account_input' defaultMessage='请输入账户名！'/>,
+        message: <FM id='UserLogin.map_account_input' defaultMessage='请输入账户名！' />,
       },
     ],
   },
@@ -31,7 +31,7 @@ const map = {
     rules: [
       {
         required: true,
-        message: <FM id='UserLogin.map_passWord_input' defaultMessage='请输入密码！'/>,
+        message: <FM id='UserLogin.map_passWord_input' defaultMessage='请输入密码！' />,
       },
       // {
       //   min: 6,
@@ -49,11 +49,11 @@ const map = {
     rules: [
       {
         required: true,
-        message: <FM id='UserLogin.map_phone_num_input' defaultMessage='请输入手机号！'/>,
+        message: <FM id='UserLogin.map_phone_num_input' defaultMessage='请输入手机号！' />,
       },
       {
         pattern: /^1\d{10}$/,
-        message: <FM id='UserLogin.map_phone_error_type' defaultMessage='手机号格式错误！'/>,
+        message: <FM id='UserLogin.map_phone_error_type' defaultMessage='手机号格式错误！' />,
       },
     ],
   },
@@ -67,7 +67,7 @@ const map = {
     rules: [
       {
         required: true,
-        message: <FM id='UserLogin.map_phone_code_input' defaultMessage='请输入验证码！'/>,
+        message: <FM id='UserLogin.map_phone_code_input' defaultMessage='请输入验证码！' />,
       },
     ],
   },
@@ -82,7 +82,7 @@ const map = {
     rules: [
       {
         required: true,
-        message: <FM id='UserLogin.map_code_input' defaultMessage='请输入验证码!'/>,
+        message: <FM id='UserLogin.map_code_input' defaultMessage='请输入验证码!' />,
       },
     ],
   },

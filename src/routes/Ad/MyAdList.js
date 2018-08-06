@@ -197,6 +197,9 @@ export default class List extends Component {
               <Popconfirm
                 title={<FM id="myAdList.operator_toDelete" defaultMessage="您确认要删除此广告?" />}
                 onConfirm={() => this.updateAd(r, 5)}
+                placement="topLeft"
+                okText="是"
+                cancelText="否"
               >
                 <a className="text-red">
                   {' '}

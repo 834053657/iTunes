@@ -19,9 +19,13 @@ import {
 } from 'antd';
 import { map, last, head } from 'lodash';
 import styles from './SellForm.less';
-import OnlyPicture from './OnlyPicture';
-import PicWithPass from './PicWithPass';
 import OnlyPassWord from './OnlyPassWord';
+
+import DescriptionList from '../../../components/DescriptionList';
+
+import { formatMoney } from '../../../utils/utils';
+
+const { Description } = DescriptionList;
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -36,13 +40,12 @@ export default class SellForm extends Component {
       addDenoVisible: false,
       cards: [],
       pswType: 1,
+      changedUnitPrice: undefined,
     };
   }
 
   componentDidMount() {
     const { defaultValue, action } = this.props;
-    console.log(action);
-    console.log(defaultValue);
   }
 
   handleCancel = () => {
@@ -95,10 +98,7 @@ export default class SellForm extends Component {
     if (!re.test(denoVaule) || denoVaule <= 0) {
       return message.warning(<FM id="sellForm.num_int_input" defaultMessage="请输入正整数格式" />);
     }
-    console.log(cards);
-    console.log(denoVaule);
     const i = cards.findIndex(card => card.money === denoVaule);
-    console.log(i);
     if (i >= 0) {
       return message.warning(<FM id="sellForm.amount_alive" defaultMessage="该面额已存在" />);
     }
@@ -179,6 +179,12 @@ export default class SellForm extends Component {
     });
   };
 
+  changeUnit = e => {
+    this.setState({
+      changedUnitPrice: e,
+    });
+  };
+
   addMoney = i => {
     const { action, defaultValue } = this.props;
     const data = action ? defaultValue.cards : this.state.cards;
@@ -205,6 +211,7 @@ export default class SellForm extends Component {
       fileUpload: true,
     });
   };
+
   changePsw = (e, index, littleIndex) => {
     const { action, defaultValue } = this.props;
     const cards = action ? defaultValue.cards : this.state.cards;
@@ -281,8 +288,22 @@ export default class SellForm extends Component {
     });
   };
 
+  calculateMoney = () => {
+    const { action, defaultValue } = this.props;
+    const cards = action ? defaultValue.cards : this.state.cards;
+    let money = 0;
+    let calculateMoney = 0;
+    calculateMoney = cards.map((item, index) => {
+      return (calculateMoney += item.money * item.items.length);
+    });
+    calculateMoney.map(item => {
+      return (money += item);
+    });
+    return money;
+  };
+
   render() {
-    const { termModalInfo } = this.state;
+    const { termModalInfo, changedUnitPrice } = this.state;
     const {
       defaultValue,
       action,
@@ -304,7 +325,6 @@ export default class SellForm extends Component {
     if (action && !defaultValue.cards) {
       return null;
     }
-    console.log(defaultValue);
 
     const addDenoBox = (
       <div>
@@ -358,11 +378,14 @@ export default class SellForm extends Component {
       cards: [],
     };
 
+    const unit = changedUnitPrice || (action ? defaultValue.unit_price : initialValues.unit_price);
+
     getFieldDecorator('cards[]', { initialValue: [] });
     const cards = getFieldValue('cards[]') || [];
     return (
       <div>
         <Form className={styles.form} onSubmit={this.handleSubmit}>
+          {/*类型*/}
           <FormItem
             {...formItemLayout}
             label={<FM id="sellForm.card_type" defaultMessage="类型" />}
@@ -396,6 +419,7 @@ export default class SellForm extends Component {
           >
             {getFieldDecorator('unit_price', {
               initialValue: action ? defaultValue.unit_price : initialValues.unit_price,
+              onChange: this.changeUnit,
               rules: [
                 {
                   required: true,
@@ -405,6 +429,7 @@ export default class SellForm extends Component {
             })(<InputNumber precision={2} disabled={action && action !== 'edit'} />)}
           </FormItem>
 
+          {/*保障时间*/}
           <FormItem
             {...formItemLayout}
             label={<FM id="sellForm.guarantee_time" defaultMessage="保障时间" />}
@@ -570,6 +595,18 @@ export default class SellForm extends Component {
             fileUpload={this.state.fileUpload}
           />
 
+          <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
+            <Description style={{ float: 'right' }} term="总面额">
+              {formatMoney(this.calculateMoney()) || '0'}
+            </Description>
+          </DescriptionList>
+
+          <DescriptionList size="large" style={{ marginBottom: 15, marginTop: 20 }}>
+            <Description style={{ float: 'right' }} term="总价">
+              {formatMoney(unit * this.calculateMoney()) || '0'}
+            </Description>
+          </DescriptionList>
+
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel} disabled={this.props.submitSellForm}>
               <FM id="sellForm.goBack" defaultMessage="返回" />
@@ -604,6 +641,7 @@ export default class SellForm extends Component {
               </Popconfirm>
             ) : null}
           </FormItem>
+
           {termModalInfo && (
             <Modal
               title={termModalInfo.title}

@@ -13,9 +13,9 @@ const { Option } = Select;
 const InputGroup = Input.Group;
 
 const passwordStatusMap = {
-  ok: <div className={styles.success}><FM id='UserLogin.sign_word_strong' defaultMessage='强度：强'/></div>,
-  pass: <div className={styles.warning}><FM id='UserLogin.sign_word_center' defaultMessage='强度：中'/></div>,
-  poor: <div className={styles.error}><FM id='UserLogin.sign_word_lower' defaultMessage='强度：太短'/></div>,
+  ok: <div className={styles.success}><FM id='UserLogin.sign_word_strong' defaultMessage='强度：强' /></div>,
+  pass: <div className={styles.warning}><FM id='UserLogin.sign_word_center' defaultMessage='强度：中' /></div>,
+  poor: <div className={styles.error}><FM id='UserLogin.sign_word_lower' defaultMessage='强度：太短' /></div>,
 };
 
 const passwordProgressMap = {
@@ -129,7 +129,7 @@ export default class Register extends Component {
   checkPassword = (rule, value, callback) => {
     if (!value) {
       this.setState({
-        help: <FM id='UserLogin.sign_word_input' defaultMessage='请输入密码！'/>,
+        help: <FM id='UserLogin.sign_word_input' defaultMessage='请输入密码！' />,
         visible: !!value,
       });
       callback('error');
@@ -190,18 +190,18 @@ export default class Register extends Component {
     const { count, image, imageValidationVisible } = this.state;
     return (
       <div className={styles.main}>
-        <h3><FM id='UserLogin.sign_user_title' defaultMessage='注册'/></h3>
+        <h3><FM id='UserLogin.sign_user_title' defaultMessage='注册' /></h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
             {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
-                  message: <FM id='UserLogin.sign_word_input_email' defaultMessage='请输入邮箱地址！'/>,
+                  message: <FM id='UserLogin.sign_word_input_email' defaultMessage='请输入邮箱地址！' />,
                 },
                 {
                   type: 'email',
-                  message: <FM id='UserLogin.sign_word_error_type' defaultMessage='邮箱地址格式错误！'/>,
+                  message: <FM id='UserLogin.sign_word_error_type' defaultMessage='邮箱地址格式错误！' />,
                 },
               ],
             })(<Input size="large" placeholder={(PROMPT('UserLogin.login_userEmail')||'邮箱')} />)}
@@ -213,7 +213,7 @@ export default class Register extends Component {
                   rules: [
                     {
                       required: true,
-                      message: <FM id='UserLogin.sign_code_input_' defaultMessage='请输入验证码！'/>,
+                      message: <FM id='UserLogin.sign_code_input_' defaultMessage='请输入验证码！' />,
                     },
                   ],
                 })(<Input size="large" placeholder={(PROMPT("loginItem.sign_input_code" || "验证码"))} />)}
@@ -235,7 +235,7 @@ export default class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: <FM id='UserLogin.sign_input_userName' defaultMessage='请输入用户名！'/>,
+                  message: <FM id='UserLogin.sign_input_userName' defaultMessage='请输入用户名！' />,
                 },
                 // {
                 //   min: 2,
@@ -248,7 +248,7 @@ export default class Register extends Component {
                 {
                  // pattern: /^[\u4E00-\u9FA5_a-zA-Z0-9/-]{2,20}$/,
                   pattern: /^[a-zA-Z0-9_-]{2,20}$/,
-                  message: <FM id='UserLogin.sign_userName_limit' defaultMessage='用户名只能是2~20位字母，数字，下划线，减号'/>,
+                  message: <FM id='UserLogin.sign_userName_limit' defaultMessage='用户名只能是2~20位字母，数字，下划线，减号' />,
                 },
               ],
             })(<Input size="large" placeholder={(PROMPT('UserLogin.userName_inp_lim')||'用户名 2-20位')} />)}
@@ -260,7 +260,7 @@ export default class Register extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    <FM id='UserLogin.sign_word_num_limit' defaultMessage='请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。'/>
+                    <FM id='UserLogin.sign_word_num_limit' defaultMessage='请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。' />
                   </div>
                 </div>
               }
@@ -275,7 +275,7 @@ export default class Register extends Component {
                   },
                   {
                     min: 6,
-                    message: <FM id='UserLogin.sign_word_min_inp' defaultMessage='请输入至少6位字符！'/>,
+                    message: <FM id='UserLogin.sign_word_min_inp' defaultMessage='请输入至少6位字符！' />,
                   },
                 ],
               })(
@@ -293,7 +293,7 @@ export default class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: <FM id='UserLogin.sign_word_again_' defaultMessage='请确认密码！'/>,
+                  message: <FM id='UserLogin.sign_word_again_' defaultMessage='请确认密码！' />,
                 },
                 {
                   validator: this.checkConfirm,
@@ -306,7 +306,7 @@ export default class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: <FM id='UserLogin.sign_input_Invitation' defaultMessage='请输入邀请码！'/>,
+                  message: <FM id='UserLogin.sign_input_Invitation' defaultMessage='请输入邀请码！' />,
                 },
               ],
             })(<Input size="large" placeholder={(PROMPT('UserLogin.sign_Invitation')||'邀请码')} />)}
@@ -320,15 +320,15 @@ export default class Register extends Component {
               type="primary"
               htmlType="submit"
             >
-              <FM id='UserLogin.sign_btn_' defaultMessage='注册'/>
+              <FM id='UserLogin.sign_btn_' defaultMessage='注册' />
             </Button>
             <Link className={styles.login} to="/user/login">
-              <FM id='UserLogin.sign_old_account_' defaultMessage='使用已有账户登录'/>
+              <FM id='UserLogin.sign_old_account_' defaultMessage='使用已有账户登录' />
             </Link>
           </FormItem>
         </Form>
         <ImageValidation
-          title={<FM id='UserLogin.sign_safe_check_user' defaultMessage='安全验证'/>}
+          title={<FM id='UserLogin.sign_safe_check_user' defaultMessage='安全验证' />}
           onCancel={() => {
             this.setState({ imageValidationVisible: false });
           }}

@@ -1,27 +1,28 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
-import { FormattedMessage as FM } from 'react-intl';
+import React, {Component} from 'react';
+import {connect} from 'dva';
+import {routerRedux} from 'dva/router';
+import {FormattedMessage as FM} from 'react-intl';
 
-import { sumBy, map, get, findIndex, filter } from 'lodash';
-import { Badge, Button, message, Avatar, Popover, Icon, Input, Spin, Form } from 'antd';
+import {sumBy, map, get, findIndex, filter} from 'lodash';
+import {Badge, Button, message, Avatar, Popover, Icon, Input, Spin, Form} from 'antd';
 import DescriptionList from 'components/DescriptionList';
 import InputNumber from 'components/InputNumber';
 import PriceForm from './forms/PriceForm';
 import styles from './DealDetail.less';
+import {formatMoney} from '../../utils/utils';
 
-const { Description } = DescriptionList;
+const {Description} = DescriptionList;
 const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
-    sm: { span: 6 },
+    sm: {span: 6},
   },
   wrapperCol: {
-    sm: { span: 18 },
+    sm: {span: 18},
   },
 };
 
-@connect(({ card, loading }) => ({
+@connect(({card, loading}) => ({
   card,
   detail: card.adDetail,
   submitting: loading.effects['card/createSellOrder'],
@@ -34,12 +35,19 @@ export default class DealDeatil extends Component {
     this.state = {
       addDenoVisible: false,
       orderDetail: [],
+      totalMoney: 0,
     };
   }
 
   componentDidMount() {
-    const { params: { id } } = this.props.match || {};
-    this.fetch({ id });
+    const {params: {id}} = this.props.match || {};
+    this.fetch({id});
+  }
+
+  componentWillUnmount(){
+    this.props.dispatch({
+      type: 'card/GET_AD_DETAIL',
+    });
   }
 
   fetch = param => {
@@ -58,29 +66,29 @@ export default class DealDeatil extends Component {
     if (this.state.orderDetail.length <= 0) {
       return 0;
     }
-    const { form: { getFieldValue }, detail = {} } = this.props;
+    const {form: {getFieldValue}, detail = {}} = this.props;
     const total = sumBy(getFieldValue('order_detail'), row => {
       return row.money * row.count * detail.unit_price || 0;
     });
 
-    return total;
+   return total
   };
 
   calcuBuyTotal1 = (money = []) => {
     if (money.length <= 0) {
       return 0;
     }
-    const { form: { getFieldValue }, detail = {} } = this.props;
+    const {form: {getFieldValue}, detail = {}} = this.props;
     const total = sumBy(getFieldValue('order_detail'), row => {
       return row.money * row.count * detail.unit_price || 0;
     });
 
-    return total;
+    return total
   };
 
   calcuMaxCountBuy = (orderData, item) => {
     const accountBalance = get(this.props, 'detail.owner.amount');
-    const { money, count } = item || {};
+    const {money, count} = item || {};
     const userBuySum = sumBy(orderData, row => {
       return row.money * row.count || 0;
     });
@@ -105,9 +113,9 @@ export default class DealDeatil extends Component {
   };
 
   handleAddDeno = price => {
-    const { orderDetail = [] } = this.state;
+    const {orderDetail = []} = this.state;
     if (~findIndex(orderDetail, item => item.money === price)) {
-      message.error(PROMPT('dealDetail.num_amount_price', { price }));
+      message.error(PROMPT('dealDetail.num_amount_price', {price}));
       return;
     }
 
@@ -131,7 +139,7 @@ export default class DealDeatil extends Component {
         <FM
           id="dealDetail.num_multiple"
           defaultMessage="数量必须是{multiple}的倍数"
-          values={{ multiple }}
+          values={{multiple}}
         />
       );
     } else {
@@ -145,10 +153,10 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   renderCondition = detail => {
-    const { orderDetail, addDenoVisible } = this.state;
-    const { getFieldDecorator, getFieldValue } = this.props.form;
-    const { condition_type, ad_type, money = [], stock = {}, multiple = 0 } = detail || {};
-    let { condition } = detail || {};
+    const {orderDetail, addDenoVisible} = this.state;
+    const {getFieldDecorator, getFieldValue} = this.props.form;
+    const {condition_type, ad_type, money = [], stock = {}, multiple = 0} = detail || {};
+    let {condition} = detail || {};
     const accountBalance = detail.owner.amount;
     let content = null;
 
@@ -162,7 +170,7 @@ export default class DealDeatil extends Component {
             const moneys = c.money;
             const min_con = c.min_count;
             const max_con = c.max_count;
-            getFieldDecorator(`order_detail[${index}].money`, { initialValue: c.money });
+            getFieldDecorator(`order_detail[${index}].money`, {initialValue: c.money});
             return (
               <FormItem
                 key={index}
@@ -171,14 +179,14 @@ export default class DealDeatil extends Component {
                   <FM
                     id="dealDetail.num_amount"
                     defaultMessage="{moneys} 面额"
-                    values={{ moneys }}
+                    values={{moneys}}
                   />
                 }
                 extra={
                   <FM
                     id="dealDetail.num_amount_limit"
                     defaultMessage="数量限额 {min_con} - {max_con}"
-                    values={{ min_con, max_con }}
+                    values={{min_con, max_con}}
                   />
                 }
               >
@@ -197,7 +205,7 @@ export default class DealDeatil extends Component {
                         <FM
                           id="dealDetail.num_amount_limit_section"
                           defaultMessage="数量限额为 {min_con} - {max_con}"
-                          values={{ min_con, max_con }}
+                          values={{min_con, max_con}}
                         />
                       ),
                     },
@@ -209,7 +217,7 @@ export default class DealDeatil extends Component {
                   <InputNumber
                     min={0}
                     precision={0}
-                    style={{ width: 200 }}
+                    style={{width: 200}}
                     placeholder={PROMPT('dealDetail.num_amount_limit_sell')}
                   />
                 )}
@@ -224,7 +232,7 @@ export default class DealDeatil extends Component {
         <div className={styles.order_detail_box}>
           {map(orderDetail, (c, index) => {
             const Money = c.money;
-            getFieldDecorator(`order_detail[${index}].money`, { initialValue: c.money });
+            getFieldDecorator(`order_detail[${index}].money`, {initialValue: c.money});
             const maxCount = this.calcuMaxCountBuy(
               getFieldValue(`order_detail`),
               getFieldValue(`order_detail[${index}]`)
@@ -237,14 +245,14 @@ export default class DealDeatil extends Component {
                   <FM
                     id="dealDetail.num_amount_money"
                     defaultMessage="{Money} 面额"
-                    values={{ Money }}
+                    values={{Money}}
                   />
                 }
                 extra={
                   <FM
                     id="dealDetail.num_amount_maxCount"
                     defaultMessage="最多可再出售{maxCount}个"
-                    values={{ maxCount }}
+                    values={{maxCount}}
                   />
                 }
               >
@@ -259,7 +267,7 @@ export default class DealDeatil extends Component {
                   <InputNumber
                     min={0}
                     precision={0}
-                    style={{ width: 200 }}
+                    style={{width: 200}}
                     placeholder={PROMPT('dealDetail.num_amount_sell_input')}
                   />
                 )}
@@ -267,7 +275,7 @@ export default class DealDeatil extends Component {
             );
           })}
           <Popover
-            overlayStyle={{ zIndex: 1009 }}
+            overlayStyle={{zIndex: 1009}}
             content={
               <PriceForm
                 min={condition.min_money}
@@ -296,8 +304,9 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   renderSellContent = detail => {
-    const { card_type, password_type, unit_price, deadline = 0, multiple = 0, guarantee_time } =
-      detail || {};
+    const {card_type, password_type, unit_price, deadline = 0, multiple = 0, guarantee_time} =
+    detail || {};
+    const {totalMonty} = this.state
     return (
       <div className={styles.left}>
         <Spin spinning={this.props.loading} delay={1500}>
@@ -320,7 +329,7 @@ export default class DealDeatil extends Component {
           {this.renderCondition(detail)}
           <DescriptionList col={1}>
             <Description term={<FM id="dealDetail.sell_all_price" defaultMessage="总价" />}>
-              {this.calcuBuyTotal()} RMB
+              {formatMoney(this.calcuBuyTotal())} RMB
             </Description>
             <Description term={<FM id="dealDetail.sell_deadLine" defaultMessage="发卡期限" />}>
               {deadline} <FM id="dealDetail._minute" defaultMessage="分钟" />
@@ -336,7 +345,7 @@ export default class DealDeatil extends Component {
             </Button>
             <Button
               loading={this.props.submitting}
-              style={{ marginLeft: 15 }}
+              style={{marginLeft: 15}}
               type="primary"
               htmlType="submit"
             >
@@ -353,9 +362,10 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   renderBuyerContent = detail => {
-    const { getFieldDecorator, getFieldValue } = this.props.form;
-    const { card_type, password_type, unit_price, guarantee_time = 0, money = [], stock = {} } =
-      detail || {};
+    const {getFieldDecorator, getFieldValue} = this.props.form;
+    const {card_type, password_type, unit_price, guarantee_time = 0, money = [], stock = {}} =
+    detail || {};
+    const {totalMoney} = this.state
 
     return (
       <div className={styles.left}>
@@ -376,7 +386,7 @@ export default class DealDeatil extends Component {
           <div className={styles.order_detail_box}>
             {money.map((d, index) => {
               const Stock = stock[d] || 0;
-              getFieldDecorator(`order_detail[${index}].money`, { initialValue: d });
+              getFieldDecorator(`order_detail[${index}].money`, {initialValue: d});
               return (
                 <FormItem
                   key={index}
@@ -385,10 +395,10 @@ export default class DealDeatil extends Component {
                     <FM
                       id="dealDetail.buy_amount_money_d"
                       defaultMessage="{d} 面额"
-                      values={{ d }}
+                      values={{d}}
                     />
                   }
-                  extra={PROMPT('dealDetail.buy_amount_money_stock', { Stock })}
+                  extra={PROMPT('dealDetail.buy_amount_money_stock', {Stock})}
                   // extra={<FM id="dealDetail.buy_amount_money_stock" defaultMessage="库存{Stock}个"  values={{Stock}} />}
                 >
                   {getFieldDecorator(`order_detail[${index}].count`, {
@@ -412,7 +422,7 @@ export default class DealDeatil extends Component {
                     <InputNumber
                       min={0}
                       precision={0}
-                      style={{ width: 200 }}
+                      style={{width: 200}}
                       placeholder={PROMPT('dealDetail.num_amount_buy_input')}
                     />
                   )}
@@ -422,7 +432,7 @@ export default class DealDeatil extends Component {
           </div>
           <DescriptionList size="large" col={1}>
             <Description term={<FM id="dealDetail.buy_all_moneys" defaultMessage="总价" />}>
-              {this.calcuBuyTotal1(money)} RMB
+              {formatMoney(this.calcuBuyTotal1(money))} RMB
             </Description>
             <Description term={<FM id="dealDetail.buy_safe_time" defaultMessage="保障时间" />}>
               {guarantee_time} <FM id="dealDetail.buy_time_minute" defaultMessage="分钟" />
@@ -434,7 +444,7 @@ export default class DealDeatil extends Component {
             </Button>
             <Button
               loading={this.props.submitting}
-              style={{ marginLeft: 15 }}
+              style={{marginLeft: 15}}
               disabled={this.calcuBuyTotal1(money) <= 0}
               type="primary"
               htmlType="submit"
@@ -449,8 +459,7 @@ export default class DealDeatil extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { detail = {}, match: { params } } = this.props;
-    console.log(params);
+    const {detail = {}, match: {params}} = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
       values.order_detail = filter(values.order_detail, item => item.count > 0);
       if (!values.order_detail.length) {
@@ -471,7 +480,7 @@ export default class DealDeatil extends Component {
               this.props.dispatch(routerRedux.push('/card/market'));
             }
             if (res.code === 607) {
-              this.fetch({ id: +params.id });
+              this.fetch({id: +params.id});
             }
           },
         });
@@ -485,8 +494,8 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   render() {
-    const { detail } = this.props;
-    const { owner = {}, ad_type, term } = detail || {};
+    const {detail} = this.props;
+    const {owner = {}, ad_type, term} = detail || {};
     const userInfo = owner;
     if (!detail) {
       return false;

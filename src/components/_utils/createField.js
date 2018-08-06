@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Radio, Select, Checkbox, Button, InputNumber } from 'antd';
+import UploadQN from '../UploadQiNiu';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -20,7 +21,7 @@ const createField = Component => ({
   ...rest
 }) => {
   const hasError = meta.touched && meta.invalid;
-  // console.log(label, input, meta);
+  // console.log(input, rest)
   return (
     <FormItem
       wrapperCol={wrapperCol}
@@ -45,5 +46,6 @@ const AOption = Select.Option;
 const ACheckbox = createField(Checkbox);
 const ATextarea = createField(TextArea);
 const AInputNumber = createField(InputNumber);
+const AUpload = createField(UploadQN);
 
-export { AInput, ARadioGroup, ASelect, AOption, ACheckbox, ATextarea, AInputNumber };
+export { AInput, ARadioGroup, ASelect, AOption, ACheckbox, ATextarea, AInputNumber, AUpload };
