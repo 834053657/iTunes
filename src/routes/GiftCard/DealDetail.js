@@ -82,17 +82,18 @@ export default class DealDeatil extends Component {
     const total = sumBy(getFieldValue('order_detail'), row => {
       return row.money * row.count * detail.unit_price || 0;
     });
-
     return total
   };
 
   calcuMaxCountBuy = (orderData, item) => {
     const accountBalance = get(this.props, 'detail.owner.amount');
+    const unit_price = get(this.props, 'detail.unit_price') || 0;
     const {money, count} = item || {};
     const userBuySum = sumBy(orderData, row => {
-      return row.money * row.count || 0;
+      return row.money * row.count * unit_price || 0;
     });
-    const result = (accountBalance - userBuySum) * 10000 / money / 10000;
+    const result = (accountBalance - userBuySum) * 10000 / money / unit_price / 10000;
+
     return result < 0 ? 0 : +parseInt(result);
   };
 

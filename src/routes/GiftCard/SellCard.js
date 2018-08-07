@@ -96,7 +96,7 @@ export default class BuyCard extends Component {
     const { adDetail = {}, loading, terms } = this.props;
     const cardList = filter(CONFIG.card_type, c => c.valid, []);
     const defaultCard = cardList[0] || {};
-    console.log(cardList);
+    // console.log(cardList);
 
     if (!cardList.length) {
       return false;

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Input, Radio, Select, Checkbox, Button, InputNumber } from 'antd';
+import { Form, Input, Radio, Select, Checkbox, Button } from 'antd';
+import InputNumber from '../InputNumber';
 import UploadQN from '../UploadQiNiu';
 
 const FormItem = Form.Item;
