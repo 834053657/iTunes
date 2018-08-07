@@ -1,0 +1,198 @@
+[
+  {
+    "id": "sellForm.type_choose",
+    "defaultMessage": "请选择类型"
+  },
+  {
+    "id": "sellForm.input_num",
+    "defaultMessage": "请输入单价"
+  },
+  {
+    "id": "sellForm.choose_type_please",
+    "defaultMessage": "请选择条件类型"
+  },
+  {
+    "id": "sellForm.amount_add",
+    "defaultMessage": "请添加面额"
+  },
+  {
+    "id": "sellForm.add_pwd_msg",
+    "defaultMessage": "请添加密码信息"
+  },
+  {
+    "id": "sellForm.pwd_input",
+    "defaultMessage": "请输入卡密"
+  },
+  {
+    "id": "sellForm.min_length",
+    "defaultMessage": "最小长度不得小于4位"
+  },
+  {
+    "id": "sellForm.max_limit",
+    "defaultMessage": "最大长度不得超过50位"
+  },
+  {
+    "id": "sellForm.num_and_letter",
+    "defaultMessage": "只能输入字母，数字组合"
+  },
+  {
+    "id": "sellForm.upload_card_img",
+    "defaultMessage": "请上传卡图"
+  },
+  {
+    "id": "sellForm.amount_num",
+    "defaultMessage": "面额"
+  },
+  {
+    "id": "sellForm.evidence_img",
+    "defaultMessage": "凭证"
+  },
+  {
+    "id": "sellForm.btn_cancel",
+    "defaultMessage": "删除"
+  },
+  {
+    "id": "sellForm.add_amount_title",
+    "defaultMessage": "添加面额"
+  },
+  {
+    "id": "sellForm.amount_modal",
+    "defaultMessage": "面额:"
+  },
+  {
+    "id": "sellForm.amount_of_card",
+    "defaultMessage": "面额"
+  },
+  {
+    "id": "sellForm.add_file",
+    "defaultMessage": "导入"
+  },
+  {
+    "id": "sellForm.click_load",
+    "defaultMessage": "点击下载模板"
+  },
+  {
+    "id": "sellForm.sure_to_cancel",
+    "defaultMessage": "确定删除吗？"
+  },
+  {
+    "id": "sellForm.cancel_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "sellForm.cancel_no",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "sellForm.evidence_card",
+    "defaultMessage": "凭证:"
+  },
+  {
+    "id": "sellForm.card_passWord",
+    "defaultMessage": "卡密:"
+  },
+  {
+    "id": "sellForm.pwd_sure_cancel",
+    "defaultMessage": "确定删除吗？"
+  },
+  {
+    "id": "sellForm.cancel_pwd_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "sellForm.pwd_cancel_no",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "sellForm.card_img",
+    "defaultMessage": "卡图:"
+  },
+  {
+    "id": "sellForm.card_img_cancel",
+    "defaultMessage": "确定删除吗？"
+  },
+  {
+    "id": "sellForm.card_img_cancel_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "sellForm.card_img_cancel_no",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "sellForm.add_card_pwd",
+    "defaultMessage": "添加卡密"
+  },
+  {
+    "id": "sellForm.card_type_",
+    "defaultMessage": "类型"
+  },
+  {
+    "id": "sellForm.unit_price_",
+    "defaultMessage": "单价"
+  },
+  {
+    "id": "sellForm.guarantee_time_",
+    "defaultMessage": "保障时间"
+  },
+  {
+    "id": "sellForm.time_minute",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "sellForm.deal_rule_",
+    "defaultMessage": "交易条款"
+  },
+  {
+    "id": "sellForm.deal_rule_can_choose",
+    "defaultMessage": "可选"
+  },
+  {
+    "id": "sellForm.order_deal_with",
+    "defaultMessage": "同时处理订单数"
+  },
+  {
+    "id": "sellForm.password_type",
+    "defaultMessage": "条件"
+  },
+  {
+    "id": "sellForm.dashed_add",
+    "defaultMessage": "添加面额"
+  },
+  {
+    "id": "sellForm.all_amount_",
+    "defaultMessage": "总面额"
+  },
+  {
+    "id": "sellForm.all_amount_price",
+    "defaultMessage": "总价"
+  },
+  {
+    "id": "sellForm.btn_cancel_",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "sellForm.btn_edit_",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "sellForm.btn_cancel_edit",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "sellForm.sure_public",
+    "defaultMessage": "确定发布吗？"
+  },
+  {
+    "id": "sellForm.sure_public_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "sellForm.sure_public_no",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "sellForm.btn_public",
+    "defaultMessage": "保存"
+  }
+]

@@ -38,8 +38,6 @@
   "payMethodModal.pay_way_choose":"pay method",
   "buyForm.max_num_input_than":"at least{min_con}",
   "listHell.minute":"minute",
-
-
   "UserLogin.login_email":"Email",
   "UserLogin.login_passWord":"密码en",
   "UserLogin.login_code":"验证码en",
@@ -62,7 +60,34 @@
   "UserLogin.realName_user_leave":"真实姓名en",
   "UserLogin.realName_leave_num_person_input":"card ID",
   "UserLogin.forget_code_":"验证码en",
-  "UserLogin.login_emailOrUser":"用户名或邮箱en"
+  "UserLogin.login_emailOrUser":"用户名或邮箱en",
+  "BuyCard.fill_none":"English未填写指定面额信息",
+  "List.denomination":"denomination",
+  "BuyForm.account_money":"denomination",
+  "BuyForm.account_min_num":"min",
+  "BuyForm.account_max_num":"max",
+  "BuyForm.choose_type":"type",
+  "BuyForm.min_account":"min",
+  "BuyForm.max_account":"max",
+  "BuyForm.choose_send_card_time":"time",
+  "BuyForm.choose_safe_time":"safe time",
+  "BuyForm.deal_rules_choose":"choose",
+  "BuyForm.no_limit":"Non representation is unrestricted",
+  "sellForm.amount_num_holder":"amount",
+  "sellForm.min_num_holder":"min",
+  "sellForm.max_num_holder":"max",
+  "sellForm.right_num":"error",
+  "sellForm.amount_already":"exist",
+  "sellForm.modal_amount_input":"please input",
+  "sellForm.upload_error_warning":"error",
+  "sellForm.file_error":"error，file about csv xls or xlsx。",
+  "sellForm.choose_type_card":"select",
+  "sellForm.guarantee_time_holder":"choose time",
+  "sellForm.choose_deal_rule_":"Exchange provision",
+  "sellForm.no_limit":"Non representation is unrestricted",
+  "priceForm.input_amount_num":"EN请输入面额",
+  "priceForm.amount_add_msg_region":"en可添加面额为 {min} - {max}",
+  "priceForm.amount_add_region_":"en可添加面额 {min} - {max}"
 
 
 

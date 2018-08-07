@@ -4,7 +4,7 @@ import numeral from 'numeral';
 import {connect} from 'dva';
 import {stringify} from 'qs';
 import {map, omitBy, filter, isEmpty} from 'lodash';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage as FM} from 'react-intl';
 import {
   Table,
   Tabs,
@@ -27,7 +27,6 @@ import styles from './List.less';
 
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
-const FM = FormattedMessage;
 @connect(({card, loading, user}) => ({
   list: card.list,
   user: user.currentUser.user,
@@ -258,7 +257,7 @@ export default class List extends Component {
         },
       },
       {
-        title: <FM id="denomination" defaultMessage="面额" />,
+        title: <FM id="list.denomination" defaultMessage="面额" />,
         dataIndex: 'denomination',
         width: '100px ',
         onFilterDropdownVisibleChange: e => {
@@ -276,7 +275,7 @@ export default class List extends Component {
         filterDropdown: (
           <div>
             {this.state.denoVisible ? (
-              <FM
+              <FilterDemoinForm
                 initialValues={this.state.denominFilterValue}
                 onSubmit={this.handleFilterDemoin}
                 onCancel={this.handleResetFilterDemoin}

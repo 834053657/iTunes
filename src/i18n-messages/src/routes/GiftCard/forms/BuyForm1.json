@@ -1,0 +1,170 @@
+[
+  {
+    "id": "BuyForm.type_choose",
+    "defaultMessage": "请选择类型"
+  },
+  {
+    "id": "BuyForm.input_number",
+    "defaultMessage": "请输入单价"
+  },
+  {
+    "id": "BuyForm.input_multiple",
+    "defaultMessage": "请输入倍数"
+  },
+  {
+    "id": "BuyForm.integer_input",
+    "defaultMessage": "请输入正整数"
+  },
+  {
+    "id": "BuyForm.choose_type_",
+    "defaultMessage": "请选择条件类型"
+  },
+  {
+    "id": "BuyForm.error_add_assign",
+    "defaultMessage": "请添加指定面额"
+  },
+  {
+    "id": "BuyForm.input_account_money",
+    "defaultMessage": "请输入面额"
+  },
+  {
+    "id": "BuyForm.input_min_num",
+    "defaultMessage": "请输入最小数量"
+  },
+  {
+    "id": "BuyForm.input_max_num",
+    "defaultMessage": "请输入最大数量"
+  },
+  {
+    "id": "BuyForm.condition2_input_",
+    "defaultMessage": "请填写"
+  },
+  {
+    "id": "BuyForm.input_min_account",
+    "defaultMessage": "请输入最小面额"
+  },
+  {
+    "id": "BuyForm.input_",
+    "defaultMessage": "请输入正整数"
+  },
+  {
+    "id": "BuyForm.input_max_amount",
+    "defaultMessage": "请输入最大面额"
+  },
+  {
+    "id": "BuyForm.condition2_input_integer",
+    "defaultMessage": "请输入正整数"
+  },
+  {
+    "id": "BuyForm.deadline_time_choose",
+    "defaultMessage": "请选择发卡期限"
+  },
+  {
+    "id": "BuyForm.guarantee_time",
+    "defaultMessage": "请选择保障时间"
+  },
+  {
+    "id": "BuyForm.password_type",
+    "defaultMessage": "请输入选择密保卡类型"
+  },
+  {
+    "id": "BuyForm.num_less_right",
+    "defaultMessage": "该数值应小于右侧值"
+  },
+  {
+    "id": "BuyForm.num_lessThan_right",
+    "defaultMessage": "该数值应小于右侧值"
+  },
+  {
+    "id": "BuyForm.sure_to_cancel",
+    "defaultMessage": "您确认要删除吗?"
+  },
+  {
+    "id": "BuyForm.choose_ok",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "BuyForm.choose_no",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "BuyForm.add_account",
+    "defaultMessage": "添加面额"
+  },
+  {
+    "id": "BuyForm.card_type",
+    "defaultMessage": "类型"
+  },
+  {
+    "id": "BuyForm.unit_price",
+    "defaultMessage": "单价"
+  },
+  {
+    "id": "BuyForm.multiple_title",
+    "defaultMessage": "倍数"
+  },
+  {
+    "id": "BuyForm.condition_type",
+    "defaultMessage": "条件"
+  },
+  {
+    "id": "BuyForm.btn_account",
+    "defaultMessage": "指定面额"
+  },
+  {
+    "id": "BuyForm.btn_account_region",
+    "defaultMessage": "面额区间"
+  },
+  {
+    "id": "BuyForm.ask_title",
+    "defaultMessage": "要求"
+  },
+  {
+    "id": "BuyForm.time_send_card",
+    "defaultMessage": "发卡期限"
+  },
+  {
+    "id": "BuyForm.minute_time",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "BuyForm.safe_time",
+    "defaultMessage": "保障时间"
+  },
+  {
+    "id": "BuyForm.safe_time_minute",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "BuyForm.deal_rules",
+    "defaultMessage": "交易条款"
+  },
+  {
+    "id": "BuyForm.can_be_choose",
+    "defaultMessage": "可选"
+  },
+  {
+    "id": "BuyForm.none_",
+    "defaultMessage": "无"
+  },
+  {
+    "id": "BuyForm.order_num_",
+    "defaultMessage": "同时处理订单数"
+  },
+  {
+    "id": "BuyForm.cancel_btn",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "BuyForm.edit_btn",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "BuyForm.btn_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "BuyForm.btn_keep",
+    "defaultMessage": "保存"
+  }
+]
