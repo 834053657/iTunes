@@ -86,6 +86,7 @@
   "sellForm.choose_deal_rule_":"请选择交易条款",
   "sellForm.no_limit":"不填代表不限制",
   "priceForm.input_amount_num":"请输入面额",
-  "priceForm.amount_add_msg_region":"可添加面额为 {min} - {max}",
-  "priceForm.amount_add_region_":"可添加面额 {min} - {max}"
+  "payMethodModal.pay_way_add":"添加支付方式",
+  "personalCenter.Method_payment_change_payWay":"修改支付方式",
+  "personalCenter.Method_payment_add_payWay":"添加支付方式"
 }

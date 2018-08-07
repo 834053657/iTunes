@@ -42,7 +42,13 @@ export default class PriceForm extends Component {
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormItem
-          extra={PROMPT('priceForm.amount_add_region_' ,{ MIN:min, MAX:max })}
+          extra={
+            <FM
+              id="priceForm.amount_add_region_"
+              defaultMessage="可添加面额 {min} - {max}"
+              values={{ min, max }}
+            />
+          }
         >
           {getFieldDecorator('price', {
             rules: [
@@ -55,7 +61,11 @@ export default class PriceForm extends Component {
                 min,
                 max,
                 message: (
-                  <FM id="priceForm.amount_add_msg_region" defaultMessage="可添加面额为 {min} - {max}" values={{ min, max }}/>
+                  <FM
+                    id="priceForm.amount_add_msg_region"
+                    defaultMessage="可添加面额为 {min} - {max}"
+                    values={{ min, max }}
+                  />
                 ),
               },
               // {

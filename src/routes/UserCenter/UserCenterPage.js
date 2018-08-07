@@ -797,12 +797,9 @@ export default class UserCenterPage extends Component {
               {...this.props}
               title={
                 payMethodModalVisible && payMethodModalVisible.id ? (
-                  <FM
-                    id="personalCenter.Method_payment_change_payWay"
-                    defaultMessage="修改支付方式"
-                  />
+                  PROMPT('personalCenter.Method_payment_change_payWay')||'修改支付方式'
                 ) : (
-                  <FM id="personalCenter.Method_payment_add_payWay" defaultMessage="添加支付方式" />
+                  PROMPT('personalCenter.Method_payment_add_payWay')||'添加支付方式'
                 )
               }
               data={payMethodModalVisible}

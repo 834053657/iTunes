@@ -86,10 +86,9 @@
   "sellForm.choose_deal_rule_":"Exchange provision",
   "sellForm.no_limit":"Non representation is unrestricted",
   "priceForm.input_amount_num":"EN请输入面额",
-  "priceForm.amount_add_msg_region":"en可添加面额为 {min} - {max}",
-  "priceForm.amount_add_region_":"en可添加面额 {min} - {max}"
-
-
+  "payMethodModal.pay_way_add":"EN添加支付方式",
+  "personalCenter.Method_payment_change_payWay":"EN修改支付方式",
+  "personalCenter.Method_payment_add_payWay":"EN添加支付方式"
 
 
 }

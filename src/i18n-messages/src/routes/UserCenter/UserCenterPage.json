@@ -202,13 +202,5 @@
   {
     "id": "personalCenter.Method_payment_safe",
     "defaultMessage": "安全验证"
-  },
-  {
-    "id": "personalCenter.Method_payment_change_payWay",
-    "defaultMessage": "修改支付方式"
-  },
-  {
-    "id": "personalCenter.Method_payment_add_payWay",
-    "defaultMessage": "添加支付方式"
   }
 ]
