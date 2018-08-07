@@ -52,7 +52,7 @@ const {Description} = DescriptionList;
   return {
     password_type: formValueSelector('sellForm')(state, 'password_type'),
     cards: formValueSelector('sellForm')(state, 'cards') || [],
-    unit_price: formValueSelector('sellForm')(state, 'unit_price') || [],
+    unit_price: formValueSelector('sellForm')(state, 'unit_price') || 0,
   };
 })
 @reduxForm({
@@ -429,7 +429,7 @@ export default class ReduxForm extends Component {
                     <Field
                       name={`${fieldName}.password`}
                       component={AInput}
-                      disabled={disabled || status}
+                      disabled={!!(disabled || status)}
                     />
                   </Col>
                   {!disabled &&
@@ -457,7 +457,7 @@ export default class ReduxForm extends Component {
                     <Field
                       name={`${fieldName}.picture`}
                       component={AUpload}
-                      disabled={disabled || status}
+                      disabled={!!(disabled || status)}
                     />
                   </Col>
                   {!disabled &&
@@ -479,17 +479,20 @@ export default class ReduxForm extends Component {
             </div>
           );
         })}
-
-        <Button
-          type="dashed"
-          className={styles.addBtn}
-          disabled={disabled}
-          onClick={() => {
-            fields.push({password: '', picture: ''});
-          }}
-        >
-          <Icon type="plus" /> <FM id='sellForm.add_card_pwd' defaultMessage='添加卡密' />
-        </Button>
+        {
+          this.props.editing && (
+            <Button
+              type="dashed"
+              className={styles.addBtn}
+              disabled={disabled}
+              onClick={() => {
+                fields.push({password: '', picture: ''});
+              }}
+            >
+              <Icon type="plus" /> <FM id='sellForm.add_card_pwd' defaultMessage='添加卡密' />
+            </Button>
+          )
+        }
       </div>
     );
   };
@@ -498,7 +501,7 @@ export default class ReduxForm extends Component {
     const {cards} = this.props;
     let money = 0;
     let calculateMoney;
-    console.log(cards);
+    // console.log(cards);
     calculateMoney = cards.map((item, index) => {
       calculateMoney = 0;
       return (calculateMoney += item.money * item.items.length);
@@ -543,7 +546,7 @@ export default class ReduxForm extends Component {
             {...formItemLayout}
             style={{width: 200}}
             placeholder={(PROMPT('sellForm.choose_type_card')||'请选择类型')}
-            disabled={!editing}
+            disabled={!editing || action === 'edit'}
           >
             {map(cardList, card => {
               return (
@@ -562,6 +565,7 @@ export default class ReduxForm extends Component {
             {...formItemLayout}
             style={{width: 200}}
             disabled={!editing}
+            addonAfter="RMB"
             precision={2}
             min={0}
           />
@@ -632,16 +636,18 @@ export default class ReduxForm extends Component {
               </Radio>
             ))}
           </Field>
-
-          <Button
-            type="dashed"
-            style={{width: '29%', marginLeft: '12%'}}
-            onClick={this.showAddMoneyBox}
-            disabled={!editing}
-          >
-            <Icon type="plus" /> <FM id='sellForm.dashed_add' defaultMessage='添加面额' />
-          </Button>
-
+          {
+            editing && (
+              <Button
+                type="dashed"
+                style={{width: '29%', marginLeft: '12%'}}
+                onClick={this.showAddMoneyBox}
+                disabled={!editing}
+              >
+                <Icon type="plus" /> <FM id='sellForm.dashed_add' defaultMessage='添加面额' />
+              </Button>
+            )
+          }
           {this.renderModal()}
 
           <FieldArray
@@ -676,7 +682,7 @@ export default class ReduxForm extends Component {
             </Form.Item>
           ) : (
             <Form.Item className={styles.buttonBox}>
-              <Button key="back" onClick={this.handleCancel} disabled={this.props.submitSellForm}>
+              <Button key="back" onClick={this.handleCancel} disabled={!!this.props.submitSellForm}>
                 <FM id='sellForm.btn_cancel_edit' defaultMessage='取消' />
               </Button>
               <Popconfirm

@@ -277,7 +277,7 @@ export default class ReduxForm extends PureComponent {
           {...formItemLayout}
           style={{ width: 200 }}
           placeholder={(PROMPT('BuyForm.choose_type')||'请选择类型')}
-          disabled={!editing}
+          disabled={!editing || action=== 'edit'}
         >
           {map(cardList, card => {
             return (
@@ -295,6 +295,7 @@ export default class ReduxForm extends PureComponent {
           {...formItemLayout}
           style={{ width: 200 }}
           disabled={!editing}
+          addonAfter="RMB"
           precision={2}
           min={0}
         />
