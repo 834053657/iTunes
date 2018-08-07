@@ -76,7 +76,7 @@ export default class SaleCard extends Component {
     const { params: { id } } = this.props.match || {};
     console.log(values);
     if (values.condition_type === 1 && !values.condition.length) {
-      return message.error('未填写指定面额信息');
+      return message.error(PROMPT('BuyCard.fill_none')||'未填写指定面额信息');
     }
     this.props.dispatch({
       type: 'card/addBuyAd',
