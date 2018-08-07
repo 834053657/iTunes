@@ -1,6 +1,11 @@
 {
   "message.clearMessages": "Cleared messages",
   "message.prompt": "Prompt",
+  "message.realNameAuth": "Real name authentication",
+  "message.videoAuth": "Video authentication",
+  "message.bankAccount": "Bank account",
+  "message.alipayAccount": "Alipay",
+  "message.giftCard": "Gift card",
   "order.pendingOrder": "Pending Order",
   "buyForm.amount":"amount",
   "buyForm.amount_holder_min":"min",
