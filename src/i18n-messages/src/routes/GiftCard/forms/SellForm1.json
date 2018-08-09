@@ -168,16 +168,12 @@
     "defaultMessage": "总价"
   },
   {
-    "id": "sellForm.btn_cancel_",
+    "id": "sellForm.btn_cancel_edit",
     "defaultMessage": "取消"
   },
   {
     "id": "sellForm.btn_edit_",
     "defaultMessage": "编辑"
-  },
-  {
-    "id": "sellForm.btn_cancel_edit",
-    "defaultMessage": "取消"
   },
   {
     "id": "sellForm.sure_public",
@@ -193,6 +189,6 @@
   },
   {
     "id": "sellForm.btn_public",
-    "defaultMessage": "保存"
+    "defaultMessage": "发布"
   }
 ]

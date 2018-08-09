@@ -25,6 +25,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
   detail: card_ad.detail,
   terms: card.terms.filter(term => term.status === 3),
   loading: loading.effects['card_ad/fetchInitialValue'] || false,
+  submitSellForm: loading.effects['card/addBuyAd'],
 }))
 export default class SaleCard extends Component {
   constructor(props) {
@@ -74,7 +75,6 @@ export default class SaleCard extends Component {
 
   handleSubmit = values => {
     const { params: { id } } = this.props.match || {};
-    console.log(values);
     if (values.condition_type === 1 && !values.condition.length) {
       return message.error(PROMPT('BuyCard.fill_none')||'未填写指定面额信息');
     }
@@ -131,6 +131,7 @@ export default class SaleCard extends Component {
                 onSubmit={this.handleSubmit}
                 onCancel={() => this.props.dispatch(routerRedux.push('/ad/my'))}
                 initialValues={id ? detail : defaultValues}
+                submitSellForm={this.props.submitSellForm}
               />
             ) : null}
           </Spin>

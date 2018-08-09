@@ -136,8 +136,12 @@ export default class ReduxForm extends PureComponent {
   save = values => {
     const {condition_type} = this.props;
     const rules = omit(this.descriptor, condition_type === 1 ? 'condition2' : 'condition1');
+    values.unit_price = parseFloat(values.unit_price)
     const err = validate(rules, values);
     const checkErr = {};
+    if (values.unit_price <= 0) {
+      createError(checkErr, `unit_price`, '单价必须大于0');
+    }
     if (err) {
       throw new SubmissionError(err);
     }
@@ -260,6 +264,19 @@ export default class ReduxForm extends PureComponent {
     // }
   };
 
+  parseFloatNumber = (value, name) => {
+    let v = value
+    if (!isNaN(v)) {
+      if (v.toString().split('.')[1] && v.toString().split('.')[1].length >= 2) {
+        v = parseFloat(v)
+        v = v.toFixed(2)
+      }
+    } else {
+      v = 0
+    }
+    return v
+  }
+
   render() {
     const {
       editing,
@@ -273,6 +290,7 @@ export default class ReduxForm extends PureComponent {
       condition2 = {},
       onEdit,
       cardList,
+      initialValues
     } = this.props;
     const formItemLayout = {
       labelCol: {
@@ -283,7 +301,8 @@ export default class ReduxForm extends PureComponent {
       },
     };
     const req = value => (value || typeof value === 'number' ? undefined : 'Required');
-
+    const status = action === 'preview' && initialValues ? initialValues.status : undefined
+    const showEdit = status && (status === 1 || status === 2)
     return (
       <Form onSubmit={handleSubmit(this.save)}>
         <Field
@@ -306,7 +325,7 @@ export default class ReduxForm extends PureComponent {
         <Field
           label={<FM id='BuyForm.unit_price' defaultMessage='单价' />}
           name="unit_price"
-          parse={parseNumber}
+          parse={this.parseFloatNumber}
           component={AInputNumber}
           {...formItemLayout}
           style={{width: 200}}
@@ -462,26 +481,42 @@ export default class ReduxForm extends PureComponent {
           placeholder={(PROMPT('BuyForm.no_limit') || '不填代表不限制')}
           disabled={!editing}
         />
-
-        {!editing ? (
-          <Form.Item className={styles.buttonBox}>
-            <Button key="back" onClick={this.handleCancel}>
-              <FM id='BuyForm.cancel_btn' defaultMessage='取消' />
-            </Button>
-            <Button key="edit" type="primary" className={styles.submit} onClick={onEdit}>
-              <FM id='BuyForm.edit_btn' defaultMessage='编辑' />
-            </Button>
-          </Form.Item>
-        ) : (
-          <Form.Item className={styles.buttonBox}>
-            <Button key="back" onClick={this.handleCancel}>
-              <FM id='BuyForm.btn_cancel' defaultMessage='取消' />
-            </Button>
-            <Button type="primary" className={styles.submit} htmlType="submit">
-              <FM id='BuyForm.btn_keep' defaultMessage='保存' />
-            </Button>
-          </Form.Item>
-        )}
+        <Form.Item className={styles.buttonBox}>
+          <Button key="back" onClick={this.handleCancel}>
+            <FM id='BuyForm.cancel_btn' defaultMessage='返回' />
+          </Button>
+          {(!editing ?
+              showEdit &&
+              (
+              <Button
+                key="edit"
+                type="primary"
+                className={styles.submit}
+                onClick={onEdit}
+              >
+                <FM id='BuyForm.edit_btn' defaultMessage='编辑' />
+              </Button>
+)
+              :
+              (
+                <Popconfirm
+                  title={<FM id='sellForm.sure_public' defaultMessage='确定发布吗？' />}
+                  onConfirm={handleSubmit(this.save)}
+                  okText={<FM id='sellForm.sure_public_yes' defaultMessage='是' />}
+                  cancelText={<FM id='sellForm.sure_public_no' defaultMessage='否' />}
+                >
+                  <Button
+                    type="primary"
+                    className={styles.submit}
+                    htmlType="submit"
+                    loading={this.props.submitSellForm}
+                  >
+                    <FM id='BuyForm.btn_keep' defaultMessage='发布' />
+                  </Button>
+                </Popconfirm>
+)
+          )}
+        </Form.Item>
       </Form>
     );
   }
