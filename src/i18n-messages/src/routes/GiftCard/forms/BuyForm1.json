@@ -153,18 +153,26 @@
   },
   {
     "id": "BuyForm.cancel_btn",
-    "defaultMessage": "取消"
+    "defaultMessage": "返回"
   },
   {
     "id": "BuyForm.edit_btn",
     "defaultMessage": "编辑"
   },
   {
-    "id": "BuyForm.btn_cancel",
-    "defaultMessage": "取消"
+    "id": "sellForm.sure_public",
+    "defaultMessage": "确定发布吗？"
+  },
+  {
+    "id": "sellForm.sure_public_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "sellForm.sure_public_no",
+    "defaultMessage": "否"
   },
   {
     "id": "BuyForm.btn_keep",
-    "defaultMessage": "保存"
+    "defaultMessage": "发布"
   }
 ]
