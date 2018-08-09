@@ -120,6 +120,9 @@ export const getRouterData = app => {
     '/information/terms': {
       component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Terms')),
     },
+    '/information/duty': {
+      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Duty')),
+    },
     // 资讯消息路由控制
     '/message/info-list': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/InfoList')),

@@ -88,7 +88,10 @@
   "priceForm.input_amount_num":"EN请输入面额",
   "payMethodModal.pay_way_add":"EN添加支付方式",
   "personalCenter.Method_payment_change_payWay":"EN修改支付方式",
-  "personalCenter.Method_payment_add_payWay":"EN添加支付方式"
+  "personalCenter.Method_payment_add_payWay":"EN添加支付方式",
+  "withdrawForm.passWord_input_warning_holder":"请input密码",
+  "duty":"Disclaimer"
+
 
 
 }

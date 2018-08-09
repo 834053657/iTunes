@@ -1,9 +1,5 @@
 [
   {
-    "id": "help",
-    "defaultMessage": "帮助"
-  },
-  {
     "id": "privacy",
     "defaultMessage": "隐私"
   },

@@ -36,10 +36,6 @@
     "defaultMessage": "请输入密码！"
   },
   {
-    "id": "withdrawForm.passWord_input_warning_holder",
-    "defaultMessage": "请输入密码"
-  },
-  {
     "id": "withdrawForm.chrome_code",
     "defaultMessage": "谷歌验证"
   },

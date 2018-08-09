@@ -196,7 +196,7 @@ class WithdrawForm extends Component {
                 type="password"
                 size="large"
                 placeholder={
-                  <FM id="withdrawForm.passWord_input_warning_holder" defaultMessage="请输入密码" />
+                  (PROMPT('withdrawForm.passWord_input_warning_holder')||'请输入密码')
                 }
               />
             )}

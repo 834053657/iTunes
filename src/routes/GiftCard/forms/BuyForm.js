@@ -123,7 +123,6 @@ class BuyForm extends Component {
       conditionFix: data,
     });
     this.conditionFix = data;
-    console.log(data);
     form.setFieldsValue({
       'conditionFix[]': data,
     });

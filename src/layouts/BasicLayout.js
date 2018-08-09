@@ -406,6 +406,12 @@ class BasicLayout extends React.Component {
                   href: '/#/information/terms',
                   blankTarget: true,
                 },
+                {
+                  key: '4',
+                  title: (PROMPT('duty')||'免责'),
+                  href: '/#/information/Duty',
+                  blankTarget: true,
+                }
               ]}
               copyright={
                 <Fragment>
