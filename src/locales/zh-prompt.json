@@ -95,5 +95,8 @@
   "personalCenter.Method_payment_change_payWay":"修改支付方式",
   "personalCenter.Method_payment_add_payWay":"添加支付方式",
   "withdrawForm.passWord_input_warning_holder":"请输入密码",
-  "duty":"免责"
+  "duty":"免责声明",
+  "privacy":"隐私保护",
+  "help":"操作说明",
+  "rules":"服务条款"
 }

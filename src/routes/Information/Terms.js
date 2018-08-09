@@ -29,7 +29,7 @@ export default class Terms extends PureComponent {
     const { loading, data } = this.props;
 
     return (
-      <PageHeaderLayout className={styles.title} title="条款">
+      <PageHeaderLayout className={styles.title} title={PROMPT('rules')||'条款'}>
         <Content type="3" />
       </PageHeaderLayout>
     );

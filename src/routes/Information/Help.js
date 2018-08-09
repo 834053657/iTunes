@@ -29,7 +29,7 @@ export default class Help extends PureComponent {
     const { loading, data } = this.props;
 
     return (
-      <PageHeaderLayout className={styles.title} title="帮助">
+      <PageHeaderLayout className={styles.title} title={PROMPT('help')||'帮助'}>
         <Content type="1" />
       </PageHeaderLayout>
     );
