@@ -16,7 +16,7 @@ import {
   Spin,
   Upload,
 } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM} from 'react-intl';
 // import AsyncValidator from 'async-validator'
 import {map, filter, omit, forEach, size, get} from 'lodash';
 import {connect} from 'dva';
@@ -29,7 +29,7 @@ import {
   SubmissionError,
   FormSection,
 } from 'redux-form';
-import {validate, parseNumber, createError, formatMoney} from '../../../utils/utils';
+import {validate, parseNumber, createError, formatMoney, parseFloatNumber} from '../../../utils/utils';
 import DescriptionList from '../../../components/DescriptionList';
 import {
   AInput,
@@ -139,8 +139,14 @@ export default class ReduxForm extends Component {
   save = values => {
     const {condition_type} = this.props;
     const rules = omit(this.descriptor());
+    values.unit_price = parseFloat(values.unit_price)
+    console.log(values);
     const err = validate(rules, values);
     const checkErr = {};
+    if (values.unit_price <= 0) {
+      createError(checkErr, `unit_price`, '单价必须大于0');
+    }
+
     if (err) {
       throw new SubmissionError(err);
     }
@@ -169,7 +175,7 @@ export default class ReduxForm extends Component {
                   name={`${member}.money`}
                   component={AInputNumber}
                   parse={parseNumber}
-                  placeholder={(PROMPT('sellForm.amount_num_holder')||'面额')}
+                  placeholder={(PROMPT('sellForm.amount_num_holder') || '面额')}
                   precision={0}
                   min={0}
                   style={{width: '100%'}}
@@ -183,7 +189,7 @@ export default class ReduxForm extends Component {
                   parse={parseNumber}
                   precision={0}
                   min={0}
-                  placeholder={(PROMPT('sellForm.min_num_holder')||'最小数量')}
+                  placeholder={(PROMPT('sellForm.min_num_holder') || '最小数量')}
                   style={{width: '100%'}}
                   disabled={disabled}
                 />
@@ -191,7 +197,7 @@ export default class ReduxForm extends Component {
               <Col sm={4} offset={1}>
                 <Field
                   name={`${member}.max_count`}
-                  placeholder={(PROMPT('sellForm.max_num_holder')||'最大数量')}
+                  placeholder={(PROMPT('sellForm.max_num_holder') || '最大数量')}
                   parse={parseNumber}
                   precision={0}
                   min={0}
@@ -233,11 +239,11 @@ export default class ReduxForm extends Component {
     const {cards} = this.props;
     const re = /^\+?[1-9][0-9]*$/;
     if (!re.test(denoVaule)) {
-      return message.warning(PROMPT('sellForm.right_num')||'请输入正整数格式');
+      return message.warning(PROMPT('sellForm.right_num') || '请输入正整数格式');
     }
     const i = cards.findIndex(card => card.money === denoVaule);
     if (i >= 0) {
-      return message.warning(PROMPT('sellForm.amount_already')||'该面额已存在');
+      return message.warning(PROMPT('sellForm.amount_already') || '该面额已存在');
     }
     const newItem = {
       money: denoVaule,
@@ -255,6 +261,18 @@ export default class ReduxForm extends Component {
     });
   };
 
+
+  hasSelledCard = cardItem => {
+    console.log(cardItem);
+    const {items} = cardItem
+    const i = items.findIndex(item => item.status)
+    if (i >= 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   renderModal = fields => {
     const {denoVaule, addDenoVisible} = this.state;
     return (
@@ -270,11 +288,16 @@ export default class ReduxForm extends Component {
         }}
       >
         <Row>
-          <Col style={{width: 50, float: 'left', lineHeight: '30px'}}><FM id='sellForm.amount_modal' defaultMessage='面额:' /></Col>
+          <Col style={{width: 50, float: 'left', lineHeight: '30px'}}>
+            <FM
+              id='sellForm.amount_modal'
+              defaultMessage='面额:'
+            />
+          </Col>
           <Col style={{width: 150, float: 'left'}}>
             <Input
               style={{width: 150}}
-              placeholder={(PROMPT('sellForm.modal_amount_input')||'请输入面额')}
+              placeholder={(PROMPT('sellForm.modal_amount_input') || '请输入面额')}
               onChange={e => {
                 this.setState({denoVaule: +e.target.value});
               }}
@@ -294,14 +317,16 @@ export default class ReduxForm extends Component {
     } else if (info.file.status === 'done') {
       const {array} = this.props;
       const newItems = get(info, 'file.response.data.items') || [];
-
-      newItems.map(item => array.push(fieldName, item));
+      const a = []
+      newItems.map(item=> a.unshift(item))
+      a.map(item => array.unshift(fieldName, item));
+      //array.push(fieldName,...newItems)
       this.setState({
         uploading: false,
       });
     } else if (info.file.status === 'error') {
       this.setState({uploading: false});
-      message.error(PROMPT('sellForm.upload_error_warning')||'上传错误，可能请求已过期，请刷新页面重试');
+      message.error(PROMPT('sellForm.upload_error_warning') || '上传错误，可能请求已过期，请刷新页面重试');
     }
   };
 
@@ -325,7 +350,7 @@ export default class ReduxForm extends Component {
       beforeUpload(file) {
         const fileExt = file.name.substr(file.name.lastIndexOf('.') + 1);
         if (['csv', 'xls', 'xlsx'].indexOf(fileExt) < 0) {
-          message.error(PROMPT('sellForm.file_error')||'文件格式不对，您只能导入csv, xls或xlsx文件。');
+          message.error(PROMPT('sellForm.file_error') || '文件格式不对，您只能导入csv, xls或xlsx文件。');
           return false;
         }
         return true;
@@ -366,6 +391,7 @@ export default class ReduxForm extends Component {
                     </a>
                   )}
                   {!disabled &&
+                  !this.hasSelledCard(cardItem) &&
                   fields.length !== 1 && (
                     <div style={{float: 'right'}}>
                       <Popconfirm
@@ -512,6 +538,22 @@ export default class ReduxForm extends Component {
     return money;
   };
 
+  parseFloatNumber = (value, name) => {
+    let v = value
+    if (!isNaN(v)) {
+      if (v.toString().split('.')[1] && v.toString().split('.')[1].length >= 2) {
+        v = parseFloat(v)
+        v = v.toFixed(2)
+      }
+    } else {
+      v = 0
+    }
+
+    console.log(v);
+    console.log(typeof v);
+    return v
+  }
+
   render() {
     const {
       editing = false,
@@ -545,7 +587,7 @@ export default class ReduxForm extends Component {
             component={ASelect}
             {...formItemLayout}
             style={{width: 200}}
-            placeholder={(PROMPT('sellForm.choose_type_card')||'请选择类型')}
+            placeholder={(PROMPT('sellForm.choose_type_card') || '请选择类型')}
             disabled={!editing || action === 'edit'}
           >
             {map(cardList, card => {
@@ -557,17 +599,19 @@ export default class ReduxForm extends Component {
             })}
           </Field>
 
+          {/*单啊价*/}
           <Field
             label={<FM id='sellForm.unit_price_' defaultMessage='单价' />}
             name="unit_price"
-            parse={parseNumber}
             component={AInputNumber}
             {...formItemLayout}
             style={{width: 200}}
+            parse={this.parseFloatNumber}
             disabled={!editing}
             addonAfter="RMB"
-            precision={2}
-            min={0}
+            step="0.01"
+            //precision={2}
+            //min={0}
           />
 
           <Field
@@ -575,7 +619,7 @@ export default class ReduxForm extends Component {
             name="guarantee_time"
             component={ASelect}
             {...formItemLayout}
-            placeholder={(PROMPT('sellForm.guarantee_time_holder')||'请选择保障时间')}
+            placeholder={(PROMPT('sellForm.guarantee_time_holder') || '请选择保障时间')}
             style={{width: 200}}
             disabled={!editing}
           >
@@ -589,14 +633,20 @@ export default class ReduxForm extends Component {
           <Field
             label={
               <span>
-                <FM id='sellForm.deal_rule_' defaultMessage='交易条款' /><i>(<FM id='sellForm.deal_rule_can_choose' defaultMessage='可选' />)</i>
+                <FM id='sellForm.deal_rule_' defaultMessage='交易条款' />
+                <i>
+                  <FM
+                    id='sellForm.deal_rule_can_choose'
+                    defaultMessage='可选'
+                  />
+                </i>
               </span>
             }
             name="term_id"
             component={ASelect}
             style={{width: 200}}
             {...formItemLayout}
-            placeholder={(PROMPT('sellForm.choose_deal_rule_')||'请选择交易条款')}
+            placeholder={(PROMPT('sellForm.choose_deal_rule_') || '请选择交易条款')}
             disabled={!editing}
           >
             <AOption value={0}>无</AOption>
@@ -616,7 +666,7 @@ export default class ReduxForm extends Component {
             min={0}
             precision={0}
             {...formItemLayout}
-            placeholder={(PROMPT('sellForm.no_limit')||'不填代表不限制')}
+            placeholder={(PROMPT('sellForm.no_limit') || '不填代表不限制')}
             disabled={!editing}
           />
 

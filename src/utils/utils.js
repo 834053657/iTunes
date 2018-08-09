@@ -197,7 +197,7 @@ export function getSystemUrl(env) {
 
 export function getMessageContent(msgObj) {
   //get language
-  const lang =getLocale().replace('-','_') ||  'zh_CN';
+  const lang = getLocale().replace('-', '_') ||  'zh_CN';
   let msgText = CONFIG[`message_type_${lang}`][msgObj.msg_type];
 
   if (msgObj.msg_type === 1) {
@@ -207,14 +207,14 @@ export function getMessageContent(msgObj) {
     if ([11, 12].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace(
         '{auth_type}',
-        msgObj.content && msgObj.content.auth_type === 1 ? '实名认证' : '视频认证'
+        msgObj.content && msgObj.content.auth_type === 1 ? (PROMPT('message.realNameAuth') || '实名认证') : (PROMPT('message.videoAuth') || '视频认证')
       );
     }
 
     if ([21, 22].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace(
         '{payment_method}',
-        msgObj.content && msgObj.content.payment_method === 'bank' ? '银行账号' : '支付宝账号'
+        msgObj.content && msgObj.content.payment_method === 'bank' ? (PROMPT('message.bankAccount') || '银行账号') : (PROMPT('message.alipayAccount') || '支付宝账号')
       );
       msgText = msgText.replace(
         '{account}',
@@ -246,7 +246,7 @@ export function getMessageContent(msgObj) {
     if ([101, 102].indexOf(msgObj.msg_type) >= 0) {
       msgText = msgText.replace(
         '{goods_type}',
-        msgObj.content && msgObj.content.goods_type === 1 ? 'Itunes' : '礼品卡'
+        msgObj.content && msgObj.content.goods_type === 1 ? 'Itunes' : (PROMPT('message.giftCard') || '礼品卡')
       );
     }
 

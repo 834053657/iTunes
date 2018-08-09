@@ -1,6 +1,11 @@
 {
   "message.clearMessages": "清空了消息",
   "message.prompt": "提示",
+  "message.realNameAuth": "实名认证",
+  "message.videoAuth": "视频认证",
+  "message.bankAccount": "银行账号",
+  "message.alipayAccount": "支付宝账号",
+  "message.giftCard": "礼品卡",
   "order.pendingOrder": "挂单",
   "buyForm.amount":"面额",
   "buyForm.amount_holder_min":"最小数量",
