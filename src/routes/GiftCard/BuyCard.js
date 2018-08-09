@@ -129,7 +129,7 @@ export default class SaleCard extends Component {
                 onEdit={this.handleEdit}
                 action={action}
                 onSubmit={this.handleSubmit}
-                onCancel={this.handleCancel}
+                onCancel={() => this.props.dispatch(routerRedux.push('/ad/my'))}
                 initialValues={id ? detail : defaultValues}
               />
             ) : null}

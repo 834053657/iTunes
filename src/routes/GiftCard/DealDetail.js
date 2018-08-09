@@ -4,7 +4,7 @@ import {routerRedux} from 'dva/router';
 import {FormattedMessage as FM} from 'react-intl';
 
 import {sumBy, map, get, findIndex, filter} from 'lodash';
-import {Badge, Button, message, Avatar, Popover, Icon, Input, Spin, Form} from 'antd';
+import {Badge, Button, message, Avatar, Popover, Icon, Input, Spin, Form, Popconfirm} from 'antd';
 import DescriptionList from 'components/DescriptionList';
 import InputNumber from 'components/InputNumber';
 import PriceForm from './forms/PriceForm';
@@ -44,7 +44,7 @@ export default class DealDeatil extends Component {
     this.fetch({id});
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.props.dispatch({
       type: 'card/GET_AD_DETAIL',
     });
@@ -71,7 +71,7 @@ export default class DealDeatil extends Component {
       return row.money * row.count * detail.unit_price || 0;
     });
 
-   return total
+    return total
   };
 
   calcuBuyTotal1 = (money = []) => {
@@ -344,14 +344,24 @@ export default class DealDeatil extends Component {
             <Button key="back" onClick={this.handleBack}>
               <FM id="dealDetail.sell_toDelete" defaultMessage="取消" />
             </Button>
-            <Button
-              loading={this.props.submitting}
-              style={{marginLeft: 15}}
-              type="primary"
-              htmlType="submit"
+
+            <Popconfirm
+              title="确认要出售吗？"
+              onConfirm={this.handleSubmit}
+              okText="是"
+              cancelText="否"
             >
-              <FM id="dealDetail.sell_sure_sell" defaultMessage="确认出售" />
-            </Button>
+              <Button
+                loading={this.props.submitting}
+                style={{marginLeft: 15}}
+                type="primary"
+                htmlType="submit"
+              >
+                <FM id="dealDetail.sell_sure_sell" defaultMessage="确认出售" />
+              </Button>
+            </Popconfirm>
+
+
           </FormItem>
         </Spin>
       </div>
@@ -443,15 +453,22 @@ export default class DealDeatil extends Component {
             <Button key="back" onClick={this.handleBack}>
               <FM id="dealDetail.buy_delete_btn" defaultMessage="取消" />
             </Button>
-            <Button
-              loading={this.props.submitting}
-              style={{marginLeft: 15}}
-              disabled={this.calcuBuyTotal1(money) <= 0}
-              type="primary"
-              htmlType="submit"
+            <Popconfirm
+              title="确认要购买吗？"
+              onConfirm={this.handleSubmit}
+              okText="是"
+              cancelText="否"
             >
-              <FM id="dealDetail.buy_sure_btn" defaultMessage="确认购买" />
-            </Button>
+              <Button
+                loading={this.props.submitting}
+                style={{marginLeft: 15}}
+                disabled={this.calcuBuyTotal1(money) <= 0}
+                type="primary"
+                htmlType="submit"
+              >
+                <FM id="dealDetail.buy_sure_btn" defaultMessage="确认购买" />
+              </Button>
+            </Popconfirm>
           </FormItem>
         </Spin>
       </div>
