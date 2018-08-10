@@ -28,10 +28,6 @@
     "defaultMessage": "高"
   },
   {
-    "id": "personalCenter.change_photo",
-    "defaultMessage": "修改头像成功"
-  },
-  {
     "id": "personalCenter.upload_error",
     "defaultMessage": "上传错误，可能请求已过期，请刷新页面重试"
   },

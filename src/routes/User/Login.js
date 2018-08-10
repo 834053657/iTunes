@@ -34,7 +34,7 @@ export default class LoginPage extends Component {
           ...values,
         },
         callback: res => {
-          if (res.code !== 0 && res.code < 1000) {
+          if (res.code !== 0 ) { // && res.code < 1000
             this.loadCaptcha();
           }
         },

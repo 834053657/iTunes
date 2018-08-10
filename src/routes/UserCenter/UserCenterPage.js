@@ -312,7 +312,7 @@ export default class UserCenterPage extends Component {
           avatar,
         },
         callback: () => {
-          message.success(<FM id="personalCenter.change_photo" defaultMessage="修改头像成功" />);
+          message.success(PROMPT('success') || '操作成功!');
           this.setState({ uploadLoading: false });
         },
       });
