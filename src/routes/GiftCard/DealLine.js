@@ -41,16 +41,17 @@ export default class OrderDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if(__KG_API_ENV__ === 'dev'){return}
     const { params: { id } } = this.props.match || {};
     const { pageStatus } = this.props.detail || {};
     const { params: { id: nextid } } = nextProps.match || {};
     const { pageStatus: nextPageStatus } = nextProps.detail || {};
 
-    if (nextid !== id) {
-      this.fetchData(nextid);
-      this.leaveRoom(id);
-      this.enterRoom(nextid);
-    }
+    // if (nextid !== id) {
+    //   this.fetchData(nextid);
+    //   this.leaveRoom(id);
+    //   this.enterRoom(nextid);
+    // }
     // else if(pageStatus !== nextPageStatus) {
     //   this.fetchData(id);
     //   console.log(pageStatus, nextPageStatus)
@@ -83,20 +84,6 @@ export default class OrderDetail extends Component {
       type: 'leave_chat_room',
       payload: { order_id },
     });
-  };
-
-  orderTitle = (ad, cards, order, user) => {
-    if (order.order_type === 1) {
-      if (user.id === ad.owner.id) {
-        return '您向XX出售';
-      } else {
-        return 'XX向您出售';
-      }
-    } else if (user.id === ad.owner.id) {
-      return 'XX向您购买';
-    } else {
-      return '您向XX购买';
-    }
   };
 
   setStatus = (type, value) => {
@@ -155,7 +142,6 @@ export default class OrderDetail extends Component {
             setStatus={this.setStatus}
             detail={detail}
             user={user}
-            orderTitle={this.orderTitle}
           />
         ) : null}
 
@@ -164,7 +150,6 @@ export default class OrderDetail extends Component {
           <SendCard
             detail={detail}
             user={user}
-            orderTitle={this.orderTitle}
             setStatus={this.setStatus}
           />
         ) : null}
@@ -175,7 +160,6 @@ export default class OrderDetail extends Component {
             detail={detail}
             user={user}
             setStatus={this.setStatus}
-            orderTitle={this.orderTitle}
             pageStatus={pageStatus}
           />
         ) : null}
@@ -195,7 +179,6 @@ export default class OrderDetail extends Component {
             setStatus={this.setStatus}
             detail={detail}
             user={user}
-            orderTitle={this.orderTitle}
           />
         ) : null}
 
@@ -206,7 +189,6 @@ export default class OrderDetail extends Component {
             pageStatus={pageStatus}
             detail={detail}
             user={user}
-            orderTitle={this.orderTitle}
           />
         ) : null}
 
@@ -216,7 +198,6 @@ export default class OrderDetail extends Component {
             setStatus={this.setStatus}
             detail={detail}
             user={user}
-            orderTitle={this.orderTitle}
             orderId={this.state.orderId}
           />
         ) : null}
@@ -229,7 +210,6 @@ export default class OrderDetail extends Component {
             pageStatus={pageStatus}
             detail={detail}
             user={user}
-            orderTitle={this.orderTitle}
             orderId={this.state.orderId}
           />
         ) : null}

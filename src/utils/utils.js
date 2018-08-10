@@ -5,7 +5,6 @@ import AsyncValidator from 'async-validator';
 import { parse } from 'qs';
 import { size, map } from 'lodash';
 import { getLocale } from './authority';
-// import audioMsg from '../../public/audio/msg.mp3'
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -193,65 +192,6 @@ export function getSystemUrl(env) {
   }
 
   return { base_url, web_name, socket_url };
-}
-
-export function getMessageContent(msgObj) {
-  //get language
-  const lang = getLocale().replace('-', '_') ||  'zh_CN';
-  let msgText = CONFIG[`message_type_${lang}`][msgObj.msg_type];
-
-  if (msgObj.msg_type === 1) {
-    return msgObj.title;
-  } else {
-    msgText = CONFIG[`message_type_${lang}`][msgObj.msg_type];
-    if ([11, 12].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace(
-        '{auth_type}',
-        msgObj.content && msgObj.content.auth_type === 1 ? (PROMPT('message.realNameAuth') || '实名认证') : (PROMPT('message.videoAuth') || '视频认证')
-      );
-    }
-
-    if ([21, 22].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace(
-        '{payment_method}',
-        msgObj.content && msgObj.content.payment_method === 'bank' ? (PROMPT('message.bankAccount') || '银行账号') : (PROMPT('message.alipayAccount') || '支付宝账号')
-      );
-      msgText = msgText.replace(
-        '{account}',
-        msgObj.content && msgObj.content.account ? `${msgObj.content.account.substr(0, 3)}...` : ''
-      );
-    }
-
-    if ([41, 42].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('{title}', msgObj.title);
-    }
-
-    if ([51, 61, 134].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('{service_phone}', CONFIG.service_phone);
-    }
-
-    if ([52, 62].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('{service_platform}', CONFIG.service_platform);
-    }
-
-    if ([101, 102, 106, 107, 111, 114].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace('{dealer}', (msgObj.sender && msgObj.sender.nickname) || '');
-    }
-
-    if ([105, 109, 110, 111, 112, 113].indexOf(msgObj.msg_type) >= 0) {
-      // msgText = msgText.replace('{order_no}', msgObj.content && msgObj.content.order_no ? `${msgObj.content.order_no.substr(0, 3)}...` : '');
-      msgText = msgText.replace('{order_no}', (msgObj.content && msgObj.content.order_no) || '');
-    }
-
-    if ([101, 102].indexOf(msgObj.msg_type) >= 0) {
-      msgText = msgText.replace(
-        '{goods_type}',
-        msgObj.content && msgObj.content.goods_type === 1 ? 'Itunes' : (PROMPT('message.giftCard') || '礼品卡')
-      );
-    }
-
-    return msgText;
-  }
 }
 
 export function playAudio() {

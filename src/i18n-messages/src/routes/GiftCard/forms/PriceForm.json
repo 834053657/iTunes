@@ -1,5 +1,9 @@
 [
   {
+    "id": "PriceForm.input_amount_num",
+    "defaultMessage": "请输入面额"
+  },
+  {
     "id": "priceForm.amount_add_region_",
     "defaultMessage": "可添加面额 {min} - {max}"
   },

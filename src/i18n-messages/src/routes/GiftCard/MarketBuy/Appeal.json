@@ -57,7 +57,7 @@
   },
   {
     "id": "appeal.order_minute",
-    "defaultMessage": "分钟"
+    "defaultMessage": "{time}分钟"
   },
   {
     "id": "appeal.check_order_list",

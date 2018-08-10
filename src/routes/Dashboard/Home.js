@@ -3,11 +3,9 @@ import { connect } from 'dva';
 import { map } from 'lodash';
 import { FormattedMessage as FM } from 'react-intl';
 import moment from 'moment';
-// import TextTruncate from 'react-text-truncate';
 import { Row, Col, Icon, Tooltip } from 'antd';
 import {
   ChartCard,
-  yuan,
   MiniArea,
   MiniBar,
   MiniProgress,
@@ -19,14 +17,9 @@ import {
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import {formatMoney} from '../../utils/utils';
 import styles from './Home.less';
 import HomeIcon from '../../../public/home_icon.png';
-
-const Yuan = ({ children }) => (
-  <span
-    dangerouslySetInnerHTML={{ __html: yuan(children) }}
-  /> /* eslint-disable-line react/no-danger */
-);
 
 @connect(({ global, chart, loading }) => ({
   chart,
@@ -81,7 +74,6 @@ export default class Analysis extends Component {
   render() {
     const { settings } = this.state;
     const { statistics, banners } = this.props;
-
     const bannersContent = [];
     if (banners && banners.length > 0) {
       map(banners, (item, key) => {
@@ -102,24 +94,10 @@ export default class Analysis extends Component {
                 <Col span={8}>
                   <div className={styles.content_date}>
                     <Icon type="calendar" className={styles.calendar_icon} />{' '}
-                    {item &&
-                      moment(new Date(parseInt(item.created_at) * 1000)).format('YYYY-MM-DD')}
+                    {item.created_at && moment(item.created_at).format('YYYY-MM-DD')}
                   </div>
                 </Col>
                 <Col span={24}>
-                  <div className={styles.desc}>
-                    {/* <TextTruncate
-                      line={13}
-                      truncateText="…"
-                      text={item.content}
-                      className=""
-                      textTruncateChild={
-                        <a href={item.link} target="_blank">
-                          更多
-                        </a>
-                      }
-                    /> */}
-                  </div>
                   <div className={styles.desc}>{this.getContent(item)}</div>
                 </Col>
               </Row>
@@ -149,18 +127,7 @@ export default class Analysis extends Component {
             </a>
           </Col>
         </Row>
-        {/* <button
-          onClick={() => {
-            this.props.dispatch({
-              type: 'push_system_message',
-              payload: {
-                abc: 123,
-              },
-            });
-          }}
-        >
-          测试推送消息
-        </button> */}
+
         <div className={styles.banner}>
           <Slider {...settings}>{bannersContent}</Slider>
         </div>
@@ -181,7 +148,7 @@ export default class Analysis extends Component {
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={() => <Yuan>{statistics.itunes}</Yuan>}
+              total={formatMoney(statistics.itunes)}
               contentHeight={46}
             />
           </Col>
@@ -195,7 +162,7 @@ export default class Analysis extends Component {
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={() => <Yuan>{statistics.gift_card}</Yuan>}
+              total={formatMoney(statistics.gift_card)}
               contentHeight={46}
             />
           </Col>

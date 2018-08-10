@@ -4,8 +4,8 @@ import { Link, routerRedux } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal } from 'antd';
+import MessageContent from 'components/_utils/MessageContent';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { getMessageContent } from '../../utils/utils';
 import styles from './Message.less';
 
 @connect(({ message, loading }) => ({
@@ -48,7 +48,7 @@ export default class List extends Component {
           return (
             <a onClick={() => this.readMsg(row)} className={row.status === 1 ? styles.read : ''}>
               {row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />}{' '}
-              {row.msg_type === 1 ? val : getMessageContent(row)}
+              {row.msg_type === 1 ? val : <MessageContent data={row} />}
             </a>
           );
       },
@@ -98,12 +98,6 @@ export default class List extends Component {
         routerRedux.push(`/message/info-detail/${item.content && item.content.ref_id}`)
       );
     } else if ([11, 12, 21, 22].indexOf(item.msg_type) >= 0) {
-      /* Modal.success({
-        // title: item.title,
-        title: '提示',
-        content: getMessageContent(item),
-        onOk: () => {},
-      }); */
       this.props.dispatch(routerRedux.replace(`/user-center/index`));
     } else if ([31, 32, 33, 34].indexOf(item.msg_type) >= 0) {
       this.props.dispatch(routerRedux.replace(`/wallet?activeKey=3`));
@@ -112,7 +106,7 @@ export default class List extends Component {
     } else if ([51, 52, 61, 62].indexOf(item.msg_type) >= 0) {
       Modal.success({
         title: '提示',
-        content: getMessageContent(item),
+        content: <MessageContent data={item} />,
         onOk: () => {},
       });
     } else if (item.msg_type >= 100 && item.msg_type <= 114) {

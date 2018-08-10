@@ -55,6 +55,7 @@ export default class Appeal extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if(__KG_API_ENV__ === 'dev'){return}
     const { detail: { order = {} } } = this.props;
     const { orderId: nextOrderId } = nextProps;
 
@@ -304,7 +305,7 @@ export default class Appeal extends Component {
                   <li className={styles.item}>
                     <span className={styles.title}><FM id="appeal.safe_time_" defaultMessage="保障时间：" /> </span>
                     <div className={styles.content}>
-                      {ad.guarantee_time ? ad.guarantee_time + <FM id="appeal.order_minute" defaultMessage="分钟" />  : '-'}
+                      {ad.guarantee_time ? <FM id="appeal.order_minute" defaultMessage="{time}分钟" values={{time: ad.guarantee_time}} />  : '-'}
                     </div>
                   </li>
                 </ul>
@@ -436,7 +437,8 @@ const AppealInfo = props => {
                 <br />
                 <span>
                   {d.sender &&
-                    d.sender.buyer === 1 && <span className={styles.avaIdentify}><FM id="appeal.seller_" defaultMessage="卖家" /> </span>}
+                    d.sender.buyer === 1 &&
+                    d.sender.type === 'user' && <span className={styles.avaIdentify}><FM id="appeal.seller_" defaultMessage="卖家" /> </span>}
                   {d.sender &&
                     d.sender.buyer !== 1 &&
                     d.sender.type === 'user' && <span className={styles.avaIdentify}><FM id="appeal.buyer_" defaultMessage="买家" /> </span>}

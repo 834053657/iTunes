@@ -1,5 +1,45 @@
 [
   {
+    "id": "BuyForm.account_money",
+    "defaultMessage": "面额"
+  },
+  {
+    "id": "BuyForm.account_min_num",
+    "defaultMessage": "最小数量"
+  },
+  {
+    "id": "BuyForm.account_max_num",
+    "defaultMessage": "最大数量"
+  },
+  {
+    "id": "BuyForm.choose_type",
+    "defaultMessage": "请选择类型"
+  },
+  {
+    "id": "BuyForm.min_account",
+    "defaultMessage": "最小面额"
+  },
+  {
+    "id": "BuyForm.max_account",
+    "defaultMessage": "最大面额"
+  },
+  {
+    "id": "BuyForm.choose_send_card_time",
+    "defaultMessage": "请选择发卡期限"
+  },
+  {
+    "id": "BuyForm.choose_safe_time",
+    "defaultMessage": "请选择保障时间"
+  },
+  {
+    "id": "BuyForm.deal_rules_choose",
+    "defaultMessage": "请选择交易条款"
+  },
+  {
+    "id": "BuyForm.no_limit",
+    "defaultMessage": "不填代表不限制"
+  },
+  {
     "id": "BuyForm.type_choose",
     "defaultMessage": "请选择类型"
   },

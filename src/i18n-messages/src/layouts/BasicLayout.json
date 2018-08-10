@@ -1,5 +1,13 @@
 [
   {
+    "id": "basic_layout.clearMessages",
+    "defaultMessage": "清空了消息"
+  },
+  {
+    "id": "basic_layout.prompt",
+    "defaultMessage": "提示"
+  },
+  {
     "id": "help",
     "defaultMessage": "帮助"
   },
@@ -10,6 +18,10 @@
   {
     "id": "terms",
     "defaultMessage": "条款"
+  },
+  {
+    "id": "duty",
+    "defaultMessage": "免责"
   },
   {
     "id": "copyright",

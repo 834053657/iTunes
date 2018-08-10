@@ -30,19 +30,20 @@ function identify(detail = {}, user = {}) {
   }
   if (detail.order.order_type === 1) {
     if (user.id === detail.ad.owner.id) {
-      return (PROMPT('seller'));
+      return 'seller';
     } else {
-      return (PROMPT('buyer'));
+      return 'buyer';
     }
   } else if (user.id === detail.ad.owner.id) {
-    return (PROMPT('buyer'));
+    return 'buyer';
   } else {
-    return (PROMPT('seller'));
+    return 'seller';
   }
 }
 
 function initStatue(detail, user) {
   const { order: { status, order_type } } = detail || {};
+  const whoer = identify(detail, user);
   //主动出售
   //5 发送CDK      卖家视图   打开        1
   //1 等待买家查收  买家视图   等待查收      2
@@ -54,7 +55,7 @@ function initStatue(detail, user) {
   switch (status) {
     case 1:
       if (order_type === 2) {
-        if (identify(detail, user) === (PROMPT('buyer'))) {
+        if (whoer === 'buyer') {
           pageStatus = 1;
         } else {
           // '卖家'
@@ -64,7 +65,7 @@ function initStatue(detail, user) {
       break;
     case 2:
       if (order_type === 2) {
-        if (identify(detail, user) === (PROMPT('buyer'))) {
+        if (whoer === 'buyer') {
           pageStatus = 1;
         } else {
           // '卖家'
@@ -74,13 +75,13 @@ function initStatue(detail, user) {
       break;
     case 3:
       if (order_type === 2) {
-        if (identify(detail, user) === (PROMPT('buyer'))) {
+        if (whoer === 'buyer') {
           pageStatus = 2;
         } else {
           // '卖家'
           pageStatus = 7;
         }
-      } else if (identify(detail, user) === (PROMPT('buyer'))) {
+      } else if (whoer === 'buyer') {
         pageStatus = 14;
       } else {
         // '卖家'
@@ -89,13 +90,13 @@ function initStatue(detail, user) {
       break;
     case 4:
       if (order_type === 2) {
-        if (identify(detail, user) === (PROMPT('buyer'))) {
+        if (whoer === 'buyer') {
           pageStatus = 20;
         } else {
           // '卖家'
           pageStatus = 21;
         }
-      } else if (identify(detail, user) === (PROMPT('buyer'))) {
+      } else if (whoer === 'buyer') {
         pageStatus = 22;
       } else {
         // '卖家'
@@ -104,13 +105,13 @@ function initStatue(detail, user) {
       break;
     case 5:
       if (order_type === 2) {
-        if (identify(detail, user) === (PROMPT('buyer'))) {
+        if (whoer === 'buyer') {
           pageStatus = 3;
         } else {
           // '卖家'
           pageStatus = 8;
         }
-      } else if (identify(detail, user) === (PROMPT('buyer'))) {
+      } else if (whoer === 'buyer') {
         pageStatus = 17;
       } else {
         // '卖家'
@@ -119,13 +120,13 @@ function initStatue(detail, user) {
       break;
     case 6:
       if (order_type === 2) {
-        if (identify(detail, user) === (PROMPT('buyer'))) {
+        if (whoer === 'buyer') {
           pageStatus = 4;
         } else {
           // '卖家'
           pageStatus = 9;
         }
-      } else if (identify(detail, user) === (PROMPT('buyer'))) {
+      } else if (whoer === 'buyer') {
         pageStatus = 15;
       } else {
         // '卖家'

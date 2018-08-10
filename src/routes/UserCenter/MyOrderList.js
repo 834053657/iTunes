@@ -20,7 +20,6 @@ import {
   Popconfirm,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { getMessageContent } from '../../utils/utils';
 import styles from './MyOrderList.less';
 
 const TabPane = Tabs.TabPane;

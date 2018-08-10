@@ -18,7 +18,6 @@ import {
   Tooltip,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { getMessageContent } from '../../utils/utils';
 import TermsModal from './TermsModal';
 import styles from './List.less';
 

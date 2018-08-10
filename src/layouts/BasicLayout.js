@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Layout, Icon, message, Modal, LocaleProvider } from 'antd';
-import { IntlProvider, FormattedMessage } from 'react-intl';
-import intl from 'intl';
+import { FormattedMessage } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -10,18 +9,17 @@ import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import pathToRegexp from 'path-to-regexp';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
+import MessageContent from 'components/_utils/MessageContent';
 import GlobalHeader from '../components/GlobalHeader';
 import GlobalFooter from '../components/GlobalFooter';
 import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
-import { getRoutes, getMessageContent } from '../utils/utils';
+import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.svg';
 import { getAuthority, setLocale, getLocale } from '../utils/authority';
-import cintl from '../utils/intl';
 
-const appLocale = cintl.getAppLocale();
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
 
@@ -194,7 +192,7 @@ class BasicLayout extends React.Component {
     });
   };
   handleNoticeClear = type => {
-    message.success(PROMPT('message.clearMessages') || `清空了消息`);
+    message.success(<FormattedMessage id="basic_layout.clearMessages" defaultMessage="清空了消息" />);
     this.props.dispatch({
       type: 'global/readNotices',
       payload: { all: true },
@@ -248,9 +246,8 @@ class BasicLayout extends React.Component {
           dispatch(routerRedux.push(`/ad/terms`));
         } else if ([51, 52, 61, 62].indexOf(item.msg_type) >= 0) {
           Modal.success({
-            title: PROMPT('message.prompt') || '提示',
-            content: getMessageContent(item),
-            onOk: () => {},
+            title: <FormattedMessage id="basic_layout.prompt" defaultMessage="提示" />,
+            content:  <MessageContent data={item} />,
           });
         } else if (item.msg_type >= 100 && item.msg_type <= 114) {
           //todo redict to order detail
@@ -408,7 +405,7 @@ class BasicLayout extends React.Component {
                 },
                 {
                   key: '4',
-                  title: (PROMPT('duty')||'免责'),
+                  title: <FormattedMessage id="duty" defaultMessage="免责" />,
                   href: '/#/information/Duty',
                   blankTarget: true,
                 }
@@ -424,17 +421,12 @@ class BasicLayout extends React.Component {
         </Layout>
       </Layout>
     );
-console.log(appLocale)
     return (
-      <LocaleProvider locale={appLocale.antd}>
-        <IntlProvider locale={appLocale.locale} messages={appLocale.messages}>
-          <DocumentTitle title={this.getPageTitle()}>
-            <ContainerQuery query={query}>
-              {params => <div className={classNames(params)}>{layout}</div>}
-            </ContainerQuery>
-          </DocumentTitle>
-        </IntlProvider>
-      </LocaleProvider>
+      <DocumentTitle title={this.getPageTitle()}>
+        <ContainerQuery query={query}>
+          {params => <div className={classNames(params)}>{layout}</div>}
+        </ContainerQuery>
+      </DocumentTitle>
     );
   }
 }

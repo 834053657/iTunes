@@ -2,17 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Checkbox, Alert, Icon } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
-import { stringify } from 'qs';
+import { FormattedMessage as FM, defineMessages } from 'react-intl';
 import Login from 'components/Login';
+import {injectIntl } from 'components/_utils/decorator';
 import G2Validation from 'components/G2Validation';
 import { getCaptcha } from '../../services/api';
 import styles from './Login.less';
 
-
 const { Tab, UserName, Password, Mobile, Captcha, ImgCaptcha, Submit } = Login;
 
+const msg = defineMessages({
+  account: {
+    id: 'UserLogin.login_emailOrUser',
+    defaultMessage: '用户名或邮箱',
+  },
+});
+
+@injectIntl()
 @connect(({ login, loading }) => ({
   login,
   submitting: loading.effects['login/login'],
@@ -89,7 +95,7 @@ export default class LoginPage extends Component {
   };
 
   render() {
-    const { login, submitting } = this.props;
+    const { login, submitting, intl } = this.props;
     const { image } = this.state;
 
     return (
@@ -99,7 +105,8 @@ export default class LoginPage extends Component {
         <Login onSubmit={this.handleSubmit}>
           {login.error && this.renderMessage(login.error)}
           {/*邮箱*/}
-          <UserName name="account" placeholder={(PROMPT('UserLogin.login_emailOrUser')||'用户名或邮箱')} />
+          {/*<UserName name="account" placeholder={(PROMPT('UserLogin.login_emailOrUser')||'用户名或邮箱')} />*/}
+          <UserName name="account" placeholder={intl.formatMessage(msg.account)} />
           {/*密码*/}
           <Password name="password" placeholder={(PROMPT('UserLogin.login_passWord')||'密码')} />
           <ImgCaptcha

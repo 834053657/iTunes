@@ -1,12 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Button } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { FormattedMessage as FM, defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import InputNumber from 'components/InputNumber';
 import styles from './PriceForm.less';
 
 const FormItem = Form.Item;
 
+const msg = defineMessages({
+  account: {
+    id: 'PriceForm.input_amount_num',
+    defaultMessage: '请输入面额',
+  },
+});
+
+@injectIntl()
 @Form.create()
 export default class PriceForm extends Component {
   state = {};
@@ -37,7 +45,7 @@ export default class PriceForm extends Component {
   // };
 
   render() {
-    const { form: { getFieldDecorator, resetForm, getFieldsError }, min, max } = this.props;
+    const { intl, form: { getFieldDecorator, resetForm, getFieldsError }, min, max } = this.props;
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -72,7 +80,7 @@ export default class PriceForm extends Component {
               //   validator: this.checkCount,
               // },
             ],
-          })(<InputNumber precision={0} style={{ width: 200 }} placeholder={(PROMPT('priceForm.input_amount_num')||'请输入面额')} />)}
+          })(<InputNumber precision={0} style={{ width: 200 }} placeholder={intl.formatMessage(msg.input_amount_num)} />)}
         </FormItem>
         <FormItem className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>

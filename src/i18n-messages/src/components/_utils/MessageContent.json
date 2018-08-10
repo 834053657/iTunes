@@ -1,0 +1,22 @@
+[
+  {
+    "id": "message.realNameAuth",
+    "defaultMessage": "实名认证"
+  },
+  {
+    "id": "message.videoAuth",
+    "defaultMessage": "视频认证"
+  },
+  {
+    "id": "message.bankAccount",
+    "defaultMessage": "银行账号"
+  },
+  {
+    "id": "message.alipayAccount",
+    "defaultMessage": "支付宝账号"
+  },
+  {
+    "id": "message.giftCard",
+    "defaultMessage": "礼品卡"
+  }
+]

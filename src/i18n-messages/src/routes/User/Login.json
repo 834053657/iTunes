@@ -1,5 +1,9 @@
 [
   {
+    "id": "UserLogin.login_emailOrUser",
+    "defaultMessage": "用户名或邮箱"
+  },
+  {
     "id": "UserLogin.login_",
     "defaultMessage": "登录"
   },

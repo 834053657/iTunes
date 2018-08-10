@@ -4,7 +4,7 @@ import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import moment from 'moment';
 import styles from './NoticeList.less';
-import { getMessageContent } from '../../utils/utils';
+import MessageContent from '../_utils/MessageContent';
 
 export default function CustomNoticeList({
   data = [],
@@ -52,13 +52,13 @@ export default function CustomNoticeList({
                       {(item.msg_type === 104 || item.msg_type === 108) && item.count > 1 ? (
                         <span>
                           <Badge count={item.count} offset={[5, 20]}>
-                            <Icon type="bell" /> {getMessageContent(item)}
+                            <Icon type="bell" /> <MessageContent data={item} />
                           </Badge>
                         </span>
                       ) : (
                         <span>
                           {item.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />}{' '}
-                          {getMessageContent(item)}
+                          <MessageContent data={item} />
                         </span>
                       )}
                     </div>

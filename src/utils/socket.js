@@ -1,14 +1,16 @@
+import React from 'react';
 import { message, Modal } from 'antd';
 import { routerRedux } from 'dva/router';
 import { Server, SocketIO } from 'mock-socket';
 import createSocket from 'dva-socket.io';
+import MessageContent from 'components/_utils/MessageContent';
 import {
   push_system_message,
   enter_chat_room,
   leave_chat_room,
   receive_message,
 } from '../services/socket';
-import { playAudio, getMessageContent } from './utils';
+import { playAudio } from './utils';
 
 export function dvaSocket(url, option) {
   // 如需调试线上socket 请吧isDev 设置成false
@@ -72,10 +74,10 @@ export function dvaSocket(url, option) {
             //封号
             Modal.info({
               title: '提示',
-              content: getMessageContent(msg),
+              content: <MessageContent data={msg} />,
             });
             // 封号后不需要自动跳转到登录页 用户访问接口 token失效会自动跳转到登录页 test1 环境token失效不会跳转 test2可以正常测试
-            // message.error(getMessageContent(msg));
+            // message.error(<MessageContent data={msg} />);
             // dispatch({
             //   type: 'login/changeLoginStatus',
             //   payload: {},
