@@ -1,5 +1,5 @@
 import React, {PureComponent, Component, Fragment} from 'react';
-import {Form, Button, Row, Col, Icon, Radio, Popconfirm} from 'antd';
+import {Form, Button, Row, Col, Icon, Radio, Popconfirm, Popover} from 'antd';
 import {FormattedMessage as FM} from 'react-intl';
 // import AsyncValidator from 'async-validator'
 import {map, filter, omit, forEach, size} from 'lodash';
@@ -41,32 +41,32 @@ export default class ReduxForm extends PureComponent {
   descriptor = {
     card_type: {
       required: true,
-      message: <FM id='BuyForm.type_choose' defaultMessage='请选择类型' />,
+      message: <FM id='BuyForm.type_choose' defaultMessage='请选择类型'/>,
     },
     unit_price: {
       required: true,
       type: 'number',
-      message: <FM id='BuyForm.input_number' defaultMessage='请输入单价' />,
+      message: <FM id='BuyForm.input_number' defaultMessage='请输入单价'/>,
     },
     multiple: [
       {
         required: true,
         type: 'number',
-        message: <FM id='BuyForm.input_multiple' defaultMessage='请输入倍数' />,
+        message: <FM id='BuyForm.input_multiple' defaultMessage='请输入倍数'/>,
       },
       {
         pattern: /^[1-9]\d*$/,
-        message: <FM id='BuyForm.integer_input' defaultMessage='请输入正整数' />,
+        message: <FM id='BuyForm.integer_input' defaultMessage='请输入正整数'/>,
       },
     ],
     condition_type: {
       required: true,
-      message: <FM id='BuyForm.choose_type_' defaultMessage='请选择条件类型' />,
+      message: <FM id='BuyForm.choose_type_' defaultMessage='请选择条件类型'/>,
     },
     condition1: {
       type: 'array',
       required: true,
-      message: {_error: <FM id='BuyForm.error_add_assign' defaultMessage='请添加指定面额' />},
+      message: {_error: <FM id='BuyForm.error_add_assign' defaultMessage='请添加指定面额'/>},
       defaultField: {
         type: 'object',
         fields: {
@@ -74,18 +74,18 @@ export default class ReduxForm extends PureComponent {
             {
               required: true,
               type: 'number',
-              message: <FM id='BuyForm.input_account_money' defaultMessage='请输入面额' />,
+              message: <FM id='BuyForm.input_account_money' defaultMessage='请输入面额'/>,
             },
           ],
           min_count: [{
             required: true,
             type: 'number',
-            message: <FM id='BuyForm.input_min_num' defaultMessage='请输入最小数量' />
+            message: <FM id='BuyForm.input_min_num' defaultMessage='请输入最小数量'/>
           }],
           max_count: {
             required: true,
             type: 'number',
-            message: <FM id='BuyForm.input_max_num' defaultMessage='请输入最大数量' />
+            message: <FM id='BuyForm.input_max_num' defaultMessage='请输入最大数量'/>
           },
         },
       },
@@ -93,43 +93,43 @@ export default class ReduxForm extends PureComponent {
     condition2: {
       type: 'object',
       required: true,
-      message: {_error: <FM id='BuyForm.condition2_input_' defaultMessage='请填写' />},
+      message: {_error: <FM id='BuyForm.condition2_input_' defaultMessage='请填写'/>},
       fields: {
         min_money: [
           {
             required: true,
             type: 'number',
-            message: <FM id='BuyForm.input_min_account' defaultMessage='请输入最小面额' />,
+            message: <FM id='BuyForm.input_min_account' defaultMessage='请输入最小面额'/>,
           },
           {
             pattern: /^[1-9]\d*$/,
-            message: <FM id='BuyForm.input_' defaultMessage='请输入正整数' />,
+            message: <FM id='BuyForm.input_' defaultMessage='请输入正整数'/>,
           },
         ],
         max_money: [
           {
             required: true,
             type: 'number',
-            message: <FM id='BuyForm.input_max_amount' defaultMessage='请输入最大面额' />,
+            message: <FM id='BuyForm.input_max_amount' defaultMessage='请输入最大面额'/>,
           },
           {
             pattern: /^[1-9]\d*$/,
-            message: <FM id='BuyForm.condition2_input_integer' defaultMessage='请输入正整数' />,
+            message: <FM id='BuyForm.condition2_input_integer' defaultMessage='请输入正整数'/>,
           },
         ],
       },
     },
     deadline: {
       required: true,
-      message: <FM id='BuyForm.deadline_time_choose' defaultMessage='请选择发卡期限' />,
+      message: <FM id='BuyForm.deadline_time_choose' defaultMessage='请选择发卡期限'/>,
     },
     guarantee_time: {
       required: true,
-      message: <FM id='BuyForm.guarantee_time' defaultMessage='请选择保障时间' />,
+      message: <FM id='BuyForm.guarantee_time' defaultMessage='请选择保障时间'/>,
     },
     password_type: {
       required: true,
-      message: <FM id='BuyForm.password_type' defaultMessage='请输入选择密保卡类型' />,
+      message: <FM id='BuyForm.password_type' defaultMessage='请输入选择密保卡类型'/>,
     },
   };
 
@@ -163,7 +163,7 @@ export default class ReduxForm extends PureComponent {
       values.condition = values.condition1;
     } else {
       if (values.condition2.min_money > values.condition2.max_money) {
-        createError(checkErr, `condition2.min_money`, <FM id='BuyForm.num_lessThan_right' defaultMessage='该数值应小于右侧值' />);
+        createError(checkErr, `condition2.min_money`, <FM id='BuyForm.num_lessThan_right' defaultMessage='该数值应小于右侧值'/>);
         // createError(checkErr, `condition2.min_money`, '该数值应小于右侧值');
       }
       values.condition = values.condition2;
@@ -226,13 +226,13 @@ export default class ReduxForm extends PureComponent {
               </Col>
               {!disabled && (
                 <Popconfirm
-                  title={<FM id='BuyForm.sure_to_cancel' defaultMessage='您确认要删除吗?' />}
+                  title={<FM id='BuyForm.sure_to_cancel' defaultMessage='您确认要删除吗?'/>}
                   onConfirm={() => fields.remove(index)}
                   placement="topLeft"
-                  okText={<FM id='BuyForm.choose_ok' defaultMessage='是' />}
-                  cancelText={<FM id='BuyForm.choose_no' defaultMessage='否' />}
+                  okText={<FM id='BuyForm.choose_ok' defaultMessage='是'/>}
+                  cancelText={<FM id='BuyForm.choose_no' defaultMessage='否'/>}
                 >
-                  <Icon className={styles.deleteDenoIcon} type="minus-circle-o" />
+                  <Icon className={styles.deleteDenoIcon} type="minus-circle-o"/>
                 </Popconfirm>
               )}
             </Row>
@@ -244,7 +244,7 @@ export default class ReduxForm extends PureComponent {
           onClick={() => fields.push({money: '', min_count: '', max_count: ''})}
           disabled={disabled}
         >
-          <Icon type="plus" /> <FM id='BuyForm.add_account' defaultMessage='添加面额' />
+          <Icon type="plus"/> <FM id='BuyForm.add_account' defaultMessage='添加面额'/>
         </Button>
       </FormItem>
     );
@@ -306,7 +306,7 @@ export default class ReduxForm extends PureComponent {
     return (
       <Form onSubmit={handleSubmit(this.save)}>
         <Field
-          label={<FM id='BuyForm.card_type' defaultMessage='类型' />}
+          label={<FM id='BuyForm.card_type' defaultMessage='类型'/>}
           name="card_type"
           component={ASelect}
           {...formItemLayout}
@@ -323,7 +323,7 @@ export default class ReduxForm extends PureComponent {
           })}
         </Field>
         <Field
-          label={<FM id='BuyForm.unit_price' defaultMessage='单价' />}
+          label={<FM id='BuyForm.unit_price' defaultMessage='单价'/>}
           name="unit_price"
           parse={this.parseFloatNumber}
           component={AInputNumber}
@@ -335,7 +335,7 @@ export default class ReduxForm extends PureComponent {
           min={0}
         />
         <Field
-          label={<FM id='BuyForm.multiple_title' defaultMessage='倍数' />}
+          label={<FM id='BuyForm.multiple_title' defaultMessage='倍数'/>}
           name="multiple"
           component={AInputNumber}
           {...formItemLayout}
@@ -347,7 +347,7 @@ export default class ReduxForm extends PureComponent {
           placeholder=""
         />
         <Field
-          label={<FM id='BuyForm.condition_type' defaultMessage='条件' />}
+          label={<FM id='BuyForm.condition_type' defaultMessage='条件'/>}
           name="condition_type"
           component={ARadioGroup}
           {...formItemLayout}
@@ -355,8 +355,8 @@ export default class ReduxForm extends PureComponent {
           disabled={!editing}
           placeholder=""
         >
-          <Radio.Button value={1}><FM id='BuyForm.btn_account' defaultMessage='指定面额' /></Radio.Button>
-          <Radio.Button value={2}><FM id='BuyForm.btn_account_region' defaultMessage='面额区间' /></Radio.Button>
+          <Radio.Button value={1}><FM id='BuyForm.btn_account' defaultMessage='指定面额'/></Radio.Button>
+          <Radio.Button value={2}><FM id='BuyForm.btn_account_region' defaultMessage='面额区间'/></Radio.Button>
         </Field>
 
         {condition_type === 1 ? (
@@ -399,7 +399,7 @@ export default class ReduxForm extends PureComponent {
         )}
 
         <Field
-          label={<FM id='BuyForm.ask_title' defaultMessage='要求' />}
+          label={<FM id='BuyForm.ask_title' defaultMessage='要求'/>}
           name="password_type"
           component={ARadioGroup}
           {...formItemLayout}
@@ -414,7 +414,7 @@ export default class ReduxForm extends PureComponent {
         </Field>
 
         <Field
-          label={<FM id='BuyForm.time_send_card' defaultMessage='发卡期限' />}
+          label={<FM id='BuyForm.time_send_card' defaultMessage='发卡期限'/>}
           name="deadline"
           component={ASelect}
           {...formItemLayout}
@@ -424,23 +424,23 @@ export default class ReduxForm extends PureComponent {
         >
           {map(CONFIG.deadline, (item, index) => (
             <AOption key={item} value={item}>
-              {item}<FM id='BuyForm.minute_time' defaultMessage='分钟' />
+              {item}<FM id='BuyForm.minute_time' defaultMessage='分钟'/>
             </AOption>
           ))}
         </Field>
 
         <Field
-          label={<FM id='BuyForm.safe_time' defaultMessage='保障时间' />}
+          label={<FM id='BuyForm.safe_time' defaultMessage='保障时间'/>}
           name="guarantee_time"
           component={ASelect}
           {...formItemLayout}
-          placeholder={(PROMPT('BuyForm.choose_safe_time') || '请选择保障时间')}
           style={{width: 200}}
+          placeholder={(PROMPT('BuyForm.choose_safe_time') || '请选择保障时间')}
           disabled={!editing}
         >
           {map(CONFIG.guarantee_time, (item, index) => (
             <AOption key={item} value={item}>
-              {item}<FM id='BuyForm.safe_time_minute' defaultMessage='分钟' />
+              {item}<FM id='BuyForm.safe_time_minute' defaultMessage='分钟'/>
             </AOption>
           ))}
         </Field>
@@ -448,20 +448,20 @@ export default class ReduxForm extends PureComponent {
         <Field
           label={
             <span>
-              <FM id='BuyForm.deal_rules' defaultMessage='交易条款' />
+              <FM id='BuyForm.deal_rules' defaultMessage='交易条款'/>
               <i>
-                (<FM id='BuyForm.can_be_choose' defaultMessage='可选' />)
+                (<FM id='BuyForm.can_be_choose' defaultMessage='可选'/>)
               </i>
             </span>
           }
           name="term_id"
           component={ASelect}
-          style={{width: 200}}
+          style={{width: '200px'}}
           {...formItemLayout}
           placeholder={(PROMPT('BuyForm.deal_rules_choose') || '请选择交易条款')}
           disabled={!editing}
         >
-          <AOption value={0}><FM id='BuyForm.none_' defaultMessage='无' /></AOption>
+          <AOption value={0}><FM id='BuyForm.none_' defaultMessage='无'/></AOption>
           {map(terms, (item, index) => (
             <AOption key={item.id} value={+item.id}>
               {item.title}
@@ -470,7 +470,7 @@ export default class ReduxForm extends PureComponent {
         </Field>
 
         <Field
-          label={<FM id='BuyForm.order_num_' defaultMessage='同时处理订单数' />}
+          label={<FM id='BuyForm.order_num_' defaultMessage='同时处理订单数'/>}
           name="concurrency_order"
           component={AInputNumber}
           style={{width: 200}}
@@ -483,27 +483,27 @@ export default class ReduxForm extends PureComponent {
         />
         <Form.Item className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>
-            <FM id='BuyForm.cancel_btn' defaultMessage='返回' />
+            <FM id='BuyForm.cancel_btn' defaultMessage='返回'/>
           </Button>
           {(!editing ?
               showEdit &&
               (
-              <Button
-                key="edit"
-                type="primary"
-                className={styles.submit}
-                onClick={onEdit}
-              >
-                <FM id='BuyForm.edit_btn' defaultMessage='编辑' />
-              </Button>
-)
+                <Button
+                  key="edit"
+                  type="primary"
+                  className={styles.submit}
+                  onClick={onEdit}
+                >
+                  <FM id='BuyForm.edit_btn' defaultMessage='编辑'/>
+                </Button>
+              )
               :
               (
                 <Popconfirm
-                  title={<FM id='sellForm.sure_public' defaultMessage='确定发布吗？' />}
+                  title={<FM id='sellForm.sure_public' defaultMessage='确定发布吗？'/>}
                   onConfirm={handleSubmit(this.save)}
-                  okText={<FM id='sellForm.sure_public_yes' defaultMessage='是' />}
-                  cancelText={<FM id='sellForm.sure_public_no' defaultMessage='否' />}
+                  okText={<FM id='sellForm.sure_public_yes' defaultMessage='是'/>}
+                  cancelText={<FM id='sellForm.sure_public_no' defaultMessage='否'/>}
                 >
                   <Button
                     type="primary"
@@ -511,10 +511,10 @@ export default class ReduxForm extends PureComponent {
                     htmlType="submit"
                     loading={this.props.submitSellForm}
                   >
-                    <FM id='BuyForm.btn_keep' defaultMessage='发布' />
+                    <FM id='BuyForm.btn_keep' defaultMessage='发布'/>
                   </Button>
                 </Popconfirm>
-)
+              )
           )}
         </Form.Item>
       </Form>
