@@ -29,7 +29,7 @@ export default class Duty extends PureComponent {
     const { loading, data } = this.props;
 
     return (
-      <PageHeaderLayout className={styles.title} title="免责声明">
+      <PageHeaderLayout className={styles.title} title={PROMPT('duty')||'免责'}>
         <Content type="4" />
       </PageHeaderLayout>
     );

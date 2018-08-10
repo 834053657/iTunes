@@ -26,7 +26,7 @@ export default class Privacy extends PureComponent {
     const { loading, data } = this.props;
 
     return (
-      <PageHeaderLayout className={styles.title} title="隐私">
+      <PageHeaderLayout className={styles.title} title={PROMPT('privacy')||'隐私'}>
         <Content type="2" />
       </PageHeaderLayout>
     );

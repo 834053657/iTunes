@@ -69,7 +69,7 @@ class G2Validation extends Component {
                     message: <FM id='UserLogin.G2_inputGoogle_code' defaultMessage='请输入谷歌验证码' />,
                   },
                 ],
-              })(<Input size="large" placeholder={(PROMPT('UserLogin.G2_Google_code')||'谷歌验证码')} />)}
+              })(<Input autoFocus size="large" placeholder={(PROMPT('UserLogin.G2_Google_code')||'谷歌验证码')} />)}
             </FormItem>
           </Form>
         </div>
