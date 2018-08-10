@@ -20,7 +20,6 @@ import {
 } from 'antd';
 import styles from './FilterDemoinForm.less';
 
-import SellForm from './SellForm';
 import PicUpload from '../../../components/UploadQiNiu/index';
 import { getAuthority } from '../../../utils/authority';
 import { getSystemUrl } from '../../../utils/utils';

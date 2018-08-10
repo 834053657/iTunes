@@ -6,9 +6,6 @@ import CountDown from 'components/CountDown';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
 import {sendCDK} from '../../../../services/api';
-import SendOnlyPicture from './OnlyPic';
-import SendPicWithText from './PicWithText';
-import OnlyPassWord from '../../forms/OnlyPassWord';
 import SendCardForm from '../../forms/SendCardForm';
 
 const FormItem = Form.Item;
@@ -95,76 +92,17 @@ export default class Process extends Component {
     });
   }
 
-  // RC-form
-  // changePsw = (e, index, littleIndex) => {
-  //   this.cardsData[index].items[littleIndex].password = e.target.value;
-  //   this.props.form.setFieldsValue({
-  //     'cards[]': this.cardsData,
-  //   });
-  //   this.setState({
-  //     cards: this.cardsData,
-  //   });
-  // };
-  //
-  // changePic = (e, index, littleIndex) => {
-  //   this.cardsData[index].items[littleIndex].picture = e;
-  //   this.props.form.setFieldsValue({
-  //     'cards[]': this.cardsData,
-  //   });
-  //   this.setState({
-  //     cards: this.cardsData,
-  //   });
-  // };
-  //
-  // changePZ = (e, index) => {
-  //   this.cardsData[index].receipt = e;
-  //   this.props.form.setFieldsValue({
-  //     'cards[]': this.cardsData,
-  //   });
-  //
-  //   this.setState({
-  //     cards: this.cardsData,
-  //   });
-  // };
-  //
-  // addFileData = (info, index, length) => {
-  //   this.cardsData[index].items = info.splice(0, length);
-  //   console.log(this.cardsData);
-  //
-  //   this.props.form.setFieldsValue({
-  //     'cards[]': this.cardsData,
-  //   });
-  //   this.setState({
-  //     cards: this.cardsData,
-  //   });
-  // };
-  //
-  // handleSubmit = e => {
-  //   e.preventDefault();
-  //   this.props.form.validateFieldsAndScroll((err, values) => {
-  //     if (!err) {
-  //       this.sendCDK({
-  //         cards: this.cardsData,
-  //         order_id: this.state.detail.order.id,
-  //       });
-  //     }
-  //   });
-  // };
-
   render() {
     const {
       user,
       detail,
       submitting,
       setStatus,
-      // form: {getFieldDecorator, getFieldValue, resetForm, onFieldsChange},
     } = this.props;
     const {ad = {}, cards = {}, order = {}} = detail;
 
     const userInfo = ad.owner;
     const steps = [{title: '发送礼品卡'}, {title: '确认信息'}, {title: '完成'}];
-
-    //getFieldDecorator('cards[]');
 
     return (
       <div className={styles.sendBox}>
@@ -233,18 +171,6 @@ export default class Process extends Component {
         <div className={styles.denomination}>
           <div className={styles.bottom}>
             <Form className={styles.form} onSubmit={this.handleSubmit}>
-              {/* RC-form
-               <OnlyPassWord
-                dValue={this.state.cards}
-                changePsw={this.changePsw}
-                changePic={this.changePic}
-                psw={ad.password_type}
-                form={this.props.form}
-                changePZ={this.changePZ}
-                addFileData={this.addFileData}
-                sendCard
-              />
-              */}
               <SendCardForm
                 defaultValue={this.state.cards}
                 pswType={ad.password_type}

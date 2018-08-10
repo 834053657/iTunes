@@ -8,7 +8,7 @@ import styles from './PriceForm.less';
 const FormItem = Form.Item;
 
 const msg = defineMessages({
-  account: {
+  input_amount_num: {
     id: 'PriceForm.input_amount_num',
     defaultMessage: '请输入面额',
   },

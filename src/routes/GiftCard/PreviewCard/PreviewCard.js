@@ -44,34 +44,10 @@ export default class PreviewCard extends Component {
     }
   };
 
-  componentWillMount() {
-    console.log('componentWillMount in preview');
-  }
-
   render() {
     const { order, ad, cards, pageStatus, trader, olderPageStatus, steps } = this.state.detail;
     const { status } = order;
-    console.log(olderPageStatus);
-    console.log(pageStatus);
 
-    // let steps;
-    // if (pageStatus === 12 || pageStatus === 17) {
-    //   steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
-    // } else if (pageStatus === 13) {
-    //   //13 卖家已取消       卖家视图
-    //   steps = [{ title: '打开交易' }, { title: '您已取消' }];
-    // } else if (pageStatus === 15) {
-    //   //13 卖家已取消       买家视图
-    //   steps = [{ title: '打开交易' }, { title: '卖家已取消' }];
-    // } else if (pageStatus === 8) {
-    //   steps = [{ title: '发送礼品卡' }, { title: '确认信息' }, { title: '完成' }];
-    // } else if (pageStatus === 9) {
-    //   steps = [{ title: '发送礼品卡' }, { title: '您已取消' }];
-    // } else if (pageStatus === 3) {
-    //   steps = [{ title: '查收礼品卡' }, { title: '确认信息' }, { title: '完成' }];
-    // } else if (pageStatus === 4) {
-    //   steps = [{ title: '查收礼品卡' }, { title: '卖家已取消' }];
-    // }
     return (
       <div className={styles.stepBox}>
         <StepModel steps={steps} current={this.status(status)} />
@@ -118,7 +94,6 @@ export default class PreviewCard extends Component {
 
 function Checklist(props) {
   const { cards } = props;
-  console.log(cards);
   return (
     <div className={styles.denominationBox}>
       {cards &&

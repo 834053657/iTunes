@@ -18,8 +18,6 @@ import {
   Spin,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import OnlyPicture from './SellOnlyPicture';
-import PicWithText from './SellPicWithText';
 import styles from './SellCard.less';
 import SellForm from './forms/SellForm1';
 
