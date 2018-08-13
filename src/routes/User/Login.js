@@ -16,6 +16,14 @@ const msg = defineMessages({
     id: 'UserLogin.login_emailOrUser',
     defaultMessage: '用户名或邮箱',
   },
+  login_passWord: {
+    id: 'UserLogin.login_passWord',
+    defaultMessage: '密码',
+  },
+  login_code: {
+    id: 'UserLogin.login_code',
+    defaultMessage: '验证码',
+  }
 });
 
 @injectIntl()
@@ -108,11 +116,11 @@ export default class LoginPage extends Component {
           {/*<UserName name="account" placeholder={(PROMPT('UserLogin.login_emailOrUser')||'用户名或邮箱')} />*/}
           <UserName name="account" placeholder={intl.formatMessage(msg.account)} />
           {/*密码*/}
-          <Password name="password" placeholder={(PROMPT('UserLogin.login_passWord')||'密码')} />
+          <Password name="password" placeholder={intl.formatMessage(msg.login_passWord)} />
           <ImgCaptcha
             name="captcha"
             // 验证码
-            placeholder={(PROMPT('UserLogin.login_code'))}
+            placeholder={intl.formatMessage(msg.login_code)}
             image={image}
             loadCaptcha={this.loadCaptcha}
           />

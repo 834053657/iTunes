@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { FormattedMessage as FM, defineMessages } from 'react-intl';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
+import {injectIntl } from 'components/_utils/decorator';
+
 import styles from './ChangePassword.less';
 
 const FormItem = Form.Item;
@@ -21,7 +22,18 @@ const passwordProgressMap = {
   pass: 'normal',
   poor: 'exception',
 };
+const msg = defineMessages({
+  change_pwd_wordLimit_title: {
+    id: 'changePassWord.change_pwd_wordLimit_title',
+    defaultMessage: '至少6位密码，区分大小写',
+  },
+  require_passWord_again: {
+    id: 'changePassWord.require_passWord_again',
+    defaultMessage: '请确认密码',
+  },
+});
 
+@injectIntl()
 @connect(({ user, loading }) => ({
   result: user.changePassword.result,
   submitting: loading.effects['register/submit'],
@@ -118,7 +130,7 @@ export default class Register extends Component {
   };
 
   render() {
-    const { form, submitting } = this.props;
+    const { form, submitting, intl } = this.props;
     const { getFieldDecorator } = form;
     return (
       <div className={styles.main}>
@@ -154,7 +166,7 @@ export default class Register extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder={PROMPT('changePassWord.change_pwd_wordLimit_title')}
+                  placeholder={intl.formatMessage(msg.change_pwd_wordLimit_title)}
                 />
               )}
             </Popover>
@@ -170,7 +182,7 @@ export default class Register extends Component {
                   validator: this.checkConfirm,
                 },
               ],
-            })(<Input size="large" type="password" placeholder={PROMPT('changePassWord.require_passWord_again')} />)}
+            })(<Input size="large" type="password" placeholder={intl.formatMessage(msg.require_passWord_again)} />)}
             {/*确认密码*/}
           </FormItem>
 

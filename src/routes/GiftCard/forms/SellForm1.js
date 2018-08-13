@@ -16,7 +16,7 @@ import {
   Spin,
   Upload,
 } from 'antd';
-import {FormattedMessage as FM} from 'react-intl';
+import {FormattedMessage as FM, defineMessages} from 'react-intl';
 // import AsyncValidator from 'async-validator'
 import {map, filter, omit, forEach, size, get} from 'lodash';
 import {connect} from 'dva';
@@ -29,6 +29,7 @@ import {
   SubmissionError,
   FormSection,
 } from 'redux-form';
+import {injectIntl } from 'components/_utils/decorator';
 import {validate, parseNumber, createError, formatMoney, parseFloatNumber} from '../../../utils/utils';
 import DescriptionList from '../../../components/DescriptionList';
 import {
@@ -46,8 +47,45 @@ import {getAuthority} from '../../../utils/authority';
 const FormItem = Form.Item;
 const {Description} = DescriptionList;
 
+const msg = defineMessages({
+  amount_num_holder:{
+    id:'sellForm.amount_num_holder',
+    defaultMessage: '面额',
+  },
+  min_num_holder:{
+    id:'sellForm.min_num_holder',
+    defaultMessage: '最小数量',
+  },
+  max_num_holder:{
+    id:'sellForm.max_num_holder',
+    defaultMessage: '最大数量',
+  },
+  modal_amount_input:{
+    id:'sellForm.modal_amount_input',
+    defaultMessage: '请输入面额',
+  },
+  choose_type_card:{
+    id:'sellForm.choose_type_card',
+    defaultMessage: '请选择类型',
+  },
+  guarantee_time_holder:{
+    id:'sellForm.guarantee_time_holder',
+    defaultMessage: '请选择保障时间',
+  },
+  choose_deal_rule:{
+    id:'sellForm.choose_deal_rule',
+    defaultMessage: '请选择交易条款',
+  },
+  no_limit:{
+    id:'sellForm.no_limit',
+    defaultMessage: '不填代表不限制',
+  },
+});
+
+
 // 根据校验规则构造一个 validator
 // const validator = new AsyncValidator(descriptor)
+@injectIntl()
 @connect(state => {
   return {
     password_type: formValueSelector('sellForm')(state, 'password_type'),
@@ -58,7 +96,7 @@ const {Description} = DescriptionList;
 @reduxForm({
   form: 'sellForm', // a unique name for this form
 })
-export default class ReduxForm extends Component {
+export default class SellForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -157,7 +195,8 @@ export default class ReduxForm extends Component {
     this.props.onSubmit(params);
   };
 
-  renderItem = arg => {
+  /*renderItem = arg => {
+    const { intl } = this.props;
     const {fields, formitemlayout, meta, _error, disabled} = arg;
     return (
       <FormItem
@@ -173,7 +212,7 @@ export default class ReduxForm extends Component {
                   name={`${member}.money`}
                   component={AInputNumber}
                   parse={parseNumber}
-                  placeholder={(PROMPT('sellForm.amount_num_holder') || '面额')}
+                  placeholder={intl.formatMessage(msg.amount_num_holder)}
                   precision={0}
                   min={0}
                   style={{width: '100%'}}
@@ -187,7 +226,7 @@ export default class ReduxForm extends Component {
                   parse={parseNumber}
                   precision={0}
                   min={0}
-                  placeholder={(PROMPT('sellForm.min_num_holder') || '最小数量')}
+                  placeholder={intl.formatMessage(msg.min_num_holder)}
                   style={{width: '100%'}}
                   disabled={disabled}
                 />
@@ -195,7 +234,7 @@ export default class ReduxForm extends Component {
               <Col sm={4} offset={1}>
                 <Field
                   name={`${member}.max_count`}
-                  placeholder={(PROMPT('sellForm.max_num_holder') || '最大数量')}
+                  placeholder={intl.formatMessage(msg.max_num_holder)}
                   parse={parseNumber}
                   precision={0}
                   min={0}
@@ -214,7 +253,7 @@ export default class ReduxForm extends Component {
         })}
       </FormItem>
     );
-  };
+  };*/
 
   handleCancel = () => {
     this.props.reset();
@@ -273,6 +312,7 @@ export default class ReduxForm extends Component {
 
   renderModal = fields => {
     const {denoVaule, addDenoVisible} = this.state;
+    const { intl } = this.porps;
     return (
       <Modal
         title={<FM id='sellForm.add_amount_title' defaultMessage='添加面额' />}
@@ -295,7 +335,7 @@ export default class ReduxForm extends Component {
           <Col style={{width: 150, float: 'left'}}>
             <Input
               style={{width: 150}}
-              placeholder={(PROMPT('sellForm.modal_amount_input') || '请输入面额')}
+              placeholder={intl.formatMessage(msg.modal_amount_input)}
               onChange={e => {
                 this.setState({denoVaule: +e.target.value});
               }}
@@ -562,7 +602,8 @@ export default class ReduxForm extends Component {
       onEdit,
       cardList,
       unit_price,
-      initialValues
+      initialValues,
+      intl
     } = this.props;
 
     const formItemLayout = {
@@ -585,7 +626,7 @@ export default class ReduxForm extends Component {
             component={ASelect}
             {...formItemLayout}
             style={{width: 200}}
-            placeholder={(PROMPT('sellForm.choose_type_card') || '请选择类型')}
+            placeholder={intl.formatMessage(msg.choose_type_card)}
             disabled={!editing || action === 'edit'}
           >
             {map(cardList, card => {
@@ -617,7 +658,7 @@ export default class ReduxForm extends Component {
             name="guarantee_time"
             component={ASelect}
             {...formItemLayout}
-            placeholder={(PROMPT('sellForm.guarantee_time_holder') || '请选择保障时间')}
+            placeholder={intl.formatMessage(msg.guarantee_time_holder)}
             style={{width: 200}}
             disabled={!editing}
           >
@@ -644,7 +685,7 @@ export default class ReduxForm extends Component {
             component={ASelect}
             style={{width: 200}}
             {...formItemLayout}
-            placeholder={(PROMPT('sellForm.choose_deal_rule_') || '请选择交易条款')}
+            placeholder={intl.formatMessage(msg.choose_deal_rule)}
             disabled={!editing}
           >
             <AOption value={0}>无</AOption>
@@ -664,7 +705,7 @@ export default class ReduxForm extends Component {
             min={0}
             precision={0}
             {...formItemLayout}
-            placeholder={(PROMPT('sellForm.no_limit') || '不填代表不限制')}
+            placeholder={intl.formatMessage(msg.no_limit)}
             disabled={!editing}
           />
 
@@ -696,7 +737,7 @@ export default class ReduxForm extends Component {
               </Button>
             )
           }
-          {this.renderModal()}
+          {this.renderModal.bind(this)}
 
           <FieldArray
             name="cards"

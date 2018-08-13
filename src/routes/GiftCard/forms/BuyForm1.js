@@ -13,6 +13,7 @@ import {
   SubmissionError,
   FormSection,
 } from 'redux-form';
+import {injectIntl } from 'components/_utils/decorator';
 import {validate, parseNumber, createError} from '../../../utils/utils';
 import {
   AInput,
@@ -21,7 +22,6 @@ import {
   AInputNumber,
   ARadioGroup,
 } from '../../../components/_utils/createField';
-import { injectIntl } from '../../../components/_utils/decorator';
 import styles from './SellForm.less';
 
 const FormItem = Form.Item;
@@ -82,7 +82,7 @@ const msg = defineMessages({
 @reduxForm({
   form: 'loginForm', // a unique name for this form
 })
-export default class ReduxForm extends PureComponent {
+export default class BuyForm extends PureComponent {
   descriptor = {
     card_type: {
       required: true,
@@ -547,10 +547,10 @@ export default class ReduxForm extends PureComponent {
               :
               (
                 <Popconfirm
-                  title={<FM id='sellForm.sure_public' defaultMessage='确定发布吗？' />}
+                  title={<FM id='BuyForm.sure_public' defaultMessage='确定发布吗？' />}
                   onConfirm={handleSubmit(this.save)}
-                  okText={<FM id='sellForm.sure_public_yes' defaultMessage='是' />}
-                  cancelText={<FM id='sellForm.sure_public_no' defaultMessage='否' />}
+                  okText={<FM id='BuyForm.sure_public_yes' defaultMessage='是' />}
+                  cancelText={<FM id='BuyForm.sure_public_no' defaultMessage='否' />}
                 >
                   <Button
                     type="primary"
