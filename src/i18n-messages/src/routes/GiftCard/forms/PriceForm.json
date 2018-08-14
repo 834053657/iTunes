@@ -4,23 +4,15 @@
     "defaultMessage": "请输入面额"
   },
   {
-    "id": "priceForm.amount_add_region_",
+    "id": "PriceForm.extra",
     "defaultMessage": "可添加面额 {min} - {max}"
   },
   {
-    "id": "priceForm.amount_add_input",
-    "defaultMessage": "请输入面额！"
-  },
-  {
-    "id": "priceForm.amount_add_msg_region",
-    "defaultMessage": "可添加面额为 {min} - {max}"
-  },
-  {
-    "id": "priceForm.amount_add_input_cancel",
+    "id": "PriceForm.amount_add_input_cancel",
     "defaultMessage": "取消"
   },
   {
-    "id": "priceForm.amount_add_input_submit",
+    "id": "PriceForm.amount_add_input_submit",
     "defaultMessage": "添加"
   }
 ]

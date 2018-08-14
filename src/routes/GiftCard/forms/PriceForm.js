@@ -12,6 +12,10 @@ const msg = defineMessages({
     id: 'PriceForm.input_amount_num',
     defaultMessage: '请输入面额',
   },
+  extra: {
+    id: 'PriceForm.extra',
+    defaultMessage: '可添加面额 {min} - {max}',
+  },
 });
 
 @injectIntl()
@@ -52,8 +56,7 @@ export default class PriceForm extends Component {
         <FormItem
           extra={
             <FM
-              id="priceForm.amount_add_region_"
-              defaultMessage="可添加面额 {min} - {max}"
+              {...msg.extra}
               values={{ min, max }}
             />
           }
@@ -62,7 +65,7 @@ export default class PriceForm extends Component {
             rules: [
               {
                 required: true,
-                message: <FM id="priceForm.amount_add_input" defaultMessage="请输入面额！" />,
+                message: <FM {...msg.input_amount_num} />,
               },
               {
                 type: 'number',
@@ -70,8 +73,7 @@ export default class PriceForm extends Component {
                 max,
                 message: (
                   <FM
-                    id="priceForm.amount_add_msg_region"
-                    defaultMessage="可添加面额为 {min} - {max}"
+                    {...msg.extra}
                     values={{ min, max }}
                   />
                 ),
@@ -84,7 +86,7 @@ export default class PriceForm extends Component {
         </FormItem>
         <FormItem className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>
-            <FM id="priceForm.amount_add_input_cancel" defaultMessage="取消" />
+            <FM id="PriceForm.amount_add_input_cancel" defaultMessage="取消" />
           </Button>
           <Button
             // loading={submitting}
@@ -92,7 +94,7 @@ export default class PriceForm extends Component {
             type="primary"
             htmlType="submit"
           >
-            <FM id="priceForm.amount_add_input_submit" defaultMessage="添加" />
+            <FM id="PriceForm.amount_add_input_submit" defaultMessage="添加" />
           </Button>
         </FormItem>
       </Form>

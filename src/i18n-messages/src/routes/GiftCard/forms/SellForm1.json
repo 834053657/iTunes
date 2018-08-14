@@ -1,5 +1,37 @@
 [
   {
+    "id": "sellForm.amount_num_holder",
+    "defaultMessage": "面额"
+  },
+  {
+    "id": "sellForm.min_num_holder",
+    "defaultMessage": "最小数量"
+  },
+  {
+    "id": "sellForm.max_num_holder",
+    "defaultMessage": "最大数量"
+  },
+  {
+    "id": "sellForm.modal_amount_input",
+    "defaultMessage": "请输入面额"
+  },
+  {
+    "id": "sellForm.choose_type_card",
+    "defaultMessage": "请选择类型"
+  },
+  {
+    "id": "sellForm.guarantee_time_holder",
+    "defaultMessage": "请选择保障时间"
+  },
+  {
+    "id": "sellForm.choose_deal_rule",
+    "defaultMessage": "请选择交易条款"
+  },
+  {
+    "id": "sellForm.no_limit",
+    "defaultMessage": "不填代表不限制"
+  },
+  {
     "id": "sellForm.type_choose",
     "defaultMessage": "请选择类型"
   },
@@ -46,10 +78,6 @@
   {
     "id": "sellForm.evidence_img",
     "defaultMessage": "凭证"
-  },
-  {
-    "id": "sellForm.btn_cancel",
-    "defaultMessage": "删除"
   },
   {
     "id": "sellForm.add_amount_title",

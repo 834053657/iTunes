@@ -43,7 +43,7 @@ export default class PayMethodForm extends Component {
         wechat: {
           'payment_detail.name': {
             lablel: <FM id="payMethodForm.payer_name" defaultMessage="姓名" />,
-            component: <Input size="large" maxLength={20} placeholder={(PROMPT('payMethodForm.payer_name'))} />,
+            component: <Input size="large" maxLength={20} />,
             options: {
               initialValue: payment_detail.name,
               rules: [
@@ -56,7 +56,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.account': {
             lablel: <FM id="payMethodForm.payer_account" defaultMessage="账号" />,
-            component: <Input size="large" maxLength={30} placeholder={(PROMPT('payMethodForm.payer_account'))} />,
+            component: <Input size="large" maxLength={30} />,
             options: {
               initialValue: payment_detail.account,
               rules: [
@@ -75,7 +75,7 @@ export default class PayMethodForm extends Component {
         alipay: {
           'payment_detail.name': {
             lablel: <FM id="payMethodForm.user_name" defaultMessage="姓名" />,
-            component: <Input size="large" maxLength={20} placeholder={(PROMPT('payMethodModal.payer_name'))} />,
+            component: <Input size="large" maxLength={20} />,
             options: {
               initialValue: payment_detail.name,
               rules: [
@@ -88,7 +88,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.account': {
             lablel: <FM id="payMethodModal.user_account" defaultMessage="账号" />,
-            component: <Input size="large" maxLength={30} placeholder={(PROMPT('payMethodModal.user_account'))} />,
+            component: <Input size="large" maxLength={30} />,
             options: {
               initialValue: payment_detail.account,
               rules: [
@@ -107,7 +107,7 @@ export default class PayMethodForm extends Component {
         bank: {
           'payment_detail.name': {
             lablel: <FM id="payMethodModal.bank_name" defaultMessage="姓名" />,
-            component: <Input size="large" maxLength={20} placeholder={(PROMPT('payMethodModal.payer_name'))} />,
+            component: <Input size="large" maxLength={20} />,
             options: {
               initialValue: payment_detail.name,
               rules: [
@@ -120,7 +120,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.bank_name': {
             lablel: <FM id="payMethodModal.bank_open" defaultMessage="开户行" />,
-            component: <Input size="large" maxLength={20} placeholder={(PROMPT('payMethodModal.bank_open'))} />,
+            component: <Input size="large" maxLength={20}  />,
             options: {
               initialValue: payment_detail.bank_name,
               rules: [
@@ -133,7 +133,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.bank_account': {
             lablel: <FM id="payMethodModal.bank_card_num" defaultMessage="银行卡号" />,
-            component: <Input size="large" maxLength={30} placeholder={(PROMPT('payMethodModal.bank_card_num'))} />,
+            component: <Input size="large" maxLength={30} />,
             options: {
               initialValue: payment_detail.bank_account,
               rules: [
@@ -207,7 +207,7 @@ export default class PayMethodForm extends Component {
               initialValue: initialValues.payment_method || 'alipay',
               rules: [{ required: true, message: <FM id="payMethodModal.pay_way_choose" defaultMessage="请选择支付方式" /> }],
             })(
-              <Select size="large" placeholder={(PROMPT('payMethodModal.pay_way_choose'))}>
+              <Select size="large">
                 {map(PAY_MENTS, (text, key) => (
                   <Option key={key} value={key}>
                     {text}

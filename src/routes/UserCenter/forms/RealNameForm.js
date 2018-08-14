@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Upload, Icon, message } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { FormattedMessage as FM, defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import UploadQiNiu from 'components/UploadQiNiu';
 import styles from './PasswordForm.less';
 
 const FormItem = Form.Item;
 const Dragger = Upload.Dragger;
 
+
+@injectIntl()
 @connect(({ user, loading }) => ({
   currentUser: user.currentUser,
   submitting: loading.effects['register/submit'],
@@ -47,7 +49,7 @@ export default class RealNameForm extends Component {
   };
 
   render() {
-    const { form, submitting, initialValues = {} } = this.props;
+    const { form, submitting, initialValues = {}, intl } = this.props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -61,27 +63,27 @@ export default class RealNameForm extends Component {
     return (
       <div className={styles.main}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label={<FM id='realName.realName_user_leave' defaultMessage='真实姓名' />}>
+          <FormItem {...formItemLayout} label={<FM id='RealNameForm.realName_user_leave' defaultMessage='真实姓名' />}>
             {getFieldDecorator('name', {
               initialValue: initialValues.name,
               rules: [
                 {
                   required: true,
-                  message: <FM id='UserLogin.realName_user_input_leave' defaultMessage='请输入真实姓名！' />,
+                  message: <FM id='RealNameForm.realName_user_input_leave' defaultMessage='请输入真实姓名！' />,
                 },
               ],
-            })(<Input size="large" maxLength={20} placeholder={(PROMPT('UserLogin.realName_user_leave')||'真实姓名')} />)}
+            })(<Input size="large" maxLength={20} placeholder={intl.formatMessage({id:'RealNameForm.realName_user_input_leave'})} />)}
           </FormItem>
-          <FormItem {...formItemLayout} label={<FM id='realName.realName_leave_user_person_card' defaultMessage='身份证号' />}>
+          <FormItem {...formItemLayout} label={<FM id='RealNameForm.realName_leave_user_person_card' defaultMessage='身份证号' />}>
             {getFieldDecorator('cardno', {
               initialValue: initialValues.cardno,
               rules: [
                 {
                   required: true,
-                  message: <FM id='realName.realName_leave_user_person_input' defaultMessage='请输入身份证号！' />,
+                  message: <FM id='RealNameForm.realName_leave_user_person_input' defaultMessage='请输入身份证号！' />,
                 },
               ],
-            })(<Input size="large" maxLength={30} placeholder={(PROMPT('UserLogin.realName_leave_num_person_input')||'身份证号')} />)}
+            })(<Input size="large" maxLength={30} placeholder={intl.formatMessage({id:'RealNameForm.realName_leave_user_person_input'})} />)}
           </FormItem>
           <h3><FM id='realName.realName_leave_user_card_upload' defaultMessage='上传证件' /></h3>
 
@@ -91,7 +93,7 @@ export default class RealNameForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: <FM id='realName.realName_leave_user_card_front' defaultMessage='请上传身份证正面！' />,
+                  message: <FM id='RealNameForm.realName_leave_user_card_front' defaultMessage='请上传身份证正面！' />,
                 },
               ],
             })(<UploadQiNiu />)}
@@ -102,7 +104,7 @@ export default class RealNameForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: <FM id='realName.realName_leave_user_card_reverse' defaultMessage='请上传身份证反面！！' />,
+                  message: <FM id='RealNameForm.realName_leave_user_card_reverse' defaultMessage='请上传身份证反面！！' />,
                 },
               ],
             })(<UploadQiNiu />)}
