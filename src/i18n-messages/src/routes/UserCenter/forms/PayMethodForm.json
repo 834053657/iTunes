@@ -36,10 +36,6 @@
     "defaultMessage": "请输入账号！"
   },
   {
-    "id": "payMethodModal.num_amount_limit",
-    "defaultMessage": "请输入4~30位的数字"
-  },
-  {
     "id": "payMethodModal.bank_name",
     "defaultMessage": "姓名"
   },
