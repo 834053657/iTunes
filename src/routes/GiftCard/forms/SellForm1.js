@@ -589,6 +589,11 @@ export default class SellForm extends Component {
     return v
   }
 
+  previewTerms = () => {
+    const win = window.open(`#/ad/terms`, '_blank');
+    win.focus();
+  }
+
   render() {
     const {
       editing = false,
@@ -687,6 +692,7 @@ export default class SellForm extends Component {
             {...formItemLayout}
             placeholder={intl.formatMessage(msg.choose_deal_rule)}
             disabled={!editing}
+            extranode={<a onClick={this.previewTerms} style={{marginLeft: '10px'}}>查看</a>}
           >
             <AOption value={0}>无</AOption>
             {map(terms, (item, index) => (

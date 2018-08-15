@@ -19,10 +19,10 @@ const createField = Component => ({
   wrapperCol,
   colon,
   extra,
+  extranode,
   ...rest
 }) => {
   const hasError = meta.touched && meta.invalid;
-  // console.log(input, rest)
   return (
     <FormItem
       wrapperCol={wrapperCol}
@@ -36,6 +36,7 @@ const createField = Component => ({
       extra={extra}
     >
       <Component {...input} {...rest} children={children} />
+      {extranode}
     </FormItem>
   );
 };
