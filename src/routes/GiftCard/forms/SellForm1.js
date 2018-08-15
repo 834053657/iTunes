@@ -312,7 +312,7 @@ export default class SellForm extends Component {
 
   renderModal = fields => {
     const {denoVaule, addDenoVisible} = this.state;
-    const { intl } = this.porps;
+    const { intl } = this.props;
     return (
       <Modal
         title={<FM id='sellForm.add_amount_title' defaultMessage='添加面额' />}
@@ -737,7 +737,8 @@ export default class SellForm extends Component {
               </Button>
             )
           }
-          {this.renderModal.bind(this)}
+
+          {this.renderModal()}
 
           <FieldArray
             name="cards"
