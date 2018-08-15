@@ -1,5 +1,9 @@
 [
   {
+    "id": "G2Identity.mobile_code_input",
+    "defaultMessage": "验证码"
+  },
+  {
     "id": "G2Identity.personal_passWord",
     "defaultMessage": "身份密匙"
   },

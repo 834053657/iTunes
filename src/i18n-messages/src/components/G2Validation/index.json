@@ -1,5 +1,9 @@
 [
   {
+    "id": "UserLogin.G2_Google_code",
+    "defaultMessage": "谷歌验证码"
+  },
+  {
     "id": "UserLogin.G2_cancel",
     "defaultMessage": "取消"
   },

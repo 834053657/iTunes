@@ -1,5 +1,21 @@
 [
   {
+    "id": "dealDetail.num_amount_limit_sell",
+    "defaultMessage": "请输入出售数量"
+  },
+  {
+    "id": "dealDetail.buy_amount_money_stock",
+    "defaultMessage": "库存{Stock}个"
+  },
+  {
+    "id": "dealDetail.num_amount_buy_input",
+    "defaultMessage": "请输入购买数量"
+  },
+  {
+    "id": "dealDetail.num_amount_sell_input",
+    "defaultMessage": "请输入购买数量"
+  },
+  {
     "id": "dealDetail.num_multiple",
     "defaultMessage": "数量必须是{multiple}的倍数"
   },

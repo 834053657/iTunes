@@ -1,22 +1,36 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { FormattedMessage as FM,defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import { delay } from 'lodash';
 import CheckEmailForm from '../forms/EmailForm';
 import styles from './EmailModal.less';
 
 const { Step } = Steps;
-
+const msg = defineMessages({
+  email_old_verify: {
+    id: 'emailModal.email_old_verify',
+    defaultMessage: '验证旧邮箱',
+  },
+  email_new_bind: {
+    id: 'emailModal.email_new_bind',
+    defaultMessage: '绑定新邮箱',
+  },
+  email_bind_finish: {
+    id: 'emailModal.email_bind_finish',
+    defaultMessage: '完成',
+  },
+});
+@injectIntl()
 export default class EmailModal extends Component {
   static defaultProps = {
     className: '',
-    title: <FM id="emailModal.email_bind" defaultMessage="邮箱绑定" /> ,
+    // title: <FM id="emailModal.email_bind" defaultMessage="邮箱绑定" /> ,
     onCancel: () => {},
   };
   static propTypes = {
-    title: PropTypes.string,
+    // title: PropTypes.string,
     className: PropTypes.string,
     onCancel: PropTypes.func,
   };
@@ -87,7 +101,7 @@ export default class EmailModal extends Component {
     const { current } = this.state;
     let steps = [
       {
-        title: <FM id="emailModal.email_old_verify" defaultMessage="验证旧邮箱" />,
+        title: this.props.intl.formatMessage(msg.email_old_verify),
         hide: !user.email,
         component: (
           <CheckEmailForm
@@ -101,7 +115,7 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title: <FM id="emailModal.email_new_bind" defaultMessage="绑定新邮箱" />,
+        title: this.props.intl.formatMessage(msg.email_new_bind),
         component: (
           <CheckEmailForm
             key="2"
@@ -112,7 +126,7 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title: <FM id="emailModal.email_bind_finish" defaultMessage="完成" />,
+        title: this.props.intl.formatMessage(msg.email_bind_finish),
       },
     ];
 

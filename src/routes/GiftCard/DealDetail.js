@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
-import {FormattedMessage as FM} from 'react-intl';
-
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import {sumBy, map, get, findIndex, filter} from 'lodash';
 import {Badge, Button, message, Avatar, Popover, Icon, Input, Spin, Form, Popconfirm} from 'antd';
 import DescriptionList from 'components/DescriptionList';
@@ -21,7 +21,25 @@ const formItemLayout = {
     sm: {span: 18},
   },
 };
-
+const msg = defineMessages({
+  num_amount_limit_sell: {
+    id: 'dealDetail.num_amount_limit_sell',
+    defaultMessage: '请输入出售数量',
+  },
+  buy_amount_money_stock: {
+    id: 'dealDetail.buy_amount_money_stock',
+    defaultMessage: '库存{Stock}个',
+  },
+  num_amount_buy_input: {
+    id: 'dealDetail.num_amount_buy_input',
+    defaultMessage: '请输入购买数量',
+  },
+  num_amount_sell_input: {
+    id: 'dealDetail.num_amount_sell_input',
+    defaultMessage: '请输入购买数量',
+  },
+});
+@injectIntl()
 @connect(({card, loading}) => ({
   card,
   detail: card.adDetail,
@@ -219,7 +237,7 @@ export default class DealDeatil extends Component {
                     min={0}
                     precision={0}
                     style={{width: 200}}
-                    placeholder={PROMPT('dealDetail.num_amount_limit_sell')}
+                    placeholder={this.props.intl.formatMessage(msg.num_amount_limit_sell)}
                   />
                 )}
               </FormItem>
@@ -269,7 +287,7 @@ export default class DealDeatil extends Component {
                     min={0}
                     precision={0}
                     style={{width: 200}}
-                    placeholder={PROMPT('dealDetail.num_amount_sell_input')}
+                    placeholder={this.props.intl.formatMessage(msg.num_amount_sell_input)}
                   />
                 )}
               </FormItem>
@@ -409,7 +427,7 @@ export default class DealDeatil extends Component {
                       values={{d}}
                     />
                   }
-                  extra={PROMPT('dealDetail.buy_amount_money_stock', {Stock})}
+                  extra={this.props.intl.formatMessage(msg.buy_amount_money_stock ,{Stock})}
                   // extra={<FM id="dealDetail.buy_amount_money_stock" defaultMessage="库存{Stock}个"  values={{Stock}} />}
                 >
                   {getFieldDecorator(`order_detail[${index}].count`, {
@@ -434,7 +452,7 @@ export default class DealDeatil extends Component {
                       min={0}
                       precision={0}
                       style={{width: 200}}
-                      placeholder={PROMPT('dealDetail.num_amount_buy_input')}
+                      placeholder={this.props.intl.formatMessage(msg.num_amount_buy_input)}
                     />
                   )}
                 </FormItem>
@@ -512,6 +530,7 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   render() {
+    console.log(this.props)
     const {detail} = this.props;
     const {owner = {}, ad_type, term} = detail || {};
     const userInfo = owner;

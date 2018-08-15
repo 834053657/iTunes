@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Upload, Icon, message, Spin } from 'antd';
+import { FormattedMessage as FM ,defineMessages} from 'react-intl';
 import { delay, map } from 'lodash';
 import { getAuthority } from '../../utils/authority';
 import styles from './index.less';
@@ -61,7 +62,7 @@ export default class UploadQiNiu extends Component {
         <p className="ant-upload-drag-icon">
           <Icon type={this.state.uploading ? 'loading' : 'inbox'} />
         </p>
-        <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
+        <p className="ant-upload-text"><FM id="index.click_files" defaultMessage="单击或拖动文件到此区域进行上传" /></p>
       </div>
     );
 

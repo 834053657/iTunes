@@ -200,15 +200,15 @@
     "defaultMessage": "编辑"
   },
   {
-    "id": "sellForm.sure_public",
+    "id": "BuyForm.sure_public",
     "defaultMessage": "确定发布吗？"
   },
   {
-    "id": "sellForm.sure_public_yes",
+    "id": "BuyForm.sure_public_yes",
     "defaultMessage": "是"
   },
   {
-    "id": "sellForm.sure_public_no",
+    "id": "BuyForm.sure_public_no",
     "defaultMessage": "否"
   },
   {

@@ -1,5 +1,9 @@
 [
   {
+    "id": "UserLogin.indexPage_code_inp",
+    "defaultMessage": "验证码"
+  },
+  {
     "id": "UserLogin.indexPage_cancel",
     "defaultMessage": "取消"
   },

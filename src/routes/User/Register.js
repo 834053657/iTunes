@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress, message } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import ImageValidation from 'components/ImageValidation';
 import styles from './Register.less';
 import { getCaptcha } from '../../services/api';
@@ -23,7 +23,41 @@ const passwordProgressMap = {
   pass: 'normal',
   poor: 'exception',
 };
-
+const msg = defineMessages({
+  sign_word_notRight: {
+    id: 'UserLogin.sign_word_notRight',
+    defaultMessage: '两次输入的密码不匹配!',
+  },
+  login_userEmail: {
+    id: 'UserLogin.login_userEmail',
+    defaultMessage: '邮箱',
+  },
+  sign_input_code: {
+    id: 'loginItem.sign_input_code',
+    defaultMessage: '验证码',
+  },
+  get_code_login: {
+    id: 'loginItem.get_code_login',
+    defaultMessage: '获取验证码',
+  },
+  userName_inp_lim: {
+    id: 'UserLogin.userName_inp_lim',
+    defaultMessage: '用户名 2-20位',
+  },
+  sign_letter: {
+    id: 'UserLogin.sign_letter',
+    defaultMessage: '6~16位密码，区分大小写',
+  },
+  resign_passWord: {
+    id: 'UserLogin.resign_passWord',
+    defaultMessage: '确认密码',
+  },
+  sign_Invitation: {
+    id: 'UserLogin.sign_Invitation',
+    defaultMessage: '邀请码',
+  },
+});
+@injectIntl()
 @connect(({ register, loading }) => ({
   submitting: loading.effects['register/submit'],
 }))
@@ -120,7 +154,7 @@ export default class Register extends Component {
   checkConfirm = (rule, value, callback) => {
     const { form } = this.props;
     if (value && value !== form.getFieldValue('password')) {
-      callback(PROMPT('UserLogin.sign_word_notRight')||'两次输入的密码不匹配!');
+      callback(this.props.intl.formatMessage(msg.sign_word_notRight));
     } else {
       callback();
     }
@@ -204,7 +238,7 @@ export default class Register extends Component {
                   message: <FM id='UserLogin.sign_word_error_type' defaultMessage='邮箱地址格式错误！' />,
                 },
               ],
-            })(<Input size="large" placeholder={(PROMPT('UserLogin.login_userEmail')||'邮箱')} />)}
+            })(<Input size="large" placeholder={this.props.intl.formatMessage(msg.login_userEmail)} />)}
           </FormItem>
           <FormItem>
             <Row gutter={8}>
@@ -216,7 +250,7 @@ export default class Register extends Component {
                       message: <FM id='UserLogin.sign_code_input_' defaultMessage='请输入验证码！' />,
                     },
                   ],
-                })(<Input size="large" placeholder={(PROMPT("loginItem.sign_input_code" || "验证码"))} />)}
+                })(<Input size="large" placeholder={this.props.intl.formatMessage(msg.sign_input_code)} />)}
               </Col>
               <Col span={8}>
                 <Button
@@ -225,7 +259,7 @@ export default class Register extends Component {
                   className={styles.getCaptcha}
                   onClick={this.showImageValidationModal}
                 >
-                  {count ? `${count} s` : (PROMPT("loginItem.get_code_login" || "获取验证码"))}
+                  {count ? `${count} s` : this.props.intl.formatMessage(msg.get_code_login)}
                 </Button>
               </Col>
             </Row>
@@ -251,7 +285,7 @@ export default class Register extends Component {
                   message: <FM id='UserLogin.sign_userName_limit' defaultMessage='用户名只能是2~20位字母，数字，下划线，减号' />,
                 },
               ],
-            })(<Input size="large" placeholder={(PROMPT('UserLogin.userName_inp_lim')||'用户名 2-20位')} />)}
+            })(<Input size="large" placeholder={this.props.intl.formatMessage(msg.userName_inp_lim)} />)}
           </FormItem>
           <FormItem help={this.state.help}>
             <Popover
@@ -283,7 +317,7 @@ export default class Register extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder={(PROMPT('UserLogin.sign_letter')||'6~16位密码，区分大小写')}
+                  placeholder={this.props.intl.formatMessage(msg.sign_letter)}
                 />
               )}
             </Popover>
@@ -299,7 +333,7 @@ export default class Register extends Component {
                   validator: this.checkConfirm,
                 },
               ],
-            })(<Input size="large" type="password" placeholder={(PROMPT('UserLogin.resign_passWord')||"确认密码")} />)}
+            })(<Input size="large" type="password" placeholder={this.props.intl.formatMessage(msg.resign_passWord)} />)}
           </FormItem>
           <FormItem>
             {getFieldDecorator('invite_code', {
@@ -309,7 +343,7 @@ export default class Register extends Component {
                   message: <FM id='UserLogin.sign_input_Invitation' defaultMessage='请输入邀请码！' />,
                 },
               ],
-            })(<Input size="large" placeholder={(PROMPT('UserLogin.sign_Invitation')||'邀请码')} />)}
+            })(<Input size="large" placeholder={this.props.intl.formatMessage(msg.sign_Invitation)} />)}
           </FormItem>
 
           <FormItem>

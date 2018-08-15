@@ -1,5 +1,9 @@
 [
   {
+    "id": "dealFinish.user_evaluate_massage",
+    "defaultMessage": "您的建议会督促我做得更好~"
+  },
+  {
     "id": "dealFinish.user_open_charge",
     "defaultMessage": "打开交易"
   },

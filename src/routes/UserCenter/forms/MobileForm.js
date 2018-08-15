@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { defineMessages, FormattedMessage as FM } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import { Form, Input, Button, Select, Row, Col } from 'antd';
 import classNames from 'classnames';
 import styles from './MobileForm.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-
-class MobileForm extends Component {
+const msg = defineMessages({
+  mobile_code_input :{
+    id:'mobileForm.mobile_code_input',
+    defaultMessage:'验证码'
+  }
+})
+@injectIntl()
+@Form.create()
+export default class MobileForm extends Component {
   static defaultProps = {
     className: '',
     onGetCaptcha: () => {},
@@ -72,16 +79,16 @@ class MobileForm extends Component {
   };
 
   render() {
-    const { className, form, initialValue = {}, submitting, disabled } = this.props;
+    const { className, form, initialValue = {}, submitting, disabled,intl } = this.props;
     const { count } = this.state;
     // const telephone_code = form.getFieldValue('telephone_code');
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
-        sm: { span: 4 },
+        sm: { span: 5 },
       },
       wrapperCol: {
-        sm: { span: 20 },
+        sm: { span: 19 },
       },
     };
 
@@ -142,7 +149,7 @@ class MobileForm extends Component {
                   size="large"
                   onClick={this.handleSendCaptcha}
                 >
-                  {count ? `${count} s` : (PROMPT("loginItem.get_code" || "获取验证码"))}
+                  {count ? `${count} s` : (<FM id="mobileForm.get_code" defaultMessage="获取验证码" />)}
                 </Button>
               </Col>
             </Row>
@@ -152,10 +159,10 @@ class MobileForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: <FM id="mobileForm.mobile_code_input" defaultMessage="请输入验证码！" />,
+                  message: <FM id="mobileForm.mobile_code_input_" defaultMessage="请输入验证码！" />,
                 },
               ],
-            })(<Input size="large" placeholder={(PROMPT('mobileForm.mobile_code_input'))} />)}
+            })(<Input size="large" placeholder={intl.formatMessage(msg.mobile_code_input)} />)}
             {/*验证码*/}
           </FormItem>
           <FormItem className={styles.buttonBox}>
@@ -172,4 +179,4 @@ class MobileForm extends Component {
   }
 }
 
-export default Form.create()(MobileForm);
+

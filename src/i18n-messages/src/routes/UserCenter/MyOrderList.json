@@ -1,5 +1,9 @@
 [
   {
+    "id": "order.pendingOrder",
+    "defaultMessage": "挂单"
+  },
+  {
     "id": "orderNo",
     "defaultMessage": "交易单号"
   },

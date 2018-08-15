@@ -4,7 +4,8 @@ import { map, delay } from 'lodash';
 import { Link, routerRedux } from 'dva/router';
 import numeral from 'numeral';
 import moment from 'moment';
-import { FormattedMessage as FM } from 'react-intl';
+import { FormattedMessage as FM,defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import {
   Table,
   Tabs,
@@ -24,6 +25,13 @@ import styles from './MyOrderList.less';
 
 const TabPane = Tabs.TabPane;
 const statusMap = ['warning', 'processing', 'error', 'default'];
+const msg = defineMessages({
+  pendingOrder: {
+    id: 'order.pendingOrder',
+    defaultMessage: '挂单',
+  },
+});
+@injectIntl()
 
 @connect(({ user, loading }) => ({
   data: user.myOrders,
@@ -75,7 +83,7 @@ export default class List extends Component {
       render: (val, row) => (
         <span>
           {val && CONFIG.order_type[val] ? CONFIG.order_type[val] : '-'}{' '}
-          {row.passive ? `(${PROMPT('order.pendingOrder') || '挂单'})` : null}
+          {row.passive ? this.props.intl.formatMessage(msg.pendingOrder): null}
         </span>
       ),
     },

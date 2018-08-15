@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { FormattedMessage as FM,defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import {
   Table,
   Button,
@@ -25,6 +25,13 @@ import { formatMoney } from '../../utils/utils';
 const Step = Steps.Step;
 const Option = Select.Option;
 const { TextArea } = Input;
+const msg = defineMessages({
+  user_evaluate_massage: {
+    id: 'dealFinish.user_evaluate_massage',
+    defaultMessage: '您的建议会督促我做得更好~',
+  },
+});
+@injectIntl()
 
 @connect(({ loading, card }) => ({
   card,
@@ -213,7 +220,7 @@ export default class DealFinish extends Component {
               <div className={styles.editor}>
                 {
                   <TextArea
-                    placeholder={PROMPT('dealFinish.user_evaluate_massage')}   //"您的建议会督促我做得更好~"
+                    placeholder={this.props.intl.formatMessage(msg.user_evaluate_massage)}   //"您的建议会督促我做得更好~"
                     defaultValue={this.state.contentT ? this.state.contentT : ''}
                     rows={4}
                     value={this.state.contentT}

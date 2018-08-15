@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
 import { routerRedux } from 'dva/router';
+import { FormattedMessage as FM ,defineMessages} from 'react-intl';
 import Content from './Content';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Detail.less';
@@ -29,7 +30,7 @@ export default class Duty extends PureComponent {
     const { loading, data } = this.props;
 
     return (
-      <PageHeaderLayout className={styles.title} title={PROMPT('duty')||'免责'}>
+      <PageHeaderLayout className={styles.title} title={<FM id="duty" defaultMessage="免责" />}>
         <Content type="4" />
       </PageHeaderLayout>
     );

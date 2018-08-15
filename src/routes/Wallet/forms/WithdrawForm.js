@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, InputNumber, message } from 'antd';
 import { map, filter, find } from 'lodash';
-import { FormattedMessage as FM } from 'react-intl';
+import { FormattedMessage as FM,defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import classNames from 'classnames';
 import styles from './RechargeForm.less';
 
@@ -17,7 +18,17 @@ const formItemLayout = {
     sm: { span: 20 },
   },
 };
-
+const msg = defineMessages({
+  passWord_input_warning_holder: {
+    id: 'withdrawForm.passWord_input_warning_holder',
+    defaultMessage: '请输入密码',
+  },
+  cash_amount_inp: {
+    id: 'withdrawForm.cash_amount_inp',
+    defaultMessage: '提现金额',
+  },
+});
+@injectIntl()
 class WithdrawForm extends Component {
   state = {
     fee: 0,
@@ -168,7 +179,7 @@ class WithdrawForm extends Component {
                 precision={2}
                 size="large"
                 // placeholder={<FM id="withdrawForm.cash_amount_inp" defaultMessage="提现金额" />}
-                placeholder={PROMPT('withdrawForm.cash_amount_inp') || '提现金额'}
+                placeholder={this.props.intl.formatMessage(msg.cash_amount_inp)}
               />
             )}
           </FormItem>
@@ -196,7 +207,7 @@ class WithdrawForm extends Component {
                 type="password"
                 size="large"
                 placeholder={
-                  (PROMPT('withdrawForm.passWord_input_warning_holder')||'请输入密码')
+                  this.props.intl.formatMessage(msg.passWord_input_warning_holder)
                 }
               />
             )}

@@ -4,6 +4,14 @@
     "defaultMessage": "用户名或邮箱"
   },
   {
+    "id": "UserLogin.login_passWord",
+    "defaultMessage": "密码"
+  },
+  {
+    "id": "UserLogin.login_code",
+    "defaultMessage": "验证码"
+  },
+  {
     "id": "UserLogin.login_",
     "defaultMessage": "登录"
   },

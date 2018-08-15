@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import { Form, Input, Button, Popover, Progress } from 'antd';
 import styles from './PasswordForm.less';
 
@@ -20,6 +20,21 @@ const passwordProgressMap = {
   poor: 'exception',
 };
 
+const msg = defineMessages({
+  passWord_old_holder: {
+    id: 'PassWordForm.passWord_old_holder',
+    defaultMessage: '旧密码',
+  },
+  pwd_input_minWd: {
+    id: 'PassWordForm.pwd_input_minWd',
+    defaultMessage: '至少6位密码，区分大小写',
+  },
+  msg_require_affirm: {
+    id: 'PassWordForm.msg_require_affirm',
+    defaultMessage: '确认密码',
+  },
+});
+@injectIntl()
 @connect(({ user, loading }) => ({
   result: user.changePassword.result,
   submitting: loading.effects['register/submit'],
@@ -66,7 +81,7 @@ export default class PasswordForm extends Component {
     }
   };
 
-  checkPassword = (rule, value, callback) => {
+  checkPassword = (rule, value, callback ,intl) => {
     if (!value) {
       this.setState({
         help: <FM id="PassWordForm.passWord_input" defaultMessage="请输入密码！" />,
@@ -117,14 +132,14 @@ export default class PasswordForm extends Component {
   };
 
   render() {
-    const { form, submitting } = this.props;
+    const { form, submitting,intl } = this.props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
-        sm: { span: 4 },
+        sm: { span: 6 },
       },
       wrapperCol: {
-        sm: { span: 20 },
+        sm: { span: 18 },
       },
     };
     return (
@@ -138,7 +153,7 @@ export default class PasswordForm extends Component {
                   message: <FM id="PassWordForm.passWord_old_input" defaultMessage="请输入旧密码！" />,
                 },
               ],
-            })(<Input size="large" type="password" placeholder={PROMPT('PassWordForm.passWord_old_holder')} />)}
+            })(<Input size="large" type="password" placeholder={intl.formatMessage(msg.passWord_old_holder)} />)}
           </FormItem>
           <FormItem {...formItemLayout} label={<FM id="PassWordForm.passWord_new" defaultMessage="新密码" />} help={this.state.help}>
             <Popover
@@ -174,7 +189,7 @@ export default class PasswordForm extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder={(PROMPT('PassWordForm.pwd_input_minWd'))}
+                  placeholder={intl.formatMessage(msg.pwd_input_minWd)}
                 />
               )}
             </Popover>
@@ -184,13 +199,13 @@ export default class PasswordForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: <FM id="PassWordForm.msg_require_affirm" defaultMessage="请确认密码！" />,
+                  message: <FM id="PassWordForm.msg_require_affirm_" defaultMessage="请确认密码！" />,
                 },
                 {
                   validator: this.checkConfirm,
                 },
               ],
-            })(<Input size="large" type="password" placeholder={(PROMPT('PassWordForm.msg_require_affirm'))} />)}
+            })(<Input size="large" type="password" placeholder={intl.formatMessage(msg.msg_require_affirm)} />)}
           </FormItem>
 
           <FormItem className={styles.buttonBox}>

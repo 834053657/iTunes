@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Modal, Row, Col, Steps, Divider } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { defineMessages, FormattedMessage as FM } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import classNames from 'classnames';
 import styles from './EmailForm.less';
 
 const FormItem = Form.Item;
 const { Step } = Steps;
-
+const msg = defineMessages({
+  emailForm_email_inp: {
+    id: 'EmailForm.emailForm_email_inp',
+    defaultMessage: '邮箱',
+  },
+  get_code: {
+    id: 'EmailForm.get_code',
+    defaultMessage: '获取验证码',
+  },
+  emailForm_code_Inp: {
+    id: 'EmailForm.emailForm_code_Inp',
+    defaultMessage: '验证码',
+  },
+});
+@injectIntl()
 class EmailForm extends Component {
   static defaultProps = {
     className: '',
@@ -61,7 +75,7 @@ class EmailForm extends Component {
   };
 
   render() {
-    const { className, form, initialValue = {}, submitting, disabled } = this.props;
+    const { className, form, initialValue = {}, submitting, disabled,intl } = this.props;
     const { count, current } = this.state;
     const { getFieldDecorator } = form;
     const formItemLayout = {
@@ -91,7 +105,7 @@ class EmailForm extends Component {
                       message: <FM id='UserLogin.emailForm_email_typeError' defaultMessage='邮箱地址格式错误！' />,
                     },
                   ],
-                })(<Input size="large" disabled={disabled} placeholder={(PROMPT('UserLogin.emailForm_email_inp')||'邮箱')} />)}
+                })(<Input size="large" disabled={disabled} placeholder={intl.formatMessage(msg.emailForm_email_inp)} />)}
               </Col>
               <Col span={8}>
                 <Button
@@ -100,7 +114,7 @@ class EmailForm extends Component {
                   size="large"
                   onClick={this.handleSendCaptcha}
                 >
-                  {count ? `${count} s` : (PROMPT("loginItem.get_code" || "获取验证码"))}
+                  {count ? `${count} s` : (intl.formatMessage(msg.get_code))}
                 </Button>
               </Col>
             </Row>
@@ -113,7 +127,7 @@ class EmailForm extends Component {
                   message: <FM id='UserLogin.emailForm_code_userInput' defaultMessage='请输入验证码！' />,
                 },
               ],
-            })(<Input size="large" placeholder={(PROMPT('UserLogin.emailForm_code_Inp')||'验证码')} />)}
+            })(<Input size="large" placeholder={intl.formatMessage(msg.emailForm_code_Inp)} />)}
           </FormItem>
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>

@@ -3,7 +3,8 @@ import { connect } from 'dva';
 import moment from 'moment';
 import cx from 'classnames';
 import { Link } from 'dva/router';
-import { FormattedMessage as FM } from 'react-intl';
+import { FormattedMessage as FM,defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import {
   Row,
   Col,
@@ -27,6 +28,17 @@ import RealNameForm from './forms/RealNameForm';
 import VideoAuthForm from './forms/VideoAuthForm';
 import styles from './UserCenterPage.less';
 
+const msg = defineMessages({
+  Method_payment_change_payWay: {
+    id: 'personalCenter.Method_payment_change_payWay',
+    defaultMessage: '修改支付方式',
+  },
+  Method_payment_add_payWay: {
+    id: 'personalCenter.Method_payment_add_payWay',
+    defaultMessage: '添加支付方式',
+  },
+});
+@injectIntl()
 @connect(({ global, user, loading }) => ({
   currentUser: user.currentUser,
   loading: loading.models.global,
@@ -344,7 +356,7 @@ export default class UserCenterPage extends Component {
       payMethodModalVisible,
       uploadLoading,
     } = this.state;
-    const { currentUser } = this.props;
+    const { currentUser,intl } = this.props;
     const { auth, user = {}, payments = [], upload = {}, trade = {} } = currentUser || {};
     const { real_name = {}, video = {} } = auth || {};
     const real_name_status = real_name.status || 1;
@@ -797,9 +809,9 @@ export default class UserCenterPage extends Component {
               {...this.props}
               title={
                 payMethodModalVisible && payMethodModalVisible.id ? (
-                  PROMPT('personalCenter.Method_payment_change_payWay')||'修改支付方式'
+                  intl.formatMessage(msg.Method_payment_change_payWay)
                 ) : (
-                  PROMPT('personalCenter.Method_payment_add_payWay')||'添加支付方式'
+                  intl.formatMessage(msg.Method_payment_add_payWay)
                 )
               }
               data={payMethodModalVisible}

@@ -1,5 +1,17 @@
 [
   {
+    "id": "EmailForm.emailForm_email_inp",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "EmailForm.get_code",
+    "defaultMessage": "获取验证码"
+  },
+  {
+    "id": "EmailForm.emailForm_code_Inp",
+    "defaultMessage": "验证码"
+  },
+  {
     "id": "UserLogin.emailForm_email",
     "defaultMessage": "邮箱"
   },

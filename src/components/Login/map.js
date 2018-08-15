@@ -4,6 +4,7 @@ import { FormattedMessage as FM } from 'react-intl';
 
 import styles from './index.less';
 
+
 const map = {
   UserName: {
     component: Input,
@@ -44,7 +45,6 @@ const map = {
     props: {
       size: 'large',
       prefix: <Icon type="mobile" className={styles.prefixIcon} />,
-      placeholder: (PROMPT('UserLogin.map_phone_num')||'手机号'),
     },
     rules: [
       {
@@ -62,7 +62,6 @@ const map = {
     props: {
       size: 'large',
       prefix: <Icon type="mail" className={styles.prefixIcon} />,
-      placeholder: (PROMPT('UserLogin.map_phone_code')||'验证码'),
     },
     rules: [
       {
@@ -77,7 +76,6 @@ const map = {
       size: 'large',
       maxLength: 4,
       prefix: <Icon type="mail" className={styles.prefixIcon} />,
-      placeholder: (PROMPT('UserLogin.map_phone_img_code')||'图像验证码'),
     },
     rules: [
       {

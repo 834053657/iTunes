@@ -1,22 +1,39 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import {injectIntl} from 'components/_utils/decorator';
+import { FormattedMessage as FM ,defineMessages} from 'react-intl';
 import { delay } from 'lodash';
 import MobileForm from '../forms/MobileForm';
 import styles from './EmailModal.less';
 
 const { Step } = Steps;
+const msg = defineMessages({
+  phone_bind: {
+    id: 'mobileModal.phone_bind',
+    defaultMessage: '手机绑定',
+  },
+  phone_check: {
+    id: 'mobileModal.phone_check_',
+    defaultMessage: '验证旧手机',
+  },
+  phone_bind_new: {
+    id: 'mobileModal.phone_bind_new',
+    defaultMessage: '绑定新手机',
+  },
+  phone_bind_finish: {
+    id: 'mobileModal.phone_bind_finish',
+    defaultMessage: '完成',
+  },
+});
 
+@injectIntl()
 export default class MobileModal extends Component {
   static defaultProps = {
     className: '',
-    title: <FM id="mobileModal.phone_bind" defaultMessage="手机绑定" />,
     onCancel: () => {},
   };
   static propTypes = {
-    title: PropTypes.string,
     className: PropTypes.string,
     onCancel: PropTypes.func,
   };
@@ -89,7 +106,7 @@ export default class MobileModal extends Component {
     const { current } = this.state;
     let steps = [
       {
-        title: <FM id="mobileModal.phone_check" defaultMessage="验证旧手机" />,
+        title:this.props.intl.formatMessage(msg.phone_check),
         hide: !user.telephone,
         component: (
           <MobileForm
@@ -103,7 +120,7 @@ export default class MobileModal extends Component {
         ),
       },
       {
-        title: <FM id="mobileModal.phone_bind_new" defaultMessage="绑定新手机" />,
+        title: this.props.intl.formatMessage(msg.phone_bind_new),
         component: (
           <MobileForm
             key="2"
@@ -114,7 +131,8 @@ export default class MobileModal extends Component {
         ),
       },
       {
-        title: <FM id="mobileModal.phone_bind_finish" defaultMessage="完成" />,
+        title: this.props.intl.formatMessage(msg.phone_bind_finish),
+
       },
     ];
 

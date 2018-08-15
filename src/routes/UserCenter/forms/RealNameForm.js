@@ -53,10 +53,10 @@ export default class RealNameForm extends Component {
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
-        sm: { span: 4 },
+        sm: { span: 6 },
       },
       wrapperCol: {
-        sm: { span: 20 },
+        sm: { span: 18 },
       },
     };
 

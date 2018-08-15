@@ -12,6 +12,38 @@
     "defaultMessage": "强度：太短"
   },
   {
+    "id": "UserLogin.sign_word_notRight",
+    "defaultMessage": "两次输入的密码不匹配!"
+  },
+  {
+    "id": "UserLogin.login_userEmail",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "loginItem.sign_input_code",
+    "defaultMessage": "验证码"
+  },
+  {
+    "id": "loginItem.get_code_login",
+    "defaultMessage": "获取验证码"
+  },
+  {
+    "id": "UserLogin.userName_inp_lim",
+    "defaultMessage": "用户名 2-20位"
+  },
+  {
+    "id": "UserLogin.sign_letter",
+    "defaultMessage": "6~16位密码，区分大小写"
+  },
+  {
+    "id": "UserLogin.resign_passWord",
+    "defaultMessage": "确认密码"
+  },
+  {
+    "id": "UserLogin.sign_Invitation",
+    "defaultMessage": "邀请码"
+  },
+  {
     "id": "UserLogin.sign_word_input",
     "defaultMessage": "请输入密码！"
   },

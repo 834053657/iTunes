@@ -4,7 +4,8 @@ import numeral from 'numeral';
 import {connect} from 'dva';
 import {stringify} from 'qs';
 import {map, omitBy, filter, isEmpty} from 'lodash';
-import {FormattedMessage as FM} from 'react-intl';
+import {FormattedMessage as FM,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import {
   Table,
   Tabs,
@@ -27,6 +28,13 @@ import styles from './List.less';
 
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
+const msg = defineMessages({
+  minute: {
+    id: 'listHell.minute',
+    defaultMessage: '分钟',
+  },
+});
+@injectIntl()
 @connect(({card, loading, user}) => ({
   list: card.list,
   user: user.currentUser.user,
@@ -332,7 +340,7 @@ export default class List extends Component {
         title: <FM id="deadline" defaultMessage="发卡期限" />,
         width: '80px',
         dataIndex: 'deadline',
-        render: v => <span>{v} {(PROMPT('listHell.minute'))}</span>,
+        render: v => <span>{v} {this.props.intl.formatMessage(msg.minute)}</span>,
       },
       {
         title: <FM id="unit_price" defaultMessage="单价" />,
@@ -346,7 +354,7 @@ export default class List extends Component {
         title: <FM id="guarantee_time" defaultMessage="保障时间" />,
         width: '80px',
         dataIndex: 'guarantee_time',
-        render: v => <span>{v} {(PROMPT('listHell.minute'))}</span>,
+        render: v => <span>{v} {this.props.intl.formatMessage(msg.minute)}</span>,
       },
       {
         title: <FM id="operation_" defaultMessage="操作" />,

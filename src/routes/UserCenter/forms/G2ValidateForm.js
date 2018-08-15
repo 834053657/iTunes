@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Icon, Row, Col, Checkbox, message } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { FormattedMessage as FM,defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import classNames from 'classnames';
 import jrQrcode from 'jr-qrcode';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styles from './G2ValidateForm.less';
 
 const FormItem = Form.Item;
+const msg = defineMessages({
+  mobile_code_input: {
+    id: 'G2Identity.mobile_code_input',
+    defaultMessage: '验证码',
+  },
+});
+@injectIntl()
 
 class G2ValidateForm extends Component {
   static defaultProps = {
@@ -39,7 +46,7 @@ class G2ValidateForm extends Component {
   };
 
   render() {
-    const { className, form, submitting, data = {} } = this.props;
+    const { className, form, submitting, data = {},intl } = this.props;
     const { ready } = this.state;
     const { getFieldDecorator } = form;
     const url = jrQrcode.getQrBase64(data.url);
@@ -72,7 +79,7 @@ class G2ValidateForm extends Component {
                       message: <FM id="G2Identity.code_input_" defaultMessage="请输入验证码！" />,
                     },
                   ],
-                })(<Input size="large" placeholder={(PROMPT('mobileForm.mobile_code_input'))} />)}
+                })(<Input size="large" placeholder={intl.formatMessage(msg.mobile_code_input)} />)}
               </FormItem>
               <FormItem>
                 <Checkbox

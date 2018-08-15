@@ -1,5 +1,13 @@
 [
   {
+    "id": "withdrawForm.passWord_input_warning_holder",
+    "defaultMessage": "请输入密码"
+  },
+  {
+    "id": "withdrawForm.cash_amount_inp",
+    "defaultMessage": "提现金额"
+  },
+  {
     "id": "withdrawForm.pay_wait",
     "defaultMessage": "已提交提现申请，请等待平台处理"
   },

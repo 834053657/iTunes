@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
+import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux } from 'dva/router';
 import Content from './Content';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -29,7 +30,7 @@ export default class Terms extends PureComponent {
     const { loading, data } = this.props;
 
     return (
-      <PageHeaderLayout className={styles.title} title={PROMPT('rules')||'条款'}>
+      <PageHeaderLayout className={styles.title} title={<FM id="rules" defaultMessage="条款" />}>
         <Content type="3" />
       </PageHeaderLayout>
     );

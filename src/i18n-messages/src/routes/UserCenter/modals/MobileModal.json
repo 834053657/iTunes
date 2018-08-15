@@ -1,6 +1,10 @@
 [
   {
-    "id": "mobileModal.phone_check",
+    "id": "mobileModal.phone_bind",
+    "defaultMessage": "手机绑定"
+  },
+  {
+    "id": "mobileModal.phone_check_",
     "defaultMessage": "验证旧手机"
   },
   {
@@ -10,9 +14,5 @@
   {
     "id": "mobileModal.phone_bind_finish",
     "defaultMessage": "完成"
-  },
-  {
-    "id": "mobileModal.phone_bind",
-    "defaultMessage": "手机绑定"
   }
 ]

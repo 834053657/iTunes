@@ -1,5 +1,9 @@
 [
   {
+    "id": "listHell.minute",
+    "defaultMessage": "分钟"
+  },
+  {
     "id": "nickname_",
     "defaultMessage": "用户名"
   },

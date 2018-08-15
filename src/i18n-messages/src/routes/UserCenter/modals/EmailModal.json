@@ -10,9 +10,5 @@
   {
     "id": "emailModal.email_bind_finish",
     "defaultMessage": "完成"
-  },
-  {
-    "id": "emailModal.email_bind",
-    "defaultMessage": "邮箱绑定"
   }
 ]

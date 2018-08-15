@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classNames from 'classnames';
+import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux } from 'dva/router';
 import Content from './Content';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -29,7 +30,7 @@ export default class Help extends PureComponent {
     const { loading, data } = this.props;
 
     return (
-      <PageHeaderLayout className={styles.title} title={PROMPT('help')||'帮助'}>
+      <PageHeaderLayout className={styles.title} title={<FM id='helps' defaultMessage='帮助' />}>
         <Content type="1" />
       </PageHeaderLayout>
     );

@@ -1,5 +1,13 @@
 [
   {
+    "id": "personalCenter.Method_payment_change_payWay",
+    "defaultMessage": "修改支付方式"
+  },
+  {
+    "id": "personalCenter.Method_payment_add_payWay",
+    "defaultMessage": "添加支付方式"
+  },
+  {
     "id": "passWordChange.change_passWord_title",
     "defaultMessage": "修改密码"
   },

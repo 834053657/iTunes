@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Modal } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { FormattedMessage as FM,defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import classNames from 'classnames';
 import styles from './index.less';
 
 const FormItem = Form.Item;
-
+const msg = defineMessages({
+  G2_Google_code: {
+    id: 'UserLogin.G2_Google_code',
+    defaultMessage: '谷歌验证码',
+  },
+});
+@injectIntl()
 class G2Validation extends Component {
   static defaultProps = {
     className: '',
@@ -69,7 +75,7 @@ class G2Validation extends Component {
                     message: <FM id='UserLogin.G2_inputGoogle_code' defaultMessage='请输入谷歌验证码' />,
                   },
                 ],
-              })(<Input autoFocus size="large" placeholder={(PROMPT('UserLogin.G2_Google_code')||'谷歌验证码')} />)}
+              })(<Input autoFocus size="large" placeholder={this.props.intl.formatMessage(msg.G2_Google_code)} />)}
             </FormItem>
           </Form>
         </div>

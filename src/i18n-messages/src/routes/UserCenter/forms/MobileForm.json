@@ -1,5 +1,9 @@
 [
   {
+    "id": "mobileForm.mobile_code_input",
+    "defaultMessage": "验证码"
+  },
+  {
     "id": "mobileForm.country_",
     "defaultMessage": "国家"
   },
@@ -20,11 +24,15 @@
     "defaultMessage": "请输入正确的手机号码"
   },
   {
+    "id": "mobileForm.get_code",
+    "defaultMessage": "获取验证码"
+  },
+  {
     "id": "mobileForm.mobile_code",
     "defaultMessage": "验证码"
   },
   {
-    "id": "mobileForm.mobile_code_input",
+    "id": "mobileForm.mobile_code_input_",
     "defaultMessage": "请输入验证码！"
   },
   {
