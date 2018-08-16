@@ -98,6 +98,12 @@ export function dvaSocket(url, option) {
               type: 'ad/fetchMyAdList',
             });
           }
+          // 支付审核信息更新后 重新拉取用户数据
+          if (msg && msg.msg_type === 21) {
+            dispatch({
+              type: 'user/fetchCurrent',
+            });
+          }
 
           if (currURL.indexOf('/card/deal-line/')) {
             const current_id = currURL.substring(currURL.lastIndexOf('/') + 1);
