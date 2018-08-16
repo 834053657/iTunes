@@ -107,7 +107,7 @@ export default class Appeal extends Component {
 
   getMsgContent = text => {
     const { imageUrls = [] } = this.state;
-    let content = `<p>${text || ''}</p>`;
+    let content = `<p>${breakLine(text) || ''}</p>`;
     content += imageUrls.length > 0 ? `<ul className="${styles.picbox}">` : '';
     map(imageUrls, (d, i) => {
       content += `<li class="{{float:left}}">
@@ -414,6 +414,17 @@ export default class Appeal extends Component {
       </div>
     );
   }
+}
+
+const breakLine = (v) => {
+  const text = v && v.replace(/\n/g, '<br />');
+  const regex = /(<br \/>)/g;
+  const str = '';
+
+  const arr = text.split(regex).map((line, index) => {
+    return line.match(regex) ? `<br key=${`key_${  index}`} />` : line
+  });
+  return arr.join('');
 }
 
 const AppealInfo = props => {

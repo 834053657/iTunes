@@ -96,10 +96,10 @@ export default class PayMethodForm extends Component {
                   required: true,
                   message: <FM id="payMethodModal.user_account_input" defaultMessage="请输入账号！" />,
                 },
-                {
-                  pattern: /^[0-9]{4,30}$/,
-                  message: <FM id="payMethodModal.num_amount_limit" defaultMessage="请输入4~30位的数字" />,
-                },
+                // {
+                //   pattern: /^[0-9]{4,30}$/,
+                //   message: <FM id="payMethodModal.num_amount_limit" defaultMessage="请输入4~30位的数字" />,
+                // },
               ],
             },
           },

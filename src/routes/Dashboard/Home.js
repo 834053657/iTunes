@@ -80,13 +80,13 @@ export default class Analysis extends Component {
         bannersContent.push(
           <div key={key}>
             <div className={styles.banner_items}>
-              <a href={item.link} target="_blank" rel="noopener noreferrer">
+              <a href={item.link ? item.link : null} target="_blank" rel="noopener noreferrer">
                 <img className={styles.img} src={item.image_url} alt="" />
               </a>
               <Row className={styles.content}>
                 <Col span={16}>
                   <div className={styles.content_title}>
-                    <a href={item.link} target="_blank" rel="noopener noreferrer">
+                    <a href={item.link ? item.link : null} target="_blank" rel="noopener noreferrer">
                       {item.title}
                     </a>
                   </div>
