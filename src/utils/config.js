@@ -26,7 +26,6 @@ export default {
       account: '312321312321',
     },
   ],
-  web_sub_title: 'Itunes & 礼品卡 在线交易平台',
   service_phone: '4000000xxx',
   service_platform: '凯歌交易平台',
   language: {

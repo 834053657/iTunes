@@ -35,7 +35,9 @@ class UserLayout extends React.PureComponent {
                   <span className={styles.title}>{CONFIG.web_name}</span>
                 </Link>
               </div>
-              <div className={styles.desc}>{CONFIG.web_sub_title}</div>
+              <div className={styles.desc}>
+                <FormattedMessage id="web_sub_title" defaultMessage="Itunes & 礼品卡 在线交易平台" />
+              </div>
             </div>
             <Switch>
               {getRoutes(match.path, routerData).map(item => (

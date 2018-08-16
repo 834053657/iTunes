@@ -32,6 +32,10 @@ const msg = defineMessages({
     id: 'withdrawForm.add_pay_way',
     defaultMessage: '添加临时账号',
   },
+  chrome_code_input_holder: {
+    id: 'withdrawForm.chrome_code_input_holder',
+    defaultMessage: '请输入谷歌验证码',
+  },
 });
 
 @injectIntl()
@@ -271,10 +275,7 @@ export default class WithdrawForm extends Component {
                   style={{ width: '100%' }}
                   size="large"
                   placeholder={
-                    <FM
-                      id="withdrawForm.chrome_code_input_holder"
-                      defaultMessage="请输入谷歌验证码"
-                    />
+                    this.props.intl.formatMessage(msg.chrome_code_input_holder)
                   }
                 />
               )}

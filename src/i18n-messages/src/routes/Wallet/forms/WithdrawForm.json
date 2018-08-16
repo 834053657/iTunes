@@ -12,6 +12,10 @@
     "defaultMessage": "添加临时账号"
   },
   {
+    "id": "withdrawForm.chrome_code_input_holder",
+    "defaultMessage": "请输入谷歌验证码"
+  },
+  {
     "id": "withdrawForm.pay_wait",
     "defaultMessage": "已提交提现申请，请等待平台处理"
   },
@@ -58,10 +62,6 @@
   {
     "id": "withdrawForm.chrome_code_input",
     "defaultMessage": "请输入谷歌验证码！"
-  },
-  {
-    "id": "withdrawForm.chrome_code_input_holder",
-    "defaultMessage": "请输入谷歌验证码"
   },
   {
     "id": "withdrawForm.submit",
