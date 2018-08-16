@@ -343,7 +343,7 @@ export default class ReduxForm extends Component {
                   {pswType === 1 && (
                     <a
                       style={{fontSize: 12, float: 'right', lineHeight: 3, marginRight: 10}}
-                      href="../../../../public/PasswordTemplate.xlsx"
+                      href="./PasswordTemplate.xlsx"
                       download="PasswordTemplate.xlsx"
                     >
                       点击下载模板

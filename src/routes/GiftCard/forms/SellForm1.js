@@ -422,7 +422,7 @@ export default class SellForm extends Component {
                   {pswType === 1 && !action && (
                     <a
                       style={{fontSize: 12, float: 'right', lineHeight: 3, marginRight: 10}}
-                      href="../../../../public/PasswordTemplate.xlsx"
+                      href="./PasswordTemplate.xlsx"
                       download="PasswordTemplate.xlsx"
                     >
                       <FM id='sellForm.click_load' defaultMessage='点击下载模板' />
