@@ -433,6 +433,8 @@ export default class BasicLayout extends React.Component {
                 <Fragment>
                   Copyright <Icon type="copyright" />{' '}
                   {<FormattedMessage id="copyright" defaultMessage="深圳凯歌科技有限公司" />}
+                  @{__KG_DATATIME__}
+
                 </Fragment>
               }
             />

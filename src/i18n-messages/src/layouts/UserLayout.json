@@ -1,5 +1,9 @@
 [
   {
+    "id": "web_sub_title",
+    "defaultMessage": "Itunes & 礼品卡 在线交易平台"
+  },
+  {
     "id": "help",
     "defaultMessage": "帮助"
   },

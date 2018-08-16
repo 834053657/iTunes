@@ -8,6 +8,14 @@
     "defaultMessage": "提现金额"
   },
   {
+    "id": "withdrawForm.add_pay_way",
+    "defaultMessage": "添加临时账号"
+  },
+  {
+    "id": "withdrawForm.chrome_code_input_holder",
+    "defaultMessage": "请输入谷歌验证码"
+  },
+  {
     "id": "withdrawForm.pay_wait",
     "defaultMessage": "已提交提现申请，请等待平台处理"
   },
@@ -22,6 +30,10 @@
   {
     "id": "withdrawForm.cash_account_choose_inp",
     "defaultMessage": "请选择您的提现账号"
+  },
+  {
+    "id": "withdrawForm.temp",
+    "defaultMessage": "临时"
   },
   {
     "id": "withdrawForm.cash_amount",
@@ -50,10 +62,6 @@
   {
     "id": "withdrawForm.chrome_code_input",
     "defaultMessage": "请输入谷歌验证码！"
-  },
-  {
-    "id": "withdrawForm.chrome_code_input_holder",
-    "defaultMessage": "请输入谷歌验证码"
   },
   {
     "id": "withdrawForm.submit",

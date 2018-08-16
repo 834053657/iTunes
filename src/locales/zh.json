@@ -66,8 +66,9 @@
   "SendCard.sure_message": "确认信息",
   "SendCard.send_card": "发送礼品卡",
   "withdrawForm.cash_amount_inp": "提现金额",
-
-
+  "withdrawForm.add_pay_way": "添加临时账号",
+  "withdrawForm.temp": "临时",
+  "web_sub_title": "Itunes & 礼品卡 在线交易平台",
 
 
 

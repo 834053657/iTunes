@@ -10,7 +10,7 @@
     "start:no-proxy": "cross-env KG_API_ENV=dev NO_PROXY=true ESLINT=none roadhog dev",
     "build": "cross-env ESLINT=none KG_API_ENV=dev roadhog build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
-    "analyze": "cross-env ANALYZE=true roadhog build",
+    "analyze": "cross-env KG_API_ENV=test1 ESLINT=none ANALYZE=true roadhog build",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",
     "lint": "eslint --ext .js src mock tests && npm run lint:style",
     "lint:fix": "eslint --fix --ext .js src mock tests && npm run lint:style",
@@ -126,6 +126,9 @@
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not ie <= 10"
+    "not ie <= 10",
+    "Android >= 3.2",
+    "Firefox >= 20",
+    "iOS 7"
   ]
 }
