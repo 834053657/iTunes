@@ -688,7 +688,7 @@ export default class SellForm extends Component {
             placeholder={intl.formatMessage(msg.choose_deal_rule)}
             disabled={!editing}
           >
-            <AOption value={0}>无</AOption>
+            <AOption value={0}> <FM id='sellForm.empty' defaultMessage='无' /></AOption>
             {map(terms, (item, index) => (
               <AOption key={item.id} value={+item.id}>
                 {item.title}

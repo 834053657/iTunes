@@ -176,6 +176,10 @@
     "defaultMessage": "可选"
   },
   {
+    "id": "sellForm.empty",
+    "defaultMessage": "无"
+  },
+  {
     "id": "sellForm.order_deal_with",
     "defaultMessage": "同时处理订单数"
   },
