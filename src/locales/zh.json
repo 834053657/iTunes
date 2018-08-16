@@ -39,7 +39,8 @@
   "mobileForm.get_code": "获取验证码",
   "mobileForm.mobile_code_input_": "请输入验证码！",
   "withdrawForm.cash_amount_inp": "提现金额",
-
+  "withdrawForm.add_pay_way": "添加临时账号",
+  "withdrawForm.temp": "临时",
 
 
   "appeal.amount_all_money": "总价：",

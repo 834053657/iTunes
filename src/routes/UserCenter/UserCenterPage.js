@@ -816,6 +816,7 @@ export default class UserCenterPage extends Component {
               }
               data={payMethodModalVisible}
               onCancel={this.hidePayMethodModal}
+              onSubmit={this.hidePayMethodModal}
             />
           </Col>
         </Row>

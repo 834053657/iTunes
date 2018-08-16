@@ -25,11 +25,13 @@ export default class MobileModal extends Component {
     if (!err) {
       this.props.dispatch({
         type: 'user/submitUserPayMethod',
+        temp: this.props.temp,
         payload: {
           ...values,
           id: this.props.data.id,
+
         },
-        callback: this.props.onCancel,
+        callback: this.props.onSubmit,
       });
     }
   };

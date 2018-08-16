@@ -177,11 +177,13 @@ export default {
     *submitUserPayMethod({ payload, callback }, { call, put }) {
       const response = yield call(postPayMethod, payload);
       if (response.code === 0) {
-        yield put({
-          type: 'fetchCurrent',
-        });
+        if(!payload.temp) {
+          yield put({
+            type: 'fetchCurrent',
+          });
+        }
         message.success(PROMPT('success') || '操作成功!');
-        callback && callback();
+        callback && callback(response.data);
       } else {
         message.error(response.msg);
       }

@@ -39,6 +39,8 @@
   "mobileForm.mobile_code_input_": "Please enter the verification code!",
   "mobileForm.get_code": "Get code",
   "withdrawForm.cash_amount_inp": "Withdrawal amount",
+  "withdrawForm.add_pay_way": "Add Temporary",
+  "withdrawForm.temp": "Temporary",
 
 
 

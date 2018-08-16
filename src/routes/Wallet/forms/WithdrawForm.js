@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, InputNumber, message } from 'antd';
-import { map, filter, find } from 'lodash';
+import { map, filter, find, get } from 'lodash';
 import { FormattedMessage as FM,defineMessages } from 'react-intl';
 import {injectIntl } from 'components/_utils/decorator';
 import classNames from 'classnames';
+import PayMethodModal from '../../UserCenter/modals/PayMethodModal';
 import styles from './RechargeForm.less';
 
 const FormItem = Form.Item;
@@ -27,11 +28,19 @@ const msg = defineMessages({
     id: 'withdrawForm.cash_amount_inp',
     defaultMessage: '提现金额',
   },
+  add_pay_way: {
+    id: 'withdrawForm.add_pay_way',
+    defaultMessage: '添加临时账号',
+  },
 });
+
 @injectIntl()
-class WithdrawForm extends Component {
+@Form.create()
+export default class WithdrawForm extends Component {
   state = {
     fee: 0,
+    addVisible: false,
+    tempPayMethod: null
   };
   static defaultProps = {
     className: '',
@@ -73,14 +82,10 @@ class WithdrawForm extends Component {
   };
 
   handleGetFee = () => {
-    console.log('abc');
-    const { form, currentUser } = this.props;
-
     this.props.form.validateFields(['amount', 'payment_id'], { force: true }, (err, value) => {
       const { amount, payment_id } = value;
       if (!err) {
-        const { payments } = currentUser || {};
-        const target = find(payments, item => item.id === payment_id);
+        const target = find(this.getEnabledPayments(), item => item.id === payment_id);
 
         this.props.dispatch({
           type: 'wallet/fetchFee',
@@ -107,10 +112,43 @@ class WithdrawForm extends Component {
     }
   };
 
+  showPayMethodModal = () => {
+    this.setState({
+      addVisible: true
+    })
+  }
+
+  hidePayMethodModal = () => {
+    this.setState({
+      addVisible: false
+    })
+  }
+
+  handleOnAddPayMethod = (values) => {
+    this.setState({
+      tempPayMethod: values,
+      addVisible: false
+    }, ()=> {
+      const { form } = this.props;
+      form.setFieldsValue({
+        payment_id: values.id,
+      });
+    })
+  }
+
+  getEnabledPayments = () => {
+    const { tempPayMethod }  = this.state;
+    const payments = get(this.props, 'currentUser.payments');
+    let userPayments = filter(payments, i => i.status === 4);
+
+    return tempPayMethod ?  [tempPayMethod, ...userPayments] : userPayments;
+  }
+
   render() {
-    const { className, form, submitting, currentUser } = this.props;
+    const { className, form, submitting, currentUser, intl } = this.props;
     const { getFieldDecorator } = form;
-    const { payments: userPayments, user = {} } = currentUser || {};
+    const { user = {} } = currentUser || {};
+
 
     return (
       <div className={classNames(className, styles.form)}>
@@ -118,6 +156,7 @@ class WithdrawForm extends Component {
           <FormItem
             {...formItemLayout}
             label={<FM id="withdrawForm.cash_account" defaultMessage="提现账号" />}
+            extra={<p style={{textAlign: 'right'}}><a onClick={this.showPayMethodModal}>+<FM id="withdrawForm.add_pay_way" defaultMessage="添加临时账号" /></a></p>}
           >
             {getFieldDecorator('payment_id', {
               onChange: this.handleGetFee,
@@ -142,9 +181,10 @@ class WithdrawForm extends Component {
                   />
                 }
               >
-                {map(filter(userPayments, i => i.status === 4), item => (
+                {map(this.getEnabledPayments(), item => (
                   <Option key={item.id} value={item.id}>
                     <span>
+                      {item.temp ? <span>(<FM id="withdrawForm.temp" defaultMessage="临时" />)</span> : null}
                       {item.payment_method && CONFIG.payments[item.payment_method]
                         ? CONFIG.payments[item.payment_method]
                         : item.payment_method}
@@ -246,9 +286,16 @@ class WithdrawForm extends Component {
             </Button>
           </FormItem>
         </Form>
+
+        <PayMethodModal
+          {...this.props}
+          temp={true}
+          title={intl.formatMessage(msg.add_pay_way)}
+          data={this.state.addVisible}
+          onSubmit={this.handleOnAddPayMethod}
+          onCancel={this.hidePayMethodModal}
+        />
       </div>
     );
   }
 }
-
-export default Form.create()(WithdrawForm);
