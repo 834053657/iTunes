@@ -1,5 +1,13 @@
 [
   {
+    "id": "Appeal.error_message",
+    "defaultMessage": "上传错误，可能请求已过期，请刷新页面重试"
+  },
+  {
+    "id": "Appeal.send_success",
+    "defaultMessage": "上传成功"
+  },
+  {
     "id": "appeal.open_charge",
     "defaultMessage": "打开交易"
   },

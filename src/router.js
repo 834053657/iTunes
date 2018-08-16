@@ -1,7 +1,6 @@
 import React from 'react';
 import { routerRedux, Route, Switch } from 'dva/router';
 import { LocaleProvider, Spin } from 'antd';
-import intl from 'intl';
 import { IntlProvider } from 'react-intl';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import enUS from 'antd/lib/locale-provider/en_US';

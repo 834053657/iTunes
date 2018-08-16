@@ -32,6 +32,14 @@
     "defaultMessage": "不填代表不限制"
   },
   {
+    "id": "sellForm.error_largest",
+    "defaultMessage": "单价必须大于0"
+  },
+  {
+    "id": "sellForm.check_msg",
+    "defaultMessage": "查看"
+  },
+  {
     "id": "sellForm.type_choose",
     "defaultMessage": "请选择类型"
   },

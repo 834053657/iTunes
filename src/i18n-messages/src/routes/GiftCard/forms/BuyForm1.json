@@ -40,6 +40,10 @@
     "defaultMessage": "不填代表不限制"
   },
   {
+    "id": "BuyForm.check",
+    "defaultMessage": "查看"
+  },
+  {
     "id": "BuyForm.type_choose",
     "defaultMessage": "请选择类型"
   },

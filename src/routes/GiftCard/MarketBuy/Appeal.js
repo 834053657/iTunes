@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { FormattedMessage as FM } from 'react-intl';
-
 import {
   Form,
   Tabs,
@@ -16,6 +14,8 @@ import {
   Badge,
 } from 'antd';
 import { map, orderBy } from 'lodash';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import moment from 'moment';
 import cx from 'classnames';
 import styles from './appeal.less';
@@ -27,6 +27,18 @@ const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
 
 const FormItem = Form.Item;
+const msg = defineMessages({
+  error_message: {
+    id: 'Appeal.error_message',
+    defaultMessage: '上传错误，可能请求已过期，请刷新页面重试',
+  },
+  //发送成功
+  send_success: {
+    id: 'Appeal.send_success',
+    defaultMessage: '上传成功',
+  },
+});
+@injectIntl()
 @connect(({ card, user }) => ({
   user,
   card,
@@ -97,7 +109,7 @@ export default class Appeal extends Component {
                 fileList: [],
                 imageUrls: [],
               });
-              message.success('发送成功');
+              message.success(this.props.intl.formatMessage(msg.send_success));
             },
           });
         }
@@ -184,7 +196,7 @@ export default class Appeal extends Component {
       });
     } else if (info.file.status === 'error') {
       this.setState({ uploadLoading: false });
-      message.error('上传错误，可能请求已过期，请刷新页面重试');
+      message.error(this.props.intl.formatMessage(msg.error_message));
     }
     this.setState({
       fileList: info.fileList,

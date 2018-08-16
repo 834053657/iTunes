@@ -9,7 +9,7 @@ import { getCaptcha } from '../../services/api';
 
 const FormItem = Form.Item;
 const msg = defineMessages({
-  account: {
+  indexPage_code_inp: {
     id: 'UserLogin.indexPage_code_inp',
     defaultMessage: '验证码',
   },

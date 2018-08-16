@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Button, Icon, Avatar, Select } from 'antd';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import styles from './DealLine.less';
 import StepModel from './Step';
 import SellerEnsure from './MarketBuy/SellerEnsure';
@@ -14,6 +16,23 @@ import Appeal from './MarketBuy/Appeal';
 
 const Option = Select.Option;
 
+const msg = defineMessages({
+  begin_order: {
+    id: 'DealLine.begin_order',
+    defaultMessage: '打开交易',
+  },
+
+  sure_message: {
+    id: 'DealLine.sure_message',
+    defaultMessage: '确认信息',
+  },
+
+  order_finish: {
+    id: 'DealLine.order_finish',
+    defaultMessage: '完成',
+  },
+})
+@injectIntl()
 @connect(({ card, user }) => ({
   user: user.currentUser.user,
   detail: card.odDetail,
@@ -125,7 +144,7 @@ export default class OrderDetail extends Component {
     const { ad = {}, cards = {}, order = {}, pageStatus } = this.props.detail || {};
     const { detail } = this.props;
     const { user } = this.props;
-    const steps = [{ title: '打开交易' }, { title: '确认信息' }, { title: '完成' }];
+    const steps = [{ title: this.props.intl.formatMessage(msg.begin_order) }, { title: this.props.intl.formatMessage(msg.sure_message) }, { title: this.props.intl.formatMessage(msg.order_finish) }];
     // const {pageStatus} = this.state;
     // pageStatus = 14;
     if (!Object.keys(ad).length) {

@@ -11,11 +11,32 @@ import {
   Form,
   InputNumber,
 } from 'antd';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import styles from './FilterDemoinForm.less';
 
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
+const msg = defineMessages({
+  error_msg: {
+    id: 'FilterDemoinForm.error_msg',
+    defaultMessage: '查询条件不正确!',
+  },
+  filter_amount: {
+    id: 'FilterDemoinForm.filter_amount',
+    defaultMessage: '筛选面额',
+  },
+  reSet: {
+    id: 'FilterDemoinForm.reSet',
+    defaultMessage: '重置',
+  },
+  sure_Btn: {
+    id: 'FilterDemoinForm.sure_Btn',
+    defaultMessage: '确定',
+  },
 
+});
+@injectIntl()
 @Form.create()
 export default class FilterDemoinForm extends Component {
   state = {};
@@ -28,7 +49,6 @@ export default class FilterDemoinForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(err, values);
       if (!err) {
         this.props.onSubmit(values);
       }
@@ -39,7 +59,7 @@ export default class FilterDemoinForm extends Component {
     const { form } = this.props;
     const max = form.getFieldValue('max');
     if (value && max && value > max) {
-      callback('查询条件不正确!');
+      callback(this.props.intl.formatMessage(msg.error_msg));
     } else {
       if (max) {
         // form.validateFields(['max'], { force: true });
@@ -52,7 +72,7 @@ export default class FilterDemoinForm extends Component {
     const { form } = this.props;
     const min = form.getFieldValue('min');
     if (value && min && value < min) {
-      callback('查询条件不正确!');
+      callback(this.props.intl.formatMessage(msg.error_msg));
     } else {
       if (min) {
         form.validateFields(['min'], { force: true });
@@ -66,7 +86,7 @@ export default class FilterDemoinForm extends Component {
     const { min, max } = initialValues || {};
 
     return (
-      <Card title="筛选面额" className={styles.card}>
+      <Card title={this.props.intl.formatMessage(msg.filter_amount)} className={styles.card}>
         <Form className={styles.denoRange} onSubmit={this.handleSubmit}>
           <InputGroup compact>
             <FormItem>
@@ -109,10 +129,10 @@ export default class FilterDemoinForm extends Component {
           </InputGroup>
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>
-              重置
+              {this.props.intl.formatMessage(msg.reSet)}
             </Button>
             <Button className={styles.submit} type="primary" htmlType="submit">
-              确定
+              {this.props.intl.formatMessage(msg.sure_Btn)}
             </Button>
           </FormItem>
         </Form>

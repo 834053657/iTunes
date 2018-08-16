@@ -38,6 +38,34 @@ const msg = defineMessages({
     id: 'dealDetail.num_amount_sell_input',
     defaultMessage: '请输入购买数量',
   },
+  sell_sure_sell: {
+    id: 'dealDetail.sell_sure_sell',
+    defaultMessage: '确认出售',
+  },
+  buy_sure_btn: {
+    id: 'dealDetail.buy_sure_btn',
+    defaultMessage: '确认购买',
+  },
+  buy_amount_details: {
+    id: 'dealDetail.buy_amount_details',
+    defaultMessage: '未填写面额详情',
+  },
+  sure_to_buy: {
+    id: 'dealDetail.sure_to_buy',
+    defaultMessage: '确认要购买吗？',
+  },
+  sure_to_sell: {
+    id: 'dealDetail.sure_to_sell',
+    defaultMessage: '确认要出售吗？',
+  },
+  sell_yes: {
+    id: 'dealDetail.sell_yes',
+    defaultMessage: '是',
+  },
+  sell_no:{
+    id: 'dealDetail.sell_no',
+    defaultMessage: '否',
+  }
 });
 @injectIntl()
 @connect(({card, loading}) => ({
@@ -364,10 +392,10 @@ export default class DealDeatil extends Component {
             </Button>
 
             <Popconfirm
-              title="确认要出售吗？"
+              title={this.props.intl.formatMessage(msg.sure_to_sell)}
               onConfirm={this.handleSubmit}
-              okText="是"
-              cancelText="否"
+              okText={this.props.intl.formatMessage(msg.sell_yes)}
+              cancelText={this.props.intl.formatMessage(msg.sell_no)}
             >
               <Button
                 loading={this.props.submitting}
@@ -375,7 +403,9 @@ export default class DealDeatil extends Component {
                 type="primary"
                 htmlType="submit"
               >
-                <FM id="dealDetail.sell_sure_sell" defaultMessage="确认出售" />
+                {/*<FM id="dealDetail.sell_sure_sell" defaultMessage="确认出售" />*/}
+                {this.props.intl.formatMessage(msg.sell_sure_sell)}
+
               </Button>
             </Popconfirm>
 
@@ -472,10 +502,10 @@ export default class DealDeatil extends Component {
               <FM id="dealDetail.buy_delete_btn" defaultMessage="取消" />
             </Button>
             <Popconfirm
-              title="确认要购买吗？"
+              title={this.props.intl.formatMessage(msg.sure_to_buy)}
               onConfirm={this.handleSubmit}
-              okText="是"
-              cancelText="否"
+              okText={this.props.intl.formatMessage(msg.sell_yes)}
+              cancelText={this.props.intl.formatMessage(msg.sell_no)}
             >
               <Button
                 loading={this.props.submitting}
@@ -484,7 +514,8 @@ export default class DealDeatil extends Component {
                 type="primary"
                 htmlType="submit"
               >
-                <FM id="dealDetail.buy_sure_btn" defaultMessage="确认购买" />
+                {/*<FM id="dealDetail.buy_sure_btn" defaultMessage="确认购买" />*/}
+                {this.props.intl.formatMessage(msg.buy_sure_btn)}
               </Button>
             </Popconfirm>
           </FormItem>
@@ -500,7 +531,7 @@ export default class DealDeatil extends Component {
       values.order_detail = filter(values.order_detail, item => item.count > 0);
       if (!values.order_detail.length) {
         return message.warning(
-          <FM id="dealDetail.buy_amount_details" defaultMessage="未填写面额详情" />
+          this.props.intl.formatMessage(msg.buy_amount_details)
         );
       }
       if (!err && values.order_detail.length) {

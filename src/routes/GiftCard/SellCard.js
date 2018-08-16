@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'dva/index';
 import { filter, head } from 'lodash';
 import { routerRedux } from 'dva/router';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import {
   Button,
   Menu,
@@ -25,6 +26,13 @@ const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
 
+const msg = defineMessages({
+  msg_error: {
+    id: 'SellCard.msg_error',
+    defaultMessage: '未添加卡信息',
+  },
+});
+@injectIntl()
 @connect(({ card_ad, card, loading }) => ({
   card,
   adDetail: card_ad.detail || {},
@@ -67,7 +75,7 @@ export default class BuyCard extends Component {
       value.id = this.props.adDetail.id;
     }
     if (!value.cards.length) {
-      return message.warning('未添加卡信息');
+      return message.warning(this.props.intl.formatMessage(msg.msg_error));
     }
     this.props.dispatch({
       type: 'card/addSellAd',

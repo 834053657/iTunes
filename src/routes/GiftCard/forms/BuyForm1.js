@@ -67,6 +67,11 @@ const msg = defineMessages({
     id: 'BuyForm.no_limit',
     defaultMessage: '不填代表不限制'
   },
+
+  check: {
+    id: 'BuyForm.check',
+    defaultMessage: '查看'
+  },
 });
 
 // 根据校验规则构造一个 validator
@@ -501,7 +506,7 @@ export default class BuyForm extends PureComponent {
           {...formItemLayout}
           placeholder={intl.formatMessage(msg.deal_rules_choose)}
           disabled={!editing}
-          extranode={<a onClick={this.previewTerms} style={{marginLeft: '10px'}}>查看</a>}
+          extranode={<a onClick={this.previewTerms} style={{marginLeft: '10px'}}>{this.props.intl.formatMessage(msg.check)}</a>}
         >
           <AOption value={0}><FM id='BuyForm.none_' defaultMessage='无' /></AOption>
           {map(terms, (item, index) => (

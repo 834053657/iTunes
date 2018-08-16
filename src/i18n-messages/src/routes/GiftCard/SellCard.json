@@ -1,5 +1,9 @@
 [
   {
+    "id": "SellCard.msg_error",
+    "defaultMessage": "未添加卡信息"
+  },
+  {
     "id": "sell.adManage",
     "defaultMessage": "广告管理"
   },

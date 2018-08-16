@@ -221,7 +221,6 @@ export default class DealFinish extends Component {
                 {
                   <TextArea
                     placeholder={this.props.intl.formatMessage(msg.user_evaluate_massage)}   //"您的建议会督促我做得更好~"
-                    defaultValue={this.state.contentT ? this.state.contentT : ''}
                     rows={4}
                     value={this.state.contentT}
                     onChange={e => {

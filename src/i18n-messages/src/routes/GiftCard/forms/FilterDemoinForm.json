@@ -1,0 +1,18 @@
+[
+  {
+    "id": "FilterDemoinForm.error_msg",
+    "defaultMessage": "查询条件不正确!"
+  },
+  {
+    "id": "FilterDemoinForm.filter_amount",
+    "defaultMessage": "筛选面额"
+  },
+  {
+    "id": "FilterDemoinForm.reSet",
+    "defaultMessage": "重置"
+  },
+  {
+    "id": "FilterDemoinForm.sure_Btn",
+    "defaultMessage": "确定"
+  }
+]

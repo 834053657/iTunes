@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Layout, Icon, message, Modal, LocaleProvider } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import pathToRegexp from 'path-to-regexp';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
 import MessageContent from 'components/_utils/MessageContent';
+import {injectIntl } from 'components/_utils/decorator';
 import GlobalHeader from '../components/GlobalHeader';
 import GlobalFooter from '../components/GlobalFooter';
 import SiderMenu from '../components/SiderMenu';
@@ -22,6 +23,14 @@ import { getAuthority, setLocale, getLocale } from '../utils/authority';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
+
+const msg = defineMessages({
+  clearMessages: {
+    id: 'basic_layout.clearMessages',
+    defaultMessage: '清空了消息',
+  },
+})
+
 
 /**
  * 根据菜单取得重定向地址.
@@ -87,7 +96,15 @@ enquireScreen(b => {
   isMobile = b;
 });
 
-class BasicLayout extends React.Component {
+@injectIntl()
+@connect(({ user, global, loading }) => ({
+  currentUser: user.currentUser,
+  collapsed: global.collapsed,
+  fetchingNotices: loading.effects['global/fetchNotices'],
+  notices: global.notices,
+  noticesCount: global.noticesCount,
+}))
+export default class BasicLayout extends React.Component {
   static childContextTypes = {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
@@ -192,17 +209,18 @@ class BasicLayout extends React.Component {
     });
   };
   handleNoticeClear = type => {
-    message.success(<FormattedMessage id="basic_layout.clearMessages" defaultMessage="清空了消息" />);
-    this.props.dispatch({
-      type: 'global/readNotices',
-      payload: { all: true },
-      callback: () => {
-        this.props.dispatch({
-          type: 'global/fetchNotices',
-          payload: { status: 0, type: 2 },
-        });
-      },
-    });
+    // message.success((<FormattedMessage id="basic_layout.clearMessages" defaultMessage="清空了消息" />);
+    message.success(this.props.intl.formatMessage(msg.clearMessages));
+    // this.props.dispatch({
+    //   type: 'global/readNotices',
+    //   payload: { all: true },
+    //   callback: () => {
+    //     this.props.dispatch({
+    //       type: 'global/fetchNotices',
+    //       payload: { status: 0, type: 2 },
+    //     });
+    //   },
+    // });
   };
   handleNoticeViewMore = type => {
     this.props.dispatch(routerRedux.push('/message/list'));
@@ -300,6 +318,7 @@ class BasicLayout extends React.Component {
 
   handleLanguageClick = ({ key }) => {
     console.log('language', key);
+    console.log(getLocale())
     if (getLocale() !== key) {
       setLocale(key);
       window.location.reload();
@@ -431,10 +450,3 @@ class BasicLayout extends React.Component {
   }
 }
 
-export default connect(({ user, global, loading }) => ({
-  currentUser: user.currentUser,
-  collapsed: global.collapsed,
-  fetchingNotices: loading.effects['global/fetchNotices'],
-  notices: global.notices,
-  noticesCount: global.noticesCount,
-}))(BasicLayout);

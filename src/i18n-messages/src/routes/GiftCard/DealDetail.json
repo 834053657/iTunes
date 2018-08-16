@@ -16,6 +16,34 @@
     "defaultMessage": "请输入购买数量"
   },
   {
+    "id": "dealDetail.sell_sure_sell",
+    "defaultMessage": "确认出售"
+  },
+  {
+    "id": "dealDetail.buy_sure_btn",
+    "defaultMessage": "确认购买"
+  },
+  {
+    "id": "dealDetail.buy_amount_details",
+    "defaultMessage": "未填写面额详情"
+  },
+  {
+    "id": "dealDetail.sure_to_buy",
+    "defaultMessage": "确认要购买吗？"
+  },
+  {
+    "id": "dealDetail.sure_to_sell",
+    "defaultMessage": "确认要出售吗？"
+  },
+  {
+    "id": "dealDetail.sell_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "dealDetail.sell_no",
+    "defaultMessage": "否"
+  },
+  {
     "id": "dealDetail.num_multiple",
     "defaultMessage": "数量必须是{multiple}的倍数"
   },
@@ -84,10 +112,6 @@
     "defaultMessage": "取消"
   },
   {
-    "id": "dealDetail.sell_sure_sell",
-    "defaultMessage": "确认出售"
-  },
-  {
     "id": "dealDetail.buy_type",
     "defaultMessage": "类型"
   },
@@ -126,14 +150,6 @@
   {
     "id": "dealDetail.buy_delete_btn",
     "defaultMessage": "取消"
-  },
-  {
-    "id": "dealDetail.buy_sure_btn",
-    "defaultMessage": "确认购买"
-  },
-  {
-    "id": "dealDetail.buy_amount_details",
-    "defaultMessage": "未填写面额详情"
   },
   {
     "id": "dealDetail.buy_bargain_one",

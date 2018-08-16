@@ -80,6 +80,15 @@ const msg = defineMessages({
     id:'sellForm.no_limit',
     defaultMessage: '不填代表不限制',
   },
+  error_largest:{
+    id:'sellForm.error_largest',
+    defaultMessage: '单价必须大于0',
+  },
+  //
+  check_msg:{
+    id:'sellForm.check_msg',
+    defaultMessage: '查看',
+  },
 });
 
 
@@ -181,7 +190,7 @@ export default class SellForm extends Component {
     const err = validate(rules, values);
     const checkErr = {};
     if (values.unit_price <= 0) {
-      createError(checkErr, `unit_price`, '单价必须大于0');
+      createError(checkErr, `unit_price`, this.props.intl.formatMessage(msg.error_largest));
     }
     if (err) {
       throw new SubmissionError(err);
@@ -692,7 +701,7 @@ export default class SellForm extends Component {
             {...formItemLayout}
             placeholder={intl.formatMessage(msg.choose_deal_rule)}
             disabled={!editing}
-            extranode={<a onClick={this.previewTerms} style={{marginLeft: '10px'}}>查看</a>}
+            extranode={<a onClick={this.previewTerms} style={{marginLeft: '10px'}}>{this.props.intl.formatMessage(msg.check_msg)}</a>}
           >
             <AOption value={0}> <FM id='sellForm.empty' defaultMessage='无' /></AOption>
             {map(terms, (item, index) => (

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
 import {Button, Icon, Input, Avatar, Badge, Modal, Popconfirm, Form, message} from 'antd';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import CountDown from 'components/CountDown';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
@@ -9,7 +11,55 @@ import {sendCDK} from '../../../../services/api';
 import SendCardForm from '../../forms/SendCardForm';
 
 const FormItem = Form.Item;
+const msg = defineMessages({
+  send_card: {
+    id: 'SendCard.send_card',
+    defaultMessage: '发送礼品卡',
+  },
 
+  sure_message: {
+    id: 'SendCard.sure_message',
+    defaultMessage: '确认信息',
+  },
+
+  order_finish: {
+    id: 'SendCard.order_finish',
+    defaultMessage: '完成',
+  },
+
+  type_order: {
+    id: 'SendCard.type_order',
+    defaultMessage: '类型：',
+  },
+
+  ask_order: {
+    id: 'SendCard.ask_order',
+    defaultMessage: '要求：',
+  },
+
+  safe_time: {
+    id: 'SendCard.safe_time',
+    defaultMessage: '保障时间：',
+  },
+
+  minute: {
+    id: 'SendCard.minute',
+    defaultMessage: '分钟',
+  },
+  one_month: {
+    id: 'SendCard.one_month',
+    defaultMessage: '30日成单：',
+  },
+  trade_rule: {
+    id: 'SendCard.trade_rule',
+    defaultMessage: '交易条款：',
+  },
+  rules_check: {
+    id: 'SendCard.rules_check',
+    defaultMessage: '查看交易条款',
+  },
+});
+@injectIntl()
 @connect(({loading, card}) => ({
   card,
   submitting: loading.effects['card/sendCDK'],
@@ -102,7 +152,7 @@ export default class Process extends Component {
     const {ad = {}, cards = {}, order = {}} = detail;
 
     const userInfo = ad.owner;
-    const steps = [{title: '发送礼品卡'}, {title: '确认信息'}, {title: '完成'}];
+    const steps = [{title: this.props.intl.formatMessage(msg.send_card)}, {title: this.props.intl.formatMessage(msg.sure_message)}, {title: this.props.intl.formatMessage(msg.order_finish)}];
 
     return (
       <div className={styles.sendBox}>
@@ -110,7 +160,8 @@ export default class Process extends Component {
         <div className={styles.top}>
           <div className={styles.orderInfo}>
             <div className={styles.price}>
-              <span>类型：</span>
+              <span>{this.props.intl.formatMessage(msg.type_order)}</span>
+              {/*类型：*/}
               <p>
                 {CONFIG.cardTypeMap && order.card_type
                   ? CONFIG.cardTypeMap[ad.card_type].name || '-'
@@ -118,12 +169,12 @@ export default class Process extends Component {
               </p>
             </div>
             <div className={styles.price}>
-              <span>要求：</span>
+              <span>{this.props.intl.formatMessage(msg.ask_order)}</span>
               <p>{(CONFIG.cardPwdType && CONFIG.cardPwdType[ad.password_type]) || '-'}</p>
             </div>
             <div className={styles.price}>
-              <span>保障时间：</span>
-              <p>{ad.guarantee_time}</p>分钟
+              <span>{this.props.intl.formatMessage(msg.safe_time)}</span>
+              <p>{ad.guarantee_time}</p>{this.props.intl.formatMessage(msg.minute)}
             </div>
           </div>
 
@@ -140,13 +191,13 @@ export default class Process extends Component {
                     </Badge>
                   </div>
                   <div className={styles.infoBottom}>
-                    <span className={styles.dealTit}>30日成单：</span>
+                    <span className={styles.dealTit}>{this.props.intl.formatMessage(msg.one_month)}</span>
                     <span className={styles.dealNum}>{userInfo.month_volume}</span>
                   </div>
                 </div>
               </div>
               <div className={styles.term}>
-                <h3>交易条款：</h3>
+                <h3>{this.props.intl.formatMessage(msg.trade_rule)}</h3>
                 <Button
                   onClick={() => {
                     this.setState({
@@ -154,10 +205,11 @@ export default class Process extends Component {
                     });
                   }}
                 >
-                  查看交易条款
+                  {this.props.intl.formatMessage(msg.rules_check)}
                 </Button>
                 <Modal
-                  title="交易条款"
+                  title={this.props.intl.formatMessage(msg.trade_rule)}
+                  // 交易条款
                   visible={this.state.termView}
                   onCancel={() => this.setState({termView: false})}
                   footer={null}

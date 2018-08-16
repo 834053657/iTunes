@@ -1,0 +1,14 @@
+[
+  {
+    "id": "DealLine.begin_order",
+    "defaultMessage": "打开交易"
+  },
+  {
+    "id": "DealLine.sure_message",
+    "defaultMessage": "确认信息"
+  },
+  {
+    "id": "DealLine.order_finish",
+    "defaultMessage": "完成"
+  }
+]
