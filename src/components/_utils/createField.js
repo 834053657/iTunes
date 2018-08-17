@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Radio, Select, Checkbox, Button } from 'antd';
+import { Form, Input, Radio, Select, Checkbox, Button, Switch} from 'antd';
 import InputNumber from '../InputNumber';
 import UploadQN from '../UploadQiNiu';
 
@@ -49,5 +49,6 @@ const ACheckbox = createField(Checkbox);
 const ATextarea = createField(TextArea);
 const AInputNumber = createField(InputNumber);
 const AUpload = createField(UploadQN);
+const ASwitch = createField(Switch);
 
-export { AInput, ARadioGroup, ASelect, AOption, ACheckbox, ATextarea, AInputNumber, AUpload };
+export { AInput, ARadioGroup, ASelect, AOption, ACheckbox, ATextarea, AInputNumber, AUpload, ASwitch };

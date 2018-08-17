@@ -144,10 +144,6 @@
     "defaultMessage": "单价"
   },
   {
-    "id": "BuyForm.multiple_title",
-    "defaultMessage": "倍数"
-  },
-  {
     "id": "BuyForm.condition_type",
     "defaultMessage": "条件"
   },
@@ -158,6 +154,10 @@
   {
     "id": "BuyForm.btn_account_region",
     "defaultMessage": "面额区间"
+  },
+  {
+    "id": "BuyForm.dynamic",
+    "defaultMessage": "流动性"
   },
   {
     "id": "BuyForm.ask_title",
