@@ -109,14 +109,23 @@ export default class Layout extends Component {
                   : Warning}
               </TabPane>
               <TabPane tab={<FM id="wallet.withdraw" defaultMessage="提现" />} key="2">
-                {hadEnabledPayment
+                {
+                  activeKey === '2' && (
+                    <WithdrawForm
+                      {...this.props}
+                      onSubmit={this.handleTabsChange.bind(this, '3')}
+                    />
+                  )
+                }
+                {/*{hadEnabledPayment
                   ? activeKey === '2' && (
                   <WithdrawForm
                     {...this.props}
                     onSubmit={this.handleTabsChange.bind(this, '3')}
                   />
                     )
-                  : Warning}
+                  : Warning}*/}
+
               </TabPane>
               <TabPane tab={<FM id="wallet.trading_record" defaultMessage="交易记录" />} key="3">
                 {activeKey === '3' && <TransferList {...this.props} />}
