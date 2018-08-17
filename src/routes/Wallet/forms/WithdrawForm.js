@@ -143,7 +143,7 @@ export default class WithdrawForm extends Component {
   getEnabledPayments = () => {
     const { tempPayMethod }  = this.state;
     const payments = get(this.props, 'currentUser.payments');
-    let userPayments = filter(payments, i => i.status === 4);
+    const userPayments = filter(payments, i => i.status === 4);
 
     return tempPayMethod ?  [tempPayMethod, ...userPayments] : userPayments;
   }
@@ -290,7 +290,7 @@ export default class WithdrawForm extends Component {
 
         <PayMethodModal
           {...this.props}
-          temp={true}
+          temp
           title={intl.formatMessage(msg.add_pay_way)}
           data={this.state.addVisible}
           onSubmit={this.handleOnAddPayMethod}
