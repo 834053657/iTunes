@@ -93,6 +93,7 @@ module.exports = {
   globals: {
     CONFIG: true,
     MESSAGES: true,
+    INTL: true,
     PROMPT: true,
     __KG_API_ENV__: true,
     __KG_DATATIME__: true,

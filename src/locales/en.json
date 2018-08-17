@@ -69,13 +69,8 @@
   "withdrawForm.add_pay_way": "Add Temporary",
   "withdrawForm.temp": "Temporary",
   "web_sub_title": "Itunes & GiftCard Online Trading Platform",
-
-
-
-
-
-
-
+  "RegisterResult.goback":"Go Back",
+  "RegisterResult.signSuccess":"Account：{userAccount} registered successfully",
 
 
 
@@ -94,7 +89,7 @@
   "dealDetail.num_amount_sell_input":"please input the sales amount",
   "dealDetail.num_amount_buy_input":"please input the purchase amount",
   "dealDetail.num_amount_inp_":"please input the amount",
-  "dealDetail.buy_amount_money_stock":"{Stock}",
+  "dealDetail.buy_amount_money_stock":"{Stock} stocks",
   "buyForm.min_amount_holder":"minimum amount",
   "buyForm.max_amount_holder":"maximum amount",
   "onlyPassWord.upload_default":"upload fault. Maybe the request have expired. Please refresh the page",
