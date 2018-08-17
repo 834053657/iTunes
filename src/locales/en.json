@@ -76,7 +76,19 @@
   "success": "Success!",
   "RegisterResult.goback":"Go Back",
   "RegisterResult.signSuccess":"Account：{userAccount} registered successfully",
-
+  "ForgetPasswoordResult.replace_pwd":"The reset mail has been sent to your mailbox, and the validity period is 24 hours. Please login to the mailbox in time and click the link in the mail to reset the password.",
+  "ForgetPasswoordResult.send_msg":"Reset password message sent successfully",
+  "ForgetPasswoordResult.go_back":"Go Back",
+  "TeamModal.terms":"Terms",
+  "TeamModal.add":"Append",
+  "TeamModal.edit":"Edit",
+  "TeamModal.check":"Check",
+  "TeamModal.title":"Title",
+  "TeamModal.title_input":"Please enter the title (1-20 characters).",
+  "TeamModal.title_input300":"Please enter transaction terms (5-300 characters).",
+  "TeamModal.cancel":"Cancel",
+  "TeamModal.sure":"OK",
+  "TeamModal.send":"OK",
 
 
 

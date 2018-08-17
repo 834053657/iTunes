@@ -1,6 +1,42 @@
 [
   {
-    "id": "termsModal.title",
+    "id": "TeamModal.terms",
     "defaultMessage": "交易条款"
+  },
+  {
+    "id": "TeamModal.add",
+    "defaultMessage": "添加"
+  },
+  {
+    "id": "TeamModal.edit",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "TeamModal.check",
+    "defaultMessage": "查看"
+  },
+  {
+    "id": "TeamModal.title",
+    "defaultMessage": "标题"
+  },
+  {
+    "id": "TeamModal.title_input",
+    "defaultMessage": "请输入标题(1-20字符)"
+  },
+  {
+    "id": "TeamModal.title_input300",
+    "defaultMessage": "请输入交易条款(5-300字符)"
+  },
+  {
+    "id": "TeamModal.cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "TeamModal.sure",
+    "defaultMessage": "确定"
+  },
+  {
+    "id": "TeamModal.send",
+    "defaultMessage": "提交"
   }
 ]

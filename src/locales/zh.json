@@ -76,6 +76,23 @@
   "success": "操作成功",
   "RegisterResult.goback":"返回首页",
   "RegisterResult.signSuccess":"你的账户：{userAccount} 注册成功",
+  "ForgetPasswoordResult.replace_pwd":"重置邮件已发送到你的邮箱中，邮件有效期为24小时。请及时登录邮箱，点击邮件中的链接重置密码。",
+  "ForgetPasswoordResult.send_msg":"重置密码邮件发送成功",
+  "ForgetPasswoordResult.go_back":"返回首页",
+  "TeamModal.terms":"交易条款",
+  "TeamModal.add":"添加",
+  "TeamModal.edit":"编辑",
+  "TeamModal.check":"查看",
+  "TeamModal.title":"标题",
+  "TeamModal.title_input":"请输入标题(1-20字符)",
+  "TeamModal.title_input300":"请输入交易条款(5-300字符)",
+  "TeamModal.cancel":"取消",
+  "TeamModal.sure":"确定",
+  "TeamModal.send":"提交",
+
+
+
+
 
 
 

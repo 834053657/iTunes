@@ -1,16 +1,61 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Divider, Form, Input, Button } from 'antd';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
 import { delay } from 'lodash';
 import styles from './TermsModal.less';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
+const msg = defineMessages({
+  terms: {
+    id: 'TeamModal.terms',
+    defaultMessage: '交易条款',
+  },
+  add: {
+    id: 'TeamModal.add',
+    defaultMessage: '添加',
+  },
+  edit: {
+    id: 'TeamModal.edit',
+    defaultMessage: '编辑',
+  },
+  check: {
+    id: 'TeamModal.check',
+    defaultMessage: '查看',
+  },
+  title: {
+    id: 'TeamModal.title',
+    defaultMessage: '标题',
+  },
+  //-
+  title_input: {
+    id: 'TeamModal.title_input',
+    defaultMessage: '请输入标题(1-20字符)',
+  },
+  title_input300: {
+    id: 'TeamModal.title_input300',
+    defaultMessage: '请输入交易条款(5-300字符)',
+  },
+  cancel: {
+    id: 'TeamModal.cancel',
+    defaultMessage: '取消',
+  },
+  sure: {
+    id: 'TeamModal.sure',
+    defaultMessage: '确定',
+  },
+  send: {
+    id: 'TeamModal.send',
+    defaultMessage: '提交',
+  },
+
+});
 @Form.create()
 export default class TermsModal extends Component {
   static defaultProps = {
     className: '',
-    title: '交易条款',
+    title: INTL(msg.terms),
     onCancel: () => {},
   };
   static propTypes = {
@@ -26,7 +71,6 @@ export default class TermsModal extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
 
         this.props.dispatch({
           type: 'ad/saveTerms',
@@ -50,7 +94,7 @@ export default class TermsModal extends Component {
     const { className, form, submitting, visible, title, onCancel, action, terms } = this.props;
     const { getFieldDecorator } = this.props.form;
 
-    let modalTitle = action === '_NEW' ? '添加' : action === '_EDIT' ? '编辑' : '查看';
+    let modalTitle = action === '_NEW' ? INTL(msg.add) : action === '_EDIT' ? INTL(msg.edit) : INTL(msg.check);
     modalTitle += title;
 
     const formItemLayout = {
@@ -87,25 +131,25 @@ export default class TermsModal extends Component {
         footer={false}
       >
         <Form onSubmit={this.handleSubmit}>
-          <Form.Item label="标题" {...formItemLayout}>
+          <Form.Item label={INTL(msg.title)} {...formItemLayout}>
             {getFieldDecorator('title', {
               initialValue: action === '_NEW' ? null : terms && terms.title,
-              rules: [{ required: true, message: '请输入标题(1-20字符)' }],
-            })(<Input placeholder="标题" maxLength={20} disabled={action === '_OPEN'} />)}
+              rules: [{ required: true, message: INTL(msg.title_input) }],
+            })(<Input placeholder={INTL(msg.title)} maxLength={20} disabled={action === '_OPEN'} />)}
           </Form.Item>
-          <FormItem label="交易条款" {...formItemLayout}>
+          <FormItem label={INTL(msg.terms)} {...formItemLayout}>
             {getFieldDecorator('content', {
               initialValue: action === '_NEW' ? null : terms && terms.content,
               rules: [
                 {
                   required: true,
-                  message: '请输入交易条款(5-300字符)',
+                  message: INTL(msg.title_input300),
                 },
               ],
             })(
               <TextArea
                 style={{ minHeight: 32 }}
-                placeholder="交易条款"
+                placeholder={INTL(msg.terms)}
                 maxLength={300}
                 disabled={action === '_OPEN'}
                 rows={4}
@@ -114,7 +158,7 @@ export default class TermsModal extends Component {
           </FormItem>
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.props.onCancel}>
-              {action !== '_OPEN' ? '取消' : '确定'}
+              {action !== '_OPEN' ? INTL(msg.cancel) : INTL(msg.sure)}
             </Button>
             {action !== '_OPEN' && (
               <Button
@@ -123,7 +167,7 @@ export default class TermsModal extends Component {
                 type="primary"
                 htmlType="submit"
               >
-                提交
+                {INTL(msg.send)}
               </Button>
             )}
           </FormItem>
