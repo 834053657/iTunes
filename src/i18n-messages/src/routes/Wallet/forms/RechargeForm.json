@@ -4,10 +4,6 @@
     "defaultMessage": "已提交充值申请，请等待平台处理"
   },
   {
-    "id": "rechargeForm.success",
-    "defaultMessage": "发布成功"
-  },
-  {
     "id": "rechargeForm.account",
     "defaultMessage": "平台账号"
   },

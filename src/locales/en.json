@@ -74,13 +74,8 @@
   "uploadQiNiu.error2": "Wrong file format, GIF, PNG, JPG, jpeg, or BMP file.",
   "uploadQiNiu.error3": "The picture size must be less than 5M!",
   "success": "Success!",
-
-
-
-
-
-
-
+  "RegisterResult.goback":"Go Back",
+  "RegisterResult.signSuccess":"Account：{userAccount} registered successfully",
 
 
 
@@ -99,7 +94,7 @@
   "dealDetail.num_amount_sell_input":"please input the sales amount",
   "dealDetail.num_amount_buy_input":"please input the purchase amount",
   "dealDetail.num_amount_inp_":"please input the amount",
-  "dealDetail.buy_amount_money_stock":"{Stock}",
+  "dealDetail.buy_amount_money_stock":"{Stock} stocks",
   "buyForm.min_amount_holder":"minimum amount",
   "buyForm.max_amount_holder":"maximum amount",
   "onlyPassWord.upload_default":"upload fault. Maybe the request have expired. Please refresh the page",
@@ -873,7 +868,8 @@
   "withdrawForm.chrome_code_input": "please input Google verification code!",
   "withdrawForm.chrome_code_input_holder": "please input Google verification code",
   "withdrawForm.passWord_input_warning": "please input password!",
-  "withdrawForm.submit": "submit"
+  "withdrawForm.submit": "submit",
+  "termsModal.title": "Terms"
 
 
 }

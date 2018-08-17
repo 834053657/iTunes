@@ -74,6 +74,8 @@
   "uploadQiNiu.error2": "文件格式不对，gif、png、jpg、jpeg、或bmp文件。",
   "uploadQiNiu.error3": "图片必须小于5M!",
   "success": "操作成功",
+  "RegisterResult.goback":"返回首页",
+  "RegisterResult.signSuccess":"你的账户：{userAccount} 注册成功",
 
 
 
@@ -787,5 +789,6 @@
   "withdrawForm.passWord_input_warning": "请输入密码！",
   "withdrawForm.passWord_input_warning_holder": "请输入密码",
   "withdrawForm.pay_wait": "已提交提现申请，请等待平台处理",
-  "withdrawForm.service_charge": "手续费"
+  "withdrawForm.service_charge": "手续费",
+  "termsModal.title": "交易条款"
 }
