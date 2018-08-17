@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { routerRedux } from 'dva/router';
-import { FormattedMessage as FM } from 'react-intl';
+import { FormattedMessage as FM, defineMessages } from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import {
   Form,
   Input,
@@ -31,6 +32,14 @@ const formItemLayout = {
   },
 };
 
+const msg = defineMessages({
+  pay_wait: {
+    id: 'rechargeForm.pay_wait',
+    defaultMessage: '已提交充值申请，请等待平台处理',
+  }
+});
+
+@injectIntl()
 class RechargeForm extends Component {
   static defaultProps = {
     className: '',
@@ -59,13 +68,11 @@ class RechargeForm extends Component {
           payload: values,
           callback: res => {
             if (res.code === 0) {
-              message.success(
-                <FM id="rechargeForm.pay_wait" defaultMessage="已提交充值申请，请等待平台处理" />
-              );
+              message.success(this.props.intl.formatMessage(msg.pay_wait));
               this.props.form.resetFields();
               this.props.onSubmit && this.props.onSubmit();
             } else {
-              message.success(res.msg);
+              message.error(res.msg);
             }
           },
         });

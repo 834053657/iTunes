@@ -42,6 +42,7 @@
   "message.videoAuth": "视频认证",
   "mobileModal.phone_check_": "验证旧手机",
   "SellCard.msg_error": "未添加卡信息",
+  "SellCard.success": "发布成功",
   "Privacy": "隐私",
   "rules": "条款",
   "RealNameForm.realName_leave_user_card_reverse": "请上传身份证反面！",
@@ -69,6 +70,28 @@
   "withdrawForm.add_pay_way": "添加临时账号",
   "withdrawForm.temp": "临时",
   "web_sub_title": "Itunes & 礼品卡 在线交易平台",
+  "uploadQiNiu.error1": "上传错误，可能请求已过期，请刷新页面重试",
+  "uploadQiNiu.error2": "文件格式不对，gif、png、jpg、jpeg、或bmp文件。",
+  "uploadQiNiu.error3": "图片必须小于5M!",
+  "success": "操作成功",
+  "RegisterResult.goback":"返回首页",
+  "RegisterResult.signSuccess":"你的账户：{userAccount} 注册成功",
+  "ForgetPasswoordResult.replace_pwd":"重置邮件已发送到你的邮箱中，邮件有效期为24小时。请及时登录邮箱，点击邮件中的链接重置密码。",
+  "ForgetPasswoordResult.send_msg":"重置密码邮件发送成功",
+  "ForgetPasswoordResult.go_back":"返回首页",
+  "TeamModal.terms":"交易条款",
+  "TeamModal.add":"添加",
+  "TeamModal.edit":"编辑",
+  "TeamModal.check":"查看",
+  "TeamModal.title":"标题",
+  "TeamModal.title_input":"请输入标题(1-20字符)",
+  "TeamModal.title_input300":"请输入交易条款(5-300字符)",
+  "TeamModal.cancel":"取消",
+  "TeamModal.sure":"确定",
+  "TeamModal.send":"提交",
+
+
+
 
 
 
@@ -783,5 +806,6 @@
   "withdrawForm.passWord_input_warning": "请输入密码！",
   "withdrawForm.passWord_input_warning_holder": "请输入密码",
   "withdrawForm.pay_wait": "已提交提现申请，请等待平台处理",
-  "withdrawForm.service_charge": "手续费"
+  "withdrawForm.service_charge": "手续费",
+  "termsModal.title": "交易条款"
 }

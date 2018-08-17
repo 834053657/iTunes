@@ -3,8 +3,8 @@ import { connect } from 'dva';
 import classNames from 'classnames';
 import { routerRedux } from 'dva/router';
 import { FormattedMessage as FM ,defineMessages} from 'react-intl';
-import Content from './Content';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import Content from './Content';
 import styles from './Detail.less';
 
 const size = 'large';

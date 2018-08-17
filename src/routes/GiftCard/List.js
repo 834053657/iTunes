@@ -347,8 +347,8 @@ export default class List extends Component {
         width: '80px',
         dataIndex: 'unit_price',
         render: v => <span>{numeral(v).format('0,0.00')} RMB</span>,
-        sorter: true,
-        sortOrder: this.state.order_by,
+        // sorter: true,
+        // sortOrder: this.state.order_by,
       },
       {
         title: <FM id="guarantee_time" defaultMessage="保障时间" />,

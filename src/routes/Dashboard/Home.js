@@ -112,7 +112,7 @@ export default class Analysis extends Component {
       sm: 12,
       md: 12,
       lg: 12,
-      xl: 6,
+      xl: 8,
       style: { marginBottom: 24 },
     };
     return (
@@ -138,7 +138,7 @@ export default class Analysis extends Component {
           <Icon className={styles.realtime_icon} type="bar-chart" />
         </div>
         <Row className={styles.realtime_content} gutter={24}>
-          <Col {...topColResponsiveProps}>
+          {/* <Col {...topColResponsiveProps}>
             <ChartCard
               bordered
               title="Itunes"
@@ -151,7 +151,7 @@ export default class Analysis extends Component {
               total={formatMoney(statistics.itunes)}
               contentHeight={46}
             />
-          </Col>
+          </Col>*/}
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}

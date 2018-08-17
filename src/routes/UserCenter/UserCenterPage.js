@@ -37,7 +37,16 @@ const msg = defineMessages({
     id: 'personalCenter.Method_payment_add_payWay',
     defaultMessage: '添加支付方式',
   },
+  upload_error: {
+    id: 'personalCenter.upload_error',
+    defaultMessage: '上传错误，可能请求已过期，请刷新页面重试',
+  },
+  photo_limit: {
+    id: 'personalCenter.photo_limit',
+    defaultMessage: '头像必须小于2M',
+  },
 });
+
 @injectIntl()
 @connect(({ global, user, loading }) => ({
   currentUser: user.currentUser,
@@ -330,19 +339,14 @@ export default class UserCenterPage extends Component {
       });
     } else if (info.file.status === 'error') {
       this.setState({ uploadLoading: false });
-      message.error(
-        <FM
-          id="personalCenter.upload_error"
-          defaultMessage="上传错误，可能请求已过期，请刷新页面重试"
-        />
-      );
+      message.error(this.props.intl.formatMessage(msg.upload_error));
     }
   };
 
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error(<FM id="personalCenter.photo_limit" defaultMessage="头像必须小于2M!" />);
+      message.error(this.props.intl.formatMessage(msg.photo_limit));
     }
     return isLt2M;
   };

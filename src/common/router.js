@@ -82,6 +82,21 @@ export const getRouterData = app => {
     '/home': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Home')),
     },
+    // 帮助，隐私，条款路由控制
+    '/information/help': {
+      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Help')),
+    },
+    '/information/privacy': {
+      component: dynamicWrapper(app, ['information'], () =>
+        import('../routes/Information/Privacy')
+      ),
+    },
+    '/information/terms': {
+      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Terms')),
+    },
+    '/information/duty': {
+      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Duty')),
+    },
     '/user-center/index': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/UserCenterPage')),
       authority: checkLogined,
@@ -108,21 +123,6 @@ export const getRouterData = app => {
       authority: checkLogined,
       redirectPath: '/user/login',
     },
-    // 帮助，隐私，条款路由控制
-    '/information/help': {
-      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Help')),
-    },
-    '/information/privacy': {
-      component: dynamicWrapper(app, ['information'], () =>
-        import('../routes/Information/Privacy')
-      ),
-    },
-    '/information/terms': {
-      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Terms')),
-    },
-    '/information/duty': {
-      component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Duty')),
-    },
     // 资讯消息路由控制
     '/message/info-list': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/InfoList')),
@@ -130,14 +130,20 @@ export const getRouterData = app => {
     '/message/info-detail/:id': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/InfoDetail')),
     },
+    '/card/market': {
+      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/List')),
+    },
     '/message/list': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/List')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/card/sell-card': {
       component: dynamicWrapper(app, ['card_ad', 'card'], () =>
         import('../routes/GiftCard/SellCard')
       ),
       authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/card/edit-sell-card/:id/:action': {
       component: dynamicWrapper(app, ['card_ad', 'card'], () =>
@@ -170,11 +176,13 @@ export const getRouterData = app => {
       authority: checkLogined,
       redirectPath: '/user/login',
     },
-    '/card/market': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/List')),
-    },
-    '/card/a_detail': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/Ad/PreviewAd')),
+    // '/card/a_detail': {
+    //   component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/Ad/PreviewAd')),
+    // },
+    '/wallet': {
+      component: dynamicWrapper(app, ['user', 'wallet'], () => import('../routes/Wallet/Layout')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
@@ -200,62 +208,6 @@ export const getRouterData = app => {
     '/user/change-password/:code': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/User/ChangePassword')),
     },
-    '/wallet': {
-      component: dynamicWrapper(app, ['user', 'wallet'], () => import('../routes/Wallet/Layout')),
-    },
-    '/form/step-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/index')),
-    },
-    '/form/step-form/info': {
-      name: '分步表单（填写转账信息）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step1')),
-    },
-    '/form/step-form/confirm': {
-      name: '分步表单（确认转账信息）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step2')),
-    },
-    '/form/step-form/result': {
-      name: '分步表单（完成）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step3')),
-    },
-    '/form/advanced-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/AdvancedForm')),
-    },
-    '/list/table-list': {
-      component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
-    },
-    '/list/basic-list': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/BasicList')),
-    },
-    '/list/card-list': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/CardList')),
-    },
-    '/list/search': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/List')),
-    },
-    '/list/search/projects': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/Projects')),
-    },
-    '/list/search/applications': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/Applications')),
-    },
-    '/list/search/articles': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/Articles')),
-    },
-    '/profile/basic': {
-      component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/BasicProfile')),
-    },
-    '/profile/advanced': {
-      component: dynamicWrapper(app, ['profile'], () =>
-        import('../routes/Profile/AdvancedProfile')
-      ),
-    },
-    '/result/success': {
-      component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
-    },
-    '/result/fail': {
-      component: dynamicWrapper(app, [], () => import('../routes/Result/Error')),
-    },
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),
     },
@@ -265,36 +217,90 @@ export const getRouterData = app => {
     '/exception/500': {
       component: dynamicWrapper(app, [], () => import('../routes/Exception/500')),
     },
-    '/exception/trigger': {
-      component: dynamicWrapper(app, ['error'], () =>
-        import('../routes/Exception/triggerException')
-      ),
-    },
-    '/dashboard/analysis': {
-      component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
-      authority: checkLogined,
-      redirectPath: '/user/login',
-    },
-    '/dashboard/monitor': {
-      component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
-    },
-    '/dashboard/workplace': {
-      component: dynamicWrapper(app, ['project', 'activities', 'chart'], () =>
-        import('../routes/Dashboard/Workplace')
-      ),
-      // hideInBreadcrumb: true,
-      // name: '工作台',
-      // authority: 'admin',
-    },
-    '/form/basic-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
-    },
-    // '/form/zan-form': {
-    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/ZanForm')),
+
+    // '/form/step-form': {
+    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/index')),
     // },
-    '/form/redux-form': {
-      component: dynamicWrapper(app, [], () => import('../routes/Forms/ReduxForm')),
-    },
+    // '/form/step-form/info': {
+    //   name: '分步表单（填写转账信息）',
+    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step1')),
+    // },
+    // '/form/step-form/confirm': {
+    //   name: '分步表单（确认转账信息）',
+    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step2')),
+    // },
+    // '/form/step-form/result': {
+    //   name: '分步表单（完成）',
+    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step3')),
+    // },
+    // '/form/advanced-form': {
+    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/AdvancedForm')),
+    // },
+    // '/list/table-list': {
+    //   component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
+    // },
+    // '/list/basic-list': {
+    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/BasicList')),
+    // },
+    // '/list/card-list': {
+    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/CardList')),
+    // },
+    // '/list/search': {
+    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/List')),
+    // },
+    // '/list/search/projects': {
+    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/Projects')),
+    // },
+    // '/list/search/applications': {
+    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/Applications')),
+    // },
+    // '/list/search/articles': {
+    //   component: dynamicWrapper(app, ['list'], () => import('../routes/List/Articles')),
+    // },
+    // '/profile/basic': {
+    //   component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/BasicProfile')),
+    // },
+    // '/profile/advanced': {
+    //   component: dynamicWrapper(app, ['profile'], () =>
+    //     import('../routes/Profile/AdvancedProfile')
+    //   ),
+    // },
+    // '/result/success': {
+    //   component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
+    // },
+    // '/result/fail': {
+    //   component: dynamicWrapper(app, [], () => import('../routes/Result/Error')),
+    // },
+    // '/exception/trigger': {
+    //   component: dynamicWrapper(app, ['error'], () =>
+    //     import('../routes/Exception/triggerException')
+    //   ),
+    // },
+    // '/dashboard/analysis': {
+    //   component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
+    //   authority: checkLogined,
+    //   redirectPath: '/user/login',
+    // },
+    // '/dashboard/monitor': {
+    //   component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
+    // },
+    // '/dashboard/workplace': {
+    //   component: dynamicWrapper(app, ['project', 'activities', 'chart'], () =>
+    //     import('../routes/Dashboard/Workplace')
+    //   ),
+    //   // hideInBreadcrumb: true,
+    //   // name: '工作台',
+    //   // authority: 'admin',
+    // },
+    // '/form/basic-form': {
+    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
+    // },
+    // // '/form/zan-form': {
+    // //   component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/ZanForm')),
+    // // },
+    // '/form/redux-form': {
+    //   component: dynamicWrapper(app, [], () => import('../routes/Forms/ReduxForm')),
+    // },
   };
 
   // Get name from ./menu.js or just set it in the router data.
