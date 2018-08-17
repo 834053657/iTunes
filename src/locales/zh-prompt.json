@@ -27,6 +27,7 @@
   "dealFinish.user_evaluate_massage":"您的建议会督促我做得更好~",
   "seller":"卖家",
   "buyer":"买家",
+  "success": "操作成功",
   "submit_success":"提交成功",
   "send_success":"发送成功",
   "loginItem.get_code":"获取验证码",

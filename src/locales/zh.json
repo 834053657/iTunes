@@ -73,6 +73,7 @@
   "uploadQiNiu.error1": "上传错误，可能请求已过期，请刷新页面重试",
   "uploadQiNiu.error2": "文件格式不对，gif、png、jpg、jpeg、或bmp文件。",
   "uploadQiNiu.error3": "图片必须小于5M!",
+  "success": "操作成功",
 
 
 
