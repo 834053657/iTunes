@@ -28,6 +28,7 @@
   "seller":"seller",
   "buyer":"buyer",
   "submit_success":"submit successfully",
+  "success": "success",
   "send_success":"send successfully",
   "loginItem.get_code":"get code",
   "mobileForm.mobile_code_input":"code",

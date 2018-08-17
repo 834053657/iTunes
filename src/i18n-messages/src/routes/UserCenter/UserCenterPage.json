@@ -8,6 +8,14 @@
     "defaultMessage": "添加支付方式"
   },
   {
+    "id": "personalCenter.upload_error",
+    "defaultMessage": "上传错误，可能请求已过期，请刷新页面重试"
+  },
+  {
+    "id": "personalCenter.photo_limit",
+    "defaultMessage": "头像必须小于2M"
+  },
+  {
     "id": "passWordChange.change_passWord_title",
     "defaultMessage": "修改密码"
   },
@@ -34,14 +42,6 @@
   {
     "id": "personalCenter.height",
     "defaultMessage": "高"
-  },
-  {
-    "id": "personalCenter.upload_error",
-    "defaultMessage": "上传错误，可能请求已过期，请刷新页面重试"
-  },
-  {
-    "id": "personalCenter.photo_limit",
-    "defaultMessage": "头像必须小于2M!"
   },
   {
     "id": "personalCenter.upload_head_photo",

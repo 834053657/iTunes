@@ -528,7 +528,8 @@ export default class BuyForm extends PureComponent {
           min={0}
           precision={0}
           {...formItemLayout}
-          placeholder={intl.formatMessage(msg.no_limit)}
+          // placeholder={intl.formatMessage(msg.no_limit)}
+          placeholder={PROMPT(msg.no_limit.id)}
           disabled={!editing}
         />
         <Form.Item className={styles.buttonBox}>

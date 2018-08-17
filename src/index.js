@@ -28,9 +28,21 @@ notification.config({
 
 global.CONFIG = CONFIG;
 global.PROMPT = promptMsgs;
+
+const undo = r => (state, action) => {
+  const newState = r(state, action);
+  if (action.type === 'login/logout') {
+    return {}
+  }
+  else {
+    return newState
+  }
+};
+
 // 1. Initialize
 const app = dva({
   history: createHistory(),
+  onReducer: undo,
   extraReducers: {
     form: formReducer,
   },

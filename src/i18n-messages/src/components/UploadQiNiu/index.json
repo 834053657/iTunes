@@ -1,5 +1,17 @@
 [
   {
+    "id": "uploadQiNiu.error1",
+    "defaultMessage": "上传错误，可能请求已过期，请刷新页面重试"
+  },
+  {
+    "id": "uploadQiNiu.error2",
+    "defaultMessage": "文件格式不对，gif、png、jpg、jpeg、或bmp文件。"
+  },
+  {
+    "id": "uploadQiNiu.error3",
+    "defaultMessage": "图片必须小于5M!"
+  },
+  {
     "id": "index.click_files",
     "defaultMessage": "单击或拖动文件到此区域进行上传"
   }

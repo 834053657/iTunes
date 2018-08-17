@@ -4,6 +4,10 @@
     "defaultMessage": "未添加卡信息"
   },
   {
+    "id": "SellCard.success",
+    "defaultMessage": "发布成功"
+  },
+  {
     "id": "sell.adManage",
     "defaultMessage": "广告管理"
   },

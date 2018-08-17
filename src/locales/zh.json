@@ -42,6 +42,7 @@
   "message.videoAuth": "视频认证",
   "mobileModal.phone_check_": "验证旧手机",
   "SellCard.msg_error": "未添加卡信息",
+  "SellCard.success": "发布成功",
   "Privacy": "隐私",
   "rules": "条款",
   "RealNameForm.realName_leave_user_card_reverse": "请上传身份证反面！",
@@ -69,8 +70,14 @@
   "withdrawForm.add_pay_way": "添加临时账号",
   "withdrawForm.temp": "临时",
   "web_sub_title": "Itunes & 礼品卡 在线交易平台",
+  "uploadQiNiu.error1": "上传错误，可能请求已过期，请刷新页面重试",
+  "uploadQiNiu.error2": "文件格式不对，gif、png、jpg、jpeg、或bmp文件。",
+  "uploadQiNiu.error3": "图片必须小于5M!",
+  "success": "操作成功",
   "RegisterResult.goback":"返回首页",
   "RegisterResult.signSuccess":"你的账户：{userAccount} 注册成功",
+
+
 
 
 

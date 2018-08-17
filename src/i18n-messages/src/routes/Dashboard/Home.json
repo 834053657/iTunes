@@ -16,10 +16,6 @@
     "defaultMessage": "实时成交"
   },
   {
-    "id": "home.ItunesSales",
-    "defaultMessage": "Itunes销售额"
-  },
-  {
     "id": "home.giftCard",
     "defaultMessage": "礼品卡"
   },
