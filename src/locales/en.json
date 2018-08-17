@@ -42,6 +42,7 @@
   "PriceForm.input_amount_num": "Please enter the amount of",
   "mobileModal.phone_check_": "Verify the old cell phones",
   "SellCard.msg_error": "Not add card information",
+  "SellCard.success": "Release Success",
   "Privacy": "privacy",
   "rules": "Terms of Service",
   "RealNameForm.realName_leave_user_card_reverse": "Please upload id opposite!",
@@ -69,6 +70,9 @@
   "withdrawForm.add_pay_way": "Add Temporary",
   "withdrawForm.temp": "Temporary",
   "web_sub_title": "Itunes & GiftCard Online Trading Platform",
+  "uploadQiNiu.error1": "Upload error, the request may have expired, please refresh the page and try again",
+  "uploadQiNiu.error2": "Wrong file format, GIF, PNG, JPG, jpeg, or BMP file.",
+  "uploadQiNiu.error3": "The picture size must be less than 5M!",
 
 
 

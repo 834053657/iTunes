@@ -275,7 +275,6 @@ export default {
       const res = yield call(addSellAd, payload);
       if (res.code === 0) {
         yield callback && callback(res);
-        message.success('发布成功');
         return res;
       } else {
         message.error(res.msg);

@@ -36,6 +36,10 @@ const msg = defineMessages({
     id: 'withdrawForm.chrome_code_input_holder',
     defaultMessage: '请输入谷歌验证码',
   },
+  pay_wait: {
+    id: 'withdrawForm.pay_wait',
+    defaultMessage: '已提交提现申请，请等待平台处理',
+  }
 });
 
 @injectIntl()
@@ -68,9 +72,7 @@ export default class WithdrawForm extends Component {
           payload: values,
           callback: res => {
             if (res.code === 0) {
-              message.success(
-                <FM id="withdrawForm.pay_wait" defaultMessage="已提交提现申请，请等待平台处理" />
-              );
+              message.success(this.props.intl.formatMessage(msg.pay_wait));
               this.setState({
                 fee: 0,
               });

@@ -3,11 +3,28 @@ import PropTypes from 'prop-types';
 import { Upload, Icon, message, Spin } from 'antd';
 import { FormattedMessage as FM ,defineMessages} from 'react-intl';
 import { delay, map } from 'lodash';
+import {injectIntl } from 'components/_utils/decorator';
 import { getAuthority } from '../../utils/authority';
 import styles from './index.less';
 
 const Dragger = Upload.Dragger;
 
+const msg = defineMessages({
+  error1: {
+    id: 'uploadQiNiu.error1',
+    defaultMessage: '上传错误，可能请求已过期，请刷新页面重试',
+  },
+  error2: {
+    id: 'uploadQiNiu.error2',
+    defaultMessage: '文件格式不对，gif、png、jpg、jpeg、或bmp文件。',
+  },
+  error3: {
+    id: 'uploadQiNiu.error3',
+    defaultMessage: '图片必须小于5M!',
+  }
+});
+
+@injectIntl()
 export default class UploadQiNiu extends Component {
   state = {
     uploading: false,
@@ -36,18 +53,18 @@ export default class UploadQiNiu extends Component {
       this.setState({ uploading: false });
     } else if (info.file.status === 'error') {
       this.setState({ uploading: false });
-      message.error('上传错误，可能请求已过期，请刷新页面重试');
+      message.error(this.props.intl.formatMessage(msg.error1));
     }
   };
 
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 5;
     if (!isLt2M) {
-      message.error('图片必须小于5M!');
+      message.error(this.props.intl.formatMessage(msg.error3));
     }
     const fileExt = file.name.substr(file.name.lastIndexOf('.') + 1);
     if (['gif', 'png', 'jpg', 'jpeg', 'bmp'].indexOf(fileExt) < 0) {
-      message.error('文件格式不对，gif、png、jpg、jpeg、或bmp文件。');
+      message.error(this.props.intl.formatMessage(msg.error2));
       return false;
     }
     return isLt2M;

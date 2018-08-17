@@ -31,6 +31,10 @@ const msg = defineMessages({
     id: 'SellCard.msg_error',
     defaultMessage: '未添加卡信息',
   },
+  success: {
+    id: 'SellCard.success',
+    defaultMessage: '发布成功',
+  },
 });
 @injectIntl()
 @connect(({ card_ad, card, loading }) => ({
@@ -81,6 +85,7 @@ export default class BuyCard extends Component {
       type: 'card/addSellAd',
       payload: value,
       callback: res => {
+        message.success(this.props.intl.formatMessage(msg.success))
         this.props.history.push({ pathname: '/ad/my' });
       },
     });
