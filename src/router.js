@@ -15,9 +15,9 @@ const { AuthorizedRoute } = Authorized;
 const appLocale = cintl.getAppLocale();
 const { intl  } = new IntlProvider(appLocale, {}).getChildContext();
 
-global.INTL = (id, values) => {
+global.INTL = (obj, values) => {
   // defineMessages(id, defaultMessage);
-  return intl.formatMessage({id}, values);
+  return intl.formatMessage(obj, values);
 };
 
 

@@ -115,7 +115,7 @@ export default {
         message.success(PROMPT('send_success'));
         callback && callback();
       } else {
-        message.error(PROMPT('{msg}',{msg:res.msg}) || '操作失败');
+        message.error(res.msg);
       }
     },
     *verifyCaptcha({ payload, callback }, { call }) {
