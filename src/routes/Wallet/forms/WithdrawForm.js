@@ -13,10 +13,10 @@ const { Option } = Select;
 
 const formItemLayout = {
   labelCol: {
-    sm: { span: 4 },
+    sm: { span: 8 },
   },
   wrapperCol: {
-    sm: { span: 20 },
+    sm: { span: 14 },
   },
 };
 const msg = defineMessages({
