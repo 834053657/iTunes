@@ -66,15 +66,15 @@ export default class OrderDetail extends Component {
     const { params: { id: nextid } } = nextProps.match || {};
     const { pageStatus: nextPageStatus } = nextProps.detail || {};
 
-    // if (nextid !== id) {
-    //   this.fetchData(nextid);
-    //   this.leaveRoom(id);
-    //   this.enterRoom(nextid);
-    // }
-    // else if(pageStatus !== nextPageStatus) {
-    //   this.fetchData(id);
-    //   console.log(pageStatus, nextPageStatus)
-    // }
+    if (nextid !== id) {
+      this.fetchData(nextid);
+      this.leaveRoom(id);
+      this.enterRoom(nextid);
+    }
+    else if(pageStatus !== nextPageStatus) {
+      this.fetchData(id);
+      console.log(pageStatus, nextPageStatus)
+    }
   }
 
   fetchData = id => {
