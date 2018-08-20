@@ -211,16 +211,16 @@ export default class BasicLayout extends React.Component {
   handleNoticeClear = type => {
     // message.success((<FormattedMessage id="basic_layout.clearMessages" defaultMessage="清空了消息" />);
     message.success(this.props.intl.formatMessage(msg.clearMessages));
-    // this.props.dispatch({
-    //   type: 'global/readNotices',
-    //   payload: { all: true },
-    //   callback: () => {
-    //     this.props.dispatch({
-    //       type: 'global/fetchNotices',
-    //       payload: { status: 0, type: 2 },
-    //     });
-    //   },
-    // });
+    this.props.dispatch({
+      type: 'global/readNotices',
+      payload: { all: true },
+      callback: () => {
+        this.props.dispatch({
+          type: 'global/fetchNotices',
+          payload: { status: 0, type: 2 },
+        });
+      },
+    });
   };
   handleNoticeViewMore = type => {
     this.props.dispatch(routerRedux.push('/message/list'));
