@@ -93,6 +93,15 @@
 
 
 
+  "ChangePasswordResult.goSign":"en去登录",
+  "ChangePasswordResult.goback":"en返回首页",
+  "ChangePasswordResult.changeSuccess":"en密码修改成功",
+  "changePassWord.help":"en请输入密码！",
+  "changePassWord.pwd_error":"'en两次输入的密码不匹配!",
+
+
+
+
 
 
   "message.clearMessages": "clear messages",
@@ -455,7 +464,7 @@
   "appeal.one_month_order": "make the deal within 30 days:",
   "appeal.check_order_list": "check gift card list",
   "nickname_": "user name",
-  "appeal.order_minute": "minute",
+  "appeal.order_minute": "{time}minute",
   "contain": "contain",
   "appeal.safe_time_": "guarantee time:",
   "list.denomination": "denomination",
