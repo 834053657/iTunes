@@ -150,7 +150,6 @@ export function dvaSocket(url, option) {
           console.log(getState().user);
           console.log(user);
 
-          // console.log(data);
           console.log(msg);
           if (msg && msg.order_msg_type === 1) {
             // 快捷短语
@@ -159,17 +158,24 @@ export function dvaSocket(url, option) {
             quickMsgList.unshift(msg);
             dispatch({
               type: 'card/setQuickMsgList',
-              payload: { data: quickMsgList },
+              payload: { data: { items: quickMsgList } },
             });
             // playAudio();
           } else if (msg && msg.order_msg_type === 2) {
             // 申述聊天
-            const { chatMsgList } = getState().card;
+            // const { chatMsgList } = getState().card;
+            const { chatMsgList: { items, total } } = getState().card;
 
-            chatMsgList.unshift(msg);
+            items.unshift(msg);
+            const chatData = {
+                items,
+                paginator: {
+                    total: total + 1,
+                }
+            }
             dispatch({
               type: 'card/setChatMsgList',
-              payload: { data: chatMsgList },
+              payload: { data: chatData, push: true },
             });
             // playAudio();
           } else if (msg && [31, 32, 33, 34].indexOf(msg.order_msg_type) >= 0) {

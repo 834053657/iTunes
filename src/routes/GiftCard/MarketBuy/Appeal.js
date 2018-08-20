@@ -35,7 +35,7 @@ const msg = defineMessages({
   //发送成功
   send_success: {
     id: 'Appeal.send_success',
-    defaultMessage: '上传成功',
+    defaultMessage: '发送成功',
   },
 });
 @injectIntl()
@@ -54,6 +54,7 @@ export default class Appeal extends Component {
       imageUrls: [],
       textValue: '',
       shouldCleanPic: false,
+      page: 1,
     };
     //当前订单ID
     this.id = props.orderId;
@@ -135,7 +136,7 @@ export default class Appeal extends Component {
     return { content, image_url: imageUrls };
   };
 
-  fetchData = order_id => {
+  fetchData = (order_id, page) => {
     const { dispatch, detail: { order = {} } } = this.props;
     dispatch({
       type: 'card/fetchChatMsgList',
@@ -143,9 +144,22 @@ export default class Appeal extends Component {
         order_id,
         order_msg_type: 2, // 1快捷短语  2 申诉
         goods_type: 2, // 1: 'itunes', 2: '礼品卡'
+        page_size: 5,
+        page: page || 1,
       },
     });
   };
+
+  handleViewMore = () => {
+    const {page = 1} = this.state;
+    const { detail: { order = {} } } = this.props;
+    console.log(123, order, page);
+
+    this.setState({
+      page: page + 1,
+    });
+    this.fetchData(order.id, page + 1);
+  }
 
   handleChange = ({ fileList }) => this.setState({ fileList });
 
@@ -355,7 +369,7 @@ export default class Appeal extends Component {
                 </div>
               </TabPane>
               <TabPane tab={<FM id="appeal.state_inTime" defaultMessage="申诉中" />}  key="2">
-                <AppealInfo data={chatMsgList} />
+                <AppealInfo data={chatMsgList} onViewMore={this.handleViewMore} />
                 <Form onSubmit={this.handleSubmit}>
                   <div className={styles.submitAppeal}>
                     <div>
@@ -440,12 +454,18 @@ const breakLine = (v) => {
 }
 
 const AppealInfo = props => {
-  let { data = [] } = props;
-  data = orderBy(data, ['created_at'], ['asc']);
+  let {data: {items = [], total}} = props;
+  items = orderBy(items, ['created_at'], ['asc']);
   return (
     <div>
+      {
+        total > items.length && (
+          <div className={styles.viewMore}>
+            查看更多历史消息请点击<a onClick={props.onViewMore}>加载</a>
+          </div>)
+      }
       <ul className={styles.tabTwoTab}>
-        {map(data, d => {
+        {map(items, d => {
           return (
             <li key={d.id} className={styles.appealItem}>
               <div className={styles.leftAvatar}>

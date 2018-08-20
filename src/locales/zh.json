@@ -1,5 +1,5 @@
 {
-  "Appeal.send_success": "上传成功",
+  "Appeal.send_success": "发送成功",
   "basic_layout.clearMessages": "清空了消息",
   "basic_layout.prompt": "提示",
   "Appeal.error_message": "上传错误，可能请求已过期，请刷新页面重试",
