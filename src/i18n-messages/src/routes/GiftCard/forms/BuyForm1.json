@@ -24,6 +24,14 @@
     "defaultMessage": "最大面额"
   },
   {
+    "id": "totalMoney.min",
+    "defaultMessage": "最小总面额"
+  },
+  {
+    "id": "totalMoney.max",
+    "defaultMessage": "最大总面额"
+  },
+  {
     "id": "BuyForm.choose_send_card_time",
     "defaultMessage": "请选择发卡期限"
   },
@@ -142,6 +150,10 @@
   {
     "id": "BuyForm.unit_price",
     "defaultMessage": "单价"
+  },
+  {
+    "id": "BuyForm.total_money",
+    "defaultMessage": "总面额"
   },
   {
     "id": "BuyForm.condition_type",

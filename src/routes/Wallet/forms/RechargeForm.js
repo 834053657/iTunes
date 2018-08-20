@@ -134,7 +134,7 @@ class RechargeForm extends Component {
             <img
               className={styles.qrcode}
               src={payment_detail.qrcode_url}
-              alt={<FM id="rechargeForm.pay_code_1" defaultMessage="收款二维码" />}
+              alt=""
             />
           </FormItem>
         </div>
