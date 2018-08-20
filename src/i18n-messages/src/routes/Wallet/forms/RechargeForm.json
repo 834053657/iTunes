@@ -28,10 +28,6 @@
     "defaultMessage": "收款二维码"
   },
   {
-    "id": "rechargeForm.pay_code_1",
-    "defaultMessage": "收款二维码"
-  },
-  {
     "id": "rechargeForm.pay_way",
     "defaultMessage": "充值方式"
   },

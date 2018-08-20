@@ -1,5 +1,5 @@
 import React, {PureComponent, Component, Fragment} from 'react';
-import {Form, Button, Row, Col, Icon, Radio, Popconfirm, Popover, message} from 'antd';
+import {Form, Button, Row, Col, Icon, Radio, Popconfirm, Popover,message} from 'antd';
 import {FormattedMessage as FM, defineMessages} from 'react-intl';
 // import AsyncValidator from 'async-validator'
 import {map, filter, omit, forEach, size} from 'lodash';
@@ -61,7 +61,6 @@ const msg = defineMessages({
     id: 'BuyForm.max_totalMoney',
     defaultMessage: '最大总面额'
   },
-
   choose_send_card_time: {
     id: 'BuyForm.choose_send_card_time',
     defaultMessage: '请选择发卡期限'
@@ -584,7 +583,6 @@ export default class BuyForm extends PureComponent {
             onChange={this.changeDynamic}
           />
         </Row>
-        <span>{dynamic}</span>
         <Field
           label={<FM id='BuyForm.ask_title' defaultMessage='要求' />}
           name="password_type"

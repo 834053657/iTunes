@@ -180,13 +180,13 @@ export function getSystemUrl(env) {
     // socket_url = 'http://localhost:3000/socket/push';
     socket_url = 'http://47.106.111.213:9000/socket.io';
   } else if (env === 'test1') {
-    base_url = 'http://47.106.111.213:9003'; // 深圳测试环境
-    web_name += '(TEST1)';
+    base_url = 'http://47.106.111.213:9003'; // 深圳开发测试环境
+    web_name += '(DEV)';
     // socket_url = 'http://localhost:3000/socket/push';
-    socket_url = 'http://47.106.111.213:9065/socket.io'; // // 深圳测试环境
+    socket_url = 'http://47.106.111.213:9065/socket.io'; // // 深圳开发测试环境
   } else if (env === 'test2') {
     base_url = 'http://47.106.111.213:9001'; // 业务测试环境
-    web_name += '(TEST2)';
+    web_name += '(TEST)';
     // socket_url = 'http://localhost:3000/socket/push';
     socket_url = 'http://47.106.111.213:9000/socket.io';
   }

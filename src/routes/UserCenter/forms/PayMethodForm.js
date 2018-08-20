@@ -33,10 +33,10 @@ export default class PayMethodForm extends Component {
     this.state = {
       formItemLayout: {
         labelCol: {
-          sm: { span: 4 },
+          sm: { span: 6 },
         },
         wrapperCol: {
-          sm: { span: 20 },
+          sm: { span: 18 },
         },
       },
       fieldList: {

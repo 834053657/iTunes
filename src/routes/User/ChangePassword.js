@@ -31,6 +31,14 @@ const msg = defineMessages({
     id: 'changePassWord.require_passWord_again',
     defaultMessage: '请确认密码',
   },
+  pwd_error: {
+    id: 'changePassWord.pwd_error',
+    defaultMessage: '两次输入的密码不匹配!',
+  },
+  help: {
+    id: 'changePassWord.help',
+    defaultMessage: '请输入密码！',
+  },
 });
 
 @injectIntl()
@@ -78,7 +86,7 @@ export default class Register extends Component {
   checkConfirm = (rule, value, callback) => {
     const { form } = this.props;
     if (value && value !== form.getFieldValue('new_password')) {
-      callback('两次输入的密码不匹配!');
+      callback(INTL(msg.pwd_error));
     } else {
       callback();
     }
@@ -87,7 +95,7 @@ export default class Register extends Component {
   checkPassword = (rule, value, callback) => {
     if (!value) {
       this.setState({
-        help: '请输入密码！',
+        help: INTL(msg.help),
         visible: !!value,
       });
       callback('error');
