@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from 'react';
-import { Form, Button } from 'antd';
-import { FormattedMessage as FM, defineMessages } from 'react-intl';
-import {injectIntl } from 'components/_utils/decorator';
+import React, {Component, Fragment} from 'react';
+import {Form, Button} from 'antd';
+import {FormattedMessage as FM, defineMessages} from 'react-intl';
+import {injectIntl} from 'components/_utils/decorator';
 import InputNumber from 'components/InputNumber';
 import styles from './PriceForm.less';
 
@@ -49,7 +49,7 @@ export default class PriceForm extends Component {
   // };
 
   render() {
-    const { intl, form: { getFieldDecorator, resetForm, getFieldsError }, min, max } = this.props;
+    const {intl, form: {getFieldDecorator, resetForm, getFieldsError}, min, max} = this.props;
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -57,7 +57,7 @@ export default class PriceForm extends Component {
           extra={
             <FM
               {...msg.extra}
-              values={{ min, max }}
+              values={{min, max}}
             />
           }
         >
@@ -65,24 +65,21 @@ export default class PriceForm extends Component {
             rules: [
               {
                 required: true,
-                message: <FM {...msg.input_amount_num} />,
+                //message: <FM id="PriceForm.input_amount_num" defaultMessage="请输入面额"/>,
+                message: "请输入面额"
               },
               {
                 type: 'number',
                 min,
                 max,
-                message: (
-                  <FM
-                    {...msg.extra}
-                    values={{ min, max }}
-                  />
-                ),
-              },
-              // {
-              //   validator: this.checkCount,
-              // },
+                // message: (<FM {...msg.extra} values={{ min, max }}/>),
+                message: `面额值范围应在${min}-${max}`
+          },
+            // {
+            //   validator: this.checkCount,
+            // },
             ],
-          })(<InputNumber precision={0} style={{ width: 200 }} placeholder={intl.formatMessage(msg.input_amount_num)} />)}
+          })(<InputNumber precision={0} style={{width: 200}} placeholder={intl.formatMessage(msg.input_amount_num)} />)}
         </FormItem>
         <FormItem className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>
@@ -90,7 +87,7 @@ export default class PriceForm extends Component {
           </Button>
           <Button
             // loading={submitting}
-            style={{ marginLeft: 15 }}
+            style={{marginLeft: 15}}
             type="primary"
             htmlType="submit"
           >

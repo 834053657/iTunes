@@ -1,5 +1,5 @@
 import React, {PureComponent, Component, Fragment} from 'react';
-import {Form, Button, Row, Col, Icon, Radio, Popconfirm, Popover} from 'antd';
+import {Form, Button, Row, Col, Icon, Radio, Popconfirm, Popover, message} from 'antd';
 import {FormattedMessage as FM, defineMessages} from 'react-intl';
 // import AsyncValidator from 'async-validator'
 import {map, filter, omit, forEach, size} from 'lodash';
@@ -32,10 +32,6 @@ const msg = defineMessages({
     id: 'BuyForm.account_money',
     defaultMessage: '面额'
   },
-  account_min_num: {
-    id: 'BuyForm.account_min_num',
-    defaultMessage: '最小数量'
-  },
   account_max_num: {
     id: 'BuyForm.account_max_num',
     defaultMessage: '最大数量'
@@ -43,6 +39,10 @@ const msg = defineMessages({
   choose_type: {
     id: 'BuyForm.choose_type',
     defaultMessage: '请选择类型'
+  },
+  multiple: {
+    id: 'BuyForm.multiple',
+    defaultMessage: '倍数'
   },
   min_account: {
     id: 'BuyForm.min_account',
@@ -52,14 +52,16 @@ const msg = defineMessages({
     id: 'BuyForm.max_account',
     defaultMessage: '最大面额'
   },
+
   min_totalMoney: {
-    id: 'totalMoney.min',
+    id: 'BuyForm.min_totalMoney',
     defaultMessage: '最小总面额'
   },
   max_totalMoney: {
-    id: 'totalMoney.max',
+    id: 'BuyForm.max_totalMoney',
     defaultMessage: '最大总面额'
   },
+
   choose_send_card_time: {
     id: 'BuyForm.choose_send_card_time',
     defaultMessage: '请选择发卡期限'
@@ -89,9 +91,11 @@ const msg = defineMessages({
 @injectIntl()
 @connect(state => {
   return {
-    dynamic:formValueSelector('loginForm')(state, 'dynamic'),
+    dynamic: formValueSelector('loginForm')(state, 'dynamic'),
+    total_money: formValueSelector('loginForm')(state, 'total_money') || {},
     condition_type: formValueSelector('loginForm')(state, 'condition_type'),
     condition2: formValueSelector('loginForm')(state, 'condition2') || {},
+    condition1: formValueSelector('loginForm')(state, 'condition1') || [],
   };
 })
 @reduxForm({
@@ -101,32 +105,22 @@ export default class BuyForm extends PureComponent {
   descriptor = {
     card_type: {
       required: true,
-      message: <FM id='BuyForm.type_choose' defaultMessage='请选择类型'/>,
+      message: <FM id='BuyForm.type_choose' defaultMessage='请选择类型' />,
     },
     unit_price: {
       required: true,
       type: 'number',
-      message: <FM id='BuyForm.input_number' defaultMessage='请输入单价'/>,
+      message: <FM id='BuyForm.input_number' defaultMessage='请输入单价' />,
     },
-    multiple: [
-      {
-        required: true,
-        type: 'number',
-        message: <FM id='BuyForm.input_multiple' defaultMessage='请输入倍数'/>,
-      },
-      {
-        pattern: /^[1-9]\d*$/,
-        message: <FM id='BuyForm.integer_input' defaultMessage='请输入正整数'/>,
-      },
-    ],
+
     condition_type: {
       required: true,
-      message: <FM id='BuyForm.choose_type_' defaultMessage='请选择条件类型'/>,
+      message: <FM id='BuyForm.choose_type_' defaultMessage='请选择条件类型' />,
     },
     condition1: {
       type: 'array',
       required: true,
-      message: {_error: <FM id='BuyForm.error_add_assign' defaultMessage='请添加指定面额'/>},
+      message: {_error: <FM id='BuyForm.error_add_assign' defaultMessage='请添加指定面额' />},
       defaultField: {
         type: 'object',
         fields: {
@@ -134,18 +128,13 @@ export default class BuyForm extends PureComponent {
             {
               required: true,
               type: 'number',
-              message: <FM id='BuyForm.input_account_money' defaultMessage='请输入面额'/>,
+              message: <FM id='BuyForm.input_account_money' defaultMessage='请输入面额' />,
             },
           ],
-          min_count: [{
-            required: true,
-            type: 'number',
-            message: <FM id='BuyForm.input_min_num' defaultMessage='请输入最小数量'/>
-          }],
           max_count: {
             required: true,
             type: 'number',
-            message: <FM id='BuyForm.input_max_num' defaultMessage='请输入最大数量'/>
+            message: <FM id='BuyForm.input_max_num' defaultMessage='请输入最大数量' />
           },
         },
       },
@@ -153,48 +142,59 @@ export default class BuyForm extends PureComponent {
     condition2: {
       type: 'object',
       required: true,
-      message: {_error: <FM id='BuyForm.condition2_input_' defaultMessage='请填写'/>},
+      message: {_error: <FM id='BuyForm.condition2_input_' defaultMessage='请填写' />},
       fields: {
+        multiple: [
+          {
+            required: true,
+            type: 'number',
+            message: <FM id='BuyForm.input_multiple' defaultMessage='请输入倍数' />,
+          },
+          {
+            pattern: /^[1-9]\d*$/,
+            message: <FM id='BuyForm.integer_input' defaultMessage='请输入正整数' />,
+          },
+        ],
         min_money: [
           {
             required: true,
             type: 'number',
-            message: <FM id='BuyForm.input_min_account' defaultMessage='请输入最小面额'/>,
+            message: <FM id='BuyForm.input_min_account' defaultMessage='请输入最小面额' />,
           },
           {
             pattern: /^[1-9]\d*$/,
-            message: <FM id='BuyForm.input_' defaultMessage='请输入正整数'/>,
+            message: <FM id='BuyForm.input_' defaultMessage='请输入正整数' />,
           },
         ],
         max_money: [
           {
             required: true,
             type: 'number',
-            message: <FM id='BuyForm.input_max_amount' defaultMessage='请输入最大面额'/>,
+            message: <FM id='BuyForm.input_max_amount' defaultMessage='请输入最大面额' />,
           },
           {
             pattern: /^[1-9]\d*$/,
-            message: <FM id='BuyForm.condition2_input_integer' defaultMessage='请输入正整数'/>,
+            message: <FM id='BuyForm.condition2_input_integer' defaultMessage='请输入正整数' />,
           },
         ],
       },
     },
     deadline: {
       required: true,
-      message: <FM id='BuyForm.deadline_time_choose' defaultMessage='请选择发卡期限'/>,
+      message: <FM id='BuyForm.deadline_time_choose' defaultMessage='请选择发卡期限' />,
     },
     guarantee_time: {
       required: true,
-      message: <FM id='BuyForm.guarantee_time' defaultMessage='请选择保障时间'/>,
+      message: <FM id='BuyForm.guarantee_time' defaultMessage='请选择保障时间' />,
     },
     password_type: {
       required: true,
-      message: <FM id='BuyForm.password_type' defaultMessage='请输入选择密保卡类型'/>,
+      message: <FM id='BuyForm.password_type' defaultMessage='请输入选择密保卡类型' />,
     },
   };
 
   save = values => {
-    const {condition_type} = this.props;
+    const {condition_type, dynamic} = this.props;
     const rules = omit(this.descriptor, condition_type === 1 ? 'condition2' : 'condition1');
     values.unit_price = parseFloat(values.unit_price)
     const err = validate(rules, values);
@@ -208,36 +208,55 @@ export default class BuyForm extends PureComponent {
     this.setState({
       renderAfterSave: true
     })
+    if (values.total_money.max < values.total_money.min && !dynamic) {
+      createError(checkErr, `total_money.min`, '该数值应小于最大总面额')
+    }
     if (condition_type === 1) {
+      if (values.condition1.length < 1) {
+        createError(checkErr, `condition_type`, '未添加指定面额')
+      }
+      if (dynamic && this.fluidLastMoney() < 0) {
+        createError(checkErr, `condition1.${values.condition1.length - 1}.max_count`, '总面额值超过流动最大值')
+      }
       forEach(values.condition1, (value, key) => {
-        if (value.min_count > value.max_count) {
-          createError(checkErr, `condition1.${key}.min_count`,
-            <FM
-              id='BuyForm.num_less_right'
-              defaultMessage='该数值应小于右侧值'
-            />);
-          //createError(checkErr, `condition1.${key}.min_count`, '该数值应小于右侧值');
+        if (value.max_count > values.total_money.max) {
+          createError(checkErr, `condition1.${key}.max_count`, '该数值应小于最大总面额');
+          // <FM
+          //   id='BuyForm.num_less_right'
+          //   defaultMessage='该数值应小于最大面额'
+          // />
         }
       });
       values.condition = values.condition1;
     } else {
+      if (values.condition2.max_money > values.total_money.max) {
+        createError(checkErr, `condition2.max_money`, '该数值应小于最大总面额');
+      }
+      if (values.condition2.multiple > values.total_money.max) {
+        createError(checkErr, `condition2.multiple`, '该数值应小于最大总面额');
+      }
+      if (values.condition2.multiple > values.condition2.max_money) {
+        createError(checkErr, `condition2.multiple`, '该数值应小于或等于右侧最大面额');
+      }
       if (values.condition2.min_money > values.condition2.max_money) {
-        createError(checkErr, `condition2.min_money`, <FM id='BuyForm.num_lessThan_right' defaultMessage='该数值应小于右侧值'/>);
-        // createError(checkErr, `condition2.min_money`, '该数值应小于右侧值');
+        createError(checkErr, `condition2.min_money`, <FM id='BuyForm.num_lessThan_right' defaultMessage='该数值应小于右侧值' />);
       }
       values.condition = values.condition2;
     }
-
+    if (dynamic) {
+      values.dynamic = 1
+    } else {
+      values.dynamic = 0
+    }
     if (size(checkErr) > 0) {
       throw new SubmissionError(checkErr);
     }
     const params = omit(values, ['condition2', 'condition1']);
-
     this.props.onSubmit(params);
   };
-
+  dynamic = false;
   renderItem = arg => {
-    const {intl} = this.props;
+    const {intl, total_money, dynamic, condition1} = this.props;
     const {fields, formitemlayout, meta, _error, disabled, editing} = arg;
     return (
       <FormItem
@@ -248,7 +267,7 @@ export default class BuyForm extends PureComponent {
         {fields.map((member, index) => {
           return (
             <Row key={index} className={styles.denoRow}>
-              <Col sm={4}>
+              <Col sm={3}>
                 <Field
                   name={`${member}.money`}
                   component={AInputNumber}
@@ -256,18 +275,6 @@ export default class BuyForm extends PureComponent {
                   placeholder={intl.formatMessage(msg.account_money)}
                   precision={0}
                   min={0}
-                  style={{width: '100%'}}
-                  disabled={disabled}
-                />
-              </Col>
-              <Col sm={4} offset={1}>
-                <Field
-                  name={`${member}.min_count`}
-                  component={AInputNumber}
-                  parse={parseNumber}
-                  precision={0}
-                  min={0}
-                  placeholder={intl.formatMessage(msg.account_min_num)}
                   style={{width: '100%'}}
                   disabled={disabled}
                 />
@@ -286,13 +293,13 @@ export default class BuyForm extends PureComponent {
               </Col>
               {!disabled && (
                 <Popconfirm
-                  title={<FM id='BuyForm.sure_to_cancel' defaultMessage='您确认要删除吗?'/>}
+                  title={<FM id='BuyForm.sure_to_cancel' defaultMessage='您确认要删除吗?' />}
                   onConfirm={() => fields.remove(index)}
                   placement="topLeft"
-                  okText={<FM id='BuyForm.choose_ok' defaultMessage='是'/>}
-                  cancelText={<FM id='BuyForm.choose_no' defaultMessage='否'/>}
+                  okText={<FM id='BuyForm.choose_ok' defaultMessage='是' />}
+                  cancelText={<FM id='BuyForm.choose_no' defaultMessage='否' />}
                 >
-                  <Icon className={styles.deleteDenoIcon} type="minus-circle-o"/>
+                  <Icon className={styles.deleteDenoIcon} type="minus-circle-o" />
                 </Popconfirm>
               )}
             </Row>
@@ -301,14 +308,51 @@ export default class BuyForm extends PureComponent {
         <Button
           type="dashed"
           style={{width: '40%', marginTop: '30px'}}
-          onClick={() => fields.push({money: '', min_count: '', max_count: ''})}
+          onClick={() => {
+            let money = total_money.max
+            let noBlank = true
+            if (dynamic) {
+              condition1.map(item => {
+                const ArrayMoney = item.money * item.max_count
+                if (!ArrayMoney) {
+                  noBlank = false
+                }
+                return money -= ArrayMoney
+              })
+            }
+            if (total_money.max) {
+              if ((money > 0 && dynamic) || !dynamic) {
+                if (noBlank) {
+                  fields.push({money: '', max_count: ''})
+                } else {
+                  message.warning('请填写完整面额信息')
+                }
+              } else {
+                message.warning('流动最大值已达上限')
+              }
+            } else {
+              message.warning('请先填写总面额')
+            }
+          }}
           disabled={disabled}
         >
-          <Icon type="plus"/> <FM id='BuyForm.add_account' defaultMessage='添加面额'/>
+          <Icon type="plus" /> <FM id='BuyForm.add_account' defaultMessage='添加面额' />
         </Button>
       </FormItem>
     );
   };
+
+  fluidLastMoney = () => {
+    const {total_money, dynamic, condition1} = this.props
+    let money = total_money.max
+    if (dynamic) {
+      condition1.map(item => {
+        const ArrayMoney = item.money * item.max_count
+        return money -= ArrayMoney
+      })
+    }
+    return money
+  }
 
   handleCancel = () => {
     this.props.reset();
@@ -333,6 +377,16 @@ export default class BuyForm extends PureComponent {
     win.focus();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.dynamic !== nextProps.dynamic) {
+      this.dynamic = nextProps.dynamic
+    }
+  }
+
+  changeDynamic = () => {
+    this.props.array.removeAll('condition1');
+  }
+
   render() {
     const {
       intl,
@@ -350,7 +404,6 @@ export default class BuyForm extends PureComponent {
       initialValues,
       dynamic,
     } = this.props;
-    console.log(dynamic);
     const formItemLayout = {
       labelCol: {
         sm: {span: 4},
@@ -365,25 +418,25 @@ export default class BuyForm extends PureComponent {
     const DynamicInstruction = (
       <p style={{width: 300}}>
         流动性代表一个广告成交的订单具有上限值，上限值为最大总面额乘以单价。
-        <br/>
+        <br />
         例如：收购最大总面额为 100 面额，
         卖家出售 20面额 的卡，流动性减至 80 面额乘以单价。
-        <br/>
+        <br />
         如果交易未完成，流动性上限值恢复至 100 面额乘以单价；
-        <br/>
+        <br />
         简单的说，开启流动性收卡有上限值，不开启流动性可以无限收卡
       </p>
     )
     const DynamicPop =
       (
         <Popover placement="right" content={DynamicInstruction}>
-          <Icon style={{marginLeft: 10, fontSize: 16}} type="question-circle-o"/>
+          <Icon style={{marginLeft: 10, fontSize: 16}} type="question-circle-o" />
         </Popover>
       )
     return (
       <Form onSubmit={handleSubmit(this.save)}>
         <Field
-          label={<FM id='BuyForm.card_type' defaultMessage='类型'/>}
+          label={<FM id='BuyForm.card_type' defaultMessage='类型' />}
           name="card_type"
           component={ASelect}
           {...formItemLayout}
@@ -400,7 +453,7 @@ export default class BuyForm extends PureComponent {
           })}
         </Field>
         <Field
-          label={<FM id='BuyForm.unit_price' defaultMessage='单价'/>}
+          label={<FM id='BuyForm.unit_price' defaultMessage='单价' />}
           name="unit_price"
           parse={this.parseFloatNumber}
           component={AInputNumber}
@@ -428,8 +481,8 @@ export default class BuyForm extends PureComponent {
         <Row>
           <Col sm={12} offset={2}>
             <Field
-              name="totalMoney.min"
-              label={<FM id='BuyForm.total_money' defaultMessage='总面额'/>}
+              name="total_money.min"
+              label={<FM id='BuyForm.total_money' defaultMessage='总面额' />}
               parse={parseNumber}
               precision={0}
               min={0}
@@ -440,9 +493,9 @@ export default class BuyForm extends PureComponent {
               placeholder={intl.formatMessage(msg.min_totalMoney)}
             />
           </Col>
-          <Col sm={4} offset={1}>
+          <Col sm={4}>
             <Field
-              name="totalMoney.max"
+              name="total_money.max"
               parse={parseNumber}
               precision={0}
               min={0}
@@ -456,15 +509,15 @@ export default class BuyForm extends PureComponent {
         </Row>
 
         <Field
-          label={<FM id='BuyForm.condition_type' defaultMessage='条件'/>}
+          label={<FM id='BuyForm.condition_type' defaultMessage='条件' />}
           name="condition_type"
           component={ARadioGroup}
           {...formItemLayout}
           disabled={!editing}
           placeholder=""
         >
-          <Radio.Button value={1}><FM id='BuyForm.btn_account' defaultMessage='指定面额'/></Radio.Button>
-          <Radio.Button value={2}><FM id='BuyForm.btn_account_region' defaultMessage='面额区间'/></Radio.Button>
+          <Radio.Button value={1}><FM id='BuyForm.btn_account' defaultMessage='指定面额' /></Radio.Button>
+          <Radio.Button value={2}><FM id='BuyForm.btn_account_region' defaultMessage='面额区间' /></Radio.Button>
         </Field>
 
         {condition_type === 1 ? (
@@ -476,7 +529,19 @@ export default class BuyForm extends PureComponent {
           />
         ) : (
           <Row>
-            <Col sm={4} offset={4}>
+            <Col sm={3} offset={4}>
+              <Field
+                name="condition2.multiple"
+                parse={parseNumber}
+                precision={0}
+                min={0}
+                style={{width: '100%'}}
+                component={AInputNumber}
+                disabled={!editing}
+                placeholder={intl.formatMessage(msg.multiple)}
+              />
+            </Col>
+            <Col sm={3} offset={1}>
               <Field
                 name="condition2.min_money"
                 parse={parseNumber}
@@ -488,10 +553,10 @@ export default class BuyForm extends PureComponent {
                 placeholder={intl.formatMessage(msg.min_account)}
               />
             </Col>
-            <Col sm={1} style={{textAlign: 'center', marginTop: '8px'}}>
+            <Col sm={1} style={{textAlign: 'center', marginTop: '5px'}}>
               ~
             </Col>
-            <Col sm={4}>
+            <Col sm={3}>
               <Field
                 name="condition2.max_money"
                 parse={parseNumber}
@@ -509,16 +574,19 @@ export default class BuyForm extends PureComponent {
         <Row>
           <Field
             name="dynamic"
-            label={<FM id='BuyForm.dynamic' defaultMessage='流动性'/>}
+            label={<FM id='BuyForm.dynamic' defaultMessage='流动性' />}
             precision={0}
             {...formItemLayout}
+            defaultChecked={dynamic === 1}
             extranode={DynamicPop}
             component={ASwitch}
+            disabled={!editing}
+            onChange={this.changeDynamic}
           />
         </Row>
-
+        <span>{dynamic}</span>
         <Field
-          label={<FM id='BuyForm.ask_title' defaultMessage='要求'/>}
+          label={<FM id='BuyForm.ask_title' defaultMessage='要求' />}
           name="password_type"
           component={ARadioGroup}
           {...formItemLayout}
@@ -533,7 +601,7 @@ export default class BuyForm extends PureComponent {
         </Field>
 
         <Field
-          label={<FM id='BuyForm.time_send_card' defaultMessage='发卡期限'/>}
+          label={<FM id='BuyForm.time_send_card' defaultMessage='发卡期限' />}
           name="deadline"
           component={ASelect}
           {...formItemLayout}
@@ -543,13 +611,13 @@ export default class BuyForm extends PureComponent {
         >
           {map(CONFIG.deadline, (item, index) => (
             <AOption key={item} value={item}>
-              {item}<FM id='BuyForm.minute_time' defaultMessage='分钟'/>
+              {item}<FM id='BuyForm.minute_time' defaultMessage='分钟' />
             </AOption>
           ))}
         </Field>
 
         <Field
-          label={<FM id='BuyForm.safe_time' defaultMessage='保障时间'/>}
+          label={<FM id='BuyForm.safe_time' defaultMessage='保障时间' />}
           name="guarantee_time"
           component={ASelect}
           {...formItemLayout}
@@ -559,7 +627,7 @@ export default class BuyForm extends PureComponent {
         >
           {map(CONFIG.guarantee_time, (item, index) => (
             <AOption key={item} value={item}>
-              {item}<FM id='BuyForm.safe_time_minute' defaultMessage='分钟'/>
+              {item}<FM id='BuyForm.safe_time_minute' defaultMessage='分钟' />
             </AOption>
           ))}
         </Field>
@@ -567,9 +635,9 @@ export default class BuyForm extends PureComponent {
         <Field
           label={
             <span>
-              <FM id='BuyForm.deal_rules' defaultMessage='交易条款'/>
+              <FM id='BuyForm.deal_rules' defaultMessage='交易条款' />
               <i>
-                (<FM id='BuyForm.can_be_choose' defaultMessage='可选'/>)
+                (<FM id='BuyForm.can_be_choose' defaultMessage='可选' />)
               </i>
             </span>
           }
@@ -585,7 +653,7 @@ export default class BuyForm extends PureComponent {
             </a>
           }
         >
-          <AOption value={0}><FM id='BuyForm.none_' defaultMessage='无'/></AOption>
+          <AOption value={0}><FM id='BuyForm.none_' defaultMessage='无' /></AOption>
           {map(terms, (item, index) => (
             <AOption
               key={item.id}
@@ -597,7 +665,7 @@ export default class BuyForm extends PureComponent {
         </Field>
 
         <Field
-          label={<FM id='BuyForm.order_num_' defaultMessage='同时处理订单数'/>}
+          label={<FM id='BuyForm.order_num_' defaultMessage='同时处理订单数' />}
           name="concurrency_order"
           component={AInputNumber}
           style={{width: 200}}
@@ -611,7 +679,7 @@ export default class BuyForm extends PureComponent {
         />
         <Form.Item className={styles.buttonBox}>
           <Button key="back" onClick={this.handleCancel}>
-            <FM id='BuyForm.cancel_btn' defaultMessage='返回'/>
+            <FM id='BuyForm.cancel_btn' defaultMessage='返回' />
           </Button>
           {(!editing ?
               showEdit &&
@@ -622,16 +690,16 @@ export default class BuyForm extends PureComponent {
                   className={styles.submit}
                   onClick={onEdit}
                 >
-                  <FM id='BuyForm.edit_btn' defaultMessage='编辑'/>
+                  <FM id='BuyForm.edit_btn' defaultMessage='编辑' />
                 </Button>
               )
               :
               (
                 <Popconfirm
-                  title={<FM id='BuyForm.sure_public' defaultMessage='确定发布吗？'/>}
+                  title={<FM id='BuyForm.sure_public' defaultMessage='确定发布吗？' />}
                   onConfirm={handleSubmit(this.save)}
-                  okText={<FM id='BuyForm.sure_public_yes' defaultMessage='是'/>}
-                  cancelText={<FM id='BuyForm.sure_public_no' defaultMessage='否'/>}
+                  okText={<FM id='BuyForm.sure_public_yes' defaultMessage='是' />}
+                  cancelText={<FM id='BuyForm.sure_public_no' defaultMessage='否' />}
                 >
                   <Button
                     type="primary"
@@ -639,7 +707,7 @@ export default class BuyForm extends PureComponent {
                     htmlType="submit"
                     loading={this.props.submitSellForm}
                   >
-                    <FM id='BuyForm.btn_keep' defaultMessage='发布'/>
+                    <FM id='BuyForm.btn_keep' defaultMessage='发布' />
                   </Button>
                 </Popconfirm>
               )

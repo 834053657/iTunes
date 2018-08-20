@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
-import {FormattedMessage as FM ,defineMessages} from 'react-intl';
-import {injectIntl } from 'components/_utils/decorator';
+import {FormattedMessage as FM, defineMessages} from 'react-intl';
+import {injectIntl} from 'components/_utils/decorator';
 import {sumBy, map, get, findIndex, filter} from 'lodash';
 import {Badge, Button, message, Avatar, Popover, Icon, Input, Spin, Form, Popconfirm} from 'antd';
 import DescriptionList from 'components/DescriptionList';
@@ -50,6 +50,10 @@ const msg = defineMessages({
     id: 'dealDetail.buy_amount_details',
     defaultMessage: '未填写面额详情',
   },
+  buy_amount_multiple: {
+    id: 'dealDetail.buy_amount_multiple',
+    defaultMessage: '累计出售面额不满足倍数',
+  },
   sure_to_buy: {
     id: 'dealDetail.sure_to_buy',
     defaultMessage: '确认要购买吗？',
@@ -62,7 +66,7 @@ const msg = defineMessages({
     id: 'dealDetail.sell_yes',
     defaultMessage: '是',
   },
-  sell_no:{
+  sell_no: {
     id: 'dealDetail.sell_no',
     defaultMessage: '否',
   }
@@ -116,7 +120,6 @@ export default class DealDeatil extends Component {
     const total = sumBy(getFieldValue('order_detail'), row => {
       return row.money * row.count * detail.unit_price || 0;
     });
-
     return total
   };
 
@@ -131,16 +134,31 @@ export default class DealDeatil extends Component {
     return total
   };
 
-  calcuMaxCountBuy = (orderData, item) => {
-    const accountBalance = get(this.props, 'detail.owner.amount');
-    const unit_price = get(this.props, 'detail.unit_price') || 0;
+  calcuCountBuy = (orderData, item, m) => {
     const {money, count} = item || {};
+    let min = get(this.props, 'detail.total_money.min');
+    let max = get(this.props, 'detail.total_money.max');
     const userBuySum = sumBy(orderData, row => {
-      return row.money * row.count * unit_price || 0;
+      return row.money * row.count || 0;
     });
-    const result = (accountBalance - userBuySum) * 10000 / money / unit_price / 10000;
+    min -= userBuySum
+    max -= userBuySum
+    if (m === 'min') {
+      return parseInt(min / money) < 0 ? 0 : parseInt(min / money)
+    } else {
+      return parseInt(max / money) < 0 ? 0 : parseInt(max / money)
+    }
+  };
 
-    return result < 0 ? 0 : +parseInt(result);
+  calcuFixCountBuy = (orderData, item, m) => {
+    const {money, count} = item || {};
+    const min = get(this.props, 'detail.total_money.min');
+    const max = get(this.props, 'detail.total_money.max');
+    if (m === 'min') {
+      return parseInt(min / money)
+    } else {
+      return parseInt(max / money)
+    }
   };
 
   handleBack = () => {
@@ -180,13 +198,13 @@ export default class DealDeatil extends Component {
   };
 
   checkCount = (rule, value, callback) => {
-    const multiple = get(this.props, 'detail.multiple') || 0;
-    if (value && value % multiple !== 0) {
+    const total_price = get(this.props, 'detail.total_money') || 0;
+    if (value && value % total_price !== 0) {
       callback(
         <FM
           id="dealDetail.num_multiple"
           defaultMessage="数量必须是{multiple}的倍数"
-          values={{multiple}}
+          values={{total_price}}
         />
       );
     } else {
@@ -202,7 +220,14 @@ export default class DealDeatil extends Component {
   renderCondition = detail => {
     const {orderDetail, addDenoVisible} = this.state;
     const {getFieldDecorator, getFieldValue} = this.props.form;
-    const {condition_type, ad_type, money = [], stock = {}, multiple = 0} = detail || {};
+    const {
+      condition_type,
+      ad_type,
+      money = [],
+      stock = {},
+      multiple = 0,
+      fluid,
+    } = detail || {};
     let {condition} = detail || {};
     const accountBalance = detail.owner.amount;
     let content = null;
@@ -215,7 +240,6 @@ export default class DealDeatil extends Component {
         <div className={styles.order_detail_box}>
           {condition.map((c, index) => {
             const moneys = c.money;
-            const min_con = c.min_count;
             const max_con = c.max_count;
             getFieldDecorator(`order_detail[${index}].money`, {initialValue: c.money});
             return (
@@ -232,8 +256,8 @@ export default class DealDeatil extends Component {
                 extra={
                   <FM
                     id="dealDetail.num_amount_limit"
-                    defaultMessage="数量限额 {min_con} - {max_con}"
-                    values={{min_con, max_con}}
+                    defaultMessage="数量限额 {max_con}"
+                    values={{max_con}}
                   />
                 }
               >
@@ -248,17 +272,11 @@ export default class DealDeatil extends Component {
                       type: 'number',
                       min: c.min_count,
                       max: c.max_count,
-                      message: (
-                        <FM
-                          id="dealDetail.num_amount_limit_section"
-                          defaultMessage="数量限额为 {min_con} - {max_con}"
-                          values={{min_con, max_con}}
-                        />
-                      ),
+                      message: this.props.intl.formatMessage({id: 'dealDetail.num_amount_limit_section'}, {max_con})
                     },
-                    {
-                      validator: this.checkCount,
-                    },
+                    // {
+                    //   validator: this.checkCount(),
+                    // },
                   ],
                 })(
                   <InputNumber
@@ -280,10 +298,27 @@ export default class DealDeatil extends Component {
           {map(orderDetail, (c, index) => {
             const Money = c.money;
             getFieldDecorator(`order_detail[${index}].money`, {initialValue: c.money});
-            const maxCount = this.calcuMaxCountBuy(
+            const fixMinCount = this.calcuFixCountBuy(
               getFieldValue(`order_detail`),
-              getFieldValue(`order_detail[${index}]`)
+              getFieldValue(`order_detail[${index}]`),
+              'min'
             );
+            const fixMaxCount = this.calcuFixCountBuy(
+              getFieldValue(`order_detail`),
+              getFieldValue(`order_detail[${index}]`),
+              'max'
+            );
+            const minCount = this.calcuCountBuy(
+              getFieldValue(`order_detail`),
+              getFieldValue(`order_detail[${index}]`),
+              'min'
+            );
+            const maxCount = this.calcuCountBuy(
+              getFieldValue(`order_detail`),
+              getFieldValue(`order_detail[${index}]`),
+              'max'
+            );
+
             return (
               <FormItem
                 key={index}
@@ -296,20 +331,21 @@ export default class DealDeatil extends Component {
                   />
                 }
                 extra={
-                  <FM
-                    id="dealDetail.num_amount_maxCount"
-                    defaultMessage="最多可再出售{maxCount}个"
-                    values={{maxCount}}
-                  />
+                  <span>{fluid ? `数量限额:${minCount}-${maxCount}` : `数量限额:${fixMinCount}-${fixMaxCount}`}</span>
+                  // <FM
+                  //   id="dealDetail.num_amount_maxCount"
+                  //   defaultMessage={fluid?'数量限额:{minCount}-{maxCount}':'数量限额:{fixMinCount}-{fixMaxCount}'}
+                  //   values={{minCount, maxCount}}
+                  // />
                 }
               >
                 {getFieldDecorator(`order_detail[${index}].count`, {
                   validateFirst: true,
-                  rules: [
-                    {
-                      validator: this.checkCount,
-                    },
-                  ],
+                  // rules: [
+                  //   {
+                  //     validator: this.checkCount,
+                  //   },
+                  // ],
                 })(
                   <InputNumber
                     min={0}
@@ -351,8 +387,18 @@ export default class DealDeatil extends Component {
    * @returns {*}
    */
   renderSellContent = detail => {
-    const {card_type, password_type, unit_price, deadline = 0, multiple = 0, guarantee_time} =
-    detail || {};
+    const {
+      card_type,
+      password_type,
+      unit_price,
+      deadline = 0,
+      multiple = 0,
+      guarantee_time,
+      fluid,
+      total_money,
+      condition,
+      condition_type,
+    } = detail || {};
     const {totalMonty} = this.state
     return (
       <div className={styles.left}>
@@ -369,8 +415,20 @@ export default class DealDeatil extends Component {
             <Description term={<FM id="dealDetail.sell_unit_price" defaultMessage="单价" />}>
               {unit_price} RMB
             </Description>
-            <Description term={<FM id="dealDetail.sell_num_multiple" defaultMessage="倍数" />}>
-              {multiple}
+            {
+              condition_type === 2 && (
+                <Description term={<FM id="dealDetail.sell_num_multiple" defaultMessage="倍数" />}>
+                  {condition.multiple}
+                </Description>
+              )
+            }
+            <Description term={<FM id="dealDetail.totalDenomition" defaultMessage="总面额" />}>
+              {total_money.min}
+              -
+              {total_money.max}
+            </Description>
+            <Description term={<FM id="dealDetail.fluid" defaultMessage="流动性" />}>
+              {fluid ? '是' : '否'}
             </Description>
           </DescriptionList>
           {this.renderCondition(detail)}
@@ -422,7 +480,14 @@ export default class DealDeatil extends Component {
    */
   renderBuyerContent = detail => {
     const {getFieldDecorator, getFieldValue} = this.props.form;
-    const {card_type, password_type, unit_price, guarantee_time = 0, money = [], stock = {}} =
+    const {
+      card_type,
+      password_type,
+      unit_price,
+      guarantee_time = 0,
+      money = [],
+      stock = {}
+    } =
     detail || {};
     const {totalMoney} = this.state
 
@@ -457,7 +522,7 @@ export default class DealDeatil extends Component {
                       values={{d}}
                     />
                   }
-                  extra={this.props.intl.formatMessage(msg.buy_amount_money_stock ,{Stock})}
+                  extra={this.props.intl.formatMessage(msg.buy_amount_money_stock, {Stock})}
                   // extra={<FM id="dealDetail.buy_amount_money_stock" defaultMessage="库存{Stock}个"  values={{Stock}} />}
                 >
                   {getFieldDecorator(`order_detail[${index}].count`, {
@@ -529,6 +594,16 @@ export default class DealDeatil extends Component {
     const {detail = {}, match: {params}} = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
       values.order_detail = filter(values.order_detail, item => item.count > 0);
+      console.log(values.order_detail);
+      const total = sumBy(values.order_detail, row => {
+        return row.money * row.count || 0;
+      });
+      if (total && total % get(this.props, 'detail.condition.multiple') !== 0) {
+        return message.warning(
+          this.props.intl.formatMessage(msg.buy_amount_multiple)
+        );
+      }
+      console.log(total);
       if (!values.order_detail.length) {
         return message.warning(
           this.props.intl.formatMessage(msg.buy_amount_details)
@@ -543,10 +618,10 @@ export default class DealDeatil extends Component {
             ...values,
           },
           callback: res => {
-            if (res.code === 606) {
+            if (res.code === 0) {
               this.props.dispatch(routerRedux.push('/card/market'));
             }
-            if (res.code === 607) {
+            if (res.code === 3000) {
               this.fetch({id: +params.id});
             }
           },

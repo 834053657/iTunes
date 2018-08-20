@@ -102,9 +102,10 @@ export default class SaleCard extends Component {
       password_type: 1,
       guarantee_time: CONFIG.guarantee_time[0],
       deadline: CONFIG.deadline[0],
-      condition1: [{}],
+      condition1: [],
       condition2: {},
       term_id: 0,
+      dynamic: 0,
     };
     const breadcrumbList = [
       { title: <FM id="buy.adManage" defaultMessage="广告管理" />, href: '/ad/my' },

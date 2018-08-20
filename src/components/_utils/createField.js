@@ -19,6 +19,7 @@ const createField = Component => ({
   wrapperCol,
   colon,
   extra,
+  onChange,
   extranode,
   ...rest
 }) => {
@@ -33,6 +34,7 @@ const createField = Component => ({
       hasFeedback={hasFeedback && hasError}
       help={hasError && meta.error}
       colon={colon}
+      onChange={onChange}
       extra={extra}
     >
       <Component {...input} {...rest} children={children} />
