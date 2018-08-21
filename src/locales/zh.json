@@ -102,7 +102,7 @@
   "ChangePasswordResult.changeSuccess":"密码修改成功",
   "changePassWord.help":"请输入密码！",
   "changePassWord.pwd_error":"'两次输入的密码不匹配!",
-
+  "login.user_enable": "尊敬的客户，很抱歉您的账号已被冻结，如需恢复，请及时联系客服 {tel}",
 
 
 

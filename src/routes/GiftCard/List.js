@@ -21,7 +21,6 @@ import {
   Popconfirm,
 } from 'antd';
 import {routerRedux} from 'dva/router';
-import moment from 'moment/moment';
 import FilterDemoinForm from './forms/FilterDemoinForm';
 import {getQueryString} from '../../utils/utils';
 import styles from './List.less';
