@@ -8,7 +8,7 @@ import { reducer as formReducer } from 'redux-form';
 // import createHistory from 'history/createBrowserHistory';
 import createLoading from 'dva-loading';
 
-import 'moment/locale/zh-cn';
+// import 'moment/locale/zh-cn';
 import './rollbar';
 import './index.less';
 import CONFIG from './utils/config';
