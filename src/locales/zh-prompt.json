@@ -99,5 +99,8 @@
   "duty":"免责声明",
   "privacy":"隐私保护",
   "help":"操作说明",
-  "rules":"服务条款"
+  "rules":"服务条款",
+
+  "dealFinish.evaluate_content_min":"评价内容不能小于5个字",
+  "copySuccess":"复制成功"
 }

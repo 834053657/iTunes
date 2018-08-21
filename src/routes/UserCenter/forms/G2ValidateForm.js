@@ -51,7 +51,8 @@ class G2ValidateForm extends Component {
     const { getFieldDecorator } = form;
     const url = jrQrcode.getQrBase64(data.url);
     const copy = (
-      <CopyToClipboard text={data.secret} onCopy={() => message.success('复制成功')}>
+      <CopyToClipboard text={data.secret} onCopy={() => message.success(PROMPT('copySuccess'))}>
+        {/*复制成功*/}
         <a>
           <Icon type="copy" />
         </a>

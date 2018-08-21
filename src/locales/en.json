@@ -1,4 +1,25 @@
 {
+
+  "BuyForm.total_money":"Total denomination",
+  "BuyForm.min_totalMoney":"Minimum total denomination",
+  "BuyForm.max_totalMoney":"Maximum total denomination",
+  "BuyForm.dynamic":"Mobility",
+  "BuyForm.multiple":"Multiple",
+  "dealDetail.fluid": "Mobility",
+  "dealDetail.totalDenomition": "Total denomination",
+  "dealDetail.buy_amount_multiple": "Cumulative sales face not satisfied multiple",
+  "ChangePasswordResult.goSign":"Log in",
+  "ChangePasswordResult.goback":"Return to the home page",
+  "ChangePasswordResult.changeSuccess":"Password modified successfully",
+  "changePassWord.help":"Please input a password！",
+  "changePassWord.pwd_error":"'Two passwords do not match.!",
+
+
+
+
+
+
+
   "Appeal.send_success": "Sended successfully",
   "message.realNameAuth": "Real-name authentication",
   "message.bankAccount": "The bank account",
