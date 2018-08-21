@@ -8,7 +8,7 @@ import { reducer as formReducer } from 'redux-form';
 // import createHistory from 'history/createBrowserHistory';
 import createLoading from 'dva-loading';
 
-import 'moment/locale/zh-cn';
+// import 'moment/locale/zh-cn';
 import './rollbar';
 import './index.less';
 import CONFIG from './utils/config';
@@ -29,13 +29,29 @@ notification.config({
 global.CONFIG = CONFIG;
 global.PROMPT = promptMsgs;
 
-const undo = r => (state, action) => {
-  const newState = r(state, action);
-  if (action.type === 'login/logout') {
-    return {}
-  }
-  else {
-    return newState
+const undo = reducer => (state, action) => {
+  const newState = reducer(state, action);
+  // 执行退出以后将所有state还原
+  if (action.type === 'login/logout/@@end') {
+    const initialState = {};
+    const { _models: models } = app;
+    models.forEach((model) => {
+      const { namespace} = model;
+
+      if (!namespace || namespace === '@@dva') {
+        return;
+      }
+      // eslint-disable-next-line
+      const modelObj = require(`./models/${namespace}`);
+
+      if (modelObj) {
+        initialState[namespace] = modelObj.state;
+      }
+    });
+
+    return { ...newState, ...initialState };
+  } else {
+    return newState;
   }
 };
 
