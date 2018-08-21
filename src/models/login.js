@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import { accountLogin } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
@@ -39,6 +39,10 @@ export default {
       } else if (response.code === 1001) {
         //  谷歌验证失败
         message.error(response.msg);
+      } else if (response.code === 1006) {
+        Modal.warning({
+          content: INTL({id: 'login.user_enable'}, {tel: CONFIG.service_phone}) //`尊敬的客户，很抱歉您的账号已被冻结，如需恢复，请及时联系客服`
+        });
       } else {
         yield put({
           type: 'changeLoginStatus',

@@ -89,6 +89,7 @@
   "TeamModal.cancel":"Cancel",
   "TeamModal.sure":"OK",
   "TeamModal.send":"OK",
+  "login.user_enable": "Dear customer, I'm sorry that your account has been frozen. If it needs to be restored, please contact the customer service in time {tel}",
 
 
 
