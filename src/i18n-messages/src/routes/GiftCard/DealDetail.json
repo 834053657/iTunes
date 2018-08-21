@@ -48,10 +48,6 @@
     "defaultMessage": "否"
   },
   {
-    "id": "dealDetail.num_multiple",
-    "defaultMessage": "数量必须是{multiple}的倍数"
-  },
-  {
     "id": "dealDetail.num_amount",
     "defaultMessage": "{moneys} 面额"
   },

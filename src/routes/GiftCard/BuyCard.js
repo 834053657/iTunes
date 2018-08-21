@@ -100,6 +100,7 @@ export default class SaleCard extends Component {
       condition_type: 1,
       card_type: defaultCard.type,
       password_type: 1,
+      unit_price:0,
       guarantee_time: CONFIG.guarantee_time[0],
       deadline: CONFIG.deadline[0],
       condition1: [],

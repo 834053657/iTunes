@@ -77,7 +77,7 @@ export default class SellerEnsure extends Component {
             </div>
             <div className={styles.guarantee}>
               <h5>
-                <FM id="sellEnsure.safe_time_remain" defaultMessage="保障时间剩余 {icon} {time}分钟" values={{icon:<Icon type="clock-circle-o" />,time:<CountDown formatstr="mm:ss" target={guaranteeTime} />}} />
+                <FM id="sellEnsure.safe_time_remain" defaultMessage="保障时间剩余 {icon} {time}" values={{icon:<Icon type="clock-circle-o" />,time:<CountDown formatstr="mm:ss" target={guaranteeTime} />}} />
                 {/*保障时间剩余 &nbsp;<Icon type="clock-circle-o" />&nbsp;<CountDown formatstr="mm:ss" target={guaranteeTime} />分钟*/}
               </h5>
               {pageStatus === 11 ? (

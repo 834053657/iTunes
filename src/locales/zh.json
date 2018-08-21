@@ -90,7 +90,7 @@
   "BuyForm.total_money":"总面额",
   "BuyForm.min_totalMoney":"最小总面额",
   "BuyForm.max_totalMoney":"最大总面额",
-  "BuyForm.dynamic":"流动性",
+  "BuyForm.fluid":"流动性",
   "BuyForm.multiple":"倍数",
   "dealDetail.fluid": "流动性",
   "dealDetail.totalDenomition": "总面额",
