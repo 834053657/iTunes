@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
-
+import {union} from 'lodash';
 import {
   getCardlist,
   queryTermsList,
@@ -159,7 +159,11 @@ export default {
       order: {},
     },
     quickMsgList: [],
-    chatMsgList: [],
+    // chatMsgList: [],
+    chatMsgList: {
+      items: [],
+      total: 0,
+    }
   },
 
   effects: {
@@ -478,17 +482,27 @@ export default {
       };
     },
     setQuickMsgList(state, { payload }) {
-      const { data } = payload || {};
+      const { data: { items = []} } = payload || {};
       return {
         ...state,
-        quickMsgList: data,
+        quickMsgList: items,
       };
     },
-    setChatMsgList(state, { payload }) {
+    /*setChatMsgList(state, { payload }) {
       const { data } = payload || {};
       return {
         ...state,
         chatMsgList: data,
+      };
+    },*/
+    setChatMsgList(state, {payload}) {
+      const { data: { items=[], paginator={} }, push = false } = payload || {};
+      return {
+        ...state,
+        chatMsgList: {
+          items: !push ? union(state.chatMsgList.items, items) : items,
+          total: paginator.total,
+        }
       };
     },
     changePageStatus(state, { payload }) {

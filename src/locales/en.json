@@ -1,5 +1,5 @@
 {
-  "Appeal.send_success": "Uploaded successfully",
+  "Appeal.send_success": "Sended successfully",
   "message.realNameAuth": "Real-name authentication",
   "message.bankAccount": "The bank account",
   "message.alipayAccount": "Pay treasure to account",
@@ -266,8 +266,8 @@
   "buy.createBuy": "create purchase",
   "dealDetail.num_multiple": "the amount must be {multiple}",
   "dealDetail.num_amount": "{moneys} amount",
-  "dealDetail.num_amount_limit": "amount limit {min_con} - {max_con}",
-  "dealDetail.num_amount_limit_section": "the amount limit is {min_con} - {max_con}",
+  "dealDetail.num_amount_limit": "amount limit {max_con}",
+  "dealDetail.num_amount_limit_section": "the amount limit is {max_con}",
   "dealDetail.num_amount_money": "{Money} amount",
   "dealDetail.num_amount_maxCount": "{maxCount} at most can be sold",
   "dealDetail.num_add_amount": "add the amount",

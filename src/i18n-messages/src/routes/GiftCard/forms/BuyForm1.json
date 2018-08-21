@@ -4,16 +4,16 @@
     "defaultMessage": "面额"
   },
   {
-    "id": "BuyForm.account_min_num",
-    "defaultMessage": "最小数量"
-  },
-  {
     "id": "BuyForm.account_max_num",
     "defaultMessage": "最大数量"
   },
   {
     "id": "BuyForm.choose_type",
     "defaultMessage": "请选择类型"
+  },
+  {
+    "id": "BuyForm.multiple",
+    "defaultMessage": "倍数"
   },
   {
     "id": "BuyForm.min_account",
@@ -24,11 +24,11 @@
     "defaultMessage": "最大面额"
   },
   {
-    "id": "totalMoney.min",
+    "id": "BuyForm.min_totalMoney",
     "defaultMessage": "最小总面额"
   },
   {
-    "id": "totalMoney.max",
+    "id": "BuyForm.max_totalMoney",
     "defaultMessage": "最大总面额"
   },
   {
@@ -60,14 +60,6 @@
     "defaultMessage": "请输入单价"
   },
   {
-    "id": "BuyForm.input_multiple",
-    "defaultMessage": "请输入倍数"
-  },
-  {
-    "id": "BuyForm.integer_input",
-    "defaultMessage": "请输入正整数"
-  },
-  {
     "id": "BuyForm.choose_type_",
     "defaultMessage": "请选择条件类型"
   },
@@ -80,16 +72,20 @@
     "defaultMessage": "请输入面额"
   },
   {
-    "id": "BuyForm.input_min_num",
-    "defaultMessage": "请输入最小数量"
-  },
-  {
     "id": "BuyForm.input_max_num",
     "defaultMessage": "请输入最大数量"
   },
   {
     "id": "BuyForm.condition2_input_",
     "defaultMessage": "请填写"
+  },
+  {
+    "id": "BuyForm.input_multiple",
+    "defaultMessage": "请输入倍数"
+  },
+  {
+    "id": "BuyForm.integer_input",
+    "defaultMessage": "请输入正整数"
   },
   {
     "id": "BuyForm.input_min_account",
@@ -118,10 +114,6 @@
   {
     "id": "BuyForm.password_type",
     "defaultMessage": "请输入选择密保卡类型"
-  },
-  {
-    "id": "BuyForm.num_less_right",
-    "defaultMessage": "该数值应小于右侧值"
   },
   {
     "id": "BuyForm.num_lessThan_right",
