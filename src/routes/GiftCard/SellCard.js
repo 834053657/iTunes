@@ -107,7 +107,6 @@ export default class BuyCard extends Component {
     const { adDetail = {}, loading, terms } = this.props;
     const cardList = filter(CONFIG.card_type, c => c.valid, []);
     const defaultCard = cardList[0] || {};
-    // console.log(cardList);
 
     if (!cardList.length) {
       return false;
@@ -115,7 +114,7 @@ export default class BuyCard extends Component {
     const defaultValues = {
       card_type: defaultCard.type,
       term_id: 0,
-      unit_price: 10,
+      unit_price: 0,
       guarantee_time: CONFIG.guarantee_time && head(CONFIG.guarantee_time),
       password_type: 1,
       concurrency_order: 0,

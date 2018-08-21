@@ -33,7 +33,7 @@
   },
   {
     "id": "sellEnsure.safe_time_remain",
-    "defaultMessage": "保障时间剩余 {icon} {time}分钟"
+    "defaultMessage": "保障时间剩余 {icon} {time}"
   },
   {
     "id": "sellEnsure.cancel_order_sure",
