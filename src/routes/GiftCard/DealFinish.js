@@ -54,7 +54,7 @@ export default class DealFinish extends Component {
       return false;
     }
     if (contentT && contentT.length > 500) {
-      message.warning(PROMPT('dealFinish.evaluate_content_max', {word:contentT.length}) ); //评价内容不能超出500个字,目前字数
+      message.warning(PROMPT('dealFinish.evaluate_content_max', {word:contentT.length}) ); //评价内容不能超出500个字,目前字数 {word}
       return false;
     }
     const data = {

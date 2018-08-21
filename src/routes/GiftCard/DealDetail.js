@@ -399,6 +399,7 @@ export default class DealDeatil extends Component {
       condition,
       condition_type,
     } = detail || {};
+    const { min,max } = total_money || {}
     const {totalMonty} = this.state
     return (
       <div className={styles.left}>
@@ -423,9 +424,9 @@ export default class DealDeatil extends Component {
               )
             }
             <Description term={<FM id="dealDetail.totalDenomition" defaultMessage="总面额" />}>
-              {total_money.min}
+              {min}
               -
-              {total_money.max}
+              {max}
             </Description>
             <Description term={<FM id="dealDetail.fluid" defaultMessage="流动性" />}>
               {fluid ? '是' : '否'}

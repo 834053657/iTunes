@@ -99,5 +99,9 @@
   "duty":"Disclaimer",
   "privacy":"privacy",
   "help":"Operation instructions",
-  "rules":"Terms of Service"
+  "rules":"Terms of Service",
+
+  "dealFinish.evaluate_content_min":"The content of evaluation should not be less than 5 words.",
+  "copySuccess":"success"
+
 }
