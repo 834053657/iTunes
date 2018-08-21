@@ -18,7 +18,7 @@ import {
   updateAvatar,
   queryMyOrderList,
 } from '../services/user';
-import { setAuthority } from '../utils/authority';
+import { setAuthority, getLocale } from '../utils/authority';
 
 export default {
   namespace: 'user',
@@ -73,7 +73,7 @@ export default {
           type: 'saveCurrentUser',
           payload: response.data,
         });
-        callback && setTimeout(callback(user.id, response.data.token, 'CN-zh'), 3000);
+        callback && setTimeout(callback(user.id, response.data.token, getLocale()), 3000);
       } else {
         message.error(response.msg);
       }
