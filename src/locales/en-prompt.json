@@ -102,6 +102,10 @@
   "rules":"Terms of Service",
 
   "dealFinish.evaluate_content_min":"The content of evaluation should not be less than 5 words.",
-  "copySuccess":"success"
+  "copySuccess":"success",
+
+  "BuyForm.lack.info":"TurnToEn 请填写完整面额信息",
+  "BuyForm.fluid.beyondTop":"TurnToEn 流动最大值已达上限",
+  "BuyForm.lack.total_money":"TurnToEn 请先填写总面额"
 
 }

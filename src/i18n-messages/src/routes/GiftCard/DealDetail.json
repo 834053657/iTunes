@@ -48,6 +48,10 @@
     "defaultMessage": "否"
   },
   {
+    "id": "dealDetail.beyondLimit",
+    "defaultMessage": "输入值超出最大限额"
+  },
+  {
     "id": "dealDetail.num_amount",
     "defaultMessage": "{moneys} 面额"
   },

@@ -102,5 +102,10 @@
   "rules":"服务条款",
 
   "dealFinish.evaluate_content_min":"评价内容不能小于5个字",
-  "copySuccess":"复制成功"
+  "copySuccess":"复制成功",
+
+  "BuyForm.lack.info":"请填写完整面额信息",
+  "BuyForm.fluid.beyondTop":"流动最大值已达上限",
+  "BuyForm.lack.total_money":"请先填写总面额"
+
 }

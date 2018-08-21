@@ -211,14 +211,14 @@ export default class DealDeatil extends Component {
         'max',
         1
       );
-      if (max < 0) callback('输入值超出最大限额');
+      if (max < 0) callback(<FM id='dealDetail.beyondLimit' defaultMessage='输入值超出最大限额'/>);
     } else {
       max = this.calcuFixCountBuy(
         getFieldValue(`order_detail`),
         getFieldValue(`order_detail[${index}]`),
         'max'
       );
-      if (value > max) callback('输入值超出最大限额');
+      if (value > max) callback(<FM id='dealDetail.beyondLimit' defaultMessage='输入值超出最大限额'/>);
     }
     callback();
   };

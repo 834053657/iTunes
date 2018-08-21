@@ -195,10 +195,17 @@ export default class BuyForm extends PureComponent {
     const {condition_type, fluid} = this.props;
     const rules = omit(this.descriptor, condition_type === 1 ? 'condition2' : 'condition1');
     values.unit_price = parseFloat(values.unit_price)
+    const {total_money: {min, max}} = values
+
     const err = validate(rules, values);
     const checkErr = {};
     if (values.unit_price <= 0) {
-      createError(checkErr, `unit_price`, '单价必须大于0');
+      createError(checkErr, `unit_price`,
+        <FM
+          id='BuyForm.unit_price.limit'
+          defaultMessage='单价必须大于0'
+        />
+      );
     }
     if (err) {
       throw new SubmissionError(err);
@@ -207,29 +214,46 @@ export default class BuyForm extends PureComponent {
       renderAfterSave: true
     })
 
+    if (max < min) {
+      createError(checkErr, `total_money.min`,
+        <FM
+          id='BuyForm.total_money.min.limit'
+          defaultMessage='该数值应小于最大总面额'
+        />
+      )
+    }
+
     //购买广告
     if (condition_type === 1) {
       //验证最小总面额小于最大总面额
-      const {total_money: {min, max}} = values
-      if (max < min && !fluid) {
-        createError(checkErr, `total_money.min`, '该数值应小于最大总面额')
-      }
+
       //验证已添加指定面额
       if (values.condition1.length < 1) {
-        createError(checkErr, `condition_type`, '未添加指定面额')
+        createError(checkErr, `condition_type`,
+          <FM
+            id='BuyForm.condition_type.limit'
+            defaultMessage='未添加指定面额'
+          />
+        )
       }
       //验证总面额
       if (fluid && this.fluidLastMoney() < 0) {
-        createError(checkErr, `condition1.${values.condition1.length - 1}.max_count`, '总面额值超过流动最大值')
+        createError(checkErr, `condition1.${values.condition1.length - 1}.max_count`,
+          <FM
+            id='BuyForm.condition1.max_deno.limit'
+            defaultMessage='总面额值超过流动最大值'
+          />
+        )
       }
       //验证流动性
       forEach(values.condition1, (value, key) => {
         if (value.max_count > values.total_money.max) {
-          createError(checkErr, `condition1.${key}.max_count`, '该数值应小于最大总面额');
-          // <FM
-          //   id='BuyForm.num_less_right'
-          //   defaultMessage='该数值应小于最大面额'
-          // />
+          createError(checkErr, `condition1.${key}.max_count`,
+            <FM
+              id='BuyForm.condition1.max_count.limit'
+              defaultMessage='该数值应小于最大总面额'
+            />
+          );
         }
       });
       values.condition = values.condition1;
@@ -242,16 +266,35 @@ export default class BuyForm extends PureComponent {
     }
     else {
       if (values.condition2.max_money > values.total_money.max) {
-        createError(checkErr, `condition2.max_money`, '该数值应小于最大总面额');
+        createError(checkErr, `condition2.max_money`,
+          <FM
+            id='BuyForm.condition2.max_money.limit'
+            defaultMessage='该数值应小于最大总面额'
+          />
+        );
       }
       if (values.condition2.multiple > values.total_money.max) {
-        createError(checkErr, `condition2.multiple`, '该数值应小于最大总面额');
+        createError(checkErr, `condition2.multiple`,
+          <FM
+            id='BuyForm.condition2.multiple.limit'
+            defaultMessage='该数值应小于最大总面额'
+          />
+        );
       }
-      if (values.condition2.multiple > values.condition2.max_money) {
-        createError(checkErr, `condition2.multiple`, '该数值应小于或等于右侧最大面额');
-      }
+      // if (values.condition2.multiple > max) {
+      //   createError(checkErr, `condition2.multiple`,
+      //     <FM
+      //       id='BuyForm.condition2.multiple2.limit'
+      //       defaultMessage='该数值应小于或等于最大总面额'
+      //     />
+      //   );
+      // }
       if (values.condition2.min_money > values.condition2.max_money) {
-        createError(checkErr, `condition2.min_money`, <FM id='BuyForm.num_lessThan_right' defaultMessage='该数值应小于右侧值'/>);
+        createError(checkErr, `condition2.min_money`,
+          <FM
+            id='BuyForm.num_lessThan_right'
+            defaultMessage='该数值应小于右侧值'
+          />);
       }
       values.condition = values.condition2;
     }
@@ -333,13 +376,16 @@ export default class BuyForm extends PureComponent {
                 if (noBlank) {
                   fields.push({money: '', max_count: ''})
                 } else {
-                  message.warning('请填写完整面额信息')
+                  message.warning(PROMPT('BuyForm.lack.info'));
+                 // message.warning('请填写完整面额信息')
                 }
               } else {
-                message.warning('流动最大值已达上限')
+                message.warning(PROMPT('BuyForm.fluid.beyondTop'));
+                // message.warning('流动最大值已达上限')
               }
             } else {
-              message.warning('请先填写总面额')
+              message.warning(PROMPT('BuyForm.lack.total_money'));
+              // message.warning('请先填写总面额')
             }
           }}
           disabled={disabled}
@@ -412,7 +458,7 @@ export default class BuyForm extends PureComponent {
       initialValues,
       fluid,
     } = this.props;
-    if(action&&!condition_type){
+    if (action && !condition_type) {
       return false
     }
     const formItemLayout = {
@@ -428,14 +474,15 @@ export default class BuyForm extends PureComponent {
     const showEdit = status && (status === 1 || status === 2)
     const DynamicInstruction = (
       <p style={{width: 300}}>
-        流动性代表一个广告成交的订单具有上限值，上限值为最大总面额乘以单价。
-        <br/>
+        <FM
+          id='BuyForm.Fluid.describe'
+          defaultMessage='
+            流动性代表一个广告成交的订单具有上限值，上限值为最大总面额乘以单价。
         例如：收购最大总面额为 100 面额，
         卖家出售 20面额 的卡，流动性减至 80 面额乘以单价。
-        <br/>
         如果交易未完成，流动性上限值恢复至 100 面额乘以单价；
-        <br/>
-        简单的说，开启流动性收卡有上限值，不开启流动性可以无限收卡
+        简单的说，开启流动性收卡有上限值，不开启流动性可以无限收卡'
+        />
       </p>
     )
     const DynamicPop =

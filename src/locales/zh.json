@@ -105,6 +105,20 @@
   "login.user_enable": "尊敬的客户，很抱歉您的账号已被冻结，如需恢复，请及时联系客服 {tel}",
 
 
+  "BuyForm.Fluid.describe":"流动性代表一个广告成交的订单具有上限值，上限值为最大总面额乘以单价。例如：收购最大总面额为 100 面额，卖家出售 20面额 的卡，流动性减至 80 面额乘以单价。如果交易未完成，流动性上限值恢复至 100 面额乘以单价；简单的说，开启流动性收卡有上限值，不开启流动性可以无限收卡",
+  "BuyForm.unit_price.limit":"单价必须大于0",
+  "BuyForm.total_money.min.limit":"该数值应小于最大总面额",
+  "BuyForm.condition_type.limit":"未添加指定面额 ",
+  "BuyForm.condition1.max_deno.limit":"总面额值超过流动最大值",
+  "BuyForm.condition1.max_count.limit":"该数值应小于最大总面额",
+  "BuyForm.condition2.max_money.limit":"该数值应小于最大总面额",
+  "BuyForm.condition2.multiple.limit":"该数值应小于最大总面额",
+  "BuyForm.condition2.multiple2.limit":"该数值应小于或等于右侧最大面额",
+  "BuyForm.lack.info":"请填写完整面额信息",
+  "BuyForm.fluid.beyondTop":"流动最大值已达上限",
+  "BuyForm.lack.total_money":"请先填写总面额",
+
+
 
 
 
