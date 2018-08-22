@@ -194,14 +194,17 @@ export function getSystemUrl(env) {
   return { base_url, web_name, socket_url };
 }
 
+// export function playAudio() {
+//   const audio = document.createElement('audio');
+//   audio.src = require('../../public/audio/msg.mp3');
+//   audio.play();
+// }
+
 export function playAudio() {
   try {
-    const audio = document.createElement('audio');
-    audio.src = require('../../public/audio/msg.mp3');
-    audio.play();
-  }catch (e) {
-    throw new Error("浏览器未开启权限");
-  }
+    const audio = new Audio(require('../../public/audio/msg.mp3'));
+    audio.play().catch(e => e)
+  } catch (e) { e }
 }
 
 export function formatMoney(rmb) {
