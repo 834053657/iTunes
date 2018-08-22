@@ -194,10 +194,17 @@ export function getSystemUrl(env) {
   return { base_url, web_name, socket_url };
 }
 
+// export function playAudio() {
+//   const audio = document.createElement('audio');
+//   audio.src = require('../../public/audio/msg.mp3');
+//   audio.play();
+// }
+
 export function playAudio() {
-  const audio = document.createElement('audio');
-  audio.src = require('../../public/audio/msg.mp3');
-  audio.play();
+  try {
+    const audio = new Audio(require('../../public/audio/msg.mp3'));
+    audio.play().catch(e => e)
+  } catch (e) { e }
 }
 
 export function formatMoney(rmb) {
