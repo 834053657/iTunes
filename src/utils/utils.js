@@ -195,9 +195,13 @@ export function getSystemUrl(env) {
 }
 
 export function playAudio() {
-  const audio = document.createElement('audio');
-  audio.src = require('../../public/audio/msg.mp3');
-  audio.play();
+  try {
+    const audio = document.createElement('audio');
+    audio.src = require('../../public/audio/msg.mp3');
+    audio.play();
+  }catch (e) {
+    throw new Error("浏览器未开启权限");
+  }
 }
 
 export function formatMoney(rmb) {
