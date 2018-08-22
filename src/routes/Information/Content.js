@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import { Spin } from 'antd';
 import styles from './Detail.less';
 
 @connect(({ information, loading }) => ({
@@ -18,14 +19,16 @@ export default class Content extends PureComponent {
   }
 
   render() {
-    const { data={} } = this.props;
+    const { data={}, loading } = this.props;
 
     return (
-      <div className={styles.detail}>
-        <div className={styles.content}>
-          <div dangerouslySetInnerHTML={{__html: data.content}} />
+      <Spin spinning={loading}>
+        <div className={styles.detail}>
+          <div className={styles.content}>
+            <div dangerouslySetInnerHTML={{__html: data.content}} />
+          </div>
         </div>
-      </div>
+      </Spin>
     );
   }
 }
