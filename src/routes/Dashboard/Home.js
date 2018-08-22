@@ -94,7 +94,7 @@ export default class Analysis extends Component {
                 <Col span={8}>
                   <div className={styles.content_date}>
                     <Icon type="calendar" className={styles.calendar_icon} />{' '}
-                    {item.created_at && moment(item.created_at).format('YYYY-MM-DD')}
+                    {item.created_at && moment(item.created_at*1000).format('YYYY-MM-DD')}
                   </div>
                 </Col>
                 <Col span={24}>

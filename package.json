@@ -26,6 +26,9 @@
     "rsync:test2": "rsync -avz ./dist/  kgdev:/data/itunes-frontend-test",
     "build:test2": "cross-env KG_API_ENV=test2 ESLINT=none roadhog build",
     "deploy:test2": "npm run build:test2 && npm run rsync:test2",
+    "rsync:prod": "rsync -avz ./dist/  kgpro:/data/itunes-frontend",
+    "build:prod": "cross-env KG_API_ENV=prod ESLINT=none roadhog build",
+    "deploy:prod": "npm run build:prod && npm run rsync:prod",
     "build:i18n-js": "atool-build -o ./dist/${npm_package_name}/${npm_package_version}/",
     "trans": "atool-l10n"
   },
@@ -36,6 +39,7 @@
     "atool-build": "0.7.x",
     "babel-plugin-antd": "0.4.x",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "babel-runtime": "^6.9.2",
     "bizcharts": "^3.1.5",
     "bizcharts-plugin-slider": "^2.0.1",

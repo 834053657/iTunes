@@ -3,7 +3,7 @@ import { isUrl } from '../utils/utils';
 let menuData = [
   {
     name: '首页',
-    name_en_GB: 'HOME',
+    name_en_GB: 'Home',
     path: 'home',
   },
   // {
@@ -23,22 +23,22 @@ let menuData = [
   // },
   {
     name: '礼品卡',
-    name_en_GB: 'GIFT CARD',
+    name_en_GB: 'Gift Card',
     path: 'card',
     children: [
       {
         name: '交易大厅',
-        name_en_GB: 'TRADING HALL',
+        name_en_GB: 'Trading Hall',
         path: 'market',
       },
       {
         name: '发布购买广告',
-        name_en_GB: 'POST PURCHASE AD',
+        name_en_GB: 'Create Purchase Ad',
         path: 'buy-card',
       },
       {
         name: '发布出售广告',
-        name_en_GB: 'POST SALE AD',
+        name_en_GB: 'Create Sale Ad',
         path: 'sell-card',
       },
     ],

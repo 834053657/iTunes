@@ -103,6 +103,11 @@
 
   "dealFinish.evaluate_content_min":"The content of evaluation should not be less than 5 words.",
   "copySuccess":"success",
+  "order_all":"order",
+  "Appeal.check_msg":"For more historical information, please click.",
+  "Appeal.check_load":"Load",
+
+
 
   "BuyForm.lack.info":"TurnToEn 请填写完整面额信息",
   "BuyForm.fluid.beyondTop":"TurnToEn 流动最大值已达上限",

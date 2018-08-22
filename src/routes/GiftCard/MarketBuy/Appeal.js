@@ -271,7 +271,7 @@ export default class Appeal extends Component {
         <div className={styles.top}>
           <div className={styles.orderInfo}>
             <h5>
-              <span>订单：</span>
+              <span>{PROMPT('order_all')}</span>
               <span>{order.order_no || '-'}</span>
             </h5>
             <div className={styles.orderDescribe}>
@@ -415,7 +415,7 @@ export default class Appeal extends Component {
                       })(
                         <TextArea
                           style={{ minHeight: 32 }}
-                          placeholder="您的建议会督促我做得更好~"
+                          placeholder={PROMPT('dealFinish.user_evaluate_massage')}  //您的建议会督促我做得更好
                           rows={4}
                         />
                       )}
@@ -457,7 +457,7 @@ const AppealInfo = props => {
       {
         total > items.length && (
           <div className={styles.viewMore}>
-            查看更多历史消息请点击<a onClick={props.onViewMore}>加载</a>
+            {PROMPT('Appeal.check_msg')}<a onClick={props.onViewMore}>{PROMPT('Appeal.check_load')}</a>
           </div>)
       }
       <ul className={styles.tabTwoTab}>
@@ -474,7 +474,7 @@ const AppealInfo = props => {
                 </span>
                 <span className={cx('name', styles.avaName)}>{d.sender && d.sender.nickname}</span>
                 <br />
-                <span>
+                <div style={{textAlign:'center'}}>
                   {d.sender &&
                     d.sender.buyer === 1 &&
                     d.sender.type === 'user' && <span className={styles.avaIdentify}><FM id="appeal.seller_" defaultMessage="卖家" /> </span>}
@@ -483,7 +483,7 @@ const AppealInfo = props => {
                     d.sender.type === 'user' && <span className={styles.avaIdentify}><FM id="appeal.buyer_" defaultMessage="买家" /> </span>}
                   {d.sender &&
                     d.sender.type === 'admin' && <span className={styles.avaAdmin}><FM id="appeal.service" defaultMessage="客服" /> </span>}
-                </span>
+                </div>
               </div>
               <div className={styles.chatItem}>
                 <div className={styles.chatText}>
