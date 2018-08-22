@@ -105,7 +105,7 @@ export default class MobileForm extends Component {
                 },
               ],
             })(
-              <Select disabled={disabled}>
+              <Select showSearch optionFilterProp="children" disabled={disabled}>
                 {CONFIG.country.map(item => (
                   <Option key={item.code} value={item.nation_code.toString()}>
                     {item.name}
