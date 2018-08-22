@@ -32,6 +32,7 @@ export default {
         __KG_API_ENV__: process.env.KG_API_ENV,
         __KG_DATATIME__: new Date().toLocaleString(),
       },
+      extraBabelPlugins: [ ["transform-remove-console", { "exclude": [ "error", "warn"] }] ]
     },
   },
   alias: {
