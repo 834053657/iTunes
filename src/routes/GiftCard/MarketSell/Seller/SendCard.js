@@ -156,7 +156,7 @@ export default class Process extends Component {
 
     return (
       <div className={styles.sendBox}>
-        <StepModel steps={steps} current={0}/>
+        <StepModel steps={steps} current={0} />
         <div className={styles.top}>
           <div className={styles.orderInfo}>
             <div className={styles.price}>
@@ -182,7 +182,7 @@ export default class Process extends Component {
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
-                  <Avatar size="large" src={userInfo.avatar}/>
+                  <Avatar size="large" src={userInfo.avatar} />
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
