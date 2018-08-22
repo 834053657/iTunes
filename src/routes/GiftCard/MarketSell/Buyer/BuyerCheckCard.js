@@ -55,7 +55,6 @@ export default class BuyerCheckCard extends Component {
     const { setStatus, pageStatus } = this.props;
     const { ad, cards, order, trader } = detail;
     const steps = [{ title: <FM id="buyerCheckCard.check_card" defaultMessage="查收礼品卡" /> }, { title: <FM id="buyerCheckCard.ensure_msg" defaultMessage="确认信息" /> }, { title: <FM id="buyerCheckCard.check_card_finish" defaultMessage="完成" /> }];
-    console.log(detail);
     const orderDetail = order.order_detail;
     const userInfo = trader;
     //const deadline = new Date().getTime() + order.deadline_at * 1000;
@@ -68,7 +67,7 @@ export default class BuyerCheckCard extends Component {
         <div className={styles.left}>
           <div className={styles.orderInfo}>
             <h5>
-              <span>订单：</span>
+              <span>{PROMPT('order_all')}</span>
               <span className={styles.text}>{order.order_no || '-'}</span>
             </h5>
             <div className={styles.orderDescribe}>

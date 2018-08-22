@@ -2,7 +2,7 @@ import antdEn from 'antd/lib/locale-provider/en_US';
 import appLocaleDataEn from 'react-intl/locale-data/en';
 import enMessages from './en.json';
 
-//
+
 // let ENmessage = {};
 //   for(let id in enMessages ) {
 //     if (enMessages[id]) {

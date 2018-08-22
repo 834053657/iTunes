@@ -301,7 +301,7 @@
   "dealDetail._minute": "minute",
   "dealDetail.sell_safe_time": "guarantee time",
   "dealDetail._minute_1": "minute",
-  "dealDetail.sell_toDelete": "delete",
+  "dealDetail.sell_toDelete": "Cancel",
   "dealDetail.sell_sure_sell": "confirm the sell",
   "dealDetail.buy_type": "type",
   "dealDetail.buy_contain": "contain",

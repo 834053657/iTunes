@@ -102,5 +102,9 @@
   "rules":"服务条款",
 
   "dealFinish.evaluate_content_min":"评价内容不能小于5个字",
-  "copySuccess":"复制成功"
+  "copySuccess":"复制成功",
+  "order_all":"订单：",
+  "Appeal.check_msg":"查看更多历史消息请点击",
+  "Appeal.check_load":"加载"
+
 }
