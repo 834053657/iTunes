@@ -1,8 +1,8 @@
 {
 
-  "BuyForm.total_money":"Total denomination",
-  "BuyForm.min_totalMoney":"Minimum total denomination",
-  "BuyForm.max_totalMoney":"Maximum total denomination",
+  "BuyForm.total_money":"Notes",
+  "BuyForm.min_totalMoney":"Min total",
+  "BuyForm.max_totalMoney":"Max total",
   "BuyForm.dynamic":"Mobility",
   "BuyForm.multiple":"Multiple",
   "dealDetail.fluid": "Mobility",
@@ -16,18 +16,18 @@
 
 
 
-  "BuyForm.fluid":"TurnToEn 流动性",
+  "BuyForm.fluid":"Fluid",
   "BuyForm.Fluid.describe":"TurnToEn 流动性代表一个广告成交的订单具有上限值，上限值为最大总面额乘以单价。例如：收购最大总面额为 100 面额，卖家出售 20面额 的卡，流动性减至 80 面额乘以单价。如果交易未完成，流动性上限值恢复至 100 面额乘以单价；简单的说，开启流动性收卡有上限值，不开启流动性可以无限收卡",
-  "BuyForm.unit_price.limit":"TurnToEn 单价必须大于0",
-  "BuyForm.total_money.min.limit":"TurnToEn 该数值应小于最大总面额",
-  "BuyForm.condition_type.limit":"TurnToEn 未添加指定面额 ",
-  "BuyForm.condition1.max_deno.limit":"TurnToEn 总面额值超过流动最大值",
-  "BuyForm.condition1.max_count.limit":"TurnToEn 该数值应小于最大总面额",
-  "BuyForm.condition1.max_count.noFluid.limit":"TurnToEn 对应面额乘以数量不得大于总面额",
-  "BuyForm.condition2.max_money.limit":"TurnToEn 该数值应小于最大总面额",
-  "BuyForm.condition2.multiple.limit":"TurnToEn 该数值应小于最大总面额",
-  "BuyForm.condition2.multiple2.limit":"TurnToEn 该数值应小于或等于右侧最大面额",
-  "dealDetail.beyondLimit":"TurnToEn 输入值超出最大限额",
+  "BuyForm.unit_price.limit":"Unit Price must more than 0",
+  "BuyForm.total_money.min.limit":"Should less than max total note",
+  "BuyForm.condition_type.limit":"Not input fixed Notes up till now ",
+  "BuyForm.condition1.max_deno.limit":"Total Notes beyond fluid Max num",
+  "BuyForm.condition1.max_count.limit":"Should less than Max total Notes",
+  "BuyForm.condition1.max_count.noFluid.limit":"note times amount beyond Notes",
+  "BuyForm.condition2.max_money.limit":"Should less than total max Notes",
+  "BuyForm.condition2.multiple.limit":"Should less than total max Notes",
+  "BuyForm.condition2.multiple2.limit":"Should less than right note number ",
+  "dealDetail.beyondLimit":"Should not beyond max-limted Num",
 
 
 
@@ -139,8 +139,8 @@
   "message.prompt": "prompt",
   "order.pendingOrder": "pending order",
   "buyForm.amount":"amount",
-  "buyForm.amount_holder_min":"minimum amount",
-  "buyForm.amount_holder_max":"maximum amount",
+  "buyForm.amount_holder_min":"min amount",
+  "buyForm.amount_holder_max":"max amount",
   "dealDetail.num_amount_price":"amount{price} has existed",
   "dealDetail.num_amount_limit_sell":"please input the sales amount",
   "dealDetail.num_amount_sell_input":"please input the sales amount",
@@ -451,7 +451,7 @@
   "BuyForm.deal_rules": "trade clause",
   "BuyForm.can_be_choose": "optional",
   "BuyForm.none_": "No",
-  "BuyForm.order_num_": "the number of the order processed simultaneously",
+  "BuyForm.order_num_": "Erupt Simultaneously",
   "BuyForm.cancel_btn": "Cancel",
   "BuyForm.edit_btn": "edit",
   "BuyForm.btn_cancel": "Cancel",
