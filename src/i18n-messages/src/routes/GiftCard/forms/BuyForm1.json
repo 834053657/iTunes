@@ -13,7 +13,7 @@
   },
   {
     "id": "BuyForm.multiple",
-    "defaultMessage": "倍数(选填)"
+    "defaultMessage": "倍数"
   },
   {
     "id": "BuyForm.min_account",
@@ -130,10 +130,6 @@
   {
     "id": "BuyForm.condition1.max_deno.limit",
     "defaultMessage": "总面额值超过流动最大值"
-  },
-  {
-    "id": "BuyForm.condition1.max_count.noFluid.limit",
-    "defaultMessage": "对应面额乘以数量不得大于总面额"
   },
   {
     "id": "BuyForm.condition1.max_count.limit",
