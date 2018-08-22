@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
 import {Button, Icon, Input, Avatar, Badge, Modal, Popconfirm, Form, message} from 'antd';
-import {FormattedMessage as FM ,defineMessages} from 'react-intl';
-import {injectIntl } from 'components/_utils/decorator';
+import {FormattedMessage as FM, defineMessages} from 'react-intl';
+import {injectIntl} from 'components/_utils/decorator';
 import CountDown from 'components/CountDown';
 import styles from './SendCard.less';
 import StepModel from '../../Step';
@@ -156,7 +156,7 @@ export default class Process extends Component {
 
     return (
       <div className={styles.sendBox}>
-        <StepModel steps={steps} current={0} />
+        <StepModel steps={steps} current={0}/>
         <div className={styles.top}>
           <div className={styles.orderInfo}>
             <div className={styles.price}>
@@ -182,7 +182,7 @@ export default class Process extends Component {
             <div className={styles.ownerInfo}>
               <div className={styles.userInfo}>
                 <div className={styles.avatar}>
-                  <Avatar size="large" src={userInfo.avatar} />
+                  <Avatar size="large" src={userInfo.avatar}/>
                 </div>
                 <div className={styles.avatarRight}>
                   <div className={styles.top}>
@@ -222,19 +222,17 @@ export default class Process extends Component {
         </div>
         <div className={styles.denomination}>
           <div className={styles.bottom}>
-            <Form className={styles.form} onSubmit={this.handleSubmit}>
-              <SendCardForm
-                defaultValue={this.state.cards}
-                pswType={ad.password_type}
-                submitSellForm={this.props.submitting}
-                onSubmit={this.onSubmit}
-                targetTime={this.targetTime}
-                amount={order.amount}
-                unit_price={ad.unit_price}
-                money={order.money}
-                order_id={order.id}
-              />
-            </Form>
+            <SendCardForm
+              defaultValue={this.state.cards}
+              pswType={ad.password_type}
+              submitSellForm={this.props.submitting}
+              onSubmit={this.onSubmit}
+              targetTime={this.targetTime}
+              amount={order.amount}
+              unit_price={ad.unit_price}
+              money={order.money}
+              order_id={order.id}
+            />
           </div>
         </div>
       </div>

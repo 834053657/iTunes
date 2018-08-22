@@ -23,16 +23,12 @@
   "BuyForm.condition_type.limit":"TurnToEn 未添加指定面额 ",
   "BuyForm.condition1.max_deno.limit":"TurnToEn 总面额值超过流动最大值",
   "BuyForm.condition1.max_count.limit":"TurnToEn 该数值应小于最大总面额",
+  "BuyForm.condition1.max_count.noFluid.limit":"TurnToEn 对应面额乘以数量不得大于总面额",
   "BuyForm.condition2.max_money.limit":"TurnToEn 该数值应小于最大总面额",
   "BuyForm.condition2.multiple.limit":"TurnToEn 该数值应小于最大总面额",
   "BuyForm.condition2.multiple2.limit":"TurnToEn 该数值应小于或等于右侧最大面额",
   "dealDetail.beyondLimit":"TurnToEn 输入值超出最大限额",
-  "":"TurnToEn ",
-  "":"TurnToEn ",
-  "":"TurnToEn ",
-  "":"TurnToEn ",
-  "":"TurnToEn ",
-  "":"TurnToEn ",
+
 
 
 

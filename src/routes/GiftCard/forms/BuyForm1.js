@@ -42,7 +42,7 @@ const msg = defineMessages({
   },
   multiple: {
     id: 'BuyForm.multiple',
-    defaultMessage: '倍数'
+    defaultMessage: '倍数(选填)'
   },
   min_account: {
     id: 'BuyForm.min_account',
@@ -144,7 +144,7 @@ export default class BuyForm extends PureComponent {
       fields: {
         multiple: [
           {
-            required: true,
+            required: false,
             type: 'number',
             message: <FM id='BuyForm.input_multiple' defaultMessage='请输入倍数'/>,
           },
@@ -226,7 +226,6 @@ export default class BuyForm extends PureComponent {
     //购买广告
     if (condition_type === 1) {
       //验证最小总面额小于最大总面额
-
       //验证已添加指定面额
       if (values.condition1.length < 1) {
         createError(checkErr, `condition_type`,
@@ -245,10 +244,23 @@ export default class BuyForm extends PureComponent {
           />
         )
       }
+      //验证非流动性单个面额数量
+      if (!fluid) {
+        forEach(values.condition1, (value, key) => {
+          if (value.money * value.max_count > values.total_money.max) {
+            createError(checkErr, `condition1.${key}.max_count`,
+              <FM
+                id='BuyForm.condition1.max_count.noFluid.limit'
+                defaultMessage='对应面额乘以数量不得大于总面额'
+              />
+            );
+          }
+        });
+      }
       //验证流动性
       forEach(values.condition1, (value, key) => {
-        if (value.max_count > values.total_money.max) {
-          createError(checkErr, `condition1.${key}.max_count`,
+        if (value.money > values.total_money.max) {
+          createError(checkErr, `condition1.${key}.money`,
             <FM
               id='BuyForm.condition1.max_count.limit'
               defaultMessage='该数值应小于最大总面额'
@@ -262,7 +274,6 @@ export default class BuyForm extends PureComponent {
       } else {
         values.fluid = 0
       }
-
     }
     else {
       if (values.condition2.max_money > values.total_money.max) {
@@ -281,14 +292,9 @@ export default class BuyForm extends PureComponent {
           />
         );
       }
-      // if (values.condition2.multiple > max) {
-      //   createError(checkErr, `condition2.multiple`,
-      //     <FM
-      //       id='BuyForm.condition2.multiple2.limit'
-      //       defaultMessage='该数值应小于或等于最大总面额'
-      //     />
-      //   );
-      // }
+      if (!values.condition2.multiple) {
+        values.condition2.multiple = 1
+      }
       if (values.condition2.min_money > values.condition2.max_money) {
         createError(checkErr, `condition2.min_money`,
           <FM
@@ -318,7 +324,7 @@ export default class BuyForm extends PureComponent {
         {fields.map((member, index) => {
           return (
             <Row key={index} className={styles.denoRow}>
-              <Col sm={3}>
+              <Col sm={4}>
                 <Field
                   name={`${member}.money`}
                   component={AInputNumber}
@@ -377,7 +383,7 @@ export default class BuyForm extends PureComponent {
                   fields.push({money: '', max_count: ''})
                 } else {
                   message.warning(PROMPT('BuyForm.lack.info'));
-                 // message.warning('请填写完整面额信息')
+                  // message.warning('请填写完整面额信息')
                 }
               } else {
                 message.warning(PROMPT('BuyForm.fluid.beyondTop'));
@@ -457,6 +463,7 @@ export default class BuyForm extends PureComponent {
       cardList,
       initialValues,
       fluid,
+      total_money,
     } = this.props;
     if (action && !condition_type) {
       return false
@@ -551,7 +558,7 @@ export default class BuyForm extends PureComponent {
               placeholder={intl.formatMessage(msg.min_totalMoney)}
             />
           </Col>
-          <Col sm={1}/>
+          <Col sm={1} style={{marginLeft: '-298px',marginTop:'5px'}}>~</Col>
           <Col sm={4}>
             <Field
               name="total_money.max"
@@ -610,7 +617,7 @@ export default class BuyForm extends PureComponent {
                 min={0}
                 style={{width: '100%'}}
                 component={AInputNumber}
-                disabled={!editing}
+                disabled={!editing || !total_money.max}
                 placeholder={intl.formatMessage(msg.multiple)}
               />
             </Col>
@@ -622,7 +629,7 @@ export default class BuyForm extends PureComponent {
                 min={0}
                 component={AInputNumber}
                 style={{width: '100%'}}
-                disabled={!editing}
+                disabled={!editing || !total_money.max}
                 placeholder={intl.formatMessage(msg.min_account)}
               />
             </Col>
@@ -637,7 +644,7 @@ export default class BuyForm extends PureComponent {
                 min={0}
                 component={AInputNumber}
                 style={{width: '100%'}}
-                disabled={!editing}
+                disabled={!editing || !total_money.max}
                 placeholder={intl.formatMessage(msg.max_account)}
               />
             </Col>
