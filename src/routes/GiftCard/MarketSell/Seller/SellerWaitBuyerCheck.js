@@ -87,7 +87,7 @@ export default class SellerWaitBuyerCheck extends Component {
           <div className={styles.bottomLeft}>
             <div className={styles.orderInfo}>
               <h5>
-                <span>订单：</span>
+                <span>{PROMPT('order_all')}</span>
                 <span className={styles.text}>{order.order_no || '-'}</span>
               </h5>
               <div className={styles.orderDescribe}>
