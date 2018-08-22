@@ -89,7 +89,6 @@ export default class Appeal extends Component {
   handleSubmit = e => {
     const { dispatch, detail: { order = {} } } = this.props;
     const { imageUrls = [] } = this.state;
-
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -97,7 +96,7 @@ export default class Appeal extends Component {
         if ((!values.content || values.content.trim() === '') && imageUrls.length === 0) {
           message.error('请输入您要提交的内容或者图片!');
         } else {
-          const content = this.getMsgContent(values.content);
+          const content = this.getMsgContent(values.content||'');
           dispatch({
             type: 'send_message',
             payload: {
@@ -153,8 +152,6 @@ export default class Appeal extends Component {
   handleViewMore = () => {
     const {page = 1} = this.state;
     const { detail: { order = {} } } = this.props;
-    console.log(123, order, page);
-
     this.setState({
       page: page + 1,
     });
@@ -446,7 +443,6 @@ const breakLine = (v) => {
   const text = v && v.replace(/\n/g, '<br />');
   const regex = /(<br \/>)/g;
   const str = '';
-
   const arr = text.split(regex).map((line, index) => {
     return line.match(regex) ? `<br key=${`key_${  index}`} />` : line
   });
