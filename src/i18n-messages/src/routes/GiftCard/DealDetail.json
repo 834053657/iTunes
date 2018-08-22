@@ -48,8 +48,8 @@
     "defaultMessage": "否"
   },
   {
-    "id": "dealDetail.num_multiple",
-    "defaultMessage": "数量必须是{multiple}的倍数"
+    "id": "dealDetail.beyondLimit",
+    "defaultMessage": "输入值超出最大限额"
   },
   {
     "id": "dealDetail.num_amount",

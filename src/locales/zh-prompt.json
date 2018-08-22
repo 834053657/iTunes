@@ -105,6 +105,11 @@
   "copySuccess":"复制成功",
   "order_all":"订单：",
   "Appeal.check_msg":"查看更多历史消息请点击",
-  "Appeal.check_load":"加载"
+  "Appeal.check_load":"加载",
+
+
+  "BuyForm.lack.info":"请填写完整面额信息",
+  "BuyForm.fluid.beyondTop":"流动最大值已达上限",
+  "BuyForm.lack.total_money":"请先填写总面额"
 
 }

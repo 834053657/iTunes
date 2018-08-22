@@ -71,10 +71,6 @@ export default class OrderDetail extends Component {
       this.leaveRoom(id);
       this.enterRoom(nextid);
     }
-    else if(pageStatus !== nextPageStatus) {
-      this.fetchData(id);
-      console.log(pageStatus, nextPageStatus)
-    }
   }
 
   fetchData = id => {

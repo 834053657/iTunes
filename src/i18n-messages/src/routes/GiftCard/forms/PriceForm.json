@@ -8,6 +8,10 @@
     "defaultMessage": "可添加面额 {min} - {max}"
   },
   {
+    "id": "BuyForm.type_choose",
+    "defaultMessage": "请选择类型"
+  },
+  {
     "id": "PriceForm.amount_add_input_cancel",
     "defaultMessage": "取消"
   },

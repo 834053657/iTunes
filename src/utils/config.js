@@ -10,23 +10,71 @@ export default {
   web_name,
   videoAuthConcat: [
     {
-      text: '客服电话1',
-      account: '123',
+      text: 'WeChat1',
+      account: 'kg-yamaxun',
     },
     {
-      text: '客服电话2',
-      account: '1234',
+      text: 'WeChat2',
+      account: 'KG-Amazon-02',
     },
     {
-      text: '客服电话3',
-      account: '1235',
+      text: 'WeChat3',
+      account: 'KG-Amazon-04',
     },
     {
-      text: '客服QQ1',
-      account: '312321312321',
+      text: 'WeChat4',
+      account: 'KG-Gift-card-06',
+    },
+    {
+      text: 'WeChat5',
+      account: 'KG-lpk-05',
+    },
+    {
+      text: 'WeChat6',
+      account: 'KG-Giftcard-03',
+    },
+    {
+      text: 'WeChat7',
+      account: 'KG-Gift-card-07',
+    },
+    {
+      text: 'WeChat8',
+      account: 'KG-LPK-01',
+    },
+    {
+      text: 'QQ1',
+      account: '3002700735',
+    },
+    {
+      text: 'QQ2',
+      account: '3002739275',
+    },
+    {
+      text: 'QQ3',
+      account: '3004377538',
+    },
+    {
+      text: 'QQ4',
+      account: '3002706855',
+    },
+    {
+      text: 'QQ5',
+      account: '3002766793',
+    },
+    {
+      text: 'QQ6',
+      account: '3002720283',
+    },
+    {
+      text: 'QQ7',
+      account: '3002741723',
+    },
+    {
+      text: 'QQ8',
+      account: '3002752935',
     },
   ],
-  service_phone: '4000000xxx',
+  service_phone: '18764468764',
   service_platform: '凯歌交易平台',
   language: {
     zh_CN: '简体中文',

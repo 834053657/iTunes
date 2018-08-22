@@ -387,7 +387,6 @@ export default class ReduxForm extends Component {
 
   renderItems = arg => {
     const {fields, formitemlayout, meta, _error, disabled, pswType} = arg;
-    console.log(pswType);
     return (
       <div>
         {fields.map((fieldName, i, c) => {

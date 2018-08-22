@@ -116,6 +116,34 @@
     "defaultMessage": "请输入选择密保卡类型"
   },
   {
+    "id": "BuyForm.unit_price.limit",
+    "defaultMessage": "单价必须大于0"
+  },
+  {
+    "id": "BuyForm.total_money.min.limit",
+    "defaultMessage": "该数值应小于最大总面额"
+  },
+  {
+    "id": "BuyForm.condition_type.limit",
+    "defaultMessage": "未添加指定面额"
+  },
+  {
+    "id": "BuyForm.condition1.max_deno.limit",
+    "defaultMessage": "总面额值超过流动最大值"
+  },
+  {
+    "id": "BuyForm.condition1.max_count.limit",
+    "defaultMessage": "该数值应小于最大总面额"
+  },
+  {
+    "id": "BuyForm.condition2.max_money.limit",
+    "defaultMessage": "该数值应小于最大总面额"
+  },
+  {
+    "id": "BuyForm.condition2.multiple.limit",
+    "defaultMessage": "该数值应小于最大总面额"
+  },
+  {
     "id": "BuyForm.num_lessThan_right",
     "defaultMessage": "该数值应小于右侧值"
   },
@@ -136,6 +164,10 @@
     "defaultMessage": "添加面额"
   },
   {
+    "id": "BuyForm.Fluid.describe",
+    "defaultMessage": "流动性代表一个广告成交的订单具有上限值，上限值为最大总面额乘以单价。\n        例如：收购最大总面额为 100 面额，\n        卖家出售 20面额 的卡，流动性减至 80 面额乘以单价。\n        如果交易未完成，流动性上限值恢复至 100 面额乘以单价；\n        简单的说，开启流动性收卡有上限值，不开启流动性可以无限收卡"
+  },
+  {
     "id": "BuyForm.card_type",
     "defaultMessage": "类型"
   },
@@ -148,6 +180,10 @@
     "defaultMessage": "总面额"
   },
   {
+    "id": "BuyForm.fluid",
+    "defaultMessage": "流动性"
+  },
+  {
     "id": "BuyForm.condition_type",
     "defaultMessage": "条件"
   },
@@ -158,10 +194,6 @@
   {
     "id": "BuyForm.btn_account_region",
     "defaultMessage": "面额区间"
-  },
-  {
-    "id": "BuyForm.dynamic",
-    "defaultMessage": "流动性"
   },
   {
     "id": "BuyForm.ask_title",

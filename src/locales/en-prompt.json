@@ -105,7 +105,12 @@
   "copySuccess":"success",
   "order_all":"order",
   "Appeal.check_msg":"For more historical information, please click.",
-  "Appeal.check_load":"Load"
+  "Appeal.check_load":"Load",
 
+
+
+  "BuyForm.lack.info":"TurnToEn 请填写完整面额信息",
+  "BuyForm.fluid.beyondTop":"TurnToEn 流动最大值已达上限",
+  "BuyForm.lack.total_money":"TurnToEn 请先填写总面额"
 
 }
