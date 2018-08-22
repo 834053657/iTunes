@@ -46,6 +46,10 @@ class EmailForm extends Component {
     clearInterval(this.interval);
   }
 
+  componentWillUnmount(){
+    clearInterval(this.interval);
+  }
+
   handleSendCaptcha = () => {
     this.props.form.validateFields(['email'], { force: true }, (err, values) => {
       if (!err) {

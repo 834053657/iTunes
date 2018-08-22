@@ -145,13 +145,11 @@ export default class DealDeatil extends Component {
     max -= userBuySum
     if (m === 'min') {
       return parseInt(min / money) < 0 ? 0 : parseInt(min / money)
-    } else {
-      if (n) {
+    } else if (n) {
         return parseInt(max / money)
       } else {
         return parseInt(max / money) < 0 ? 0 : parseInt(max / money)
       }
-    }
   };
 
   calcuFixCountBuy = (orderData, item, m) => {
@@ -211,14 +209,14 @@ export default class DealDeatil extends Component {
         'max',
         1
       );
-      if (max < 0) callback(<FM id='dealDetail.beyondLimit' defaultMessage='输入值超出最大限额'/>);
+      if (max < 0) callback(<FM id='dealDetail.beyondLimit' defaultMessage='输入值超出最大限额' />);
     } else {
       max = this.calcuFixCountBuy(
         getFieldValue(`order_detail`),
         getFieldValue(`order_detail[${index}]`),
         'max'
       );
-      if (value > max) callback(<FM id='dealDetail.beyondLimit' defaultMessage='输入值超出最大限额'/>);
+      if (value > max) callback(<FM id='dealDetail.beyondLimit' defaultMessage='输入值超出最大限额' />);
     }
     callback();
   };
@@ -381,8 +379,8 @@ export default class DealDeatil extends Component {
             visible={addDenoVisible}
           >
             <Button onClick={this.showDenoVisible} className={styles.addBtn}>
-              <Icon type="plus"/>
-              <FM id="dealDetail.num_add_amount" defaultMessage="添加面额"/>
+              <Icon type="plus" />
+              <FM id="dealDetail.num_add_amount" defaultMessage="添加面额" />
             </Button>
           </Popover>
         </div>
@@ -417,49 +415,49 @@ export default class DealDeatil extends Component {
       <div className={styles.left}>
         <Spin spinning={this.props.loading} delay={1500}>
           <DescriptionList col={1}>
-            <Description term={<FM id="dealDetail.sell_type" defaultMessage="类型"/>}>
+            <Description term={<FM id="dealDetail.sell_type" defaultMessage="类型" />}>
               {card_type && CONFIG.cardTypeMap && CONFIG.cardTypeMap[card_type]
                 ? CONFIG.cardTypeMap[card_type].name
                 : '-'}
             </Description>
-            <Description term={<FM id="dealDetail.sell_require" defaultMessage="要求"/>}>
+            <Description term={<FM id="dealDetail.sell_require" defaultMessage="要求" />}>
               {password_type && CONFIG.cardPwdType ? CONFIG.cardPwdType[password_type] : '-'}
             </Description>
-            <Description term={<FM id="dealDetail.sell_unit_price" defaultMessage="单价"/>}>
+            <Description term={<FM id="dealDetail.sell_unit_price" defaultMessage="单价" />}>
               {unit_price} RMB
             </Description>
             {
               condition_type === 2 && (
-                <Description term={<FM id="dealDetail.sell_num_multiple" defaultMessage="倍数"/>}>
+                <Description term={<FM id="dealDetail.sell_num_multiple" defaultMessage="倍数" />}>
                   {condition.multiple}
                 </Description>
               )
             }
-            <Description term={<FM id="dealDetail.totalDenomition" defaultMessage="总面额"/>}>
+            <Description term={<FM id="dealDetail.totalDenomition" defaultMessage="总面额" />}>
               {min}
               -
               {current_max_total_money}
             </Description>
-            <Description term={<FM id="dealDetail.fluid" defaultMessage="流动性"/>}>
+            <Description term={<FM id="dealDetail.fluid" defaultMessage="流动性" />}>
               {fluid ? '是' : '否'}
             </Description>
           </DescriptionList>
           {this.renderCondition(detail)}
           <DescriptionList col={1}>
-            <Description term={<FM id="dealDetail.sell_all_price" defaultMessage="总价"/>}>
+            <Description term={<FM id="dealDetail.sell_all_price" defaultMessage="总价" />}>
               {formatMoney(this.calcuBuyTotal())} RMB
             </Description>
-            <Description term={<FM id="dealDetail.sell_deadLine" defaultMessage="发卡期限"/>}>
-              {deadline} <FM id="dealDetail._minute" defaultMessage="分钟"/>
+            <Description term={<FM id="dealDetail.sell_deadLine" defaultMessage="发卡期限" />}>
+              {deadline} <FM id="dealDetail._minute" defaultMessage="分钟" />
             </Description>
-            <Description term={<FM id="dealDetail.sell_safe_time" defaultMessage="保障时间"/>}>
-              {guarantee_time} <FM id="dealDetail._minute_1" defaultMessage="分钟"/>
+            <Description term={<FM id="dealDetail.sell_safe_time" defaultMessage="保障时间" />}>
+              {guarantee_time} <FM id="dealDetail._minute_1" defaultMessage="分钟" />
             </Description>
           </DescriptionList>
 
           <FormItem className={styles.bottom}>
             <Button key="back" onClick={this.handleBack}>
-              <FM id="dealDetail.sell_toDelete" defaultMessage="取消"/>
+              <FM id="dealDetail.sell_toDelete" defaultMessage="取消" />
             </Button>
 
             <Popconfirm
@@ -508,15 +506,15 @@ export default class DealDeatil extends Component {
       <div className={styles.left}>
         <Spin spinning={this.props.loading} delay={1500}>
           <DescriptionList size="large" col={1}>
-            <Description term={<FM id="dealDetail.buy_type" defaultMessage="类型"/>}>
+            <Description term={<FM id="dealDetail.buy_type" defaultMessage="类型" />}>
               {card_type && CONFIG.cardTypeMap && CONFIG.cardTypeMap[card_type]
                 ? CONFIG.cardTypeMap[card_type].name
                 : '-'}
             </Description>
-            <Description term={<FM id="dealDetail.buy_contain" defaultMessage="包含"/>}>
+            <Description term={<FM id="dealDetail.buy_contain" defaultMessage="包含" />}>
               {password_type && CONFIG.cardPwdType ? CONFIG.cardPwdType[password_type] : '-'}
             </Description>
-            <Description term={<FM id="dealDetail.buy_unit_price" defaultMessage="单价"/>}>
+            <Description term={<FM id="dealDetail.buy_unit_price" defaultMessage="单价" />}>
               {unit_price}RMB
             </Description>
           </DescriptionList>
@@ -545,14 +543,14 @@ export default class DealDeatil extends Component {
                       {
                         type: 'number',
                         message: (
-                          <FM id="dealDetail.buy_amount_right" defaultMessage="请输入正确的数量"/>
+                          <FM id="dealDetail.buy_amount_right" defaultMessage="请输入正确的数量" />
                         ),
                       },
                       {
                         type: 'number',
                         min: 0,
                         max: stock[d],
-                        message: <FM id="dealDetail.buy_stock_num" defaultMessage="库存不足"/>,
+                        message: <FM id="dealDetail.buy_stock_num" defaultMessage="库存不足" />,
                       },
                     ],
                   })(
@@ -568,16 +566,16 @@ export default class DealDeatil extends Component {
             })}
           </div>
           <DescriptionList size="large" col={1}>
-            <Description term={<FM id="dealDetail.buy_all_moneys" defaultMessage="总价"/>}>
+            <Description term={<FM id="dealDetail.buy_all_moneys" defaultMessage="总价" />}>
               {formatMoney(this.calcuBuyTotal1(money))} RMB
             </Description>
-            <Description term={<FM id="dealDetail.buy_safe_time" defaultMessage="保障时间"/>}>
-              {guarantee_time} <FM id="dealDetail.buy_time_minute" defaultMessage="分钟"/>
+            <Description term={<FM id="dealDetail.buy_safe_time" defaultMessage="保障时间" />}>
+              {guarantee_time} <FM id="dealDetail.buy_time_minute" defaultMessage="分钟" />
             </Description>
           </DescriptionList>
           <FormItem className={styles.bottom}>
             <Button key="back" onClick={this.handleBack}>
-              <FM id="dealDetail.buy_delete_btn" defaultMessage="取消"/>
+              <FM id="dealDetail.buy_delete_btn" defaultMessage="取消" />
             </Button>
             <Popconfirm
               title={this.props.intl.formatMessage(msg.sure_to_buy)}
@@ -663,7 +661,7 @@ export default class DealDeatil extends Component {
         <div className={styles.right}>
           <div className={styles.userInfo}>
             <div className={styles.avatar}>
-              <Avatar size="large" src={userInfo.avatar}/>
+              <Avatar size="large" src={userInfo.avatar} />
             </div>
             <div className={styles.avatarRight}>
               <div className={styles.top}>
@@ -673,7 +671,7 @@ export default class DealDeatil extends Component {
               </div>
               <div className={styles.infoBottom}>
                 <span className={styles.dealTit}>
-                  <FM id="dealDetail.buy_bargain_one" defaultMessage="30日成单："/>
+                  <FM id="dealDetail.buy_bargain_one" defaultMessage="30日成单：" />
                 </span>
                 <span className={styles.dealNum}>{userInfo.month_volume}</span>
               </div>
@@ -681,7 +679,7 @@ export default class DealDeatil extends Component {
           </div>
           <div className={styles.term}>
             <h3>
-              <FM id="dealDetail.buy_sell_clause" defaultMessage="交易条款："/>
+              <FM id="dealDetail.buy_sell_clause" defaultMessage="交易条款：" />
             </h3>
             <p>{term}</p>
           </div>
