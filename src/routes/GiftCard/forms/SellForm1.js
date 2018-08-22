@@ -535,7 +535,8 @@ export default class SellForm extends Component {
                   </Col>
                   {!disabled &&
                   !status &&
-                  pswType === 2 && (
+                  fields.length !== 1&&
+                    pswType === 2 && (
                     <Col className={styles.deleteIcon}>
                       <Popconfirm
                         title={<FM id='sellForm.card_img_cancel' defaultMessage='确定删除吗？' />}
