@@ -109,8 +109,8 @@
 
 
 
-  "BuyForm.lack.info":"TurnToEn 请填写完整面额信息",
-  "BuyForm.fluid.beyondTop":"TurnToEn 流动最大值已达上限",
-  "BuyForm.lack.total_money":"TurnToEn 请先填写总面额"
+  "BuyForm.lack.info":"Please add complete infomation",
+  "BuyForm.fluid.beyondTop":"Max Total Value is limited",
+  "BuyForm.lack.total_money":"Please add total Value first"
 
 }

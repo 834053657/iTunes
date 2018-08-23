@@ -1,8 +1,8 @@
-import React, { PureComponent, Component, Fragment } from 'react';
-import { Form, Button, Row, Col, Icon } from 'antd';
+import React, {PureComponent, Component, Fragment} from 'react';
+import {Form, Button, Row, Col, Icon} from 'antd';
 // import AsyncValidator from 'async-validator'
-import { map } from 'lodash';
-import { connect } from 'dva';
+import {map} from 'lodash';
+import {connect} from 'dva';
 import {
   Field,
   reduxForm,
@@ -11,32 +11,43 @@ import {
   FieldArray,
   SubmissionError,
 } from 'redux-form';
-import { validate } from '../../utils/utils';
-import { AInput, ASelect, AOption, AInputNumber } from './createField';
+import {validate} from '../../utils/utils';
+import {AInput, ASelect, AOption, AInputNumber} from './createField';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 const FormItem = Form.Item;
 
 const descriptor = {
-  unit_price: {
-    required: true,
-    message: '必填',
-  },
+  unit_price: [
+    {
+      required: true,
+      type: 'number',
+      message: '必填',
+    },
+    {
+      max:9,
+      message:'最大为9'
+    },
+    {
+      len:9,
+      message:'最大长度为9'
+    },
+  ],
   cards: {
     type: 'array',
     required: true,
-    message: { _error: '错误' },
+    message: {_error: '错误'},
     defaultField: {
       type: 'object',
       fields: {
-        min: { required: true, message: '必填' },
-        price: { required: true, message: '必填' },
+        min: {required: true, message: '必填'},
+        price: {required: true, message: '必填'},
         subCards: {
           type: 'array',
           defaultField: {
             type: 'object',
             fields: {
-              a: { required: true, message: 'a 必填' },
+              a: {required: true, message: 'a 必填'},
             },
           },
         },
@@ -68,7 +79,7 @@ class Items extends Component {
     return (
       <FormItem validateStatus={hasError ? 'error' : 'success'} help={hasError && meta.error}>
         <div>
-          <button type="button" onClick={() => fields.push({ price: '', min: '', max: '' })}>
+          <button type="button" onClick={() => fields.push({price: '', min: '', max: ''})}>
             添加 cards
           </button>
           {hasError && <span>{meta.error}</span>}
@@ -83,16 +94,16 @@ class Items extends Component {
                 <h4>cards #{index + 1}</h4>
               </Col>
               <Col sm={4}>
-                <Field name={`${member}.price`} component={AInputNumber} />
+                <Field name={`${member}.price`} component={AInputNumber}/>
               </Col>
               <Col sm={4}>
-                <Field name={`${member}.min`} component={AInputNumber} />
+                <Field name={`${member}.min`} component={AInputNumber}/>
               </Col>
               <Col sm={4}>
-                <Field name={`${member}.max`} component={AInputNumber} />
+                <Field name={`${member}.max`} component={AInputNumber}/>
               </Col>
               <Col sm={10}>
-                <FieldArray name={`${member}.subCards`} component={this.renderSubItem} />
+                <FieldArray name={`${member}.subCards`} component={this.renderSubItem}/>
               </Col>
             </Row>
           );
@@ -109,12 +120,13 @@ class Items extends Component {
 })
 @reduxForm({
   form: 'loginForm', // a unique name for this form
-  // validate: (values, props) => {
-  //   return validate(descriptor, values);
-  //   // if (!['john', 'paul', 'george', 'ringo'].includes(values.unit_price)) {
-  //   //     return { unit_price: 'User does not exist' };
-  //   //   }
-  // },
+  validate: (values, props) => {
+    // console.log('validate',values )
+    return validate(descriptor, values);
+    // if (!['john', 'paul', 'george', 'ringo'].includes(values.unit_price)) {
+    //     return { unit_price: 'User does not exist' };
+    //   }
+  },
 })
 export default class ReduxForm extends PureComponent {
   save = values => {
@@ -141,12 +153,12 @@ export default class ReduxForm extends PureComponent {
     //   throw new SubmissionError({ password: 'Wrong password', _error: 'Login failed!' });
     // }
   };
-  renderSubItem = ({ fields, formitemlayout, meta: { touched, error } }) => {
+  renderSubItem = ({fields, formitemlayout, meta: {touched, error}}) => {
     console.log(fields);
     return (
       <Fragment>
         <div>
-          <button type="button" onClick={() => fields.push({ a: 0, b: 0 })}>
+          <button type="button" onClick={() => fields.push({a: 0, b: 0})}>
             添加 subCards
           </button>
           {touched && error && <span>{error}</span>}
@@ -155,10 +167,10 @@ export default class ReduxForm extends PureComponent {
           return (
             <Row key={index}>
               <Col sm={8}>
-                <Field name={`${member}.a`} component={AInputNumber} />
+                <Field name={`${member}.a`} component={AInputNumber}/>
               </Col>
               <Col sm={8}>
-                <Field name={`${member}.b`} component={AInputNumber} />
+                <Field name={`${member}.b`} component={AInputNumber}/>
               </Col>
               <Col sm={4}>
                 <Button icon="close-circle-o" onClick={() => fields.remove(index)}>
@@ -174,12 +186,12 @@ export default class ReduxForm extends PureComponent {
   };
 
   renderItem = arg => {
-    const { fields, formitemlayout, meta, _error } = arg;
+    const {fields, formitemlayout, meta, _error} = arg;
     console.log(fields);
     return (
       <FormItem validateStatus={meta.error ? 'error' : 'success'} help={meta.error && meta.error}>
         <div>
-          <button type="button" onClick={() => fields.push({ priwce: '', min: '', max: '' })}>
+          <button type="button" onClick={() => fields.push({priwce: '', min: '', max: ''})}>
             添加 cards
           </button>
         </div>
@@ -193,16 +205,16 @@ export default class ReduxForm extends PureComponent {
                 <h4>cards #{index + 1}</h4>
               </Col>
               <Col sm={4}>
-                <Field name={`${member}.priwce`} component={AInputNumber} />
+                <Field name={`${member}.priwce`} component={AInputNumber}/>
               </Col>
               <Col sm={4}>
-                <Field name={`${member}.min`} component={AInputNumber} />
+                <Field name={`${member}.min`} component={AInputNumber}/>
               </Col>
               <Col sm={4}>
-                <Field name={`${member}.max`} component={AInputNumber} />
+                <Field name={`${member}.max`} component={AInputNumber}/>
               </Col>
               <Col sm={10}>
-                <FieldArray name={`${member}.subCards`} component={this.renderSubItem} />
+                <FieldArray name={`${member}.subCards`} component={this.renderSubItem}/>
               </Col>
             </Row>
           );
@@ -212,22 +224,22 @@ export default class ReduxForm extends PureComponent {
   };
 
   render() {
-    const { handleSubmit, pristine, reset, submitting } = this.props;
+    const {handleSubmit, pristine, reset, submitting} = this.props;
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 },
+        xs: {span: 24},
+        sm: {span: 6},
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 14 },
+        xs: {span: 24},
+        sm: {span: 14},
       },
     };
     console.log(this.props);
 
     return (
       <PageHeaderLayout title="高级表单" content="高级表单常见于一次性输入和提交大批量数据的场景。">
-        <Form style={{ width: 1000 }} onSubmit={handleSubmit(this.save)}>
+        <Form style={{width: 1000}} onSubmit={handleSubmit(this.save)}>
           {/*   <Field
             label="类型"
             name="type"
@@ -242,7 +254,7 @@ export default class ReduxForm extends PureComponent {
           <Field
             label="单价"
             name="unit_price"
-            component={AInput}
+            component={AInputNumber}
             {...formItemLayout}
             placeholder=""
           />
@@ -253,7 +265,7 @@ export default class ReduxForm extends PureComponent {
             {...formItemLayout}
             placeholder=""
           />*/}
-          <FieldArray name="cards" {...formItemLayout} component={this.renderItem} />
+          <FieldArray name="cards" {...formItemLayout} component={this.renderItem}/>
 
           <Form.Item>
             <Button type="primary" htmlType="submit">

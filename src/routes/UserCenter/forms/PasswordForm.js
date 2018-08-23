@@ -136,10 +136,10 @@ export default class PasswordForm extends Component {
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
-        sm: { span: 6 },
+        sm: { span: 7 },
       },
       wrapperCol: {
-        sm: { span: 18 },
+        sm: { span: 17 },
       },
     };
     return (

@@ -2,9 +2,9 @@
 import moment from 'moment';
 import numeral from 'numeral';
 import AsyncValidator from 'async-validator';
-import { parse } from 'qs';
-import { size, map } from 'lodash';
-import { getLocale } from './authority';
+import {parse} from 'qs';
+import {size, map} from 'lodash';
+import {getLocale} from './authority';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -191,7 +191,7 @@ export function getSystemUrl(env) {
     socket_url = '//message.paean.net:9000/socket.io';
   }
 
-  return { base_url, web_name, socket_url };
+  return {base_url, web_name, socket_url};
 }
 
 // export function playAudio() {
@@ -204,14 +204,24 @@ export function playAudio() {
   try {
     const audio = new Audio(require('../../public/audio/msg.mp3'));
     audio.play().catch(e => e)
-  } catch (e) { e }
+  } catch (e) {
+    e
+  }
 }
 
 export function formatMoney(rmb) {
   return numeral(rmb || 0).format('0,0.00');
 }
 
-export function parseNumber(value) {
+export function parseNumber(value, len) {
+  let a
+  if (value > 0 && len) {
+    a = value.toString()
+    if (a.length > len) {
+      a = a.substring(0, len)
+      return Number(a);
+    }
+  }
   return !value || isNaN(Number(value)) ? null : Number(value);
 }
 

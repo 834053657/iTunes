@@ -351,7 +351,7 @@ export default class List extends Component {
       },
       {
         title: <FM id="guarantee_time" defaultMessage="保障时间" />,
-        width: '80px',
+        width: '100px',
         dataIndex: 'guarantee_time',
         render: v => <span>{v} {this.props.intl.formatMessage(msg.minute)}</span>,
       },
