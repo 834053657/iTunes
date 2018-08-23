@@ -86,7 +86,6 @@ app.router(require('./router').default);
 
 // 5. Start
 app.start('#root');
-
-// app.use(dvaSocket(CONFIG.socket_url, options));
+app._store.dispatch({ type: 'global/fetchConfigs'});// eslint-disable-line
 
 export default app._store; // eslint-disable-line
