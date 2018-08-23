@@ -29,6 +29,7 @@
     "rsync:prod": "rsync -avz ./dist/  kgpro:/data/itunes-frontend",
     "build:prod": "cross-env KG_API_ENV=prod ESLINT=none roadhog build",
     "deploy:prod": "npm run build:prod && npm run rsync:prod",
+    "deploy:all": "npm run deploy:prod && npm run deploy:test1 && npm run deploy:test2",
     "build:i18n-js": "atool-build -o ./dist/${npm_package_name}/${npm_package_version}/",
     "trans": "atool-l10n"
   },

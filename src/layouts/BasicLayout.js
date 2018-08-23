@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon, message, Modal, LocaleProvider } from 'antd';
+import { Layout, Icon, message, Modal, LocaleProvider,Spin } from 'antd';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
@@ -101,6 +101,7 @@ enquireScreen(b => {
   currentUser: user.currentUser,
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
+  loading: loading.effects['global/fetchConfigs'],
   notices: global.notices,
   noticesCount: global.noticesCount,
 }))
@@ -110,12 +111,12 @@ export default class BasicLayout extends React.Component {
     breadcrumbNameMap: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-    this.props.dispatch({
-      type: 'global/fetchConfigs',
-    });
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.props.dispatch({
+  //     type: 'global/fetchConfigs',
+  //   });
+  // }
 
   state = {
     isMobile,
@@ -342,6 +343,7 @@ export default class BasicLayout extends React.Component {
       routerData,
       match,
       location,
+      loading
     } = this.props;
     const bashRedirect = this.getBashRedirect();
     const layout = (
@@ -445,7 +447,11 @@ export default class BasicLayout extends React.Component {
     return (
       <DocumentTitle title={this.getPageTitle()}>
         <ContainerQuery query={query}>
-          {params => <div className={classNames(params)}>{layout}</div>}
+          {params => (
+            <div className={classNames(params)}>
+              {!loading ? layout : <Spin style={{width: '100%', marginTop: '25%', }} />}
+            </div>
+          )}
         </ContainerQuery>
       </DocumentTitle>
     );
