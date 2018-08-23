@@ -4,10 +4,6 @@
     "defaultMessage": "清空了消息"
   },
   {
-    "id": "basic_layout.prompt",
-    "defaultMessage": "提示"
-  },
-  {
     "id": "help",
     "defaultMessage": "帮助"
   },

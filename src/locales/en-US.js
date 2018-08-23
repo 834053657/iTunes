@@ -3,16 +3,16 @@ import appLocaleDataEn from 'react-intl/locale-data/en';
 import enMessages from './en.json';
 
 
-// let ENmessage = {};
-//   for(let id in enMessages ) {
-//     if (enMessages[id]) {
-//       ENmessage[id] = enMessages[id].substring(0, 1).toUpperCase() + enMessages[id].substring(1);
-//     }
-//   }
+const ENmessage = {};
+  for(const id in enMessages ) {
+    if (enMessages[id]) {
+      ENmessage[id] = enMessages[id].substring(0, 1).toUpperCase() + enMessages[id].substring(1);
+    }
+  }
 
 const appLocaleEn = {
   messages: {
-    ...enMessages,
+    ...ENmessage,
   },
   antd: antdEn,
   locale: 'en-US',

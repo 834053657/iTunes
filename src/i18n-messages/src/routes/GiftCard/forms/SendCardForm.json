@@ -1,0 +1,118 @@
+[
+  {
+    "id": "SendForm.pls_add_note",
+    "defaultMessage": "请添加面额"
+  },
+  {
+    "id": "SendForm.pls_add_psw",
+    "defaultMessage": "请添加密码信息"
+  },
+  {
+    "id": "SendForm.pls_card_psw",
+    "defaultMessage": "请输入卡密"
+  },
+  {
+    "id": "SendForm.minLengthBeyond4",
+    "defaultMessage": "最小长度不得小于4位"
+  },
+  {
+    "id": "SendForm.maxLengthLimit50",
+    "defaultMessage": "最大长度不得超过50位"
+  },
+  {
+    "id": "SendForm.onlyZmNum",
+    "defaultMessage": "只能输入字母，数字组合"
+  },
+  {
+    "id": "SendForm.shouldUploadCardPic",
+    "defaultMessage": "请上传卡图"
+  },
+  {
+    "id": "SendForm.Note",
+    "defaultMessage": "面额"
+  },
+  {
+    "id": "SendForm.Receipt",
+    "defaultMessage": "凭证"
+  },
+  {
+    "id": "BuyForm.account_min_num",
+    "defaultMessage": "最小数量"
+  },
+  {
+    "id": "BuyForm.account_max_num",
+    "defaultMessage": "最大数量"
+  },
+  {
+    "id": "personalCenter.Method_payment_hasDet",
+    "defaultMessage": "删除"
+  },
+  {
+    "id": "sellForm.dashed_add",
+    "defaultMessage": "添加面额"
+  },
+  {
+    "id": "PriceForm.input_amount_num",
+    "defaultMessage": "请输入面额"
+  },
+  {
+    "id": "sellForm.add_file",
+    "defaultMessage": "导入"
+  },
+  {
+    "id": "sellForm.click_load",
+    "defaultMessage": "点击下载模板"
+  },
+  {
+    "id": "sellForm.evidence_card",
+    "defaultMessage": "凭证:"
+  },
+  {
+    "id": "sellForm.card_passWord",
+    "defaultMessage": "卡密:"
+  },
+  {
+    "id": "sellForm.card_img",
+    "defaultMessage": "卡图:"
+  },
+  {
+    "id": "sellForm.card_img_cancel",
+    "defaultMessage": "确定删除吗？"
+  },
+  {
+    "id": "sellForm.card_img_cancel_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "sellForm.card_img_cancel_no",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "sellForm.all_amount_",
+    "defaultMessage": "总面额"
+  },
+  {
+    "id": "sellForm.unit_price_",
+    "defaultMessage": "单价"
+  },
+  {
+    "id": "sellForm.all_amount_price",
+    "defaultMessage": "总价"
+  },
+  {
+    "id": "SendForm.deadlineForSendCard",
+    "defaultMessage": "剩余发卡时间"
+  },
+  {
+    "id": "SendForm.sendCard",
+    "defaultMessage": "发卡"
+  },
+  {
+    "id": "waitBuyerCheck.cancel_order_sure",
+    "defaultMessage": "您确认要取消订单吗"
+  },
+  {
+    "id": "waitBuyerCheck.cancel_order_btn",
+    "defaultMessage": "取消订单"
+  }
+]

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage as FM, defineMessages, intlShape } from 'react-intl';
-import { injectIntl } from './decorator';
 import {getLocale} from '../../utils/authority';
 
 const msg = defineMessages({
@@ -27,17 +26,16 @@ const msg = defineMessages({
   }
 });
 
-@injectIntl()
 export default class MessageContent extends Component {
 
   static propTypes = {
     data: PropTypes.any.isRequired,
-    intl: intlShape.isRequired,
+    // intl: intlShape.isRequired,
   };
 
   getMessageContent= (msgObj)=> {
     //get language
-    const { intl } = this.props;
+    // const { intl } = this.props;
     const lang = getLocale().replace('-', '_') ||  'zh_CN';
     let msgText = CONFIG[`message_type_${lang}`][msgObj.msg_type];
 
@@ -48,14 +46,14 @@ export default class MessageContent extends Component {
       if ([11, 12].indexOf(msgObj.msg_type) >= 0) {
         msgText = msgText.replace(
           '{auth_type}',
-          msgObj.content && msgObj.content.auth_type === 1 ? intl.formatMessage(msg.realNameAuth) : intl.formatMessage(msg.videoAuth)
+          msgObj.content && msgObj.content.auth_type === 1 ? INTL(msg.realNameAuth) : INTL(msg.videoAuth)
         );
       }
 
       if ([21, 22].indexOf(msgObj.msg_type) >= 0) {
         msgText = msgText.replace(
           '{payment_method}',
-          msgObj.content && msgObj.content.payment_method === 'bank' ? intl.formatMessage(msg.bankAccount) : intl.formatMessage(msg.alipayAccount)
+          msgObj.content && msgObj.content.payment_method === 'bank' ? INTL(msg.bankAccount) : INTL(msg.alipayAccount)
         );
         msgText = msgText.replace(
           '{account}',
@@ -87,7 +85,7 @@ export default class MessageContent extends Component {
       if ([101, 102].indexOf(msgObj.msg_type) >= 0) {
         msgText = msgText.replace(
           '{goods_type}',
-          msgObj.content && msgObj.content.goods_type === 1 ? 'Itunes' : intl.formatMessage(msg.giftCard)
+          msgObj.content && msgObj.content.goods_type === 1 ? 'Itunes' : INTL(msg.giftCard)
         );
       }
 

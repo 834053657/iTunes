@@ -20,7 +20,6 @@ import moment from 'moment';
 import cx from 'classnames';
 import styles from './appeal.less';
 import StepModel from '../Step';
-import UploadComponent from './Upload';
 import { formatMoney } from '../../../utils/utils';
 
 const TabPane = Tabs.TabPane;

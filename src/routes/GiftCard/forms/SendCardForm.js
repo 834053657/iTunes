@@ -30,6 +30,7 @@ import {
 } from 'redux-form';
 import CountDown from 'components/CountDown';
 
+import {FormattedMessage as FM, defineMessages} from 'react-intl';
 import {validate, parseNumber, createError, formatMoney} from '../../../utils/utils';
 import DescriptionList from '../../../components/DescriptionList';
 import {
@@ -56,7 +57,7 @@ const {Description} = DescriptionList;
 @reduxForm({
   form: 'sendCard', // a unique name for this form
 })
-export default class ReduxForm extends Component {
+export default class SendCardForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,7 +75,7 @@ export default class ReduxForm extends Component {
       cards: {
         type: 'array',
         required: true,
-        message: {_error: '请添加面额'},
+        message: {_error: <FM id='SendForm.pls_add_note' defaultMessage='请添加面额' />},
         defaultField: {
           type: 'object',
           fields: {
@@ -82,7 +83,7 @@ export default class ReduxForm extends Component {
               {
                 required: true,
                 type: 'array',
-                message: '请添加密码信息',
+                message: <FM id='SendForm.pls_add_psw' defaultMessage='请添加密码信息' />,
                 defaultField: {
                   type: 'object',
                   fields: {
@@ -90,34 +91,34 @@ export default class ReduxForm extends Component {
                       {
                         required: this.props.pswType === 1 || this.props.pswType === 3,
                         type: 'string',
-                        message: '请输入卡密',
+                        message: <FM id='SendForm.pls_card_psw' defaultMessage='请输入卡密' />,
                       },
                       {
                         min: 4,
-                        message: '最小长度不得小于4位',
+                        message: <FM id='SendForm.minLengthBeyond4' defaultMessage='最小长度不得小于4位' />,
                       },
                       {
                         max: 50,
-                        message: '最大长度不得超过50位',
+                        message: <FM id='SendForm.maxLengthLimit50' defaultMessage='最大长度不得超过50位' />,
                       },
                       {
                         pattern: /^[A-Za-z0-9]+$/,
-                        message: '只能输入字母，数字组合',
+                        message: <FM id='SendForm.onlyZmNum' defaultMessage='只能输入字母，数字组合' />,
                       },
                     ],
                     picture: [
                       {
                         required: this.props.password_type === 2 || this.props.password_type === 3,
                         type: 'string',
-                        message: '请上传卡图',
+                        message: <FM id='SendForm.shouldUploadCardPic' defaultMessage='请上传卡图' />,
                       },
                     ],
                   },
                 },
               },
             ],
-            money: [{required: true, type: 'number', message: '面额'}],
-            receipt: {required: false, type: 'string', message: '凭证'},
+            money: [{required: true, type: 'number', message: <FM id='SendForm.Note' defaultMessage='面额' />}],
+            receipt: {required: false, type: 'string', message: <FM id='SendForm.Receipt' defaultMessage='凭证' />},
           },
         },
       },
@@ -157,7 +158,7 @@ export default class ReduxForm extends Component {
                   name={`${member}.money`}
                   component={AInputNumber}
                   parse={parseNumber}
-                  placeholder="面额"
+                  placeholder={<FM id='SendForm.Note' defaultMessage='面额' />}
                   precision={0}
                   min={0}
                   style={{width: '100%'}}
@@ -171,7 +172,7 @@ export default class ReduxForm extends Component {
                   parse={parseNumber}
                   precision={0}
                   min={0}
-                  placeholder="最小数量"
+                  placeholder={<FM id='BuyForm.account_min_num' defaultMessage='最小数量' />}
                   style={{width: '100%'}}
                   disabled={disabled}
                 />
@@ -179,7 +180,7 @@ export default class ReduxForm extends Component {
               <Col sm={4} offset={1}>
                 <Field
                   name={`${member}.max_count`}
-                  placeholder="最大数量"
+                  placeholder={<FM id='BuyForm.account_max_num' defaultMessage='最大数量' />}
                   parse={parseNumber}
                   precision={0}
                   min={0}
@@ -190,7 +191,7 @@ export default class ReduxForm extends Component {
               </Col>
               <Col sm={3} offset={1}>
                 <Button icon="close-circle-o" onClick={() => fields.remove(index)}>
-                  删除
+                  <FM id='personalCenter.Method_payment_hasDet' defaultMessage='删除' />
                 </Button>
               </Col>
             </Row>
@@ -244,7 +245,7 @@ export default class ReduxForm extends Component {
     const {denoVaule, addDenoVisible} = this.state;
     return (
       <Modal
-        title="添加面额"
+        title={<FM id='sellForm.dashed_add' defaultMessage='添加面额' />}
         width={400}
         destroyOnClose
         maskClosable={false}
@@ -255,11 +256,12 @@ export default class ReduxForm extends Component {
         }}
       >
         <Row>
-          <Col style={{width: 50, float: 'left', lineHeight: '30px'}}>面额:</Col>
+          <Col style={{width: 50, float: 'left', lineHeight: '30px'}}>
+            <FM id='SendForm.Note' defaultMessage='面额' /></Col>
           <Col style={{width: 150, float: 'left'}}>
             <Input
               style={{width: 150}}
-              placeholder="请输入面额"
+              placeholder={<FM id='PriceForm.input_amount_num' defaultMessage='请输入面额' />}
               onChange={e => {
                 this.setState({denoVaule: +e.target.value});
               }}
@@ -326,7 +328,7 @@ export default class ReduxForm extends Component {
               key={index}
               title={
                 <div>
-                  <span>{cardItem.money}面额</span>
+                  <span>{cardItem.money}<FM id='SendForm.Note' defaultMessage='面额' /></span>
                   <span>({cardItem.items.length})</span>
                   <div style={{float: 'right'}}>
                     {pswType === 1 && (
@@ -335,7 +337,7 @@ export default class ReduxForm extends Component {
                           onChange={info => this.handlerUpload(info, index, `${fieldName}.items`, cardItem.items.length)}
                           {...uploadProps}
                         >
-                          <Button>导入</Button>
+                          <Button><FM id='sellForm.add_file' defaultMessage='导入' /></Button>
                         </Upload>
                       </Spin>
                     )}
@@ -346,7 +348,7 @@ export default class ReduxForm extends Component {
                       href="./PasswordTemplate.xlsx"
                       download="PasswordTemplate.xlsx"
                     >
-                      点击下载模板
+                      <FM id='sellForm.click_load' defaultMessage='点击下载模板' />
                     </a>
                   )}
                 </div>
@@ -357,7 +359,7 @@ export default class ReduxForm extends Component {
               {pswType !== 1 && (
                 <div>
                   <Row>
-                    <Col className={styles.pswTitle}>凭证:</Col>
+                    <Col className={styles.pswTitle}><FM id='sellForm.evidence_card' defaultMessage='凭证:' /></Col>
                     <Col key={index} className={styles.pswInput}>
                       <Field
                         name={`${fieldName}.receipt`}
@@ -395,7 +397,7 @@ export default class ReduxForm extends Component {
             <div key={i}>
               {pswType !== 2 && (
                 <Row>
-                  <Col className={styles.pswTitle}>卡密:</Col>
+                  <Col className={styles.pswTitle}><FM id='sellForm.card_passWord' defaultMessage='卡密:' /></Col>
                   <Col className={styles.pswInput}>
                     <Field
                       name={`${fieldName}.password`}
@@ -409,7 +411,7 @@ export default class ReduxForm extends Component {
               {/*图片*/}
               {pswType !== 1 && (
                 <Row>
-                  <Col className={styles.pswTitle}>卡图:</Col>
+                  <Col className={styles.pswTitle}><FM id='sellForm.card_img' defaultMessage='卡图:' /></Col>
                   <Col key={i} className={styles.pswInput}>
                     <Field
                       name={`${fieldName}.picture`}
@@ -422,10 +424,10 @@ export default class ReduxForm extends Component {
                   pswType === 2 && (
                     <Col className={styles.deleteIcon}>
                       <Popconfirm
-                        title="确定删除吗？"
+                        title={<FM id='sellForm.card_img_cancel' defaultMessage='确定删除吗？' />}
                         onConfirm={() => fields.remove(i)}
-                        okText="是"
-                        cancelText="否"
+                        okText={<FM id='sellForm.card_img_cancel_yes' defaultMessage='是' />}
+                        cancelText={<FM id='sellForm.card_img_cancel_no' defaultMessage='否' />}
                       >
                         <Icon type="minus-circle-o" />
                       </Popconfirm>
@@ -493,24 +495,24 @@ export default class ReduxForm extends Component {
             <div className={styles.amount}>
               <h4>
                 <span className={styles.title}>{money}</span>
-                <span>总面额：</span>
+                <span><FM id='sellForm.all_amount_' defaultMessage='总面额' /></span>
               </h4>
               <h4>
                 <span className={styles.title}>{unit_price}RMB</span>
-                <span>单价：</span>
+                <span><FM id='sellForm.unit_price_' defaultMessage='单价' /></span>
               </h4>
               <h4>
                 <span className={styles.title}>{amount}RMB</span>
-                <span>总价：</span>
+                <span><FM id='sellForm.all_amount_price' defaultMessage='总价' /></span>
               </h4>
             </div>
             <div className={styles.footer}>
               <div>
-                请在&nbsp;
+                <FM id='SendForm.deadlineForSendCard' defaultMessage='剩余发卡时间' />
+                &nbsp;
                 <Icon type="clock-circle-o" />
                 &nbsp;
                 <CountDown formatstr="mm:ss" target={targetTime} />
-                秒内发卡
               </div>
             </div>
           </div>
@@ -522,11 +524,11 @@ export default class ReduxForm extends Component {
                 type="primary"
                 loading={this.props.submitSellForm}
               >
-                发卡
+                <FM id='SendForm.sendCard' defaultMessage='发卡' />
               </Button>
             </Popconfirm>
             <Popconfirm
-              title="您确认要取消订单吗?"
+              title={<FM id='waitBuyerCheck.cancel_order_sure' defaultMessage='您确认要取消订单吗' />}
               onConfirm={() =>
                 this.props.dispatch({
                   type: 'card/cacelOrder',
@@ -534,7 +536,9 @@ export default class ReduxForm extends Component {
                 })
               }
             >
-              <Button>取消订单</Button>
+              <Button>
+                <FM id='waitBuyerCheck.cancel_order_btn' defaultMessage='取消订单' />
+              </Button>
             </Popconfirm>
           </FormItem>
         </Form>

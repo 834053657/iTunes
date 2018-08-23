@@ -263,8 +263,8 @@ export default class BasicLayout extends React.Component {
           });
           dispatch(routerRedux.push(`/ad/terms`));
         } else if ([51, 52, 61, 62].indexOf(item.msg_type) >= 0) {
-          Modal.success({
-            title: <FormattedMessage id="basic_layout.prompt" defaultMessage="提示" />,
+          Modal.warning({
+            title: INTL({id: "basic_layout.prompt"}),
             content:  <MessageContent data={item} />,
           });
         } else if (item.msg_type >= 100 && item.msg_type <= 114) {
