@@ -67,14 +67,14 @@ export default {
           window.history.replaceState(null, 'login', urlParams.href);
         }
       } finally {
-        // yield put({
-        //   type: 'changeLoginStatus',
-        //   payload: {},
-        // });
-        // yield put({
-        //   type: 'user/saveCurrentUser',
-        //   payload: {},
-        // });
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {},
+        });
+        yield put({
+          type: 'user/saveCurrentUser',
+          payload: {},
+        });
         yield put({
           type: 'SOCKET/CLOSE',
         });
