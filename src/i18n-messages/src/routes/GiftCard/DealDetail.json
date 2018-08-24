@@ -92,6 +92,14 @@
     "defaultMessage": "流动性"
   },
   {
+    "id": "sellForm.cancel_pwd_yes",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "sellForm.cancel_no",
+    "defaultMessage": "否"
+  },
+  {
     "id": "dealDetail.sell_all_price",
     "defaultMessage": "总价"
   },
