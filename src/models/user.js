@@ -47,16 +47,14 @@ export default {
       const response = yield call(queryCurrent);
       if (response.code === 0 && response.data) {
         const { data: { user } } = response;
-        if(fundebug) {
-          fundebug.user = {
-            name: user.id,
-            email: user.email
-          }
-        }
         yield put({
           type: 'saveCurrentUser',
           payload: response.data,
         });
+        fundebug.user = {
+          name: user.id,
+          email: user.email
+        }
         callback && setTimeout(callback(user.id, response.data.token, getLocale()), 3000);
       } else {
         message.error(response.msg);

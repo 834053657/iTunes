@@ -4,7 +4,7 @@ console.log('process.env.KG_API_ENV', process.env.KG_API_ENV, process.env.KG_API
 
 export default {
   entry: 'src/index.js',
-  devtool: 'eval-source-map',
+  devtool: 'source-map',
   extraBabelPlugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
   define: {
     __KG_API_ENV__: process.env.KG_API_ENV,

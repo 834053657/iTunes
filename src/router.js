@@ -37,14 +37,12 @@ class ErrorBoundary extends React.Component {
       // const fundebug=require("fundebug-javascript");
       this.setState({ hasError: true });
       // 将component中的报错发送到Fundebug
-      if(fundebug) {
-        fundebug.notifyError(error, {
-          metaData: {
-            info,
-            local: appLocale.getLang()
-          }
-        });
-      }
+      fundebug.notifyError(error, {
+        metaData: {
+          info,
+          local: appLocale.getLang()
+        }
+      });
     }
 
   }
