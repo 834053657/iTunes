@@ -66,7 +66,7 @@ export default class InfoDetail extends PureComponent {
   };
 
   render() {
-    const { loading, data } = this.props;
+    const { loading, data={} } = this.props;
 
     const formItemLayout = {
       labelCol: {

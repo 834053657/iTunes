@@ -569,6 +569,7 @@ export default class BuyForm extends PureComponent {
               label={<FM id='BuyForm.total_money' defaultMessage='总面额'/>}
               parse={v=>parseNumber(v,8)}
               precision={0}
+              min={0}
               {...formItemLayout}
               component={AInputNumber}
               style={{width: 110}}

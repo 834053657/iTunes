@@ -17,6 +17,7 @@
   "BuyForm.condition2.max_money.limit":"Should less than total max Value",
   "BuyForm.condition2.multiple.limit":"Should less than total max Value",
   "BuyForm.condition2.multiple2.limit":"Should less than right Value number ",
+
   "BuyForm.deal_rules_choose":"please select the transaction terms",
   "BuyForm.fluid":"Fluid",
   "BuyForm.fluid.beyondTop":"流动最大值已达上限",
@@ -38,6 +39,22 @@
   "changePassWord.change_pwd_wordLimit_title":"at least six digits,  case-sensitive",
   "changePassWord.help":"Please input a password！",
   "changePassWord.pwd_error":"'Two passwords do not match.!",
+
+  "dealDetail.beyondLimit":"Should not beyond max-limted Num",
+
+
+
+  "SendForm.pls_add_note":"Please add the Value",
+  "SendForm.pls_add_psw":"Please add password information",
+  "SendForm.pls_card_psw":"Please input the card pwd",
+  "SendForm.minLengthBeyond4":"Card password must be at least 4 characters",
+  "SendForm.maxLengthLimit50":"The max length should not exceed 50 bits",
+  "SendForm.onlyZmNum":"Your password must contain a combination of letters or numbers",
+  "SendForm.shouldUploadCardPic":"Please upload card picture",
+  "SendForm.Receipt":"Receipt",
+  "SendForm.deadlineForSendCard":"Deadline for send cards: ",
+
+
   "changePassWord.require_passWord_again": "Please make sure the password",
   "ChangePasswordResult.changeSuccess":"Password modified successfully",
   "ChangePasswordResult.goback":"Return to the home page",
