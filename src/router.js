@@ -33,15 +33,18 @@ class ErrorBoundary extends React.Component {
   }
   componentDidCatch(error, info) {
     const isPro = location.host === 'www.paean.net';
-    if(isPro || true) {
-      const fundebug=require("fundebug-javascript");
+    if(isPro) {
+      // const fundebug=require("fundebug-javascript");
       this.setState({ hasError: true });
       // 将component中的报错发送到Fundebug
-      fundebug.notifyError(error, {
-        metaData: {
-          info
-        }
-      });
+      if(fundebug) {
+        fundebug.notifyError(error, {
+          metaData: {
+            info,
+            local: appLocale.getLang()
+          }
+        });
+      }
     }
 
   }

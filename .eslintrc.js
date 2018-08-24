@@ -91,6 +91,7 @@ module.exports = {
     polyfills: ['fetch', 'promises'],
   },
   globals: {
+    fundebug: true,
     CONFIG: true,
     MESSAGES: true,
     INTL: true,
