@@ -335,12 +335,7 @@ export default class UserCenterPage extends Component {
         },
         callback: () => {
           this.setState({uploadLoading: false});
-          this.props.dispatch({
-            type: 'user/fetchCurrent',
-            callback: () => {
-              message.success(PROMPT('success') || '操作成功!')
-            }
-          })
+          message.success(PROMPT('success') || '操作成功!')
         },
       });
     } else if (info.file.status === 'error') {
@@ -384,7 +379,7 @@ export default class UserCenterPage extends Component {
     const real_name_status = real_name.status || 1;
     const video_status = video.status || 1;
     const {first_trade_at} = trade || {};
-    const avatar = user.avatar + '?imageView2/1/w/300/h/300'
+    if(!user.avatar) return false
     return (
       <Fragment>
         <Row gutter={24} className={styles.user_center}>
@@ -394,8 +389,9 @@ export default class UserCenterPage extends Component {
                 <div className={styles.user_info}>
                   <Avatar
                     size="lager"
+                    onClick={()=>this.previewPic(user.avatar)}
                     className={styles.avatar}
-                    src={avatar}
+                    src={user.avatar + '?imageView2/1/w/300/h/300'}
                   />
                   <div className={styles.info}>
                     <div className={cx('name', styles.name)}>{user.nickname}</div>
