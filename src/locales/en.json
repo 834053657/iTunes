@@ -907,7 +907,7 @@
   "waitBuyerCheck.confirm_msg": "confirm the message",
   "waitBuyerCheck.send_card": "send gift card",
   "waitBuyerCheck.check_giftCard_list": "check gift card list",
-  "waitBuyerCheck.check_card_buyer": "the buyer checks the residue time {icon} {time} seconds of card password",
+  "waitBuyerCheck.check_card_buyer": "remaining time to check CDK {icon} {time} ",
   "waitBuyerCheck.safe_time_remain": "guarantee residue time {icon} {time}minute",
   "waitBuyerCheck.order_one_month": "monthly turnover:",
   "waitBuyerCheck.seal_rules": "trade clause:",
