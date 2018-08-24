@@ -1,5 +1,21 @@
 [
   {
+    "id": "previewCard.amount_list",
+    "defaultMessage": "面额"
+  },
+  {
+    "id": "previewCard.card_passWord_",
+    "defaultMessage": "卡密："
+  },
+  {
+    "id": "previewCard.card_img_",
+    "defaultMessage": "卡图："
+  },
+  {
+    "id": "previewCard.order_receipt",
+    "defaultMessage": "收据:"
+  },
+  {
     "id": "previewCard.order_title",
     "defaultMessage": "订单："
   },
@@ -34,21 +50,5 @@
   {
     "id": "previewCard.card_order_title",
     "defaultMessage": "礼品卡清单"
-  },
-  {
-    "id": "previewCard.amount_list",
-    "defaultMessage": "面额"
-  },
-  {
-    "id": "previewCard.card_passWord_",
-    "defaultMessage": "卡密："
-  },
-  {
-    "id": "previewCard.card_img_",
-    "defaultMessage": "卡图："
-  },
-  {
-    "id": "previewCard.order_receipt",
-    "defaultMessage": "收据:"
   }
 ]
