@@ -345,6 +345,7 @@ export default class BasicLayout extends React.Component {
       location,
       loading
     } = this.props;
+    console.log(currentUser);
     const bashRedirect = this.getBashRedirect();
     const layout = (
       <Layout>
