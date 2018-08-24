@@ -48,6 +48,7 @@
     "dva": "^2.2.3",
     "dva-loading": "^1.0.4",
     "enquire-js": "^0.2.1",
+    "fundebug-javascript": "^1.2.0",
     "intl": "^1.2.5",
     "less": "2.7.2",
     "lodash": "^4.17.10",
