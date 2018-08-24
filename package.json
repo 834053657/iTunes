@@ -20,7 +20,7 @@
     "test:component": "roadhog test ./src/components",
     "test:all": "node ./tests/run-tests.js",
     "prettier": "prettier --write ./src/**/**/**/*",
-    "rsync:test1": "rsync -avz ./dist/  kgdev:/data/itunes-frontend --exclude-from=exclude.list",
+    "rsync:test1": "rsync -avz ./dist/  kgdev:/data/itunes-frontend",
     "build:test1": "cross-env KG_API_ENV=test1 ESLINT=none roadhog build",
     "deploy:test1": "npm run build:test1 && npm run rsync:test1",
     "rsync:test2": "rsync -avz ./dist/  kgdev:/data/itunes-frontend-test",
